@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'package:sharpvendor/core/models/categories_model.dart';
 import 'package:sharpvendor/core/models/menu_item_model.dart';
-
+import 'package:sharpvendor/modules/menu/widgets/category_form.dart';
 import '../../../core/utils/exports.dart';
 
 class FoodMenuController extends GetxController {
   final menuSetupFormKey = GlobalKey<FormState>();
+  final categoryFormKey = GlobalKey<FormState>();
   final ImagePicker _picker = ImagePicker();
 
   bool isLoading = false;
@@ -19,6 +21,18 @@ class FoodMenuController extends GetxController {
 
   setMenuItemsLoadingState(bool val) {
     isLoadingMenuItems = val;
+    update();
+  }
+
+  // Categories management
+  List<CategoryModel> categoryModels = [];
+  List<CategoryModel> filteredCategories = [];
+  bool isLoadingCategories = false;
+  CategoryModel? selectedCategoryModel;
+  bool isEditMode = false;
+
+  setCategoriesLoadingState(bool val) {
+    isLoadingCategories = val;
     update();
   }
 
@@ -42,24 +56,22 @@ class FoodMenuController extends GetxController {
   TextEditingController menuNameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController priceController = TextEditingController();
+  TextEditingController categoryNameController = TextEditingController();
+  TextEditingController searchController = TextEditingController();
 
   // Dropdowns
   String? selectedCategory;
   String? selectedFoodDuration;
-  List<String> categories = [
-    'Appetizers',
-    'Main Course',
-    'Desserts',
-    'Beverages',
-    'Snacks'
-  ];
+
+  // Dynamic categories list from CategoryModel
+  List<String> get categories => categoryModels.map((cat) => cat.name).toList();
 
   List<String> foodDurations = [
     '5-10 minutes',
     '10-15 minutes',
     '15-20 minutes',
     '20-30 minutes',
-    '30+ minutes'
+    '30+ minutes',
   ];
 
   setSelectedCategory(String category) {
@@ -98,6 +110,179 @@ class FoodMenuController extends GetxController {
       availableQuantity = quantity;
       update();
     }
+  }
+
+  // Initialize default categories
+  void initializeDefaultCategories() {
+    categoryModels = [
+      CategoryModel(id: '1', name: 'Rice', createdAt: DateTime.now()),
+      CategoryModel(id: '2', name: 'Vegetable', createdAt: DateTime.now()),
+      CategoryModel(id: '3', name: 'Soup', createdAt: DateTime.now()),
+      CategoryModel(id: '4', name: 'Spaghetti', createdAt: DateTime.now()),
+    ];
+    filteredCategories = List.from(categoryModels);
+  }
+
+  // Get categories from API
+  getCategories() async {
+    setCategoriesLoadingState(true);
+
+    try {
+      // TODO: Replace with actual API call
+      await Future.delayed(const Duration(seconds: 1));
+
+      // For now, use initialized categories
+      filteredCategories = List.from(categoryModels);
+    } catch (e) {
+      showToast(message: "Error loading categories", isError: true);
+    } finally {
+      setCategoriesLoadingState(false);
+    }
+  }
+
+  // Filter categories based on search
+  void filterCategories(String query) {
+    if (query.isEmpty) {
+      filteredCategories = List.from(categoryModels);
+    } else {
+      filteredCategories = categoryModels
+          .where(
+            (category) =>
+                category.name.toLowerCase().contains(query.toLowerCase()),
+          )
+          .toList();
+    }
+    update();
+  }
+
+  // Show add category modal
+  void showAddCategoryModal(BuildContext context) {
+    isEditMode = false;
+    selectedCategoryModel = null;
+    categoryNameController.clear();
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+      ),
+      builder: (context) => Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: const CategoryForm(),
+      ),
+    );
+  }
+
+  // Show edit category modal
+  void showEditCategoryModal(BuildContext context, CategoryModel category) {
+    isEditMode = true;
+    selectedCategoryModel = category;
+    categoryNameController.text = category.name;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+      ),
+      builder: (context) => Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: const CategoryForm(),
+      ),
+    );
+  }
+
+  // Show delete confirmation dialog
+  void showDeleteConfirmationDialog(
+    BuildContext context,
+    CategoryModel category,
+  ) {
+    selectedCategoryModel = category;
+
+    showDialog(
+      context: context,
+      builder: (context) => const CategoryDeleteDialog(),
+    );
+  }
+
+  // Save category (add or edit)
+  saveCategory() async {
+    if (categoryFormKey.currentState!.validate()) {
+      setLoadingState(true);
+
+      try {
+        // TODO: Replace with actual API call
+        await Future.delayed(const Duration(seconds: 1));
+
+        if (isEditMode && selectedCategoryModel != null) {
+          // Update existing category
+          int index = categoryModels.indexWhere(
+            (cat) => cat.id == selectedCategoryModel!.id,
+          );
+          if (index != -1) {
+            categoryModels[index] = CategoryModel(
+              id: selectedCategoryModel!.id,
+              name: categoryNameController.text,
+              createdAt: selectedCategoryModel!.createdAt,
+            );
+          }
+          showToast(message: "Category updated successfully", isError: false);
+        } else {
+          // Add new category
+          final newCategory = CategoryModel(
+            id: DateTime.now().millisecondsSinceEpoch.toString(),
+            name: categoryNameController.text,
+            createdAt: DateTime.now(),
+          );
+          categoryModels.add(newCategory);
+          showToast(message: "Category added successfully", isError: false);
+        }
+
+        filterCategories(searchController.text);
+        Get.back();
+        clearCategoryForm();
+      } catch (e) {
+        showToast(message: "Error saving category", isError: true);
+      } finally {
+        setLoadingState(false);
+      }
+    }
+  }
+
+  // Delete category
+  deleteCategory() async {
+    if (selectedCategoryModel != null) {
+      setLoadingState(true);
+
+      try {
+        // TODO: Replace with actual API call
+        await Future.delayed(const Duration(seconds: 1));
+
+        categoryModels.removeWhere(
+          (cat) => cat.id == selectedCategoryModel!.id,
+        );
+        filterCategories(searchController.text);
+
+        showToast(message: "Category deleted successfully", isError: false);
+        Get.back();
+      } catch (e) {
+        showToast(message: "Error deleting category", isError: true);
+      } finally {
+        setLoadingState(false);
+      }
+    }
+  }
+
+  // Clear category form
+  void clearCategoryForm() {
+    categoryNameController.clear();
+    selectedCategoryModel = null;
+    isEditMode = false;
   }
 
   // Save menu item
@@ -167,7 +352,7 @@ class FoodMenuController extends GetxController {
       MenuItemModel(
         id: "1",
         name: "Assorted vegetable soup",
-        category: "Desserts",
+        category: "Soup",
         price: 3000.00,
         duration: "15-20 minutes",
         image: "assets/imgs/menu_2.png",
@@ -178,7 +363,7 @@ class FoodMenuController extends GetxController {
       MenuItemModel(
         id: "2",
         name: "Efo riro",
-        category: "Beverages",
+        category: "Vegetable",
         price: 3000.00,
         duration: "15-20 minutes",
         image: "assets/imgs/menu_1.png",
@@ -189,7 +374,7 @@ class FoodMenuController extends GetxController {
       MenuItemModel(
         id: "3",
         name: "Bitter leaf soup",
-        category: "Snacks",
+        category: "Soup",
         price: 3000.00,
         duration: "15-20 minutes",
         image: "assets/imgs/menu_3.png",
@@ -255,11 +440,12 @@ class FoodMenuController extends GetxController {
     }
 
     showToast(
-        message: "Menu item ${isAvailable ? 'enabled' : 'disabled'} successfully",
-        isError: false
+      message: "Menu item ${isAvailable ? 'enabled' : 'disabled'} successfully",
+      isError: false,
     );
     setLoadingState(false);
   }
+
   deleteMenuItem(String itemId) async {
     setLoadingState(true);
 
@@ -290,7 +476,14 @@ class FoodMenuController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    initializeDefaultCategories();
+    getCategories();
     getMenuItems();
+
+    // Setup search listener
+    searchController.addListener(() {
+      filterCategories(searchController.text);
+    });
   }
 
   @override
@@ -298,6 +491,8 @@ class FoodMenuController extends GetxController {
     menuNameController.dispose();
     descriptionController.dispose();
     priceController.dispose();
+    categoryNameController.dispose();
+    searchController.dispose();
     super.onClose();
   }
 }

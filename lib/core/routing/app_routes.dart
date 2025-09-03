@@ -63,4 +63,9 @@ abstract class Routes {
   static const EDIT_MENU_SCREEN = '/edit_menu_screen';
   static const MENU_DETAILS_SCREEN = '/menu_details_screen';
   static const MENU_HOME_SCREEN = '/menu_home_screen';
+  static const CATEGORIES_MANAGEMENT_SCREEN = '/categories_management_screen';
+
+  // Orders
+  static const ORDERS_HOME_SCREEN = '/orders_home_screen';
+  static const ORDER_DETAILS_SCREEN = '/order_details_screen';
 }

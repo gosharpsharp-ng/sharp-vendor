@@ -3,9 +3,13 @@
 import 'package:sharpvendor/core/utils/exports.dart';
 import 'package:sharpvendor/modules/menu/bindings/menu_bindings.dart';
 import 'package:sharpvendor/modules/menu/views/add_menu_screen.dart';
+import 'package:sharpvendor/modules/menu/views/category_management_screen.dart';
 import 'package:sharpvendor/modules/menu/views/edit_menu_screen.dart';
 import 'package:sharpvendor/modules/menu/views/menu_details_screen.dart';
 import 'package:sharpvendor/modules/menu/views/menu_home_screen.dart';
+import 'package:sharpvendor/modules/orders/bindings/orders_bindings.dart';
+import 'package:sharpvendor/modules/orders/views/order_details_screen.dart';
+import 'package:sharpvendor/modules/orders/views/orders_home_screen.dart';
 import 'package:sharpvendor/modules/settings/views/analytics_screen.dart';
 import 'package:sharpvendor/modules/settings/views/order_transactions_screen.dart';
 import 'package:sharpvendor/modules/settings/views/reviews_screen.dart';
@@ -211,7 +215,8 @@ class AppPages {
       binding: SettingsBindings(),
       transition: Transition.rightToLeftWithFade,
       transitionDuration: const Duration(milliseconds: 400),
-    ),  GetPage(
+    ),
+    GetPage(
       name: Routes.REVIEWS_SCREEN,
       page: () => const ReviewsScreen(),
       binding: SettingsBindings(),
@@ -318,6 +323,25 @@ class AppPages {
       page: () => const EditMenuScreen(),
       binding: MenuBindings(),
       transition: Transition.downToUp,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: Routes.CATEGORIES_MANAGEMENT_SCREEN,
+      page: () => CategoryManagementScreen(),
+      binding: MenuBindings(),
+      transition: Transition.downToUp,
+      transitionDuration: const Duration(milliseconds: 400),
+    ), GetPage(
+      name: Routes.ORDERS_HOME_SCREEN,
+      page: () => OrdersHomeScreen(),
+      binding: OrdersBindings(),
+      transition: Transition.downToUp,
+      transitionDuration: const Duration(milliseconds: 400),
+    ), GetPage(
+      name: Routes.ORDER_DETAILS_SCREEN,
+      page: () => OrderDetailsScreen(),
+      binding: OrdersBindings(),
+      transition: Transition.leftToRight,
       transitionDuration: const Duration(milliseconds: 400),
     ),
   ];
