@@ -215,55 +215,75 @@ class AddMenuScreen extends GetView<FoodMenuController> {
                       },
                     ),
 
-                    // Category Dropdown
-                    customText(
-                      "Category",
-                      color: AppColors.blackColor,
-                      fontSize: 13.sp,
-                      fontWeight: FontWeight.w500,
+                    // Category Selection
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        customText(
+                          "Category",
+                          color: AppColors.blackColor,
+                          fontSize: 13.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Get.toNamed(Routes.CATEGORIES_MANAGEMENT_SCREEN);
+                          },
+                          child: customText(
+                            "Add Category",
+                            color: AppColors.greenColor,
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(height: 8.h),
-                    Container(
-                      width: 1.sw,
-                      padding: EdgeInsets.symmetric(horizontal: 16.w),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: AppColors.greyColor.withOpacity(0.3),
-                        ),
-                        borderRadius: BorderRadius.circular(8.r),
-                        color: AppColors.whiteColor,
+                    ClickableCustomRoundedInputField(
+                      title: "Category",
+                      label: "Select Category",
+                      readOnly: true,
+                      showLabel: true,
+                      hasTitle: false,
+                      isRequired: true,
+                      controller: TextEditingController(
+                        text: menuController.selectedCategory ?? "",
                       ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          hint: customText(
-                            "Select",
-                            color: AppColors.greyColor,
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.normal,
+                      onPressed: () {
+                        showAnyBottomSheet(
+                          child: CategoryBottomSheet(
+                            categories: menuController.categories,
+                            onCategorySelected: (category) {
+                              menuController.setSelectedCategory(category);
+                              Get.back();
+                            },
                           ),
-                          value: menuController.selectedCategory,
-                          icon: SvgPicture.asset(
-                            SvgAssets.downChevronIcon,
-                            color: AppColors.primaryColor,
-                          ),
-                          items: menuController.categories.map((String category) {
-                            return DropdownMenuItem<String>(
-                              value: category,
-                              child: customText(
-                                category,
-                                color: AppColors.blackColor,
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.normal,
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            if (newValue != null) {
-                              menuController.setSelectedCategory(newValue);
-                            }
-                          },
+                        );
+                      },
+                      suffixWidget: IconButton(
+                        onPressed: () {
+                          showAnyBottomSheet(
+                            child: CategoryBottomSheet(
+                              categories: menuController.categories,
+                              onCategorySelected: (category) {
+                                menuController.setSelectedCategory(category);
+                                Get.back();
+                              },
+                            ),
+                          );
+                        },
+                        icon: SvgPicture.asset(
+                          SvgAssets.downChevronIcon,
+                          color: AppColors.primaryColor,
                         ),
                       ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please select a category';
+                        }
+                        return null;
+                      },
                     ),
 
                     SizedBox(height: 20.h),
@@ -290,55 +310,51 @@ class AddMenuScreen extends GetView<FoodMenuController> {
 
                     SizedBox(height: 20.h),
 
-                    // Food Duration Dropdown
-                    customText(
-                      "Food duration",
-                      color: AppColors.blackColor,
-                      fontSize: 13.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    SizedBox(height: 8.h),
-                    Container(
-                      width: 1.sw,
-                      padding: EdgeInsets.symmetric(horizontal: 16.w),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: AppColors.greyColor.withOpacity(0.3),
-                        ),
-                        borderRadius: BorderRadius.circular(8.r),
-                        color: AppColors.whiteColor,
+                    // Food Duration Selection
+                    ClickableCustomRoundedInputField(
+                      title: "Food duration",
+                      label: "Select Duration",
+                      readOnly: true,
+                      showLabel: true,
+                      hasTitle: true,
+                      isRequired: true,
+                      controller: TextEditingController(
+                        text: menuController.selectedFoodDuration ?? "",
                       ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          hint: customText(
-                            "Select",
-                            color: AppColors.greyColor,
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.normal,
+                      onPressed: () {
+                        showAnyBottomSheet(
+                          child: FoodDurationBottomSheet(
+                            durations: menuController.foodDurations,
+                            onDurationSelected: (duration) {
+                              menuController.setSelectedFoodDuration(duration);
+                              Get.back();
+                            },
                           ),
-                          value: menuController.selectedFoodDuration,
-                          icon: SvgPicture.asset(
-                            SvgAssets.downChevronIcon,
-                            color: AppColors.primaryColor,
-                          ),
-                          items: menuController.foodDurations.map((String duration) {
-                            return DropdownMenuItem<String>(
-                              value: duration,
-                              child: customText(
-                                duration,
-                                color: AppColors.blackColor,
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.normal,
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            if (newValue != null) {
-                              menuController.setSelectedFoodDuration(newValue);
-                            }
-                          },
+                        );
+                      },
+                      suffixWidget: IconButton(
+                        onPressed: () {
+                          showAnyBottomSheet(
+                            child: FoodDurationBottomSheet(
+                              durations: menuController.foodDurations,
+                              onDurationSelected: (duration) {
+                                menuController.setSelectedFoodDuration(duration);
+                                Get.back();
+                              },
+                            ),
+                          );
+                        },
+                        icon: SvgPicture.asset(
+                          SvgAssets.downChevronIcon,
+                          color: AppColors.primaryColor,
                         ),
                       ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please select a food duration';
+                        }
+                        return null;
+                      },
                     ),
 
                     SizedBox(height: 20.h),
@@ -422,6 +438,108 @@ class AddMenuScreen extends GetView<FoodMenuController> {
           ),
         );
       },
+    );
+  }
+}
+
+// New widget for Category Bottom Sheet
+class CategoryBottomSheet extends StatelessWidget {
+  final List<String> categories;
+  final Function(String) onCategorySelected;
+
+  const CategoryBottomSheet({
+    super.key,
+    required this.categories,
+    required this.onCategorySelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 22.sp, vertical: 20.sp),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          customText(
+            "Select Category",
+            color: AppColors.blackColor,
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w600,
+          ),
+          SizedBox(height: 16.h),
+          Flexible(
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: categories.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: customText(
+                    categories[index],
+                    color: AppColors.blackColor,
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.normal,
+                  ),
+                  onTap: () {
+                    onCategorySelected(categories[index]);
+                  },
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// New widget for Food Duration Bottom Sheet
+class FoodDurationBottomSheet extends StatelessWidget {
+  final List<String> durations;
+  final Function(String) onDurationSelected;
+
+  const FoodDurationBottomSheet({
+    super.key,
+    required this.durations,
+    required this.onDurationSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 22.sp, vertical: 20.sp),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          customText(
+            "Select Food Duration",
+            color: AppColors.blackColor,
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w600,
+          ),
+          SizedBox(height: 16.h),
+          Flexible(
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: durations.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: customText(
+                    durations[index],
+                    color: AppColors.blackColor,
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.normal,
+                  ),
+                  onTap: () {
+                    onDurationSelected(durations[index]);
+                  },
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

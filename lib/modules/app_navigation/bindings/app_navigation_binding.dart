@@ -1,5 +1,6 @@
 import 'package:sharpvendor/core/utils/exports.dart';
 import 'package:sharpvendor/modules/menu/controllers/food_menu_controller.dart';
+import 'package:sharpvendor/modules/orders/controllers/orders_controller.dart';
 
 class AppNavigationBinding extends Bindings {
   @override
@@ -16,6 +17,8 @@ class AppNavigationBinding extends Bindings {
       DeliveriesController(),
     );
     Get.put(
+      OrdersController(),
+    ); Get.put(
       WalletController(),
     );
     Get.put(

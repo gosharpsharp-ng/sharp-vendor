@@ -324,6 +324,8 @@ class ClickableCustomRoundedInputField extends StatefulWidget {
   final bool showLabel;
   final bool hasDropdown;
   final bool hasTitle;
+  final bool hasItemsScreen;
+  final Widget? itemsNavigator;
   final double fontSize;
   final double labelFontSize;
   final EdgeInsets edgeInsets;
@@ -339,6 +341,8 @@ class ClickableCustomRoundedInputField extends StatefulWidget {
     this.isSearch = false,
     this.showLabel = false,
     this.useCustomValidator = false,
+    this.hasItemsScreen = false,
+    this.itemsNavigator,
     this.validator,
     this.onPressed,
     this.maxLines = 1,

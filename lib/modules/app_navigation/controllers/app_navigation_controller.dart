@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:sharpvendor/core/utils/exports.dart';
+import 'package:sharpvendor/modules/orders/views/orders_home_screen.dart';
 import 'package:socket_io_client/socket_io_client.dart' as socket_io;
 
 import '../../menu/views/menu_home_screen.dart' show MenuHomeScreen;
@@ -21,7 +22,7 @@ class AppNavigationController extends GetxController {
   List<Widget> screens = [
     const DashboardScreen(),
     const MenuHomeScreen(),
-    const WalletHomeScreen(),
+    const OrdersHomeScreen(),
     const SettingsHomeScreen(),
   ];
   @override
