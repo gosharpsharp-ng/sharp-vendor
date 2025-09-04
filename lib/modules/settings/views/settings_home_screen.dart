@@ -28,62 +28,63 @@ class SettingsHomeScreen extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  SectionBox(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    backgroundColor: AppColors.whiteColor,
-                    children: [
-                      Visibility(
-                        visible: settingsController.userProfile?.avatar != null,
-                        replacement: Visibility(
-                          visible:
-                              settingsController.userProfilePicture != null,
-                          replacement: CircleAvatar(
-                            radius: 55.r,
-                            backgroundColor: AppColors.backgroundColor,
-                            child: customText(
-                              "${settingsController.userProfile?.fname.substring(0, 1) ?? ""}${settingsController.userProfile?.lname.substring(0, 1) ?? ""}",
-                              fontSize: 24.sp,
-                            ),
-                          ),
-                          child: settingsController.userProfilePicture != null
-                              ? CircleAvatar(
-                                  backgroundImage: FileImage(
-                                    settingsController.userProfilePicture!,
-                                  ),
-                                  radius: 55.r,
-                                )
-                              : CircleAvatar(
-                                  backgroundImage: const AssetImage(
-                                    PngAssets.avatarIcon,
-                                  ),
-                                  radius: 55.r,
-                                ),
-                        ),
-                        child: CircleAvatar(
-                          backgroundImage: NetworkImage(
-                            settingsController.userProfile?.avatar ?? '',
-                          ),
-                          radius: 55.r,
-                        ),
-                      ),
-                      SizedBox(height: 5.h),
-                      customText(
-                        "${settingsController.userProfile?.fname ?? ""} ${settingsController.userProfile?.lname ?? ""}",
-                        color: AppColors.blackColor,
-                        fontSize: 25.sp,
-                        fontWeight: FontWeight.w600,
-                        overflow: TextOverflow.visible,
-                      ),
-                      SizedBox(height: 5.h),
-                      customText(
-                        settingsController.userProfile?.email ?? "",
-                        color: AppColors.obscureTextColor,
-                        fontSize: 15.sp,
-                        fontWeight: FontWeight.w500,
-                        overflow: TextOverflow.visible,
-                      ),
-                    ],
-                  ),
+                  // SectionBox(
+                  //   crossAxisAlignment: CrossAxisAlignment.center,
+                  //   backgroundColor: AppColors.whiteColor,
+                  //   children: [
+                  //     Visibility(
+                  //       visible: settingsController.userProfile?.avatar != null,
+                  //       replacement: Visibility(
+                  //         visible:
+                  //             settingsController.userProfilePicture != null,
+                  //         replacement: CircleAvatar(
+                  //           radius: 55.r,
+                  //           backgroundColor: AppColors.redColor,
+                  //           child: customText(
+                  //             "${settingsController.userProfile?.fname.substring(0, 1) ?? ""}${settingsController.userProfile?.lname.substring(0, 1) ?? ""}",
+                  //             fontSize: 24.sp,
+                  //           ),
+                  //         ),
+                  //         child: settingsController.userProfilePicture != null
+                  //             ? CircleAvatar(
+                  //                 backgroundImage: FileImage(
+                  //                   settingsController.userProfilePicture!,
+                  //                 ),
+                  //                 radius: 55.r,
+                  //               )
+                  //             : CircleAvatar(
+                  //                 backgroundImage: const AssetImage(
+                  //                   PngAssets.avatarIcon,
+                  //                 ),
+                  //                 radius: 55.r,
+                  //               ),
+                  //       ),
+                  //       child: CircleAvatar(
+                  //         backgroundImage: NetworkImage(
+                  //           settingsController.userProfile?.avatar ?? '',
+                  //         ),
+                  //         radius: 55.r,
+                  //       ),
+                  //     ),
+                  //     SizedBox(height: 5.h),
+                  //     customText(
+                  //       "${settingsController.userProfile?.fname ?? ""} ${settingsController.userProfile?.lname ?? ""}",
+                  //       color: AppColors.blackColor,
+                  //       fontSize: 25.sp,
+                  //       fontWeight: FontWeight.w600,
+                  //       overflow: TextOverflow.visible,
+                  //     ),
+                  //     SizedBox(height: 5.h),
+                  //     customText(
+                  //       settingsController.userProfile?.email ?? "",
+                  //       color: AppColors.obscureTextColor,
+                  //       fontSize: 15.sp,
+                  //       fontWeight: FontWeight.w500,
+                  //       overflow: TextOverflow.visible,
+                  //     ),
+                  //   ],
+                  // ),
+                  SizedBox(height: 12.h,),
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 20.w),
                     width: 1.sw,
