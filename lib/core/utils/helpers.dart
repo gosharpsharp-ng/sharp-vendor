@@ -1257,3 +1257,68 @@ void makePhoneCall(String phoneNumber) async {
     print('Could not launch $url');
   }
 }
+
+
+// Format TimeOfDay to readable string
+String formatTimeOfDay(TimeOfDay time) {
+  int hour = time.hour;
+  int minute = time.minute;
+  String period = hour >= 12 ? 'PM' : 'AM';
+
+  if (hour > 12) {
+    hour -= 12;
+  } else if (hour == 0) {
+    hour = 12;
+  }
+
+  String minuteStr = minute.toString().padLeft(2, '0');
+  return '$hour:$minuteStr $period';
+}
+
+// Convert display time to 24-hour format for API
+String convertTo24Hour(String displayTime) {
+  if (displayTime.isEmpty) return '';
+
+  List<String> parts = displayTime.split(' ');
+  String timePart = parts[0];
+  String period = parts[1];
+
+  List<String> hourMinute = timePart.split(':');
+  int hour = int.parse(hourMinute[0]);
+  int minute = int.parse(hourMinute[1]);
+
+  if (period == 'PM' && hour != 12) {
+    hour += 12;
+  } else if (period == 'AM' && hour == 12) {
+    hour = 0;
+  }
+
+  return '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
+}
+
+// Helper method to parse time string back to TimeOfDay
+TimeOfDay parseTimeString(String timeString) {
+  List<String> parts = timeString.split(' ');
+  String timePart = parts[0];
+  String period = parts[1];
+
+  List<String> hourMinute = timePart.split(':');
+  int hour = int.parse(hourMinute[0]);
+  int minute = int.parse(hourMinute[1]);
+
+  if (period == 'PM' && hour != 12) {
+    hour += 12;
+  } else if (period == 'AM' && hour == 12) {
+    hour = 0;
+  }
+
+  return TimeOfDay(hour: hour, minute: minute);
+}
+
+// Helper method to validate time range
+bool isValidTimeRange(TimeOfDay openTime, TimeOfDay closeTime) {
+  int openMinutes = openTime.hour * 60 + openTime.minute;
+  int closeMinutes = closeTime.hour * 60 + closeTime.minute;
+  return closeMinutes > openMinutes;
+}
+
