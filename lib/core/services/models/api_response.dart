@@ -21,7 +21,7 @@ class APIResponse {
   factory APIResponse.fromMap(Map<String, dynamic> map) {
     return APIResponse(
       status: map['status'] ??"" ,
-      message: map['message']?? map['error']??"",
+      message: map['message']?? map['errors']??"",
       data: map['data'] ?? "",
     );
   }

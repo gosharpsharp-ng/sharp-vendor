@@ -33,7 +33,8 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => isBusy ? print("Is Busy") : onPressed(),
+      // onTap: () => isBusy ? print("Is Busy") : onPressed(),
+      onTap: () => isBusy ? onPressed() : onPressed(),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 15.sp, vertical: 8.sp),
         height: height.sp,

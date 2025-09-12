@@ -11,11 +11,11 @@ class SignUpScreen extends GetView<SignUpController> {
         key: signUpController.signUpFormKey,
         child: Scaffold(
           appBar: defaultAppBar(
-            bgColor: AppColors.backgroundColor,
-            onPop: (){
-              Get.back();
-            },
-            title: "Create an account"
+              bgColor: AppColors.backgroundColor,
+              onPop: (){
+                Get.back();
+              },
+              title: "Create an account"
           ),
           backgroundColor: AppColors.backgroundColor,
           body: Container(
@@ -63,6 +63,15 @@ class SignUpScreen extends GetView<SignUpController> {
                           isRequired: true,
                           hasTitle: true,
                           controller: signUpController.firstNameController,
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return 'First name is required';
+                            }
+                            if (value.trim().length < 2) {
+                              return 'First name must be at least 2 characters';
+                            }
+                            return null;
+                          },
                         ),
                         CustomRoundedInputField(
                           title: "Last name",
@@ -71,6 +80,15 @@ class SignUpScreen extends GetView<SignUpController> {
                           isRequired: true,
                           hasTitle: true,
                           controller: signUpController.lastNameController,
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return 'Last name is required';
+                            }
+                            if (value.trim().length < 2) {
+                              return 'Last name must be at least 2 characters';
+                            }
+                            return null;
+                          },
                         ),
                         CustomRoundedInputField(
                           title: "Email",
@@ -82,10 +100,10 @@ class SignUpScreen extends GetView<SignUpController> {
                           hasTitle: true,
                           controller: signUpController.emailController,
                           validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter an email';
-                            } else if (!validateEmail(value)) {
-                              return 'Please enter a valid email';
+                            if (value == null || value.trim().isEmpty) {
+                              return 'Email is required';
+                            } else if (!validateEmail(value.trim())) {
+                              return 'Please enter a valid email address';
                             }
                             return null;
                           },
@@ -97,13 +115,13 @@ class SignUpScreen extends GetView<SignUpController> {
                             if (phone.number.isNotEmpty &&
                                 phone.number.startsWith('0')) {
                               final updatedNumber =
-                                  phone.number.replaceFirst(RegExp(r'^0'), '');
+                              phone.number.replaceFirst(RegExp(r'^0'), '');
                               signUpController.phoneNumberController.value =
                                   TextEditingValue(
-                                text: updatedNumber,
-                                selection: TextSelection.collapsed(
-                                    offset: updatedNumber.length),
-                              );
+                                    text: updatedNumber,
+                                    selection: TextSelection.collapsed(
+                                        offset: updatedNumber.length),
+                                  );
                               signUpController.setPhoneNumber(
                                 updatedNumber,
                               );
@@ -142,7 +160,7 @@ class SignUpScreen extends GetView<SignUpController> {
                           isRequired: true,
                           useCustomValidator: true,
                           obscureText:
-                              signUpController.signUpPasswordVisibility,
+                          signUpController.signUpPasswordVisibility,
                           hasTitle: true,
                           controller: signUpController.passwordController,
                           suffixWidget: IconButton(
@@ -159,9 +177,11 @@ class SignUpScreen extends GetView<SignUpController> {
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your password';
+                              return 'Password is required';
                             } else if (value.length < 8) {
-                              return 'Password must contain at least 8 characters';
+                              return 'Password must be at least 8 characters long';
+                            } else if (!RegExp(r'^(?=.*[a-zA-Z])(?=.*\d)').hasMatch(value)) {
+                              return 'Password must contain at least one letter and one number';
                             }
                             return null;
                           },
@@ -174,7 +194,7 @@ class SignUpScreen extends GetView<SignUpController> {
                           isRequired: true,
                           useCustomValidator: true,
                           obscureText:
-                              signUpController.signUpConfirmPasswordVisibility,
+                          signUpController.signUpConfirmPasswordVisibility,
                           hasTitle: true,
                           controller: signUpController.cPasswordController,
                           suffixWidget: IconButton(
@@ -192,12 +212,11 @@ class SignUpScreen extends GetView<SignUpController> {
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your password';
-                            } else if (value !=
-                                signUpController.passwordController.text) {
-                              return 'Password mismatch';
+                              return 'Please confirm your password';
+                            } else if (value != signUpController.passwordController.text) {
+                              return 'Passwords do not match';
                             } else if (value.length < 8) {
-                              return 'Password must contain at least 8 characters';
+                              return 'Password must be at least 8 characters long';
                             }
                             return null;
                           },
@@ -207,8 +226,27 @@ class SignUpScreen extends GetView<SignUpController> {
                         ),
                         CustomButton(
                           onPressed: () {
-                            // signUpController.signUp();
-                            Get.toNamed(Routes.BUSINESS_INFO_ENTRY_SCREEN);
+                            // Validate the form before proceeding
+                            if (signUpController.signUpFormKey.currentState!.validate()) {
+                              // Additional validation for phone number
+                              if (signUpController.filledPhoneNumber == null ||
+                                  signUpController.phoneNumberController.text.isEmpty) {
+                                showToast(
+                                  message: "Please enter a valid phone number",
+                                  isError: true,
+                                );
+                                return;
+                              }
+
+                              // All validations passed, proceed to business info screen
+                              Get.toNamed(Routes.BUSINESS_INFO_ENTRY_SCREEN);
+                            } else {
+                              // Form validation failed, show error message
+                              showToast(
+                                message: "Please fill in all required fields correctly",
+                                isError: true,
+                              );
+                            }
                           },
                           isBusy: signUpController.isLoading,
                           title: "Continue",
