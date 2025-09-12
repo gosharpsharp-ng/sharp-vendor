@@ -11,7 +11,8 @@ class CoreService extends GetConnect {
 
   CoreService() {
     // _dio.options.baseUrl = dotenv.env['BASE_URL']!;
-    _dio.options.baseUrl = "https://logistics.sharpvendor.com/api/v1";
+    // _dio.options.baseUrl = "https://logistics.sharpvendor.com/api/v1";
+    _dio.options.baseUrl = "https://staging.gosharpsharp.com/api/v1";
     setConfig();
   }
   final getStorage = GetStorage();
@@ -120,10 +121,15 @@ class CoreService extends GetConnect {
     try {
       final res = await _dio.post(url, data: payload);
       if (res.statusCode == 200 || res.statusCode == 201) {
+        print("*************************************************************");
+        print(res.data.toString());
+        print("*************************************************************");
         return APIResponse.fromMap(res.data);
+
       }
     } on DioException catch (e) {
       if (e.response != null) {
+
         return APIResponse.fromMap(e.response?.data);
       } else {
         return APIResponse(

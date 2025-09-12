@@ -27,6 +27,7 @@ class SignInScreen extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.symmetric(
                         horizontal: 10.sp, vertical: 0.sp),
+                    width: 1.sw,
                     margin: EdgeInsets.only(left: 10.sp, right: 10.sp),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,6 +35,7 @@ class SignInScreen extends StatelessWidget {
                         customText("Login",
                             color: AppColors.blackColor,
                             fontSize: 23.sp,
+                            textAlign: TextAlign.left,
                             fontWeight: FontWeight.w600),
                         SizedBox(
                           height: 5.sp,
@@ -45,41 +47,6 @@ class SignInScreen extends StatelessWidget {
                             fontWeight: FontWeight.normal),
                         SizedBox(
                           height: 5.sp,
-                        ),
-                        SizedBox(
-                          height: 20.sp,
-                        ),
-                        SizedBox(
-                          width: 1.sw,
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: LoginTypeSelector(
-                                  title: "Login with Email",
-                                  onSelected: () {
-                                    if (!signInController.signInWithEmail) {
-                                      signInController.toggleSignInWithEmail();
-                                    }
-                                  },
-                                  isSelected: signInController.signInWithEmail,
-                                ),
-                              ),
-                              Expanded(
-                                child: LoginTypeSelector(
-                                  title: "Login with Phone",
-                                  onSelected: () {
-                                    if (signInController.signInWithEmail) {
-                                      signInController.toggleSignInWithEmail();
-                                    }
-                                  },
-                                  isSelected: !signInController.signInWithEmail,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 25.sp,
                         ),
                       ],
                     ),
@@ -107,8 +74,7 @@ class SignInScreen extends StatelessWidget {
                         //   fontSize: 16.sp,
                         // ),
 
-                        signInController.signInWithEmail
-                            ? CustomRoundedInputField(
+                         CustomRoundedInputField(
                                 title: "Email",
                                 label: "meterme@gmail.com",
                                 showLabel: true,
@@ -126,54 +92,7 @@ class SignInScreen extends StatelessWidget {
                                   return null;
                                 },
                               )
-                            : CustomRoundedPhoneInputField(
-                                title: "Phone number",
-                                label: "7061032122",
-                                onChanged: (PhoneNumber phone) {
-                                  if (phone.number.isNotEmpty &&
-                                      phone.number.startsWith('0')) {
-                                    final updatedNumber = phone.number
-                                        .replaceFirst(RegExp(r'^0'), '');
-                                    signInController.loginController.value =
-                                        TextEditingValue(
-                                      text: updatedNumber,
-                                      selection: TextSelection.collapsed(
-                                          offset: updatedNumber.length),
-                                    );
-                                    signInController.setPhoneNumber(PhoneNumber(
-                                      countryISOCode: phone.countryISOCode,
-                                      countryCode: phone.countryCode,
-                                      number: updatedNumber,
-                                    ));
-                                    signInController
-                                        .setFilledPhoneNumber(PhoneNumber(
-                                      countryISOCode: phone.countryISOCode,
-                                      countryCode: phone.countryCode,
-                                      number: updatedNumber,
-                                    ));
-                                  } else {
-                                    signInController
-                                        .setFilledPhoneNumber(phone);
-                                  }
-                                },
-                                keyboardType: TextInputType.phone,
-                                validator: (phone) {
-                                  if (phone == null ||
-                                      phone.completeNumber.isEmpty) {
-                                    return "Phone number is required";
-                                  }
-                                  // Regex: `+` followed by 1 to 3 digits (country code), then 10 digits (phone number)
-                                  final regex = RegExp(r'^\+234[1-9]\d{9}$');
-                                  if (!regex.hasMatch(phone.completeNumber)) {
-                                    return "Phone number must be 10 digits long";
-                                  }
-
-                                  return null; // Valid phone number
-                                },
-                                isPhone: true,
-                                hasTitle: true,
-                                controller: signInController.loginController,
-                              ),
+                        ,
                         SizedBox(
                           height: 10.sp,
                         ),
@@ -227,9 +146,8 @@ class SignInScreen extends StatelessWidget {
                         ),
                         CustomButton(
                           onPressed: () {
-                            // signInController.signIn();
-                            Get.toNamed(
-                                Routes.APP_NAVIGATION);
+                            signInController.signIn();
+
                           },
                           isBusy: signInController.isLoading,
                           title: "Log in",

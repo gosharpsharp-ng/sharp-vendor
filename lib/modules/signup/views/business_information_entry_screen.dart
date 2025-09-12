@@ -22,10 +22,56 @@ class BusinessInformationEntryScreen extends GetView<SignUpController> {
             ),
             bottomNavigationBar: Container(
               padding: EdgeInsets.symmetric(horizontal: 22.sp, vertical: 20.sp),
-              child:  CustomButton(
+              child: CustomButton(
                 onPressed: () {
-                  // signUpController.signUp();
-                  Get.toNamed(Routes.BUSINESS_OPERATIONS_ENTRY_SCREEN);
+                  // Validate the business information form before proceeding
+                  if (signUpController.businessInfoFormKey.currentState!.validate()) {
+                    // Check for required images
+                    if (signUpController.restaurantBanner == null) {
+                      showToast(
+                        message: "Please upload a restaurant banner",
+                        isError: true,
+                      );
+                      return;
+                    }
+
+                    if (signUpController.restaurantLogo == null) {
+                      showToast(
+                        message: "Please upload a restaurant logo",
+                        isError: true,
+                      );
+                      return;
+                    }
+
+                    // Check for restaurant location
+                    if (signUpController.restaurantLocation == null ||
+                        signUpController.restaurantAddressController.text.trim().isEmpty) {
+                      showToast(
+                        message: "Please select a business address",
+                        isError: true,
+                      );
+                      return;
+                    }
+
+                    // Additional validation for phone number
+                    if (signUpController.filledPhoneNumber == null ||
+                        signUpController.phoneNumberController.text.isEmpty) {
+                      showToast(
+                        message: "Please enter a valid business phone number",
+                        isError: true,
+                      );
+                      return;
+                    }
+
+                    // All validations passed, proceed to business operations screen
+                    Get.toNamed(Routes.BUSINESS_OPERATIONS_ENTRY_SCREEN);
+                  } else {
+                    // Form validation failed, show error message
+                    showToast(
+                      message: "Please fill in all required fields correctly",
+                      isError: true,
+                    );
+                  }
                 },
                 isBusy: signUpController.isLoading,
                 title: "Continue",
@@ -43,13 +89,23 @@ class BusinessInformationEntryScreen extends GetView<SignUpController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    customText(
-                      "Restaurant Banner",
-                      color: AppColors.blackColor,
-                      fontSize: 13.sp,
-                      fontWeight: FontWeight.w500,
+                    // Restaurant Banner Section
+                    Row(
+                      children: [
+                        customText(
+                          "Restaurant Banner",
+                          color: AppColors.blackColor,
+                          fontSize: 13.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        customText(
+                          " *",
+                          color: AppColors.redColor,
+                          fontSize: 13.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ],
                     ),
-
                     SizedBox(height: 8.h),
                     DottedBorder(
                       options: RectDottedBorderOptions(
@@ -71,16 +127,19 @@ class BusinessInformationEntryScreen extends GetView<SignUpController> {
                               return CustomImagePickerBottomSheet(
                                 title: "Banner Image",
                                 takePhotoFunction: () {
-                                  signUpController.selectParcelImage(
+                                  signUpController.selectRestaurantBanner(
                                     pickFromCamera: true,
                                   );
                                 },
                                 selectFromGalleryFunction: () {
-                                  signUpController.selectParcelImage(
+                                  signUpController.selectRestaurantBanner(
                                     pickFromCamera: false,
                                   );
                                 },
-                                deleteFunction: () {},
+                                deleteFunction: () {
+                                  signUpController.restaurantBanner = null;
+                                  signUpController.update();
+                                },
                               );
                             },
                           );
@@ -90,107 +149,262 @@ class BusinessInformationEntryScreen extends GetView<SignUpController> {
                           height: 150.h,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8.r),
-                            image: signUpController.parcelImage != null
+                            image: signUpController.restaurantBanner != null
                                 ? DecorationImage(
-                                    image: base64ToMemoryImage(
-                                      signUpController.parcelImage!,
-                                    ),
-                                    fit: BoxFit.cover,
-                                  )
+                              image: base64ToMemoryImage(
+                                signUpController.restaurantBanner!,
+                              ),
+                              fit: BoxFit.cover,
+                            )
                                 : null,
                           ),
                           padding: EdgeInsets.symmetric(
                             horizontal: 12.sp,
                             vertical: 15.h,
                           ),
-                          child: signUpController.parcelImage != null
+                          child: signUpController.restaurantBanner != null
                               ? Stack(
-                                  children: [
-                                    Positioned(
-                                      bottom: 0,
-                                      right: 2,
-                                      child: Container(
-                                        decoration: const BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: AppColors.backgroundColor,
-                                        ),
-                                        padding: EdgeInsets.all(8.sp),
-                                        child: SvgPicture.asset(
-                                          SvgAssets.cameraIcon,
-                                          height: 30.sp,
-                                          color: Colors.blue,
-                                          width: 30.sp,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )
+                            children: [
+                              Positioned(
+                                bottom: 0,
+                                right: 2,
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: AppColors.backgroundColor,
+                                  ),
+                                  padding: EdgeInsets.all(8.sp),
+                                  child: SvgPicture.asset(
+                                    SvgAssets.cameraIcon,
+                                    height: 30.sp,
+                                    color: Colors.blue,
+                                    width: 30.sp,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
                               : Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Container(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: AppColors.backgroundColor,
+                                ),
+                                padding: EdgeInsets.all(8.sp),
+                                child: SvgPicture.asset(
+                                  SvgAssets.uploadIcon,
+                                ),
+                              ),
+                              customText(
+                                "Browse image to upload",
+                                color: AppColors.blackColor,
+                                fontSize: 14.sp,
+                                textAlign: TextAlign.center,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              customText(
+                                "(Max. file size: 25 MB)",
+                                color: AppColors.blackColor,
+                                fontSize: 13.sp,
+                                overflow: TextOverflow.visible,
+                                textAlign: TextAlign.center,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20.h),
+
+                    // Restaurant Logo Section
+                    Row(
+                      children: [
+                        customText(
+                          "Restaurant Logo",
+                          color: AppColors.blackColor,
+                          fontSize: 13.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        customText(
+                          " *",
+                          color: AppColors.redColor,
+                          fontSize: 13.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 8.h),
+                    Row(
+                      children: [
+                        DottedBorder(
+                          options: RectDottedBorderOptions(
+                            dashPattern: [8, 4],
+                            strokeWidth: 1,
+                            color: Colors.grey,
+                            padding: EdgeInsets.all(16),
+                          ),
+                          child: InkWell(
+                            onTap: () {
+                              showModalBottomSheet(
+                                context: context,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(25.0),
+                                  ),
+                                ),
+                                builder: (BuildContext context) {
+                                  return CustomImagePickerBottomSheet(
+                                    title: "Logo Image",
+                                    takePhotoFunction: () {
+                                      signUpController.selectRestaurantLogo(
+                                        pickFromCamera: true,
+                                      );
+                                    },
+                                    selectFromGalleryFunction: () {
+                                      signUpController.selectRestaurantLogo(
+                                        pickFromCamera: false,
+                                      );
+                                    },
+                                    deleteFunction: () {
+                                      signUpController.restaurantLogo = null;
+                                      signUpController.update();
+                                    },
+                                  );
+                                },
+                              );
+                            },
+                            child: Container(
+                              width: 120.w,
+                              height: 120.h,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8.r),
+                                image: signUpController.restaurantLogo != null
+                                    ? DecorationImage(
+                                  image: base64ToMemoryImage(
+                                    signUpController.restaurantLogo!,
+                                  ),
+                                  fit: BoxFit.cover,
+                                )
+                                    : null,
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 8.sp,
+                                vertical: 8.h,
+                              ),
+                              child: signUpController.restaurantLogo != null
+                                  ? Stack(
+                                children: [
+                                  Positioned(
+                                    bottom: 0,
+                                    right: 0,
+                                    child: Container(
                                       decoration: const BoxDecoration(
                                         shape: BoxShape.circle,
                                         color: AppColors.backgroundColor,
                                       ),
-                                      padding: EdgeInsets.all(8.sp),
+                                      padding: EdgeInsets.all(4.sp),
                                       child: SvgPicture.asset(
-                                        SvgAssets.uploadIcon,
+                                        SvgAssets.cameraIcon,
+                                        height: 20.sp,
+                                        color: Colors.blue,
+                                        width: 20.sp,
                                       ),
                                     ),
-                                    customText(
-                                      "Browse image to upload",
-                                      color: AppColors.blackColor,
-                                      fontSize: 14.sp,
-                                      textAlign: TextAlign.center,
-                                      fontWeight: FontWeight.w500,
+                                  ),
+                                ],
+                              )
+                                  : Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: AppColors.backgroundColor,
                                     ),
-                                    customText(
-                                      "(Max. file size: 25 MB)",
-                                      color: AppColors.blackColor,
-                                      fontSize: 13.sp,
-                                      overflow: TextOverflow.visible,
-                                      textAlign: TextAlign.center,
-                                      fontWeight: FontWeight.normal,
+                                    padding: EdgeInsets.all(6.sp),
+                                    child: SvgPicture.asset(
+                                      SvgAssets.uploadIcon,
+                                      height: 20.sp,
+                                      width: 20.sp,
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                  SizedBox(height: 8.h),
+                                  customText(
+                                    "Upload Logo",
+                                    color: AppColors.blackColor,
+                                    fontSize: 12.sp,
+                                    textAlign: TextAlign.center,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                        SizedBox(width: 16.w),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              customText(
+                                "Upload your restaurant logo",
+                                color: AppColors.blackColor,
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              SizedBox(height: 4.h),
+                              customText(
+                                "Recommended size: 200x200px\nMax file size: 5MB\nFormats: JPG, PNG",
+                                color: AppColors.greyColor,
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(height: 14.h),
+                    SizedBox(height: 20.h),
+
+                    // Restaurant Name Field
                     CustomRoundedInputField(
                       title: "Restaurant Name",
                       label: "Chachalina",
                       showLabel: true,
                       isRequired: true,
                       hasTitle: true,
-                      controller: signUpController.firstNameController,
+                      controller: signUpController.restaurantNameController,
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Restaurant name is required';
+                        }
+                        if (value.trim().length < 2) {
+                          return 'Restaurant name must be at least 2 characters';
+                        }
+                        return null;
+                      },
                     ),
+
+                    // Business Address Field
                     ClickableCustomRoundedInputField(
                       onPressed: () async {
-                        // final ItemLocation result =
-                        // await Get.toNamed(Routes.SELECT_LOCATION_SCREEN);
-                        // ordersController.setDeliverySenderLocation(result);
-                        // if (ordersController.deliveryReceiverLocation !=
-                        //     null) {
-                        //   await ordersController.getRideEstimatedDistance();
-                        // }
+                        final ItemLocation result =
+                        await Get.toNamed(Routes.SELECT_LOCATION_SCREEN);
+                        signUpController.setRestaurantLocation(result);
                       },
                       suffixWidget: IconButton(
                         onPressed: () async {
-                          // final ItemLocation result = await Get.toNamed(
-                          //     Routes.SELECT_LOCATION_SCREEN);
-                          // ordersController.setDeliverySenderLocation(result);
-                          // if (ordersController.deliveryReceiverLocation !=
-                          //     null) {
-                          //   await ordersController.getRideEstimatedDistance();
-                          // }
+                          final ItemLocation result =
+                          await Get.toNamed(Routes.SELECT_LOCATION_SCREEN);
+                          signUpController.setRestaurantLocation(result);
                         },
                         icon: SvgPicture.asset(
                           SvgAssets.locationIcon,
-                          // h: 20.sp,
                           color: AppColors.primaryColor,
                         ),
                       ),
@@ -200,9 +414,19 @@ class BusinessInformationEntryScreen extends GetView<SignUpController> {
                       showLabel: true,
                       hasTitle: true,
                       isRequired: true,
-                      // controller: ordersController.senderAddressController,
+                      controller: signUpController.restaurantAddressController,
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Business address is required';
+                        }
+                        if (signUpController.restaurantLocation == null) {
+                          return 'Please select a valid address from the map';
+                        }
+                        return null;
+                      },
                     ),
 
+                    // Business Phone Field
                     CustomRoundedPhoneInputField(
                       title: "Business Phone",
                       label: "7061032122",
@@ -213,69 +437,51 @@ class BusinessInformationEntryScreen extends GetView<SignUpController> {
                             RegExp(r'^0'),
                             '',
                           );
-                          signUpController.phoneNumberController.value =
+                          signUpController.restaurantPhoneController.value =
                               TextEditingValue(
                                 text: updatedNumber,
                                 selection: TextSelection.collapsed(
                                   offset: updatedNumber.length,
                                 ),
                               );
-                          signUpController.setPhoneNumber(updatedNumber);
-                          signUpController.setFilledPhoneNumber(
-                            PhoneNumber(
-                              countryISOCode: phone.countryISOCode,
-                              countryCode: phone.countryCode,
-                              number: updatedNumber,
-                            ),
-                          );
-                        } else {
-                          signUpController.setFilledPhoneNumber(phone);
                         }
                       },
                       keyboardType: TextInputType.phone,
                       validator: (phone) {
                         if (phone == null || phone.completeNumber.isEmpty) {
-                          return "Phone number is required";
+                          return "Business phone number is required";
                         }
-                        // Regex: `+` followed by 1 to 3 digits (country code), then 10 digits (phone number)
                         final regex = RegExp(r'^\+234[1-9]\d{9}$');
                         if (!regex.hasMatch(phone.completeNumber)) {
                           return "Phone number must start with +234 and be 10 digits long";
-                        }
-                        if (signUpController
-                                .phoneNumberController
-                                .text
-                                .isEmpty ||
-                            signUpController.phoneNumberController.text ==
-                                null) {
-                          return "Phone number is required";
                         }
                         return null;
                       },
                       isPhone: true,
                       hasTitle: true,
-                      controller: signUpController.phoneNumberController,
+                      controller: signUpController.restaurantPhoneController,
                     ),
+
+                    // Business Email Field
                     CustomRoundedInputField(
-                      title: "Email",
-                      label: "meter.me@gmail.com",
+                      title: "Business Email",
+                      label: "restaurant@example.com",
                       showLabel: true,
                       isRequired: true,
                       useCustomValidator: true,
                       keyboardType: TextInputType.emailAddress,
                       hasTitle: true,
-                      controller: signUpController.emailController,
+                      controller: signUpController.restaurantEmailController,
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter an email';
-                        } else if (!validateEmail(value)) {
-                          return 'Please enter a valid email';
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Business email is required';
+                        } else if (!validateEmail(value.trim())) {
+                          return 'Please enter a valid email address';
                         }
                         return null;
                       },
                     ),
                     SizedBox(height: 15.sp),
-
                   ],
                 ),
               ),

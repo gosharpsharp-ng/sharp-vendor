@@ -1,10 +1,11 @@
 import 'dart:async';
+import 'dart:developer';
+import 'dart:io' show File;
 
 import 'package:sharpvendor/core/utils/exports.dart';
 import 'package:intl_phone_field/phone_number.dart';
 
 class SignUpController extends GetxController {
-
   Map<String, Map<String, String>> dayOperatingHours = {
     'monday': {'openTime': '', 'closeTime': ''},
     'tuesday': {'openTime': '', 'closeTime': ''},
@@ -87,18 +88,31 @@ class SignUpController extends GetxController {
   TextEditingController weekendOpenTimeController = TextEditingController();
   TextEditingController weekendCloseTimeController = TextEditingController();
 
-
-
   // Initialize default values
   @override
   void onInit() {
     super.onInit();
     // Set default times
-    dayOperatingHours['monday'] = {'openTime': '08:00 AM', 'closeTime': '09:00 PM'};
-    dayOperatingHours['tuesday'] = {'openTime': '08:00 AM', 'closeTime': '09:00 PM'};
-    dayOperatingHours['wednesday'] = {'openTime': '08:00 AM', 'closeTime': '09:00 PM'};
-    dayOperatingHours['thursday'] = {'openTime': '08:00 AM', 'closeTime': '09:00 PM'};
-    dayOperatingHours['friday'] = {'openTime': '08:00 AM', 'closeTime': '09:00 PM'};
+    dayOperatingHours['monday'] = {
+      'openTime': '08:00 AM',
+      'closeTime': '09:00 PM',
+    };
+    dayOperatingHours['tuesday'] = {
+      'openTime': '08:00 AM',
+      'closeTime': '09:00 PM',
+    };
+    dayOperatingHours['wednesday'] = {
+      'openTime': '08:00 AM',
+      'closeTime': '09:00 PM',
+    };
+    dayOperatingHours['thursday'] = {
+      'openTime': '08:00 AM',
+      'closeTime': '09:00 PM',
+    };
+    dayOperatingHours['friday'] = {
+      'openTime': '08:00 AM',
+      'closeTime': '09:00 PM',
+    };
     dayOperatingHours['saturday'] = {'openTime': '', 'closeTime': ''};
     dayOperatingHours['sunday'] = {'openTime': '', 'closeTime': ''};
 
@@ -123,14 +137,20 @@ class SignUpController extends GetxController {
       // If day is selected and has no times, set default times
       if (dayOperatingHours[day]!['openTime']!.isEmpty ||
           dayOperatingHours[day]!['closeTime']!.isEmpty) {
-        dayOperatingHours[day] = {'openTime': '08:00 AM', 'closeTime': '09:00 PM'};
+        dayOperatingHours[day] = {
+          'openTime': '08:00 AM',
+          'closeTime': '09:00 PM',
+        };
       }
     }
     update();
   }
 
   // Select time for specific day
-  Future<void> selectTimeForDay({required String day, required bool isOpeningTime}) async {
+  Future<void> selectTimeForDay({
+    required String day,
+    required bool isOpeningTime,
+  }) async {
     TimeOfDay? pickedTime = await showTimePicker(
       context: Get.context!,
       initialTime: TimeOfDay.now(),
@@ -148,37 +168,43 @@ class SignUpController extends GetxController {
     }
   }
 
-
-
   // Generate schedule array for API
   List<Map<String, dynamic>> generateScheduleArray() {
     List<Map<String, dynamic>> schedule = [];
 
     selectedDays.forEach((day, isSelected) {
       if (isSelected && dayOperatingHours[day] != null) {
-        String openTime = convertTo24Hour(dayOperatingHours[day]!['openTime'] ?? '');
-        String closeTime = convertTo24Hour(dayOperatingHours[day]!['closeTime'] ?? '');
+        String openTime = convertTo24Hour(
+          dayOperatingHours[day]!['openTime'] ?? '',
+        );
+        String closeTime = convertTo24Hour(
+          dayOperatingHours[day]!['closeTime'] ?? '',
+        );
 
         if (openTime.isNotEmpty && closeTime.isNotEmpty) {
-          schedule.add({
-            "day": day,
-            "open": openTime,
-            "close": closeTime
-          });
+          schedule.add({"day": day, "open": openTime, "close": closeTime});
         }
       }
     });
 
     return schedule;
   }
-
-
+  TextEditingController restaurantAddressController=TextEditingController();
+  ItemLocation? restaurantLocation;
+  void setRestaurantLocation(ItemLocation point) {
+    restaurantLocation = point;
+    restaurantAddressController.setText(point.formattedAddress!);
+    update();
+  }
   // Validate business operations form
   bool validateBusinessOperations() {
     // Check if at least one day is selected
     bool hasSelectedDays = selectedDays.values.any((selected) => selected);
     if (!hasSelectedDays) {
-      showToast(message: "Please select at least one operating day", isError: true);
+      showToast(
+        message: "Please select at least one operating day",
+        isError: true,
+      );
       return false;
     }
 
@@ -189,10 +215,12 @@ class SignUpController extends GetxController {
         String closeTime = dayOperatingHours[day]!['closeTime'] ?? '';
 
         if (openTime.isEmpty || closeTime.isEmpty) {
-          String capitalizedDay = day.substring(0, 1).toUpperCase() + day.substring(1);
+          String capitalizedDay =
+              day.substring(0, 1).toUpperCase() + day.substring(1);
           showToast(
-              message: "Please set both opening and closing times for $capitalizedDay",
-              isError: true
+            message:
+                "Please set both opening and closing times for $capitalizedDay",
+            isError: true,
           );
           return false;
         }
@@ -202,10 +230,12 @@ class SignUpController extends GetxController {
         TimeOfDay closeTimeOfDay = parseTimeString(closeTime);
 
         if (!isValidTimeRange(openTimeOfDay, closeTimeOfDay)) {
-          String capitalizedDay = day.substring(0, 1).toUpperCase() + day.substring(1);
+          String capitalizedDay =
+              day.substring(0, 1).toUpperCase() + day.substring(1);
           showToast(
-              message: "Closing time must be after opening time for $capitalizedDay",
-              isError: true
+            message:
+                "Closing time must be after opening time for $capitalizedDay",
+            isError: true,
           );
           return false;
         }
@@ -214,25 +244,30 @@ class SignUpController extends GetxController {
 
     return true;
   }
+
   // Submit business operations and proceed
   void submitBusinessOperations() {
     if (validateBusinessOperations()) {
       // Operations data is valid, proceed to next screen
-      Get.toNamed(Routes.BANK_INFO_ENTRY_SCREEN);
+      // Get.toNamed(Routes.BANK_INFO_ENTRY_SCREEN);
+
+      signUp();
     }
   }
 
-
-// Copy times from one day to another (utility method)
+  // Copy times from one day to another (utility method)
   void copyTimesToDay(String fromDay, String toDay) {
-    if (dayOperatingHours[fromDay] != null && dayOperatingHours[toDay] != null) {
-      dayOperatingHours[toDay]!['openTime'] = dayOperatingHours[fromDay]!['openTime'] ?? '';
-      dayOperatingHours[toDay]!['closeTime'] = dayOperatingHours[fromDay]!['closeTime'] ?? '';
+    if (dayOperatingHours[fromDay] != null &&
+        dayOperatingHours[toDay] != null) {
+      dayOperatingHours[toDay]!['openTime'] =
+          dayOperatingHours[fromDay]!['openTime'] ?? '';
+      dayOperatingHours[toDay]!['closeTime'] =
+          dayOperatingHours[fromDay]!['closeTime'] ?? '';
       update();
     }
   }
 
-// Apply same hours to multiple days (utility method)
+  // Apply same hours to multiple days (utility method)
   void applySameHoursToSelectedDays(String openTime, String closeTime) {
     selectedDays.forEach((day, isSelected) {
       if (isSelected) {
@@ -248,13 +283,12 @@ class SignUpController extends GetxController {
   verifyOtp() async {
     if (signOTPFormKey.currentState!.validate()) {
       setLoadingState(true);
-      dynamic data = {
-        'otp': otpController.text,
-        'email': emailController.text,
-      };
+      dynamic data = {'otp': otpController.text, 'email': emailController.text};
       APIResponse response = await authService.verifyEmailOtp(data);
       showToast(
-          message: response.message, isError: response.status != "success");
+        message: response.message,
+        isError: response.status != "success",
+      );
       setLoadingState(false);
       if (response.status == "success") {
         Get.offAllNamed(Routes.SIGN_IN);
@@ -264,9 +298,7 @@ class SignUpController extends GetxController {
 
   sendOtp() async {
     setIsResendingOTPState(true);
-    dynamic data = {
-      'login': emailController.text,
-    };
+    dynamic data = {'login': emailController.text};
     APIResponse response = await authService.sendOtp(data);
     showToast(message: response.message, isError: response.status != "success");
     setIsResendingOTPState(false);
@@ -313,13 +345,28 @@ class SignUpController extends GetxController {
         "restaurant_name": restaurantNameController.text,
         "restaurant_phone": restaurantPhoneController.text,
         "restaurant_email": restaurantEmailController.text,
+        "restaurant_logo": restaurantLogo,
+        "restaurant_banner": restaurantBanner,
         "cuisine_type": "Italian",
-        "schedule": schedule // Use the dynamically generated schedule
+        "restaurant_location": {
+          "name": restaurantAddressController.text,
+          "latitude": "${restaurantLocation?.latitude}",
+          "longitude": "${restaurantLocation?.longitude}"
+        },
+        "schedule": schedule,
       };
 
+      dynamic dataWithoutImages = Map.from(data)
+        ..remove("restaurant_logo")
+        ..remove("restaurant_banner");
+print("******************************************Request****************************************************************");
+log(dataWithoutImages.toString());
+print("**********************************************************************************************************");
       APIResponse response = await authService.signup(data);
       showToast(
-          message: response.message, isError: response.status != "success");
+        message: response.message,
+        isError: response.status != "success",
+      );
       setLoadingState(false);
       if (response.status == "success") {
         _startOtpResendTimer();
@@ -330,8 +377,8 @@ class SignUpController extends GetxController {
 
   // Business Information Entry
   final ImagePicker _picker = ImagePicker();
-  String? parcelImage;
-  selectParcelImage({required bool pickFromCamera}) async {
+  String? restaurantBanner;
+  void selectRestaurantBanner({required bool pickFromCamera}) async {
     XFile? photo;
     if (pickFromCamera) {
       photo = await _picker.pickImage(source: ImageSource.camera);
@@ -340,7 +387,25 @@ class SignUpController extends GetxController {
     }
     if (photo != null) {
       final croppedPhoto = await cropImage(photo);
-      parcelImage = await convertImageToBase64(croppedPhoto.path);
+      final compressed = await ImageCompressionService.compressImage(XFile(croppedPhoto.path));
+
+      restaurantBanner = await convertImageToBase64(compressed.path);
+      update();
+    }
+  }
+
+  String? restaurantLogo;
+  void selectRestaurantLogo({required bool pickFromCamera}) async {
+    XFile? photo;
+    if (pickFromCamera) {
+      photo = await _picker.pickImage(source: ImageSource.camera);
+    } else {
+      photo = await _picker.pickImage(source: ImageSource.gallery);
+    }
+    if (photo != null) {
+      final croppedPhoto = await cropImage(photo);
+      final compressed = await ImageCompressionService.compressImage(XFile(croppedPhoto.path));
+      restaurantLogo = await convertImageToBase64(compressed.path);
       update();
     }
   }
@@ -352,10 +417,12 @@ class SignUpController extends GetxController {
   filterBanks(String query) {
     if (originalBanks.isNotEmpty && query.isNotEmpty) {
       filteredBanks = originalBanks
-          .where((element) =>
-      (element.name.toLowerCase().contains(query.toLowerCase()) ||
-          element.name.toLowerCase().contains(query.toLowerCase()) ||
-          element.name.toLowerCase().contains(query.toLowerCase())))
+          .where(
+            (element) =>
+                (element.name.toLowerCase().contains(query.toLowerCase()) ||
+                element.name.toLowerCase().contains(query.toLowerCase()) ||
+                element.name.toLowerCase().contains(query.toLowerCase())),
+          )
           .toList();
     } else {
       filteredBanks = originalBanks;
@@ -371,8 +438,9 @@ class SignUpController extends GetxController {
     isLoadingBanks = false;
     update();
     if (response.status == "success") {
-      originalBanks =
-          (response.data as List).map((bk) => BankModel.fromJson(bk)).toList();
+      originalBanks = (response.data as List)
+          .map((bk) => BankModel.fromJson(bk))
+          .toList();
       filteredBanks = originalBanks;
       update();
     }
@@ -388,6 +456,7 @@ class SignUpController extends GetxController {
       await verifyPayoutBank();
     }
   }
+
   TextEditingController resolvedBankAccountName = TextEditingController();
   clearImputedBankFields() {
     resolvedBankAccountName.clear();
@@ -418,7 +487,9 @@ class SignUpController extends GetxController {
         update();
       } else {
         showToast(
-            message: response.message, isError: response.status != "success");
+          message: response.message,
+          isError: response.status != "success",
+        );
       }
     }
   }

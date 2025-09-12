@@ -45,11 +45,8 @@ class SignInController extends GetxController {
     if (signInFormKey.currentState!.validate()) {
       setLoadingState(true);
       dynamic data = {
-        'login': signInWithEmail
-            ? loginController.text
-            : filledPhoneNumber?.completeNumber ?? "",
+        'login':  loginController.text,
         'password': passwordController.text,
-        "as_rider":false
       };
       APIResponse response = await authService.login(data);
       showToast(
