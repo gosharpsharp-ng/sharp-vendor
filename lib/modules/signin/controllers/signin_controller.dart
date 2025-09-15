@@ -60,7 +60,7 @@ class SignInController extends GetxController {
         update();
         final getStorage = GetStorage();
         getStorage.write("token", response.data['access_token']);
-        Get.put(WalletController());
+          Get.put(WalletController());
         Get.put(SettingsController());
         Get.put(DeliveriesController());
         Get.toNamed(Routes.APP_NAVIGATION);
