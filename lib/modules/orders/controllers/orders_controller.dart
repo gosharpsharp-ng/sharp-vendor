@@ -58,116 +58,354 @@ class OrdersController extends GetxController {
       // Sample data - replace with actual API response
       allOrders = [
         OrderModel(
-          id: "12345",
-          customerId: "customer_1",
-          customerName: "Alex",
-          customerPhone: "+234 801 234 5678",
-          deliveryAddress: "123 Main St, Anytown",
+          id: 1,
+          orderableType: "App\\Models\\Restaurant",
+          orderableId: 1,
+          userId: 1,
+          ref: "ORD-12345ABC",
+          status: "pending",
+          subtotal: 23.00,
+          tax: 0.00,
+          deliveryFee: 2.00,
+          notes: "",
+          discountAmount: 0.00,
+          paymentReference: "ORDER-ORD-12345ABC",
           total: 25.00,
-          status: "Pending",
-          totalItems: 3,
-          orderDate: DateTime.now().subtract(const Duration(minutes: 15)),
-          estimatedDeliveryTime: "25-30 mins",
+          createdAt: DateTime.now().subtract(const Duration(minutes: 15)),
+          updatedAt: DateTime.now().subtract(const Duration(minutes: 15)),
           items: [
             OrderItemModel(
-              id: "item_1",
-              name: "Spicy Chicken Sandwich",
+              id: 1,
+              orderId: 1,
+              orderableType: "App\\Models\\RestaurantMenu",
+              orderableId: 1,
               quantity: 1,
               price: 15.00,
-              image: "assets/imgs/chicken_sandwich.png",
-              specialInstructions: "",
+              total: 15.00,
+              createdAt: DateTime.now().subtract(const Duration(minutes: 15)),
+              updatedAt: DateTime.now().subtract(const Duration(minutes: 15)),
+              orderable: OrderableItemModel(
+                id: 1,
+                restaurantId: 1,
+                name: "Spicy Chicken Sandwich",
+                description: "Delicious spicy chicken sandwich",
+                plateSize: "L",
+                quantity: 1,
+                isAvailable: true,
+                price: 15.00,
+                prepTimeMinutes: 15,
+                categoryId: 1,
+                isPublished: true,
+                createdAt: DateTime.now().subtract(const Duration(days: 1)),
+                updatedAt: DateTime.now().subtract(const Duration(days: 1)),
+              ),
             ),
             OrderItemModel(
-              id: "item_2",
-              name: "Fries",
+              id: 2,
+              orderId: 1,
+              orderableType: "App\\Models\\RestaurantMenu",
+              orderableId: 2,
               quantity: 2,
-              price: 5.00,
-              image: "assets/imgs/fries.png",
-              specialInstructions: "Extra crispy",
+              price: 4.00,
+              total: 8.00,
+              createdAt: DateTime.now().subtract(const Duration(minutes: 15)),
+              updatedAt: DateTime.now().subtract(const Duration(minutes: 15)),
+              orderable: OrderableItemModel(
+                id: 2,
+                restaurantId: 1,
+                name: "Fries",
+                description: "Crispy golden fries",
+                plateSize: "M",
+                quantity: 1,
+                isAvailable: true,
+                price: 4.00,
+                prepTimeMinutes: 10,
+                categoryId: 2,
+                isPublished: true,
+                createdAt: DateTime.now().subtract(const Duration(days: 1)),
+                updatedAt: DateTime.now().subtract(const Duration(days: 1)),
+              ),
+              options: {"instructions": "Extra crispy"},
             ),
           ],
+          user: OrderUserModel(
+            id: 1,
+            fname: "Alex",
+            lname: "",
+            phone: "+234 801 234 5678",
+            email: "alex@example.com",
+            status: "verified",
+            referralCode: "ALEX123",
+            failedLoginAttempts: 0,
+            createdAt: DateTime.now().subtract(const Duration(days: 30)),
+            updatedAt: DateTime.now().subtract(const Duration(days: 30)),
+          ),
+          deliveryLocation: DeliveryLocationModel(
+            id: 1,
+            name: "123 Main St, Anytown",
+            latitude: 6.5244,
+            longitude: 3.3792,
+            locationableType: "App\\Models\\Order",
+            locationableId: 1,
+            createdAt: DateTime.now().subtract(const Duration(minutes: 15)),
+            updatedAt: DateTime.now().subtract(const Duration(minutes: 15)),
+          ),
         ),
         OrderModel(
-          id: "78901",
-          customerId: "customer_2",
-          customerName: "Jordan",
-          customerPhone: "+234 802 345 6789",
-          deliveryAddress: "456 Oak Ave, Downtown",
+          id: 2,
+          orderableType: "App\\Models\\Restaurant",
+          orderableId: 1,
+          userId: 2,
+          ref: "ORD-78901DEF",
+          status: "accepted",
+          subtotal: 30.00,
+          tax: 0.00,
+          deliveryFee: 0.00,
+          notes: "",
+          discountAmount: 0.00,
+          paymentReference: "ORDER-ORD-78901DEF",
           total: 30.00,
-          status: "Accepted",
-          totalItems: 2,
-          orderDate: DateTime.now().subtract(const Duration(minutes: 30)),
-          estimatedDeliveryTime: "20-25 mins",
+          createdAt: DateTime.now().subtract(const Duration(minutes: 30)),
+          updatedAt: DateTime.now().subtract(const Duration(minutes: 25)),
           items: [
             OrderItemModel(
-              id: "item_3",
-              name: "Efo riro",
+              id: 3,
+              orderId: 2,
+              orderableType: "App\\Models\\RestaurantMenu",
+              orderableId: 3,
               quantity: 1,
               price: 20.00,
-              image: "assets/imgs/efo_riro.png",
-              specialInstructions: "Medium spice level",
+              total: 20.00,
+              createdAt: DateTime.now().subtract(const Duration(minutes: 30)),
+              updatedAt: DateTime.now().subtract(const Duration(minutes: 30)),
+              orderable: OrderableItemModel(
+                id: 3,
+                restaurantId: 1,
+                name: "Efo riro",
+                description: "Traditional Nigerian vegetable soup",
+                plateSize: "L",
+                quantity: 1,
+                isAvailable: true,
+                price: 20.00,
+                prepTimeMinutes: 25,
+                categoryId: 3,
+                isPublished: true,
+                createdAt: DateTime.now().subtract(const Duration(days: 1)),
+                updatedAt: DateTime.now().subtract(const Duration(days: 1)),
+              ),
+              options: {"spice_level": "Medium"},
             ),
             OrderItemModel(
-              id: "item_4",
-              name: "Rice",
+              id: 4,
+              orderId: 2,
+              orderableType: "App\\Models\\RestaurantMenu",
+              orderableId: 4,
               quantity: 1,
               price: 10.00,
-              image: "assets/imgs/rice.png",
-              specialInstructions: "",
+              total: 10.00,
+              createdAt: DateTime.now().subtract(const Duration(minutes: 30)),
+              updatedAt: DateTime.now().subtract(const Duration(minutes: 30)),
+              orderable: OrderableItemModel(
+                id: 4,
+                restaurantId: 1,
+                name: "Rice",
+                description: "Steamed white rice",
+                plateSize: "M",
+                quantity: 1,
+                isAvailable: true,
+                price: 10.00,
+                prepTimeMinutes: 15,
+                categoryId: 4,
+                isPublished: true,
+                createdAt: DateTime.now().subtract(const Duration(days: 1)),
+                updatedAt: DateTime.now().subtract(const Duration(days: 1)),
+              ),
             ),
           ],
+          user: OrderUserModel(
+            id: 2,
+            fname: "Jordan",
+            lname: "",
+            phone: "+234 802 345 6789",
+            email: "jordan@example.com",
+            status: "verified",
+            referralCode: "JORDAN456",
+            failedLoginAttempts: 0,
+            createdAt: DateTime.now().subtract(const Duration(days: 60)),
+            updatedAt: DateTime.now().subtract(const Duration(days: 60)),
+          ),
+          deliveryLocation: DeliveryLocationModel(
+            id: 2,
+            name: "456 Oak Ave, Downtown",
+            latitude: 6.4584,
+            longitude: 3.3890,
+            locationableType: "App\\Models\\Order",
+            locationableId: 2,
+            createdAt: DateTime.now().subtract(const Duration(minutes: 30)),
+            updatedAt: DateTime.now().subtract(const Duration(minutes: 30)),
+          ),
         ),
         OrderModel(
-          id: "34567",
-          customerId: "customer_3",
-          customerName: "Taylor",
-          customerPhone: "+234 803 456 7890",
-          deliveryAddress: "789 Pine Rd, Uptown",
+          id: 3,
+          orderableType: "App\\Models\\Restaurant",
+          orderableId: 1,
+          userId: 3,
+          ref: "ORD-34567GHI",
+          status: "processing",
+          subtotal: 15.00,
+          tax: 0.00,
+          deliveryFee: 0.00,
+          notes: "Less salt please",
+          discountAmount: 0.00,
+          paymentReference: "ORDER-ORD-34567GHI",
           total: 15.00,
-          status: "Processing",
-          totalItems: 1,
-          orderDate: DateTime.now().subtract(const Duration(hours: 1)),
-          estimatedDeliveryTime: "15-20 mins",
+          createdAt: DateTime.now().subtract(const Duration(hours: 1)),
+          updatedAt: DateTime.now().subtract(const Duration(minutes: 45)),
           items: [
             OrderItemModel(
-              id: "item_5",
-              name: "Bitter leaf soup",
+              id: 5,
+              orderId: 3,
+              orderableType: "App\\Models\\RestaurantMenu",
+              orderableId: 5,
               quantity: 1,
               price: 15.00,
-              image: "assets/imgs/bitter_leaf.png",
-              specialInstructions: "Less salt please",
+              total: 15.00,
+              createdAt: DateTime.now().subtract(const Duration(hours: 1)),
+              updatedAt: DateTime.now().subtract(const Duration(hours: 1)),
+              orderable: OrderableItemModel(
+                id: 5,
+                restaurantId: 1,
+                name: "Bitter leaf soup",
+                description: "Traditional bitter leaf soup",
+                plateSize: "M",
+                quantity: 1,
+                isAvailable: true,
+                price: 15.00,
+                prepTimeMinutes: 30,
+                categoryId: 3,
+                isPublished: true,
+                createdAt: DateTime.now().subtract(const Duration(days: 1)),
+                updatedAt: DateTime.now().subtract(const Duration(days: 1)),
+              ),
+              options: {"salt_level": "Less salt"},
             ),
           ],
+          user: OrderUserModel(
+            id: 3,
+            fname: "Taylor",
+            lname: "",
+            phone: "+234 803 456 7890",
+            email: "taylor@example.com",
+            status: "verified",
+            referralCode: "TAYLOR789",
+            failedLoginAttempts: 0,
+            createdAt: DateTime.now().subtract(const Duration(days: 45)),
+            updatedAt: DateTime.now().subtract(const Duration(days: 45)),
+          ),
+          deliveryLocation: DeliveryLocationModel(
+            id: 3,
+            name: "789 Pine Rd, Uptown",
+            latitude: 6.5025,
+            longitude: 3.3675,
+            locationableType: "App\\Models\\Order",
+            locationableId: 3,
+            createdAt: DateTime.now().subtract(const Duration(hours: 1)),
+            updatedAt: DateTime.now().subtract(const Duration(hours: 1)),
+          ),
         ),
         OrderModel(
-          id: "45678",
-          customerId: "customer_4",
-          customerName: "Morgan",
-          customerPhone: "+234 804 567 8901",
-          deliveryAddress: "321 Maple Dr, Westside",
+          id: 4,
+          orderableType: "App\\Models\\Restaurant",
+          orderableId: 1,
+          userId: 4,
+          ref: "ORD-45678JKL",
+          status: "ready",
+          subtotal: 40.00,
+          tax: 0.00,
+          deliveryFee: 0.00,
+          notes: "",
+          discountAmount: 0.00,
+          paymentReference: "ORDER-ORD-45678JKL",
           total: 40.00,
-          status: "Ready",
-          totalItems: 4,
-          orderDate: DateTime.now().subtract(const Duration(hours: 2)),
-          estimatedDeliveryTime: "Ready for pickup",
+          createdAt: DateTime.now().subtract(const Duration(hours: 2)),
+          updatedAt: DateTime.now().subtract(const Duration(minutes: 10)),
           items: [
             OrderItemModel(
-              id: "item_6",
-              name: "Assorted vegetable soup",
+              id: 6,
+              orderId: 4,
+              orderableType: "App\\Models\\RestaurantMenu",
+              orderableId: 6,
               quantity: 2,
               price: 15.00,
-              image: "assets/imgs/vegetable_soup.png",
-              specialInstructions: "",
+              total: 30.00,
+              createdAt: DateTime.now().subtract(const Duration(hours: 2)),
+              updatedAt: DateTime.now().subtract(const Duration(hours: 2)),
+              orderable: OrderableItemModel(
+                id: 6,
+                restaurantId: 1,
+                name: "Assorted vegetable soup",
+                description: "Mixed vegetable soup with meat",
+                plateSize: "L",
+                quantity: 1,
+                isAvailable: true,
+                price: 15.00,
+                prepTimeMinutes: 35,
+                categoryId: 3,
+                isPublished: true,
+                createdAt: DateTime.now().subtract(const Duration(days: 1)),
+                updatedAt: DateTime.now().subtract(const Duration(days: 1)),
+              ),
             ),
             OrderItemModel(
-              id: "item_7",
-              name: "Spaghetti",
+              id: 7,
+              orderId: 4,
+              orderableType: "App\\Models\\RestaurantMenu",
+              orderableId: 7,
               quantity: 2,
-              price: 12.50,
-              image: "assets/imgs/spaghetti.png",
-              specialInstructions: "Extra sauce",
+              price: 5.00,
+              total: 10.00,
+              createdAt: DateTime.now().subtract(const Duration(hours: 2)),
+              updatedAt: DateTime.now().subtract(const Duration(hours: 2)),
+              orderable: OrderableItemModel(
+                id: 7,
+                restaurantId: 1,
+                name: "Spaghetti",
+                description: "Classic spaghetti with tomato sauce",
+                plateSize: "M",
+                quantity: 1,
+                isAvailable: true,
+                price: 5.00,
+                prepTimeMinutes: 20,
+                categoryId: 4,
+                isPublished: true,
+                createdAt: DateTime.now().subtract(const Duration(days: 1)),
+                updatedAt: DateTime.now().subtract(const Duration(days: 1)),
+              ),
+              options: {"sauce": "Extra sauce"},
             ),
           ],
+          user: OrderUserModel(
+            id: 4,
+            fname: "Morgan",
+            lname: "",
+            phone: "+234 804 567 8901",
+            email: "morgan@example.com",
+            status: "verified",
+            referralCode: "MORGAN012",
+            failedLoginAttempts: 0,
+            createdAt: DateTime.now().subtract(const Duration(days: 90)),
+            updatedAt: DateTime.now().subtract(const Duration(days: 90)),
+          ),
+          deliveryLocation: DeliveryLocationModel(
+            id: 4,
+            name: "321 Maple Dr, Westside",
+            latitude: 6.4895,
+            longitude: 3.3445,
+            locationableType: "App\\Models\\Order",
+            locationableId: 4,
+            createdAt: DateTime.now().subtract(const Duration(hours: 2)),
+            updatedAt: DateTime.now().subtract(const Duration(hours: 2)),
+          ),
         ),
       ];
 
@@ -180,7 +418,7 @@ class OrdersController extends GetxController {
   }
 
   // Update order status
-  updateOrderStatus(String orderId, String newStatus) async {
+  updateOrderStatus(int orderId, String newStatus) async {
     setLoadingState(true);
 
     try {
@@ -190,18 +428,23 @@ class OrdersController extends GetxController {
       // Update in local list
       int index = allOrders.indexWhere((order) => order.id == orderId);
       if (index != -1) {
-        allOrders[index] = OrderModel(
-          id: allOrders[index].id,
-          customerId: allOrders[index].customerId,
-          customerName: allOrders[index].customerName,
-          customerPhone: allOrders[index].customerPhone,
-          deliveryAddress: allOrders[index].deliveryAddress,
-          total: allOrders[index].total,
+        // Get current timestamp for updatedAt
+        DateTime now = DateTime.now();
+
+        // Use copyWith method for cleaner code
+        allOrders[index] = allOrders[index].copyWith(
           status: newStatus,
-          totalItems: allOrders[index].totalItems,
-          orderDate: allOrders[index].orderDate,
-          estimatedDeliveryTime: allOrders[index].estimatedDeliveryTime,
-          items: allOrders[index].items,
+          updatedAt: now,
+          // Set status-specific timestamps based on the new status
+          confirmedAt: newStatus == 'accepted' && allOrders[index].confirmedAt == null
+              ? now
+              : allOrders[index].confirmedAt,
+          completedAt: newStatus == 'completed' && allOrders[index].completedAt == null
+              ? now
+              : allOrders[index].completedAt,
+          cancelledAt: newStatus == 'cancelled' && allOrders[index].cancelledAt == null
+              ? now
+              : allOrders[index].cancelledAt,
         );
 
         // Update selected order if it's the same
@@ -211,7 +454,7 @@ class OrdersController extends GetxController {
       }
 
       filterOrdersByStatus();
-      showToast(message: "Order status updated to $newStatus", isError: false);
+      showToast(message: "Order status updated to ${_getStatusDisplayText(newStatus)}", isError: false);
     } catch (e) {
       showToast(message: "Error updating order status", isError: true);
     } finally {
@@ -219,28 +462,159 @@ class OrdersController extends GetxController {
     }
   }
 
+// Alternative method if you prefer to update by order reference
+  updateOrderStatusByRef(String orderRef, String newStatus) async {
+    setLoadingState(true);
+
+    try {
+      // TODO: Replace with actual API call
+      await Future.delayed(const Duration(seconds: 1));
+
+      // Update in local list by reference
+      int index = allOrders.indexWhere((order) => order.ref == orderRef);
+      if (index != -1) {
+        DateTime now = DateTime.now();
+
+        allOrders[index] = allOrders[index].copyWith(
+          status: newStatus,
+          updatedAt: now,
+          confirmedAt: newStatus == 'accepted' && allOrders[index].confirmedAt == null
+              ? now
+              : allOrders[index].confirmedAt,
+          completedAt: newStatus == 'completed' && allOrders[index].completedAt == null
+              ? now
+              : allOrders[index].completedAt,
+          cancelledAt: newStatus == 'cancelled' && allOrders[index].cancelledAt == null
+              ? now
+              : allOrders[index].cancelledAt,
+        );
+
+        // Update selected order if it's the same
+        if (selectedOrder?.ref == orderRef) {
+          selectedOrder = allOrders[index];
+        }
+      }
+
+      filterOrdersByStatus();
+      showToast(message: "Order status updated to ${_getStatusDisplayText(newStatus)}", isError: false);
+    } catch (e) {
+      showToast(message: "Error updating order status", isError: true);
+    } finally {
+      setLoadingState(false);
+    }
+  }
+
+// Helper method for status display text (add this to your controller)
+  String _getStatusDisplayText(String status) {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return 'Pending';
+      case 'accepted':
+        return 'Accepted';
+      case 'processing':
+        return 'Processing';
+      case 'ready':
+        return 'Ready';
+      case 'completed':
+        return 'Completed';
+      case 'cancelled':
+        return 'Cancelled';
+      default:
+        return status.toUpperCase();
+    }
+  }
+
+// Enhanced method with status transition validation
+  updateOrderStatusWithValidation(int orderId, String newStatus) async {
+    setLoadingState(true);
+
+    try {
+      // Find the order
+      int index = allOrders.indexWhere((order) => order.id == orderId);
+      if (index == -1) {
+        showToast(message: "Order not found", isError: true);
+        return;
+      }
+
+      String currentStatus = allOrders[index].status.toLowerCase();
+      String targetStatus = newStatus.toLowerCase();
+
+      // Validate status transition (optional - customize based on your business logic)
+      if (!_isValidStatusTransition(currentStatus, targetStatus)) {
+        showToast(message: "Invalid status transition from $currentStatus to $targetStatus", isError: true);
+        return;
+      }
+
+      // TODO: Replace with actual API call
+      await Future.delayed(const Duration(seconds: 1));
+
+      DateTime now = DateTime.now();
+
+      allOrders[index] = allOrders[index].copyWith(
+        status: newStatus,
+        updatedAt: now,
+        confirmedAt: targetStatus == 'accepted' && allOrders[index].confirmedAt == null
+            ? now
+            : allOrders[index].confirmedAt,
+        completedAt: targetStatus == 'completed' && allOrders[index].completedAt == null
+            ? now
+            : allOrders[index].completedAt,
+        cancelledAt: targetStatus == 'cancelled' && allOrders[index].cancelledAt == null
+            ? now
+            : allOrders[index].cancelledAt,
+      );
+
+      // Update selected order if it's the same
+      if (selectedOrder?.id == orderId) {
+        selectedOrder = allOrders[index];
+      }
+
+      filterOrdersByStatus();
+      showToast(message: "Order status updated to ${_getStatusDisplayText(newStatus)}", isError: false);
+    } catch (e) {
+      showToast(message: "Error updating order status: ${e.toString()}", isError: true);
+    } finally {
+      setLoadingState(false);
+    }
+  }
+
+// Helper method to validate status transitions (customize based on your business logic)
+  bool _isValidStatusTransition(String currentStatus, String newStatus) {
+    // Define valid transitions based on your business logic
+    Map<String, List<String>> validTransitions = {
+      'pending': ['accepted', 'cancelled'],
+      'accepted': ['processing', 'cancelled'],
+      'processing': ['ready', 'cancelled'],
+      'ready': ['completed'],
+      'completed': [], // No transitions from completed
+      'cancelled': [], // No transitions from cancelled
+    };
+
+    return validTransitions[currentStatus]?.contains(newStatus) ?? false;
+  }
+
   // Accept order
-  acceptOrder(String orderId) async {
+  acceptOrder(int orderId) async {
     await updateOrderStatus(orderId, "Accepted");
   }
 
   // Start processing order
-  startProcessingOrder(String orderId) async {
+  startProcessingOrder(int orderId) async {
     await updateOrderStatus(orderId, "Processing");
   }
 
   // Mark order as ready
-  markOrderReady(String orderId) async {
+  markOrderReady(int orderId) async {
     await updateOrderStatus(orderId, "Ready");
   }
 
   // Complete order
-  completeOrder(String orderId) async {
+  completeOrder(int orderId) async {
     await updateOrderStatus(orderId, "Completed");
   }
 
   // Reject order
-  rejectOrder(String orderId) async {
+  rejectOrder(int orderId) async {
     setLoadingState(true);
 
     try {
