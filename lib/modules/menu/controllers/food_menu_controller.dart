@@ -115,10 +115,10 @@ class FoodMenuController extends GetxController {
   // Initialize default categories
   void initializeDefaultCategories() {
     categoryModels = [
-      CategoryModel(id: '1', name: 'Rice', createdAt: DateTime.now()),
-      CategoryModel(id: '2', name: 'Vegetable', createdAt: DateTime.now()),
-      CategoryModel(id: '3', name: 'Soup', createdAt: DateTime.now()),
-      CategoryModel(id: '4', name: 'Spaghetti', createdAt: DateTime.now()),
+      CategoryModel(id: '1', name: 'Rice', description: "Nice one"),
+      CategoryModel(id: '2', name: 'Vegetable', description: "Nice one"),
+      CategoryModel(id: '3', name: 'Soup', description: "Nice one"),
+      CategoryModel(id: '4', name: 'Spaghetti', description: "Nice one"),
     ];
     filteredCategories = List.from(categoryModels);
   }
@@ -228,7 +228,7 @@ class FoodMenuController extends GetxController {
             categoryModels[index] = CategoryModel(
               id: selectedCategoryModel!.id,
               name: categoryNameController.text,
-              createdAt: selectedCategoryModel!.createdAt,
+                description: "Nice one"
             );
           }
           showToast(message: "Category updated successfully", isError: false);
@@ -237,7 +237,7 @@ class FoodMenuController extends GetxController {
           final newCategory = CategoryModel(
             id: DateTime.now().millisecondsSinceEpoch.toString(),
             name: categoryNameController.text,
-            createdAt: DateTime.now(),
+            description: "Nice one",
           );
           categoryModels.add(newCategory);
           showToast(message: "Category added successfully", isError: false);

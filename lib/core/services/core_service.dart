@@ -222,7 +222,24 @@ class CoreService extends GetConnect {
     return APIResponse(
         status: "error", data: "Error", message: "Something went wrong");
   }
-
+  // general patch
+  Future<APIResponse> generalPatch(String url, data) async {
+    try {
+      final res = await _dio.patch(url, data: data);
+      if (res.statusCode == 200 || res.statusCode == 201) {
+        return APIResponse.fromMap(res.data);
+      }
+    } on DioException catch (e) {
+      if (e.response != null) {
+        return APIResponse.fromMap(e.response?.data);
+      } else {
+        return APIResponse(
+            status: "error", data: "Error", message: "Something went wrong");
+      }
+    }
+    return APIResponse(
+        status: "error", data: "Error", message: "Something went wrong");
+  }
   // form put
   Future<APIResponse> formUpdate(String url, Map<String, dynamic> data) async {
     try {

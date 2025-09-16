@@ -173,6 +173,7 @@ class OrdersHomeScreen extends GetView<OrdersController> {
 }
 
 // Order Card Widget
+// Updated OrderCard Widget
 class OrderCard extends StatelessWidget {
   final OrderModel order;
   final VoidCallback onTap;
@@ -239,7 +240,7 @@ class OrderCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 customText(
-                  "Order #${order.id}",
+                  "Order #${order.ref}",  // Updated to use ref instead of id
                   color: AppColors.greyColor,
                   fontSize: 11.sp,
                   fontWeight: FontWeight.normal,
@@ -323,7 +324,7 @@ class OrderCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12.r),
                     ),
                     child: customText(
-                      order.status,
+                      _getStatusDisplayText(order.status),  // New method for better display
                       color: _getStatusColor(order.status),
                       fontSize: 10.sp,
                       fontWeight: FontWeight.w600,
@@ -356,6 +357,31 @@ class OrderCard extends StatelessWidget {
                 ),
               ],
             ),
+
+            // Optional: Show order notes if available
+            if (order.notes.isNotEmpty) ...[
+              SizedBox(height: 8.h),
+              Row(
+                children: [
+                  Icon(
+                    Icons.note_outlined,
+                    color: AppColors.greyColor,
+                    size: 16.sp,
+                  ),
+                  SizedBox(width: 4.w),
+                  Expanded(
+                    child: customText(
+                      "Note: ${order.notes}",
+                      color: AppColors.greyColor,
+                      fontSize: 11.sp,
+                      fontWeight: FontWeight.normal,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ],
         ),
       ),
@@ -374,8 +400,29 @@ class OrderCard extends StatelessWidget {
         return Colors.green;
       case 'completed':
         return Colors.grey;
+      case 'cancelled':
+        return Colors.red;
       default:
         return AppColors.greyColor;
+    }
+  }
+
+  String _getStatusDisplayText(String status) {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return 'Pending';
+      case 'accepted':
+        return 'Accepted';
+      case 'processing':
+        return 'Processing';
+      case 'ready':
+        return 'Ready';
+      case 'completed':
+        return 'Completed';
+      case 'cancelled':
+        return 'Cancelled';
+      default:
+        return status.toUpperCase();
     }
   }
 }
