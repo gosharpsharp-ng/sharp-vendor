@@ -1,4 +1,5 @@
 import 'package:dotted_border/dotted_border.dart';
+import 'package:sharpvendor/core/models/categories_model.dart';
 import 'package:sharpvendor/modules/menu/controllers/food_menu_controller.dart';
 import '../../../core/utils/exports.dart';
 import '../../../core/utils/widgets/base64_image.dart';
@@ -18,16 +19,16 @@ class EditMenuScreen extends GetView<FoodMenuController> {
               onPop: () {
                 Get.back();
               },
-              title: "Menu Setup",
+              title: "Edit Menu",
             ),
             bottomNavigationBar: Container(
               padding: EdgeInsets.symmetric(horizontal: 22.sp, vertical: 20.sp),
               child: CustomButton(
                 onPressed: () {
-                  menuController.saveMenuItem();
+                  menuController.updateMenuItem();
                 },
                 isBusy: menuController.isLoading,
-                title: "Save",
+                title: "Update",
                 width: 1.sw,
                 backgroundColor: AppColors.primaryColor,
                 fontColor: AppColors.whiteColor,
@@ -94,9 +95,7 @@ class EditMenuScreen extends GetView<FoodMenuController> {
                             borderRadius: BorderRadius.circular(8.r),
                             image: menuController.foodImage != null
                                 ? DecorationImage(
-                              image: AssetImage(
-                                menuController.foodImage!,
-                              ),
+                              image: _getImageProvider(menuController.foodImage!),
                               fit: BoxFit.cover,
                             )
                                 : null,
@@ -169,7 +168,7 @@ class EditMenuScreen extends GetView<FoodMenuController> {
                     // Menu Name
                     CustomRoundedInputField(
                       title: "Menu name",
-                      label: "e.g Ofada Rice",
+                      label: "e.g Caesar Salad",
                       showLabel: true,
                       isRequired: true,
                       hasTitle: true,
@@ -185,7 +184,7 @@ class EditMenuScreen extends GetView<FoodMenuController> {
                     // Description
                     CustomRoundedInputField(
                       title: "Description",
-                      label: "Comment",
+                      label: "Fresh romaine with parmesan...",
                       showLabel: true,
                       isRequired: false,
                       hasTitle: true,
@@ -198,7 +197,7 @@ class EditMenuScreen extends GetView<FoodMenuController> {
                     // Price
                     CustomRoundedInputField(
                       title: "Price",
-                      label: "N0,000.00",
+                      label: "12.99",
                       showLabel: true,
                       isRequired: true,
                       hasTitle: true,
@@ -215,55 +214,183 @@ class EditMenuScreen extends GetView<FoodMenuController> {
                       },
                     ),
 
-                    // Category Dropdown
+                    SizedBox(height: 15.h),
+
+                    // Prep Time (minutes)
+                    CustomRoundedInputField(
+                      title: "Prep time (minutes)",
+                      label: "15",
+                      showLabel: true,
+                      isRequired: true,
+                      hasTitle: true,
+                      keyboardType: TextInputType.number,
+                      controller: menuController.prepTimeController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter prep time';
+                        }
+                        if (int.tryParse(value) == null) {
+                          return 'Please enter a valid number';
+                        }
+                        if (int.parse(value) <= 0) {
+                          return 'Prep time must be greater than 0';
+                        }
+                        return null;
+                      },
+                    ),
+
+                    SizedBox(height: 15.h),
+
+                    // Plate Size Selection
                     customText(
-                      "Category",
+                      "Plate size",
                       color: AppColors.blackColor,
                       fontSize: 13.sp,
                       fontWeight: FontWeight.w500,
                     ),
                     SizedBox(height: 8.h),
-                    Container(
-                      width: 1.sw,
-                      padding: EdgeInsets.symmetric(horizontal: 16.w),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: AppColors.greyColor.withOpacity(0.3),
+                    Row(
+                      children: menuController.plateSizes.map((size) {
+                        bool isSelected = menuController.selectedPlateSize == size;
+                        return Expanded(
+                          child: GestureDetector(
+                            onTap: () => menuController.setSelectedPlateSize(size),
+                            child: Container(
+                              margin: EdgeInsets.only(
+                                right: size != menuController.plateSizes.last ? 8.w : 0,
+                              ),
+                              padding: EdgeInsets.symmetric(vertical: 12.h),
+                              decoration: BoxDecoration(
+                                color: isSelected
+                                    ? AppColors.primaryColor
+                                    : AppColors.backgroundColor,
+                                borderRadius: BorderRadius.circular(8.r),
+                                border: Border.all(
+                                  color: isSelected
+                                      ? AppColors.primaryColor
+                                      : AppColors.greyColor.withOpacity(0.3),
+                                ),
+                              ),
+                              child: Center(
+                                child: customText(
+                                  size,
+                                  color: isSelected
+                                      ? AppColors.whiteColor
+                                      : AppColors.blackColor,
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+
+                    SizedBox(height: 15.h),
+
+                    // Category Selection
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        customText(
+                          "Category",
+                          color: AppColors.blackColor,
+                          fontSize: 13.sp,
+                          fontWeight: FontWeight.w500,
                         ),
-                        borderRadius: BorderRadius.circular(8.r),
-                        color: AppColors.whiteColor,
+                        // GestureDetector(
+                        //   onTap: () {
+                        //     Get.toNamed(Routes.CATEGORIES_MANAGEMENT_SCREEN);
+                        //   },
+                        //   child: customText(
+                        //     "Add Category",
+                        //     color: AppColors.greenColor,
+                        //     fontSize: 13.sp,
+                        //     fontWeight: FontWeight.w600,
+                        //   ),
+                        // ),
+                      ],
+                    ),
+                    SizedBox(height: 8.h),
+                    ClickableCustomRoundedInputField(
+                      title: "Category",
+                      label: "Select Category",
+                      readOnly: true,
+                      showLabel: true,
+                      hasTitle: false,
+                      isRequired: true,
+                      controller: TextEditingController(
+                        text: menuController.selectedCategory?.name ?? "",
                       ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          hint: customText(
-                            "Select",
-                            color: AppColors.greyColor,
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.normal,
+                      onPressed: () {
+                        showAnyBottomSheet(
+                          child: CategoryBottomSheet(
+                            categories: menuController.categories,
+                            onCategorySelected: (category) {
+                              menuController.setSelectedCategory(category);
+                              Get.back();
+                            },
                           ),
-                          value: menuController.selectedCategory,
-                          icon: SvgPicture.asset(
-                            SvgAssets.downChevronIcon,
-                            color: AppColors.primaryColor,
-                          ),
-                          items: menuController.categories.map((String category) {
-                            return DropdownMenuItem<String>(
-                              value: category,
-                              child: customText(
-                                category,
+                        );
+                      },
+                      suffixWidget: IconButton(
+                        onPressed: () {
+                          showAnyBottomSheet(
+                            child: CategoryBottomSheet(
+                              categories: menuController.categories,
+                              onCategorySelected: (category) {
+                                menuController.setSelectedCategory(category);
+                                Get.back();
+                              },
+                            ),
+                          );
+                        },
+                        icon: SvgPicture.asset(
+                          SvgAssets.downChevronIcon,
+                          color: AppColors.primaryColor,
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please select a category';
+                        }
+                        return null;
+                      },
+                    ),
+
+                    SizedBox(height: 20.h),
+
+                    // Show on customer app toggle
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              customText(
+                                "Show on customer app",
                                 color: AppColors.blackColor,
                                 fontSize: 14.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              customText(
+                                "Toggle visibility for customers",
+                                color: AppColors.greyColor,
+                                fontSize: 12.sp,
                                 fontWeight: FontWeight.normal,
                               ),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            if (newValue != null) {
-                              menuController.setSelectedCategory(newValue);
-                            }
-                          },
+                            ],
+                          ),
                         ),
-                      ),
+                        Switch(
+                          value: menuController.showOnCustomerApp,
+                          onChanged: menuController.toggleShowOnCustomerApp,
+                          activeColor: AppColors.primaryColor,
+                        ),
+                      ],
                     ),
 
                     SizedBox(height: 20.h),
@@ -273,146 +400,96 @@ class EditMenuScreen extends GetView<FoodMenuController> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         customText(
-                          "Availability",
+                          "Available",
                           color: AppColors.blackColor,
-                          fontSize: 13.sp,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.w500,
                         ),
                         Switch(
-                          value: menuController.isAvailable,
-                          onChanged: (value) {
-                            menuController.toggleAvailability(value);
+                          value: menuController.isAvailable==1,
+                          onChanged: (bool value){
+                            menuController.toggleAvailability(value ? 1 : 0);
                           },
                           activeColor: AppColors.primaryColor,
                         ),
                       ],
                     ),
 
-                    SizedBox(height: 20.h),
-
-                    // Food Duration Dropdown
-                    customText(
-                      "Food duration",
-                      color: AppColors.blackColor,
-                      fontSize: 13.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    SizedBox(height: 8.h),
-                    Container(
-                      width: 1.sw,
-                      padding: EdgeInsets.symmetric(horizontal: 16.w),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: AppColors.greyColor.withOpacity(0.3),
-                        ),
-                        borderRadius: BorderRadius.circular(8.r),
-                        color: AppColors.whiteColor,
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          hint: customText(
-                            "Select",
-                            color: AppColors.greyColor,
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.normal,
-                          ),
-                          value: menuController.selectedFoodDuration,
-                          icon: SvgPicture.asset(
-                            SvgAssets.downChevronIcon,
-                            color: AppColors.primaryColor,
-                          ),
-                          items: menuController.foodDurations.map((String duration) {
-                            return DropdownMenuItem<String>(
-                              value: duration,
-                              child: customText(
-                                duration,
-                                color: AppColors.blackColor,
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.normal,
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            if (newValue != null) {
-                              menuController.setSelectedFoodDuration(newValue);
-                            }
-                          },
-                        ),
-                      ),
-                    ),
-
-                    SizedBox(height: 20.h),
+                    SizedBox(height: 15.h),
 
                     // Available Quantity
-                    customText(
-                      "Available quantity",
-                      color: AppColors.blackColor,
-                      fontSize: 13.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    SizedBox(height: 8.h),
-                    Row(
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            menuController.decrementQuantity();
-                          },
-                          child: Container(
-                            padding: EdgeInsets.all(8.sp),
+                    if (menuController.isAvailable==1) ...[
+                      customText(
+                        "Available quantity",
+                        color: AppColors.blackColor,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      SizedBox(height: 8.h),
+                      Row(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              menuController.decrementQuantity();
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(8.sp),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: AppColors.greyColor.withOpacity(0.3),
+                                ),
+                                borderRadius: BorderRadius.circular(4.r),
+                              ),
+                              child: Icon(
+                                Icons.remove,
+                                size: 20.sp,
+                                color: AppColors.blackColor,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 12.w),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16.w,
+                              vertical: 12.h,
+                            ),
                             decoration: BoxDecoration(
                               border: Border.all(
                                 color: AppColors.greyColor.withOpacity(0.3),
                               ),
                               borderRadius: BorderRadius.circular(4.r),
                             ),
-                            child: Icon(
-                              Icons.remove,
-                              size: 20.sp,
+                            child: customText(
+                              menuController.availableQuantity.toString(),
                               color: AppColors.blackColor,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
-                        ),
-                        SizedBox(width: 12.w),
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 16.w,
-                            vertical: 12.h,
-                          ),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: AppColors.greyColor.withOpacity(0.3),
-                            ),
-                            borderRadius: BorderRadius.circular(4.r),
-                          ),
-                          child: customText(
-                            menuController.availableQuantity.toString(),
-                            color: AppColors.blackColor,
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        SizedBox(width: 12.w),
-                        InkWell(
-                          onTap: () {
-                            menuController.incrementQuantity();
-                          },
-                          child: Container(
-                            padding: EdgeInsets.all(8.sp),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: AppColors.greyColor.withOpacity(0.3),
+                          SizedBox(width: 12.w),
+                          InkWell(
+                            onTap: () {
+                              menuController.incrementQuantity();
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(8.sp),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: AppColors.greyColor.withOpacity(0.3),
+                                ),
+                                borderRadius: BorderRadius.circular(4.r),
                               ),
-                              borderRadius: BorderRadius.circular(4.r),
-                            ),
-                            child: Icon(
-                              Icons.add,
-                              size: 20.sp,
-                              color: AppColors.blackColor,
+                              child: Icon(
+                                Icons.add,
+                                size: 20.sp,
+                                color: AppColors.blackColor,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
+                      SizedBox(height: 15.h),
+                    ],
 
                     SizedBox(height: 30.h),
                   ],
@@ -422,6 +499,97 @@ class EditMenuScreen extends GetView<FoodMenuController> {
           ),
         );
       },
+    );
+  }
+
+  // Helper method to determine image provider based on image source
+  ImageProvider _getImageProvider(String imagePath) {
+    // Check if it's a base64 string
+    if (imagePath.contains('data:image') || _isBase64(imagePath)) {
+      return base64ToMemoryImage(imagePath);
+    }
+    // Check if it's a network URL
+    else if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+      return NetworkImage(imagePath);
+    }
+    // Assume it's an asset path
+    else {
+      return AssetImage(imagePath);
+    }
+  }
+
+  // Helper method to check if string is base64
+  bool _isBase64(String str) {
+    try {
+      // Basic check for base64 pattern
+      return RegExp(r'^[A-Za-z0-9+/]*={0,2}$').hasMatch(str) && str.length % 4 == 0;
+    } catch (e) {
+      return false;
+    }
+  }
+}
+
+// Category Bottom Sheet Widget (reuse from Add Menu Screen)
+class CategoryBottomSheet extends StatelessWidget {
+  final List<CategoryModel> categories;
+  final Function(CategoryModel) onCategorySelected;
+
+  const CategoryBottomSheet({
+    super.key,
+    required this.categories,
+    required this.onCategorySelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 22.sp, vertical: 20.sp),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          customText(
+            "Select Category",
+            color: AppColors.blackColor,
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w600,
+          ),
+          SizedBox(height: 16.h),
+          if (categories.isEmpty)
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 20.h),
+              child: Center(
+                child: customText(
+                  "No categories available. Add a category first.",
+                  color: AppColors.greyColor,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.normal,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            )
+          else
+            Flexible(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: categories.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: customText(
+                      categories[index].name,
+                      color: AppColors.blackColor,
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.normal,
+                    ),
+                    onTap: () {
+                      onCategorySelected(categories[index]);
+                    },
+                  );
+                },
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

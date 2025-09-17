@@ -54,20 +54,17 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
                   decoration: BoxDecoration(
                     color: AppColors.greyColor.withOpacity(0.2),
                   ),
-                  child: menuItem.image.isEmpty
+                  child:menuItem.files.isEmpty
                       ? _buildPlaceholderImage()
-                      : menuItem.image.startsWith('http')
+                      : menuItem.files[0].url.startsWith('http')
                       ? Image.network(
-                    menuItem.image,
+                    menuItem.files[0].url,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       return _buildPlaceholderImage();
                     },
                   )
-                      : Image.asset(
-                    menuItem.image,
-                    fit: BoxFit.cover,
-                  ),
+                      : Image.asset(menuItem.files[0].url, fit: BoxFit.cover),
                 ),
 
                 // Content Section
@@ -106,7 +103,7 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
                       _buildPlateSizeRow(),
 
                       SizedBox(height: 16.h),
-                      _buildDetailRow("Category", menuItem.category),
+                      _buildDetailRow("Category", menuItem.category.name),
 
                       SizedBox(height: 16.h),
                       _buildDetailRow("Duration", menuItem.duration),
@@ -240,7 +237,7 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
           fontWeight: FontWeight.normal,
         ),
         Switch(
-          value: menuItem.isAvailable,
+          value: menuItem.isAvailable==1,
           onChanged: (value) {
             controller.updateMenuItemAvailability(menuItem.id, value);
           },

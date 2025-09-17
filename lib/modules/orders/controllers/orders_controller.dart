@@ -1,13 +1,17 @@
-import 'dart:async';
+
 import 'package:sharpvendor/core/models/order_model.dart';
+import 'package:sharpvendor/core/services/restaurant/orders/orders_service.dart';
 import '../../../core/utils/exports.dart';
 
 class OrdersController extends GetxController {
+  // Orders Service Instance
+  final OrdersService _ordersService = serviceLocator<OrdersService>();
+
   // Loading states
   bool isLoading = false;
   bool isLoadingOrders = false;
 
-  setLoadingState(bool val) {
+  void setLoadingState(bool val) {
     isLoading = val;
     update();
   }
@@ -24,9 +28,9 @@ class OrdersController extends GetxController {
   // Current selected order
   OrderModel? selectedOrder;
 
-  // Order status filter
-  String selectedOrderStatus = 'Pending';
-  List<String> orderStatuses = ['Pending', 'Accepted', 'Processing', 'Ready'];
+  // Order status filter - Updated to match API statuses
+  String selectedOrderStatus = 'pending';
+  List<String> orderStatuses = ['pending', 'preparing', 'ready', 'in_transit', 'completed'];
 
   setSelectedOrderStatus(String status) {
     selectedOrderStatus = status;
@@ -47,474 +51,134 @@ class OrdersController extends GetxController {
         .toList();
   }
 
-  // Get orders from API
+  // Get orders from API - UPDATED WITH API INTEGRATION
   getOrders() async {
     setOrdersLoadingState(true);
 
     try {
-      // TODO: Replace with actual API call
-      await Future.delayed(const Duration(seconds: 1));
+      final response = await _ordersService.getAllOrders({
+        'page': 'page=1',
+        'per_page': 50,
+      });
 
-      // Sample data - replace with actual API response
-      allOrders = [
-        OrderModel(
-          id: 1,
-          orderableType: "App\\Models\\Restaurant",
-          orderableId: 1,
-          userId: 1,
-          ref: "ORD-12345ABC",
-          status: "pending",
-          subtotal: 23.00,
-          tax: 0.00,
-          deliveryFee: 2.00,
-          notes: "",
-          discountAmount: 0.00,
-          paymentReference: "ORDER-ORD-12345ABC",
-          total: 25.00,
-          createdAt: DateTime.now().subtract(const Duration(minutes: 15)),
-          updatedAt: DateTime.now().subtract(const Duration(minutes: 15)),
-          items: [
-            OrderItemModel(
-              id: 1,
-              orderId: 1,
-              orderableType: "App\\Models\\RestaurantMenu",
-              orderableId: 1,
-              quantity: 1,
-              price: 15.00,
-              total: 15.00,
-              createdAt: DateTime.now().subtract(const Duration(minutes: 15)),
-              updatedAt: DateTime.now().subtract(const Duration(minutes: 15)),
-              orderable: OrderableItemModel(
-                id: 1,
-                restaurantId: 1,
-                name: "Spicy Chicken Sandwich",
-                description: "Delicious spicy chicken sandwich",
-                plateSize: "L",
-                quantity: 1,
-                isAvailable: true,
-                price: 15.00,
-                prepTimeMinutes: 15,
-                categoryId: 1,
-                isPublished: true,
-                createdAt: DateTime.now().subtract(const Duration(days: 1)),
-                updatedAt: DateTime.now().subtract(const Duration(days: 1)),
-              ),
-            ),
-            OrderItemModel(
-              id: 2,
-              orderId: 1,
-              orderableType: "App\\Models\\RestaurantMenu",
-              orderableId: 2,
-              quantity: 2,
-              price: 4.00,
-              total: 8.00,
-              createdAt: DateTime.now().subtract(const Duration(minutes: 15)),
-              updatedAt: DateTime.now().subtract(const Duration(minutes: 15)),
-              orderable: OrderableItemModel(
-                id: 2,
-                restaurantId: 1,
-                name: "Fries",
-                description: "Crispy golden fries",
-                plateSize: "M",
-                quantity: 1,
-                isAvailable: true,
-                price: 4.00,
-                prepTimeMinutes: 10,
-                categoryId: 2,
-                isPublished: true,
-                createdAt: DateTime.now().subtract(const Duration(days: 1)),
-                updatedAt: DateTime.now().subtract(const Duration(days: 1)),
-              ),
-              options: {"instructions": "Extra crispy"},
-            ),
-          ],
-          user: OrderUserModel(
-            id: 1,
-            fname: "Alex",
-            lname: "",
-            phone: "+234 801 234 5678",
-            email: "alex@example.com",
-            status: "verified",
-            referralCode: "ALEX123",
-            failedLoginAttempts: 0,
-            createdAt: DateTime.now().subtract(const Duration(days: 30)),
-            updatedAt: DateTime.now().subtract(const Duration(days: 30)),
-          ),
-          deliveryLocation: DeliveryLocationModel(
-            id: 1,
-            name: "123 Main St, Anytown",
-            latitude: 6.5244,
-            longitude: 3.3792,
-            locationableType: "App\\Models\\Order",
-            locationableId: 1,
-            createdAt: DateTime.now().subtract(const Duration(minutes: 15)),
-            updatedAt: DateTime.now().subtract(const Duration(minutes: 15)),
-          ),
-        ),
-        OrderModel(
-          id: 2,
-          orderableType: "App\\Models\\Restaurant",
-          orderableId: 1,
-          userId: 2,
-          ref: "ORD-78901DEF",
-          status: "accepted",
-          subtotal: 30.00,
-          tax: 0.00,
-          deliveryFee: 0.00,
-          notes: "",
-          discountAmount: 0.00,
-          paymentReference: "ORDER-ORD-78901DEF",
-          total: 30.00,
-          createdAt: DateTime.now().subtract(const Duration(minutes: 30)),
-          updatedAt: DateTime.now().subtract(const Duration(minutes: 25)),
-          items: [
-            OrderItemModel(
-              id: 3,
-              orderId: 2,
-              orderableType: "App\\Models\\RestaurantMenu",
-              orderableId: 3,
-              quantity: 1,
-              price: 20.00,
-              total: 20.00,
-              createdAt: DateTime.now().subtract(const Duration(minutes: 30)),
-              updatedAt: DateTime.now().subtract(const Duration(minutes: 30)),
-              orderable: OrderableItemModel(
-                id: 3,
-                restaurantId: 1,
-                name: "Efo riro",
-                description: "Traditional Nigerian vegetable soup",
-                plateSize: "L",
-                quantity: 1,
-                isAvailable: true,
-                price: 20.00,
-                prepTimeMinutes: 25,
-                categoryId: 3,
-                isPublished: true,
-                createdAt: DateTime.now().subtract(const Duration(days: 1)),
-                updatedAt: DateTime.now().subtract(const Duration(days: 1)),
-              ),
-              options: {"spice_level": "Medium"},
-            ),
-            OrderItemModel(
-              id: 4,
-              orderId: 2,
-              orderableType: "App\\Models\\RestaurantMenu",
-              orderableId: 4,
-              quantity: 1,
-              price: 10.00,
-              total: 10.00,
-              createdAt: DateTime.now().subtract(const Duration(minutes: 30)),
-              updatedAt: DateTime.now().subtract(const Duration(minutes: 30)),
-              orderable: OrderableItemModel(
-                id: 4,
-                restaurantId: 1,
-                name: "Rice",
-                description: "Steamed white rice",
-                plateSize: "M",
-                quantity: 1,
-                isAvailable: true,
-                price: 10.00,
-                prepTimeMinutes: 15,
-                categoryId: 4,
-                isPublished: true,
-                createdAt: DateTime.now().subtract(const Duration(days: 1)),
-                updatedAt: DateTime.now().subtract(const Duration(days: 1)),
-              ),
-            ),
-          ],
-          user: OrderUserModel(
-            id: 2,
-            fname: "Jordan",
-            lname: "",
-            phone: "+234 802 345 6789",
-            email: "jordan@example.com",
-            status: "verified",
-            referralCode: "JORDAN456",
-            failedLoginAttempts: 0,
-            createdAt: DateTime.now().subtract(const Duration(days: 60)),
-            updatedAt: DateTime.now().subtract(const Duration(days: 60)),
-          ),
-          deliveryLocation: DeliveryLocationModel(
-            id: 2,
-            name: "456 Oak Ave, Downtown",
-            latitude: 6.4584,
-            longitude: 3.3890,
-            locationableType: "App\\Models\\Order",
-            locationableId: 2,
-            createdAt: DateTime.now().subtract(const Duration(minutes: 30)),
-            updatedAt: DateTime.now().subtract(const Duration(minutes: 30)),
-          ),
-        ),
-        OrderModel(
-          id: 3,
-          orderableType: "App\\Models\\Restaurant",
-          orderableId: 1,
-          userId: 3,
-          ref: "ORD-34567GHI",
-          status: "processing",
-          subtotal: 15.00,
-          tax: 0.00,
-          deliveryFee: 0.00,
-          notes: "Less salt please",
-          discountAmount: 0.00,
-          paymentReference: "ORDER-ORD-34567GHI",
-          total: 15.00,
-          createdAt: DateTime.now().subtract(const Duration(hours: 1)),
-          updatedAt: DateTime.now().subtract(const Duration(minutes: 45)),
-          items: [
-            OrderItemModel(
-              id: 5,
-              orderId: 3,
-              orderableType: "App\\Models\\RestaurantMenu",
-              orderableId: 5,
-              quantity: 1,
-              price: 15.00,
-              total: 15.00,
-              createdAt: DateTime.now().subtract(const Duration(hours: 1)),
-              updatedAt: DateTime.now().subtract(const Duration(hours: 1)),
-              orderable: OrderableItemModel(
-                id: 5,
-                restaurantId: 1,
-                name: "Bitter leaf soup",
-                description: "Traditional bitter leaf soup",
-                plateSize: "M",
-                quantity: 1,
-                isAvailable: true,
-                price: 15.00,
-                prepTimeMinutes: 30,
-                categoryId: 3,
-                isPublished: true,
-                createdAt: DateTime.now().subtract(const Duration(days: 1)),
-                updatedAt: DateTime.now().subtract(const Duration(days: 1)),
-              ),
-              options: {"salt_level": "Less salt"},
-            ),
-          ],
-          user: OrderUserModel(
-            id: 3,
-            fname: "Taylor",
-            lname: "",
-            phone: "+234 803 456 7890",
-            email: "taylor@example.com",
-            status: "verified",
-            referralCode: "TAYLOR789",
-            failedLoginAttempts: 0,
-            createdAt: DateTime.now().subtract(const Duration(days: 45)),
-            updatedAt: DateTime.now().subtract(const Duration(days: 45)),
-          ),
-          deliveryLocation: DeliveryLocationModel(
-            id: 3,
-            name: "789 Pine Rd, Uptown",
-            latitude: 6.5025,
-            longitude: 3.3675,
-            locationableType: "App\\Models\\Order",
-            locationableId: 3,
-            createdAt: DateTime.now().subtract(const Duration(hours: 1)),
-            updatedAt: DateTime.now().subtract(const Duration(hours: 1)),
-          ),
-        ),
-        OrderModel(
-          id: 4,
-          orderableType: "App\\Models\\Restaurant",
-          orderableId: 1,
-          userId: 4,
-          ref: "ORD-45678JKL",
-          status: "ready",
-          subtotal: 40.00,
-          tax: 0.00,
-          deliveryFee: 0.00,
-          notes: "",
-          discountAmount: 0.00,
-          paymentReference: "ORDER-ORD-45678JKL",
-          total: 40.00,
-          createdAt: DateTime.now().subtract(const Duration(hours: 2)),
-          updatedAt: DateTime.now().subtract(const Duration(minutes: 10)),
-          items: [
-            OrderItemModel(
-              id: 6,
-              orderId: 4,
-              orderableType: "App\\Models\\RestaurantMenu",
-              orderableId: 6,
-              quantity: 2,
-              price: 15.00,
-              total: 30.00,
-              createdAt: DateTime.now().subtract(const Duration(hours: 2)),
-              updatedAt: DateTime.now().subtract(const Duration(hours: 2)),
-              orderable: OrderableItemModel(
-                id: 6,
-                restaurantId: 1,
-                name: "Assorted vegetable soup",
-                description: "Mixed vegetable soup with meat",
-                plateSize: "L",
-                quantity: 1,
-                isAvailable: true,
-                price: 15.00,
-                prepTimeMinutes: 35,
-                categoryId: 3,
-                isPublished: true,
-                createdAt: DateTime.now().subtract(const Duration(days: 1)),
-                updatedAt: DateTime.now().subtract(const Duration(days: 1)),
-              ),
-            ),
-            OrderItemModel(
-              id: 7,
-              orderId: 4,
-              orderableType: "App\\Models\\RestaurantMenu",
-              orderableId: 7,
-              quantity: 2,
-              price: 5.00,
-              total: 10.00,
-              createdAt: DateTime.now().subtract(const Duration(hours: 2)),
-              updatedAt: DateTime.now().subtract(const Duration(hours: 2)),
-              orderable: OrderableItemModel(
-                id: 7,
-                restaurantId: 1,
-                name: "Spaghetti",
-                description: "Classic spaghetti with tomato sauce",
-                plateSize: "M",
-                quantity: 1,
-                isAvailable: true,
-                price: 5.00,
-                prepTimeMinutes: 20,
-                categoryId: 4,
-                isPublished: true,
-                createdAt: DateTime.now().subtract(const Duration(days: 1)),
-                updatedAt: DateTime.now().subtract(const Duration(days: 1)),
-              ),
-              options: {"sauce": "Extra sauce"},
-            ),
-          ],
-          user: OrderUserModel(
-            id: 4,
-            fname: "Morgan",
-            lname: "",
-            phone: "+234 804 567 8901",
-            email: "morgan@example.com",
-            status: "verified",
-            referralCode: "MORGAN012",
-            failedLoginAttempts: 0,
-            createdAt: DateTime.now().subtract(const Duration(days: 90)),
-            updatedAt: DateTime.now().subtract(const Duration(days: 90)),
-          ),
-          deliveryLocation: DeliveryLocationModel(
-            id: 4,
-            name: "321 Maple Dr, Westside",
-            latitude: 6.4895,
-            longitude: 3.3445,
-            locationableType: "App\\Models\\Order",
-            locationableId: 4,
-            createdAt: DateTime.now().subtract(const Duration(hours: 2)),
-            updatedAt: DateTime.now().subtract(const Duration(hours: 2)),
-          ),
-        ),
-      ];
+      if (response.status=="succes" && response.data != null) {
+        final Map<String, dynamic> responseData = response.data;
+        final List<dynamic> ordersData = responseData['data'] ?? [];
 
-      filterOrdersByStatus();
+        allOrders = ordersData.map((json) => OrderModel.fromJson(json)).toList();
+        filterOrdersByStatus();
+      } else {
+        // Keep existing sample data as fallback
+        if (allOrders.isEmpty) {
+          filterOrdersByStatus();
+        }
+
+        if (response.message.isNotEmpty && response.message.isNotEmpty) {
+          showToast(
+            message: response.message,
+            isError: true,
+          );
+        }
+      }
     } catch (e) {
-      showToast(message: "Error loading orders", isError: true);
+      // Keep existing sample data as fallback
+      if (allOrders.isEmpty) {
+        filterOrdersByStatus();
+      }
+      showToast(
+        message: "Error loading orders: ${e.toString()}",
+        isError: true,
+      );
     } finally {
       setOrdersLoadingState(false);
     }
   }
 
-  // Update order status
+
+
+  // Update order status - UPDATED WITH API INTEGRATION
   updateOrderStatus(int orderId, String newStatus) async {
     setLoadingState(true);
 
     try {
-      // TODO: Replace with actual API call
-      await Future.delayed(const Duration(seconds: 1));
+      // Prepare data in the required format
+      final Map<String, dynamic> statusData = {
+        "status": newStatus.toLowerCase(),
+      };
 
-      // Update in local list
-      int index = allOrders.indexWhere((order) => order.id == orderId);
-      if (index != -1) {
-        // Get current timestamp for updatedAt
-        DateTime now = DateTime.now();
+      // Call the API
+      final response = await _ordersService.updateOrder(statusData, orderId);
 
-        // Use copyWith method for cleaner code
-        allOrders[index] = allOrders[index].copyWith(
-          status: newStatus,
-          updatedAt: now,
-          // Set status-specific timestamps based on the new status
-          confirmedAt: newStatus == 'accepted' && allOrders[index].confirmedAt == null
-              ? now
-              : allOrders[index].confirmedAt,
-          completedAt: newStatus == 'completed' && allOrders[index].completedAt == null
-              ? now
-              : allOrders[index].completedAt,
-          cancelledAt: newStatus == 'cancelled' && allOrders[index].cancelledAt == null
-              ? now
-              : allOrders[index].cancelledAt,
-        );
+      if (response.status=="succes") {
+        // Update in local list
+        int index = allOrders.indexWhere((order) => order.id == orderId);
+        if (index != -1) {
+          DateTime now = DateTime.now();
 
-        // Update selected order if it's the same
-        if (selectedOrder?.id == orderId) {
-          selectedOrder = allOrders[index];
+          allOrders[index] = allOrders[index].copyWith(
+            status: newStatus,
+            updatedAt: now,
+            // Set status-specific timestamps based on the new status
+            confirmedAt: newStatus.toLowerCase() == 'preparing' && allOrders[index].confirmedAt == null
+                ? now
+                : allOrders[index].confirmedAt,
+            completedAt: newStatus.toLowerCase() == 'completed' && allOrders[index].completedAt == null
+                ? now
+                : allOrders[index].completedAt,
+            cancelledAt: newStatus.toLowerCase() == 'cancelled' && allOrders[index].cancelledAt == null
+                ? now
+                : allOrders[index].cancelledAt,
+          );
+
+          // Update selected order if it's the same
+          if (selectedOrder?.id == orderId) {
+            selectedOrder = allOrders[index];
+          }
         }
-      }
 
-      filterOrdersByStatus();
-      showToast(message: "Order status updated to ${_getStatusDisplayText(newStatus)}", isError: false);
+        filterOrdersByStatus();
+        showToast(
+          message: "Order status updated to ${_getStatusDisplayText(newStatus)}",
+          isError: false,
+        );
+      } else {
+        showToast(
+          message: response.message ?? "Failed to update order status",
+          isError: true,
+        );
+      }
     } catch (e) {
-      showToast(message: "Error updating order status", isError: true);
+      showToast(
+        message: "Error updating order status: ${e.toString()}",
+        isError: true,
+      );
     } finally {
       setLoadingState(false);
     }
   }
 
-// Alternative method if you prefer to update by order reference
+  // Alternative method if you prefer to update by order reference
   updateOrderStatusByRef(String orderRef, String newStatus) async {
-    setLoadingState(true);
-
-    try {
-      // TODO: Replace with actual API call
-      await Future.delayed(const Duration(seconds: 1));
-
-      // Update in local list by reference
-      int index = allOrders.indexWhere((order) => order.ref == orderRef);
-      if (index != -1) {
-        DateTime now = DateTime.now();
-
-        allOrders[index] = allOrders[index].copyWith(
-          status: newStatus,
-          updatedAt: now,
-          confirmedAt: newStatus == 'accepted' && allOrders[index].confirmedAt == null
-              ? now
-              : allOrders[index].confirmedAt,
-          completedAt: newStatus == 'completed' && allOrders[index].completedAt == null
-              ? now
-              : allOrders[index].completedAt,
-          cancelledAt: newStatus == 'cancelled' && allOrders[index].cancelledAt == null
-              ? now
-              : allOrders[index].cancelledAt,
-        );
-
-        // Update selected order if it's the same
-        if (selectedOrder?.ref == orderRef) {
-          selectedOrder = allOrders[index];
-        }
-      }
-
-      filterOrdersByStatus();
-      showToast(message: "Order status updated to ${_getStatusDisplayText(newStatus)}", isError: false);
-    } catch (e) {
-      showToast(message: "Error updating order status", isError: true);
-    } finally {
-      setLoadingState(false);
+    // Find order by reference first
+    final order = allOrders.firstWhereOrNull((order) => order.ref == orderRef);
+    if (order != null) {
+      await updateOrderStatus(order.id, newStatus);
+    } else {
+      showToast(message: "Order not found", isError: true);
     }
   }
 
-// Helper method for status display text (add this to your controller)
+  // Helper method for status display text
   String _getStatusDisplayText(String status) {
     switch (status.toLowerCase()) {
       case 'pending':
         return 'Pending';
-      case 'accepted':
-        return 'Accepted';
-      case 'processing':
-        return 'Processing';
+      case 'preparing':
+        return 'Preparing';
       case 'ready':
         return 'Ready';
+      case 'in_transit':
+        return 'In Transit';
       case 'completed':
         return 'Completed';
       case 'cancelled':
@@ -524,7 +188,7 @@ class OrdersController extends GetxController {
     }
   }
 
-// Enhanced method with status transition validation
+  // Enhanced method with status transition validation
   updateOrderStatusWithValidation(int orderId, String newStatus) async {
     setLoadingState(true);
 
@@ -545,32 +209,8 @@ class OrdersController extends GetxController {
         return;
       }
 
-      // TODO: Replace with actual API call
-      await Future.delayed(const Duration(seconds: 1));
-
-      DateTime now = DateTime.now();
-
-      allOrders[index] = allOrders[index].copyWith(
-        status: newStatus,
-        updatedAt: now,
-        confirmedAt: targetStatus == 'accepted' && allOrders[index].confirmedAt == null
-            ? now
-            : allOrders[index].confirmedAt,
-        completedAt: targetStatus == 'completed' && allOrders[index].completedAt == null
-            ? now
-            : allOrders[index].completedAt,
-        cancelledAt: targetStatus == 'cancelled' && allOrders[index].cancelledAt == null
-            ? now
-            : allOrders[index].cancelledAt,
-      );
-
-      // Update selected order if it's the same
-      if (selectedOrder?.id == orderId) {
-        selectedOrder = allOrders[index];
-      }
-
-      filterOrdersByStatus();
-      showToast(message: "Order status updated to ${_getStatusDisplayText(newStatus)}", isError: false);
+      // Call the regular update method
+      await updateOrderStatus(orderId, newStatus);
     } catch (e) {
       showToast(message: "Error updating order status: ${e.toString()}", isError: true);
     } finally {
@@ -578,14 +218,14 @@ class OrdersController extends GetxController {
     }
   }
 
-// Helper method to validate status transitions (customize based on your business logic)
+  // Helper method to validate status transitions
   bool _isValidStatusTransition(String currentStatus, String newStatus) {
     // Define valid transitions based on your business logic
     Map<String, List<String>> validTransitions = {
-      'pending': ['accepted', 'cancelled'],
-      'accepted': ['processing', 'cancelled'],
-      'processing': ['ready', 'cancelled'],
-      'ready': ['completed'],
+      'pending': ['preparing', 'cancelled'],
+      'preparing': ['ready', 'cancelled'],
+      'ready': ['in_transit', 'completed', 'cancelled'],
+      'in_transit': ['completed'],
       'completed': [], // No transitions from completed
       'cancelled': [], // No transitions from cancelled
     };
@@ -593,41 +233,74 @@ class OrdersController extends GetxController {
     return validTransitions[currentStatus]?.contains(newStatus) ?? false;
   }
 
-  // Accept order
+  // Specific order action methods - UPDATED WITH NEW STATUSES
   acceptOrder(int orderId) async {
-    await updateOrderStatus(orderId, "Accepted");
+    await updateOrderStatus(orderId, "preparing");
   }
 
-  // Start processing order
-  startProcessingOrder(int orderId) async {
-    await updateOrderStatus(orderId, "Processing");
+  // Start processing order (renamed from startProcessingOrder for clarity)
+  startPreparingOrder(int orderId) async {
+    await updateOrderStatus(orderId, "preparing");
   }
 
   // Mark order as ready
   markOrderReady(int orderId) async {
-    await updateOrderStatus(orderId, "Ready");
+    await updateOrderStatus(orderId, "ready");
+  }
+
+  // Mark order as in transit
+  markOrderInTransit(int orderId) async {
+    await updateOrderStatus(orderId, "in_transit");
   }
 
   // Complete order
   completeOrder(int orderId) async {
-    await updateOrderStatus(orderId, "Completed");
+    await updateOrderStatus(orderId, "completed");
   }
 
-  // Reject order
+  // Cancel order
+  cancelOrder(int orderId) async {
+    await updateOrderStatus(orderId, "cancelled");
+  }
+
+  // Reject order (for pending orders)
   rejectOrder(int orderId) async {
+    await cancelOrder(orderId);
+    Get.back(); // Go back if on order details screen
+  }
+
+  // Get single order by ID - NEW METHOD
+  getOrderById(int orderId) async {
     setLoadingState(true);
 
     try {
-      // TODO: Replace with actual API call
-      await Future.delayed(const Duration(seconds: 1));
+      final response = await _ordersService.getOrderById({'id': orderId});
 
-      allOrders.removeWhere((order) => order.id == orderId);
-      filterOrdersByStatus();
+      if (response.status=="success" && response.data != null) {
+        final orderData = response.data;
+        final order = OrderModel.fromJson(orderData);
 
-      showToast(message: "Order rejected successfully", isError: false);
-      Get.back(); // Go back if on order details screen
+        // Update the order in local list if it exists
+        int index = allOrders.indexWhere((o) => o.id == orderId);
+        if (index != -1) {
+          allOrders[index] = order;
+        }
+
+        setSelectedOrder(order);
+        return order;
+      } else {
+        showToast(
+          message: response.message ?? "Failed to load order details",
+          isError: true,
+        );
+        return null;
+      }
     } catch (e) {
-      showToast(message: "Error rejecting order", isError: true);
+      showToast(
+        message: "Error loading order details: ${e.toString()}",
+        isError: true,
+      );
+      return null;
     } finally {
       setLoadingState(false);
     }
@@ -659,36 +332,41 @@ class OrdersController extends GetxController {
     return "₦${amount.toStringAsFixed(2)}";
   }
 
-  // Get next action for order based on current status
+  // Get next action for order based on current status - UPDATED
   String getNextAction(String currentStatus) {
     switch (currentStatus.toLowerCase()) {
       case 'pending':
         return 'Accept Order';
-      case 'accepted':
-        return 'Start Processing';
-      case 'processing':
+      case 'preparing':
         return 'Mark as Ready';
       case 'ready':
+        return 'Mark In Transit';
+      case 'in_transit':
         return 'Complete Order';
       default:
         return 'View Order';
     }
   }
 
-  // Get next status for order
+  // Get next status for order - UPDATED
   String getNextStatus(String currentStatus) {
     switch (currentStatus.toLowerCase()) {
       case 'pending':
-        return 'Accepted';
-      case 'accepted':
-        return 'Processing';
-      case 'processing':
-        return 'Ready';
+        return 'preparing';
+      case 'preparing':
+        return 'ready';
       case 'ready':
-        return 'Completed';
+        return 'in_transit';
+      case 'in_transit':
+        return 'completed';
       default:
         return currentStatus;
     }
+  }
+
+  // Refresh orders
+  refreshOrders() async {
+    await getOrders();
   }
 
   @override
