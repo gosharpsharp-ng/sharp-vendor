@@ -17,13 +17,13 @@ class OrdersHomeScreen extends GetView<OrdersController> {
             title: "Orders",
             actionItem: IconButton(
               onPressed: () {
-                // Add menu or settings functionality
+                // Refresh orders
+                ordersController.refreshOrders();
               },
-              icon: SvgPicture.asset(
-                SvgAssets.menuIcon,
+              icon: Icon(
+                Icons.refresh,
                 color: AppColors.blackColor,
-                width: 24.sp,
-                height: 24.sp,
+                size: 24.sp,
               ),
             ),
           ),
@@ -48,6 +48,7 @@ class OrdersHomeScreen extends GetView<OrdersController> {
                       final status = ordersController.orderStatuses[index];
                       final isSelected = ordersController.selectedOrderStatus == status;
                       final orderCount = ordersController.getOrderCountByStatus(status);
+                      final displayName = _getStatusDisplayName(status);
 
                       return InkWell(
                         onTap: () {
@@ -73,7 +74,7 @@ class OrdersHomeScreen extends GetView<OrdersController> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               customText(
-                                status,
+                                displayName,
                                 color: isSelected
                                     ? AppColors.whiteColor
                                     : AppColors.blackColor,
@@ -115,52 +116,31 @@ class OrdersHomeScreen extends GetView<OrdersController> {
 
                 // Orders List
                 Expanded(
-                  child: ordersController.isLoadingOrders
-                      ? const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.primaryColor,
+                  child: RefreshIndicator(
+                    onRefresh: () => ordersController.refreshOrders(),
+                    color: AppColors.primaryColor,
+                    child: ordersController.isLoadingOrders
+                        ? const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.primaryColor,
+                      ),
+                    )
+                        : ordersController.filteredOrders.isEmpty
+                        ? _buildEmptyState(ordersController.selectedOrderStatus)
+                        : ListView.separated(
+                      itemCount: ordersController.filteredOrders.length,
+                      separatorBuilder: (context, index) => SizedBox(height: 16.h),
+                      itemBuilder: (context, index) {
+                        final order = ordersController.filteredOrders[index];
+                        return OrderCard(
+                          order: order,
+                          onTap: () {
+                            ordersController.setSelectedOrder(order);
+                            Get.toNamed(Routes.ORDER_DETAILS_SCREEN);
+                          },
+                        );
+                      },
                     ),
-                  )
-                      : ordersController.filteredOrders.isEmpty
-                      ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(
-                          SvgAssets.ordersIcon,
-                          height: 80.h,
-                          color: AppColors.greyColor,
-                        ),
-                        SizedBox(height: 16.h),
-                        customText(
-                          "No ${ordersController.selectedOrderStatus.toLowerCase()} orders",
-                          color: AppColors.greyColor,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        SizedBox(height: 8.h),
-                        customText(
-                          "Orders will appear here when customers place them",
-                          color: AppColors.greyColor,
-                          fontSize: 14.sp,
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  )
-                      : ListView.separated(
-                    itemCount: ordersController.filteredOrders.length,
-                    separatorBuilder: (context, index) => SizedBox(height: 16.h),
-                    itemBuilder: (context, index) {
-                      final order = ordersController.filteredOrders[index];
-                      return OrderCard(
-                        order: order,
-                        onTap: () {
-                          ordersController.setSelectedOrder(order);
-                          Get.toNamed(Routes.ORDER_DETAILS_SCREEN);
-                        },
-                      );
-                    },
                   ),
                 ),
               ],
@@ -170,9 +150,96 @@ class OrdersHomeScreen extends GetView<OrdersController> {
       },
     );
   }
+
+  Widget _buildEmptyState(String status) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 80.w,
+            height: 80.h,
+            decoration: BoxDecoration(
+              color: AppColors.greyColor.withOpacity(0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              _getStatusIcon(status),
+              size: 40.sp,
+              color: AppColors.greyColor,
+            ),
+          ),
+          SizedBox(height: 16.h),
+          customText(
+            "No ${_getStatusDisplayName(status).toLowerCase()} orders",
+            color: AppColors.greyColor,
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w500,
+          ),
+          SizedBox(height: 8.h),
+          customText(
+            _getEmptyStateMessage(status),
+            color: AppColors.greyColor,
+            fontSize: 14.sp,
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _getStatusDisplayName(String status) {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return 'Pending';
+      case 'preparing':
+        return 'Preparing';
+      case 'ready':
+        return 'Ready';
+      case 'in_transit':
+        return 'In Transit';
+      case 'completed':
+        return 'Completed';
+      default:
+        return status.toUpperCase();
+    }
+  }
+
+  IconData _getStatusIcon(String status) {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return Icons.access_time;
+      case 'preparing':
+        return Icons.restaurant;
+      case 'ready':
+        return Icons.check_circle_outline;
+      case 'in_transit':
+        return Icons.local_shipping;
+      case 'completed':
+        return Icons.done_all;
+      default:
+        return Icons.receipt;
+    }
+  }
+
+  String _getEmptyStateMessage(String status) {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return 'New orders will appear here when customers place them';
+      case 'preparing':
+        return 'Orders you\'ve accepted will show here while being prepared';
+      case 'ready':
+        return 'Completed orders ready for pickup/delivery will appear here';
+      case 'in_transit':
+        return 'Orders out for delivery will be tracked here';
+      case 'completed':
+        return 'Successfully completed orders will be listed here';
+      default:
+        return 'Orders will appear here when customers place them';
+    }
+  }
 }
 
-// Order Card Widget
 // Updated OrderCard Widget
 class OrderCard extends StatelessWidget {
   final OrderModel order;
@@ -186,6 +253,8 @@ class OrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<OrdersController>();
+
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -193,6 +262,10 @@ class OrderCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.whiteColor,
           borderRadius: BorderRadius.circular(12.r),
+          border: Border.all(
+            color: _getStatusColor(order.status).withOpacity(0.2),
+            width: 1,
+          ),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
@@ -208,48 +281,86 @@ class OrderCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
+                Expanded(
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 32.w,
+                        height: 32.h,
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryColor.withOpacity(0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: customText(
+                            (order.user.fname.isNotEmpty ? order.user.fname[0] : 'U').toUpperCase(),
+                            color: AppColors.primaryColor,
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 8.w),
+                      Expanded(
+                        child: customText(
+                          order.user.fname.isNotEmpty ? order.user.fname : 'Customer',
+                          color: AppColors.blackColor,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w600,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     customText(
-                      "Customer: ",
-                      color: AppColors.greyColor,
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.normal,
-                    ),
-                    customText(
-                      order.customerName,
+                      controller.formatCurrency(order.total),
                       color: AppColors.blackColor,
-                      fontSize: 12.sp,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w600,
                     ),
+                    customText(
+                      controller.formatOrderTime(order.createdAt),
+                      color: AppColors.greyColor,
+                      fontSize: 11.sp,
+                      fontWeight: FontWeight.normal,
+                    ),
                   ],
-                ),
-                customText(
-                  Get.find<OrdersController>().formatCurrency(order.total),
-                  color: AppColors.blackColor,
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w600,
                 ),
               ],
             ),
 
-            SizedBox(height: 4.h),
+            SizedBox(height: 8.h),
 
-            // Order ID and time
+            // Order ID and status
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 customText(
-                  "Order #${order.ref}",  // Updated to use ref instead of id
+                  "Order #${order.ref}",
                   color: AppColors.greyColor,
-                  fontSize: 11.sp,
+                  fontSize: 12.sp,
                   fontWeight: FontWeight.normal,
                 ),
-                customText(
-                  Get.find<OrdersController>().formatOrderTime(order.orderDate),
-                  color: AppColors.greyColor,
-                  fontSize: 11.sp,
-                  fontWeight: FontWeight.normal,
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 8.w,
+                    vertical: 3.h,
+                  ),
+                  decoration: BoxDecoration(
+                    color: _getStatusColor(order.status).withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                  child: customText(
+                    _getStatusDisplayText(order.status),
+                    color: _getStatusColor(order.status),
+                    fontSize: 10.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ],
             ),
@@ -260,42 +371,13 @@ class OrderCard extends StatelessWidget {
             if (order.items.isNotEmpty) ...[
               Row(
                 children: [
-                  // First item image
-                  Container(
-                    width: 40.w,
-                    height: 40.h,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8.r),
-                      color: AppColors.greyColor.withOpacity(0.1),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8.r),
-                      child: Image.asset(
-                        order.items.first.image,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            color: AppColors.greyColor.withOpacity(0.2),
-                            child: Icon(
-                              Icons.fastfood,
-                              color: AppColors.greyColor,
-                              size: 20.sp,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(width: 12.w),
-
                   // Items description
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         customText(
-                          order.items.first.name,
+                          order.items.first.orderable.name,
                           color: AppColors.blackColor,
                           fontSize: 13.sp,
                           fontWeight: FontWeight.w500,
@@ -304,7 +386,7 @@ class OrderCard extends StatelessWidget {
                         ),
                         SizedBox(height: 2.h),
                         customText(
-                          "${order.totalItems} item${order.totalItems > 1 ? 's' : ''}",
+                          "${order.items.length} item${order.items.length > 1 ? 's' : ''} • ${order.items.map((e) => e.quantity).reduce((a, b) => a + b)} qty",
                           color: AppColors.greyColor,
                           fontSize: 12.sp,
                           fontWeight: FontWeight.normal,
@@ -312,51 +394,35 @@ class OrderCard extends StatelessWidget {
                       ],
                     ),
                   ),
+                ],
+              ),
 
-                  // Status indicator
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 8.w,
-                      vertical: 4.h,
-                    ),
-                    decoration: BoxDecoration(
-                      color: _getStatusColor(order.status).withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(12.r),
-                    ),
+              SizedBox(height: 12.h),
+            ],
+
+            // Delivery address (if available)
+            if (order.deliveryLocation != null) ...[
+              Row(
+                children: [
+                  Icon(
+                    Icons.location_on_outlined,
+                    color: AppColors.greyColor,
+                    size: 14.sp,
+                  ),
+                  SizedBox(width: 4.w),
+                  Expanded(
                     child: customText(
-                      _getStatusDisplayText(order.status),  // New method for better display
-                      color: _getStatusColor(order.status),
-                      fontSize: 10.sp,
-                      fontWeight: FontWeight.w600,
+                      order.deliveryLocation!.name,
+                      color: AppColors.greyColor,
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.normal,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],
               ),
             ],
-
-            SizedBox(height: 12.h),
-
-            // Delivery address
-            Row(
-              children: [
-                Icon(
-                  Icons.location_on_outlined,
-                  color: AppColors.greyColor,
-                  size: 16.sp,
-                ),
-                SizedBox(width: 4.w),
-                Expanded(
-                  child: customText(
-                    order.deliveryAddress,
-                    color: AppColors.greyColor,
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.normal,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            ),
 
             // Optional: Show order notes if available
             if (order.notes.isNotEmpty) ...[
@@ -366,7 +432,7 @@ class OrderCard extends StatelessWidget {
                   Icon(
                     Icons.note_outlined,
                     color: AppColors.greyColor,
-                    size: 16.sp,
+                    size: 14.sp,
                   ),
                   SizedBox(width: 4.w),
                   Expanded(
@@ -392,12 +458,12 @@ class OrderCard extends StatelessWidget {
     switch (status.toLowerCase()) {
       case 'pending':
         return Colors.orange;
-      case 'accepted':
+      case 'preparing':
         return Colors.blue;
-      case 'processing':
-        return AppColors.primaryColor;
       case 'ready':
         return Colors.green;
+      case 'in_transit':
+        return AppColors.primaryColor;
       case 'completed':
         return Colors.grey;
       case 'cancelled':
@@ -411,12 +477,12 @@ class OrderCard extends StatelessWidget {
     switch (status.toLowerCase()) {
       case 'pending':
         return 'Pending';
-      case 'accepted':
-        return 'Accepted';
-      case 'processing':
-        return 'Processing';
+      case 'preparing':
+        return 'Preparing';
       case 'ready':
         return 'Ready';
+      case 'in_transit':
+        return 'In Transit';
       case 'completed':
         return 'Completed';
       case 'cancelled':

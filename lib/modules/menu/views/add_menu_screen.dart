@@ -1,7 +1,7 @@
 import 'package:dotted_border/dotted_border.dart';
+import 'package:sharpvendor/core/models/categories_model.dart';
 import 'package:sharpvendor/modules/menu/controllers/food_menu_controller.dart';
 import '../../../core/utils/exports.dart';
-import '../../../core/utils/widgets/base64_image.dart';
 
 class AddMenuScreen extends GetView<FoodMenuController> {
   const AddMenuScreen({super.key});
@@ -169,7 +169,7 @@ class AddMenuScreen extends GetView<FoodMenuController> {
                     // Menu Name
                     CustomRoundedInputField(
                       title: "Menu name",
-                      label: "e.g Ofada Rice",
+                      label: "e.g Caesar Salad",
                       showLabel: true,
                       isRequired: true,
                       hasTitle: true,
@@ -185,7 +185,7 @@ class AddMenuScreen extends GetView<FoodMenuController> {
                     // Description
                     CustomRoundedInputField(
                       title: "Description",
-                      label: "Comment",
+                      label: "Fresh romaine with parmesan...",
                       showLabel: true,
                       isRequired: false,
                       hasTitle: true,
@@ -198,7 +198,7 @@ class AddMenuScreen extends GetView<FoodMenuController> {
                     // Price
                     CustomRoundedInputField(
                       title: "Price",
-                      label: "N0,000.00",
+                      label: "12.99",
                       showLabel: true,
                       isRequired: true,
                       hasTitle: true,
@@ -214,6 +214,81 @@ class AddMenuScreen extends GetView<FoodMenuController> {
                         return null;
                       },
                     ),
+
+                    SizedBox(height: 15.h),
+
+                    // Prep Time (minutes)
+                    CustomRoundedInputField(
+                      title: "Prep time (minutes)",
+                      label: "15",
+                      showLabel: true,
+                      isRequired: true,
+                      hasTitle: true,
+                      keyboardType: TextInputType.number,
+                      controller: menuController.prepTimeController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter prep time';
+                        }
+                        if (int.tryParse(value) == null) {
+                          return 'Please enter a valid number';
+                        }
+                        if (int.parse(value) <= 0) {
+                          return 'Prep time must be greater than 0';
+                        }
+                        return null;
+                      },
+                    ),
+
+                    SizedBox(height: 15.h),
+
+                    // Plate Size Selection
+                    customText(
+                      "Plate size",
+                      color: AppColors.blackColor,
+                      fontSize: 13.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    SizedBox(height: 8.h),
+                    Row(
+                      children: menuController.plateSizes.map((size) {
+                        bool isSelected = menuController.selectedPlateSize == size;
+                        return Expanded(
+                          child: GestureDetector(
+                            onTap: () => menuController.setSelectedPlateSize(size),
+                            child: Container(
+                              margin: EdgeInsets.only(
+                                right: size != menuController.plateSizes.last ? 8.w : 0,
+                              ),
+                              padding: EdgeInsets.symmetric(vertical: 12.h),
+                              decoration: BoxDecoration(
+                                color: isSelected
+                                    ? AppColors.primaryColor
+                                    : AppColors.backgroundColor,
+                                borderRadius: BorderRadius.circular(8.r),
+                                border: Border.all(
+                                  color: isSelected
+                                      ? AppColors.primaryColor
+                                      : AppColors.greyColor.withOpacity(0.3),
+                                ),
+                              ),
+                              child: Center(
+                                child: customText(
+                                  size,
+                                  color: isSelected
+                                      ? AppColors.whiteColor
+                                      : AppColors.blackColor,
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+
+                    SizedBox(height: 15.h),
 
                     // Category Selection
                     Row(
@@ -248,7 +323,7 @@ class AddMenuScreen extends GetView<FoodMenuController> {
                       hasTitle: false,
                       isRequired: true,
                       controller: TextEditingController(
-                        text: menuController.selectedCategory ?? "",
+                        text: menuController.selectedCategory?.name ?? "",
                       ),
                       onPressed: () {
                         showAnyBottomSheet(
@@ -288,21 +363,32 @@ class AddMenuScreen extends GetView<FoodMenuController> {
 
                     SizedBox(height: 20.h),
 
-                    // Availability Toggle
+                    // Show on customer app toggle
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        customText(
-                          "Availability",
-                          color: AppColors.blackColor,
-                          fontSize: 13.sp,
-                          fontWeight: FontWeight.w500,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              customText(
+                                "Show on customer app",
+                                color: AppColors.blackColor,
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              customText(
+                                "Toggle visibility for customers",
+                                color: AppColors.greyColor,
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ],
+                          ),
                         ),
                         Switch(
-                          value: menuController.isAvailable,
-                          onChanged: (value) {
-                            menuController.toggleAvailability(value);
-                          },
+                          value: menuController.showOnCustomerApp,
+                          onChanged: menuController.toggleShowOnCustomerApp,
                           activeColor: AppColors.primaryColor,
                         ),
                       ],
@@ -310,125 +396,101 @@ class AddMenuScreen extends GetView<FoodMenuController> {
 
                     SizedBox(height: 20.h),
 
-                    // Food Duration Selection
-                    ClickableCustomRoundedInputField(
-                      title: "Food duration",
-                      label: "Select Duration",
-                      readOnly: true,
-                      showLabel: true,
-                      hasTitle: true,
-                      isRequired: true,
-                      controller: TextEditingController(
-                        text: menuController.selectedFoodDuration ?? "",
-                      ),
-                      onPressed: () {
-                        showAnyBottomSheet(
-                          child: FoodDurationBottomSheet(
-                            durations: menuController.foodDurations,
-                            onDurationSelected: (duration) {
-                              menuController.setSelectedFoodDuration(duration);
-                              Get.back();
-                            },
-                          ),
-                        );
-                      },
-                      suffixWidget: IconButton(
-                        onPressed: () {
-                          showAnyBottomSheet(
-                            child: FoodDurationBottomSheet(
-                              durations: menuController.foodDurations,
-                              onDurationSelected: (duration) {
-                                menuController.setSelectedFoodDuration(duration);
-                                Get.back();
-                              },
-                            ),
-                          );
-                        },
-                        icon: SvgPicture.asset(
-                          SvgAssets.downChevronIcon,
-                          color: AppColors.primaryColor,
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please select a food duration';
-                        }
-                        return null;
-                      },
-                    ),
-
-                    SizedBox(height: 20.h),
-
-                    // Available Quantity
-                    customText(
-                      "Available quantity",
-                      color: AppColors.blackColor,
-                      fontSize: 13.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    SizedBox(height: 8.h),
+                    // Availability Toggle
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        InkWell(
-                          onTap: () {
-                            menuController.decrementQuantity();
-                          },
-                          child: Container(
-                            padding: EdgeInsets.all(8.sp),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: AppColors.greyColor.withOpacity(0.3),
-                              ),
-                              borderRadius: BorderRadius.circular(4.r),
-                            ),
-                            child: Icon(
-                              Icons.remove,
-                              size: 20.sp,
-                              color: AppColors.blackColor,
-                            ),
-                          ),
+                        customText(
+                          "Available",
+                          color: AppColors.blackColor,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500,
                         ),
-                        SizedBox(width: 12.w),
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 16.w,
-                            vertical: 12.h,
-                          ),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: AppColors.greyColor.withOpacity(0.3),
-                            ),
-                            borderRadius: BorderRadius.circular(4.r),
-                          ),
-                          child: customText(
-                            menuController.availableQuantity.toString(),
-                            color: AppColors.blackColor,
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        SizedBox(width: 12.w),
-                        InkWell(
-                          onTap: () {
-                            menuController.incrementQuantity();
+                        Switch(
+                          value: menuController.isAvailable==1,
+                          onChanged: (bool value){
+                            menuController.toggleAvailability(value ? 1 : 0);
                           },
-                          child: Container(
-                            padding: EdgeInsets.all(8.sp),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: AppColors.greyColor.withOpacity(0.3),
-                              ),
-                              borderRadius: BorderRadius.circular(4.r),
-                            ),
-                            child: Icon(
-                              Icons.add,
-                              size: 20.sp,
-                              color: AppColors.blackColor,
-                            ),
-                          ),
+                          activeColor: AppColors.primaryColor,
                         ),
                       ],
                     ),
+
+                    SizedBox(height: 15.h),
+
+                    // Available Quantity
+                    if (menuController.isAvailable==1) ...[
+                      customText(
+                        "Available quantity",
+                        color: AppColors.blackColor,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      SizedBox(height: 8.h),
+                      Row(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              menuController.decrementQuantity();
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(8.sp),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: AppColors.greyColor.withOpacity(0.3),
+                                ),
+                                borderRadius: BorderRadius.circular(4.r),
+                              ),
+                              child: Icon(
+                                Icons.remove,
+                                size: 20.sp,
+                                color: AppColors.blackColor,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 12.w),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16.w,
+                              vertical: 12.h,
+                            ),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: AppColors.greyColor.withOpacity(0.3),
+                              ),
+                              borderRadius: BorderRadius.circular(4.r),
+                            ),
+                            child: customText(
+                              menuController.availableQuantity.toString(),
+                              color: AppColors.blackColor,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          SizedBox(width: 12.w),
+                          InkWell(
+                            onTap: () {
+                              menuController.incrementQuantity();
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(8.sp),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: AppColors.greyColor.withOpacity(0.3),
+                                ),
+                                borderRadius: BorderRadius.circular(4.r),
+                              ),
+                              child: Icon(
+                                Icons.add,
+                                size: 20.sp,
+                                color: AppColors.blackColor,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 15.h),
+                    ],
 
                     SizedBox(height: 30.h),
                   ],
@@ -442,10 +504,10 @@ class AddMenuScreen extends GetView<FoodMenuController> {
   }
 }
 
-// New widget for Category Bottom Sheet
+// Category Bottom Sheet Widget
 class CategoryBottomSheet extends StatelessWidget {
-  final List<String> categories;
-  final Function(String) onCategorySelected;
+  final List<CategoryModel> categories;
+  final Function(CategoryModel) onCategorySelected;
 
   const CategoryBottomSheet({
     super.key,
@@ -468,76 +530,39 @@ class CategoryBottomSheet extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
           SizedBox(height: 16.h),
-          Flexible(
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: categories.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: customText(
-                    categories[index],
-                    color: AppColors.blackColor,
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.normal,
-                  ),
-                  onTap: () {
-                    onCategorySelected(categories[index]);
-                  },
-                );
-              },
+          if (categories.isEmpty)
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 20.h),
+              child: Center(
+                child: customText(
+                  "No categories available. Add a category first.",
+                  color: AppColors.greyColor,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.normal,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            )
+          else
+            Flexible(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: categories.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: customText(
+                      categories[index].name,
+                      color: AppColors.blackColor,
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.normal,
+                    ),
+                    onTap: () {
+                      onCategorySelected(categories[index]);
+                    },
+                  );
+                },
+              ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// New widget for Food Duration Bottom Sheet
-class FoodDurationBottomSheet extends StatelessWidget {
-  final List<String> durations;
-  final Function(String) onDurationSelected;
-
-  const FoodDurationBottomSheet({
-    super.key,
-    required this.durations,
-    required this.onDurationSelected,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 22.sp, vertical: 20.sp),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          customText(
-            "Select Food Duration",
-            color: AppColors.blackColor,
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w600,
-          ),
-          SizedBox(height: 16.h),
-          Flexible(
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: durations.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: customText(
-                    durations[index],
-                    color: AppColors.blackColor,
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.normal,
-                  ),
-                  onTap: () {
-                    onDurationSelected(durations[index]);
-                  },
-                );
-              },
-            ),
-          ),
         ],
       ),
     );

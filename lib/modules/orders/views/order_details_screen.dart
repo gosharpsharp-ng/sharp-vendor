@@ -44,11 +44,13 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      customText(
-                        "Order #${order.id}",
-                        color: AppColors.blackColor,
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w600,
+                      Expanded(
+                        child: customText(
+                          "Order #${order.ref}",
+                          color: AppColors.blackColor,
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                       Container(
                         padding: EdgeInsets.symmetric(
@@ -60,13 +62,23 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                           borderRadius: BorderRadius.circular(20.r),
                         ),
                         child: customText(
-                          order.status,
+                          _getStatusDisplayText(order.status),
                           color: _getStatusColor(order.status),
                           fontSize: 12.sp,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                     ],
+                  ),
+
+                  SizedBox(height: 8.h),
+
+                  // Order time
+                  customText(
+                    "Placed ${ordersController.formatOrderTime(order.createdAt)}",
+                    color: AppColors.greyColor,
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.normal,
                   ),
 
                   SizedBox(height: 24.h),
@@ -88,11 +100,22 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        customText(
-                          "Order Items",
-                          color: AppColors.blackColor,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            customText(
+                              "Order Items",
+                              color: AppColors.blackColor,
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            customText(
+                              "${order.items.length} item${order.items.length > 1 ? 's' : ''}",
+                              color: AppColors.greyColor,
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ],
                         ),
 
                         SizedBox(height: 16.h),
@@ -102,11 +125,63 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: order.items.length,
-                          separatorBuilder: (context, index) => SizedBox(height: 12.h),
+                          separatorBuilder: (context, index) => Divider(height: 24.h),
                           itemBuilder: (context, index) {
                             final item = order.items[index];
                             return _buildOrderItem(item);
                           },
+                        ),
+
+                        if (order.notes.isNotEmpty) ...[
+                          Divider(height: 24.h),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Icon(
+                                Icons.note_outlined,
+                                color: AppColors.greyColor,
+                                size: 16.sp,
+                              ),
+                              SizedBox(width: 8.w),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    customText(
+                                      "Special Instructions",
+                                      color: AppColors.blackColor,
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    SizedBox(height: 4.h),
+                                    customText(
+                                      order.notes,
+                                      color: AppColors.greyColor,
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+
+                        Divider(height: 24.h),
+
+                        // Order total breakdown
+                        Column(
+                          children: [
+                            _buildPriceRow("Subtotal", order.subtotal),
+                            if (order.tax > 0)
+                              _buildPriceRow("Tax", order.tax),
+                            if (order.deliveryFee > 0)
+                              _buildPriceRow("Delivery Fee", order.deliveryFee),
+                            if (order.discountAmount > 0)
+                              _buildPriceRow("Discount", -order.discountAmount, isDiscount: true),
+                            Divider(height: 16.h),
+                            _buildPriceRow("Total", order.total, isTotal: true),
+                          ],
                         ),
                       ],
                     ),
@@ -114,7 +189,7 @@ class OrderDetailsScreen extends GetView<OrdersController> {
 
                   SizedBox(height: 20.h),
 
-                  // Order Information Section
+                  // Customer Information Section
                   Container(
                     padding: EdgeInsets.all(16.sp),
                     decoration: BoxDecoration(
@@ -132,7 +207,7 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         customText(
-                          "Order Information",
+                          "Customer Information",
                           color: AppColors.blackColor,
                           fontSize: 16.sp,
                           fontWeight: FontWeight.w600,
@@ -140,65 +215,67 @@ class OrderDetailsScreen extends GetView<OrdersController> {
 
                         SizedBox(height: 16.h),
 
-                        // Customer info
-                        _buildInfoRow("Customer", order.customerName),
-                        SizedBox(height: 12.h),
-                        _buildInfoRow("Phone", order.customerPhone),
-                        SizedBox(height: 12.h),
-                        _buildInfoRow("Order Time", ordersController.formatOrderTime(order.orderDate)),
-                        SizedBox(height: 12.h),
-                        _buildInfoRow("Total Items", order.totalItems.toString()),
-                        SizedBox(height: 12.h),
-                        _buildInfoRow("Total", ordersController.formatCurrency(order.total)),
-                        SizedBox(height: 12.h),
-                        _buildInfoRow("Estimated Delivery", order.estimatedDeliveryTime),
-                      ],
-                    ),
-                  ),
-
-                  SizedBox(height: 20.h),
-
-                  // Delivery Address Section
-                  Container(
-                    padding: EdgeInsets.all(16.sp),
-                    decoration: BoxDecoration(
-                      color: AppColors.whiteColor,
-                      borderRadius: BorderRadius.circular(12.r),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          blurRadius: 10,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        customText(
-                          "Delivery Address",
-                          color: AppColors.blackColor,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-
-                        SizedBox(height: 12.h),
-
                         Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Icon(
-                              Icons.location_on,
-                              color: AppColors.primaryColor,
-                              size: 20.sp,
+                            Container(
+                              width: 40.w,
+                              height: 40.h,
+                              decoration: BoxDecoration(
+                                color: AppColors.primaryColor.withOpacity(0.1),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                child: customText(
+                                  _getCustomerInitial(order),
+                                  color: AppColors.primaryColor,
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                             ),
-                            SizedBox(width: 8.w),
+                            SizedBox(width: 12.w),
                             Expanded(
-                              child: customText(
-                                order.deliveryAddress,
-                                color: AppColors.blackColor,
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.normal,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  customText(
+                                    _getCustomerName(order),
+                                    color: AppColors.blackColor,
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  SizedBox(height: 2.h),
+                                  customText(
+                                    _getCustomerPhone(order),
+                                    color: AppColors.greyColor,
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                  if (_getCustomerEmail(order).isNotEmpty) ...[
+                                    SizedBox(height: 2.h),
+                                    customText(
+                                      _getCustomerEmail(order),
+                                      color: AppColors.greyColor,
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () => _callCustomer(_getCustomerPhone(order)),
+                              child: Container(
+                                padding: EdgeInsets.all(8.sp),
+                                decoration: BoxDecoration(
+                                  color: AppColors.primaryColor.withOpacity(0.1),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  Icons.phone,
+                                  color: AppColors.primaryColor,
+                                  size: 18.sp,
+                                ),
                               ),
                             ),
                           ],
@@ -206,6 +283,96 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                       ],
                     ),
                   ),
+
+                  SizedBox(height: 20.h),
+
+                  // Delivery Address Section
+                  if (order.deliveryLocation != null) ...[
+                    Container(
+                      padding: EdgeInsets.all(16.sp),
+                      decoration: BoxDecoration(
+                        color: AppColors.whiteColor,
+                        borderRadius: BorderRadius.circular(12.r),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 10,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          customText(
+                            "Delivery Address",
+                            color: AppColors.blackColor,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+
+                          SizedBox(height: 12.h),
+
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Icon(
+                                Icons.location_on,
+                                color: AppColors.primaryColor,
+                                size: 20.sp,
+                              ),
+                              SizedBox(width: 8.w),
+                              Expanded(
+                                child: customText(
+                                  order.deliveryLocation!.name,
+                                  color: AppColors.blackColor,
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 20.h),
+                  ],
+
+                  // Payment Information Section
+                  if (order.paymentReference.isNotEmpty) ...[
+                    Container(
+                      padding: EdgeInsets.all(16.sp),
+                      decoration: BoxDecoration(
+                        color: AppColors.whiteColor,
+                        borderRadius: BorderRadius.circular(12.r),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 10,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          customText(
+                            "Payment Information",
+                            color: AppColors.blackColor,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+
+                          SizedBox(height: 12.h),
+
+                          _buildInfoRow("Payment Reference", order.paymentReference),
+                          SizedBox(height: 8.h),
+                          _buildInfoRow("Payment Status", "Paid"), // Assuming paid if reference exists
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 20.h),
+                  ],
 
                   SizedBox(height: 100.h), // Space for bottom buttons
                 ],
@@ -219,31 +386,20 @@ class OrderDetailsScreen extends GetView<OrdersController> {
 
   Widget _buildOrderItem(OrderItemModel item) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Item image
+        // Item image placeholder
         Container(
-          width: 60.w,
-          height: 60.h,
+          width: 50.w,
+          height: 50.h,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.r),
             color: AppColors.greyColor.withOpacity(0.1),
           ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(8.r),
-            child: Image.asset(
-              item.image,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  color: AppColors.greyColor.withOpacity(0.2),
-                  child: Icon(
-                    Icons.fastfood,
-                    color: AppColors.greyColor,
-                    size: 24.sp,
-                  ),
-                );
-              },
-            ),
+          child: Icon(
+            Icons.fastfood,
+            color: AppColors.greyColor,
+            size: 24.sp,
           ),
         ),
 
@@ -255,40 +411,108 @@ class OrderDetailsScreen extends GetView<OrdersController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               customText(
-                item.name,
+                item.orderable.name,
                 color: AppColors.blackColor,
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w500,
               ),
               SizedBox(height: 4.h),
-              customText(
-                "${item.quantity}x",
-                color: AppColors.greyColor,
-                fontSize: 12.sp,
-                fontWeight: FontWeight.normal,
-              ),
-              if (item.specialInstructions.isNotEmpty) ...[
-                SizedBox(height: 4.h),
+              if (item.orderable.description.isNotEmpty)
                 customText(
-                  "Note: ${item.specialInstructions}",
-                  color: AppColors.primaryColor,
-                  fontSize: 11.sp,
+                  item.orderable.description,
+                  color: AppColors.greyColor,
+                  fontSize: 12.sp,
                   fontWeight: FontWeight.normal,
-                  fontStyle: FontStyle.italic,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
+              SizedBox(height: 4.h),
+              Row(
+                children: [
+                  customText(
+                    "Qty: ${item.quantity}",
+                    color: AppColors.greyColor,
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.normal,
+                  ),
+                  if (item.orderable.plateSize.isNotEmpty) ...[
+                    customText(
+                      " • ",
+                      color: AppColors.greyColor,
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.normal,
+                    ),
+                    customText(
+                      "Size: ${item.orderable.plateSize}",
+                      color: AppColors.greyColor,
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ],
+                ],
+              ),
+              if (item.options != null && item.options!.isNotEmpty) ...[
+                SizedBox(height: 4.h),
+                ...item.options!.entries.map((entry) => Padding(
+                  padding: EdgeInsets.only(top: 2.h),
+                  child: customText(
+                    "${entry.key}: ${entry.value}",
+                    color: AppColors.primaryColor,
+                    fontSize: 11.sp,
+                    fontWeight: FontWeight.normal,
+                    fontStyle: FontStyle.italic,
+                  ),
+                )).toList(),
               ],
             ],
           ),
         ),
 
+        SizedBox(width: 8.w),
+
         // Item price
-        customText(
-          Get.find<OrdersController>().formatCurrency(item.price * item.quantity),
-          color: AppColors.blackColor,
-          fontSize: 14.sp,
-          fontWeight: FontWeight.w600,
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            customText(
+              Get.find<OrdersController>().formatCurrency(item.total),
+              color: AppColors.blackColor,
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w600,
+            ),
+            if (item.quantity > 1)
+              customText(
+                "${Get.find<OrdersController>().formatCurrency(item.price)} each",
+                color: AppColors.greyColor,
+                fontSize: 11.sp,
+                fontWeight: FontWeight.normal,
+              ),
+          ],
         ),
       ],
+    );
+  }
+
+  Widget _buildPriceRow(String label, double amount, {bool isTotal = false, bool isDiscount = false}) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 4.h),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          customText(
+            label,
+            color: isTotal ? AppColors.blackColor : AppColors.greyColor,
+            fontSize: isTotal ? 14.sp : 13.sp,
+            fontWeight: isTotal ? FontWeight.w600 : FontWeight.normal,
+          ),
+          customText(
+            "${isDiscount ? '-' : ''}${Get.find<OrdersController>().formatCurrency(amount.abs())}",
+            color: isDiscount ? Colors.green : (isTotal ? AppColors.blackColor : AppColors.greyColor),
+            fontSize: isTotal ? 14.sp : 13.sp,
+            fontWeight: isTotal ? FontWeight.w600 : FontWeight.w500,
+          ),
+        ],
+      ),
     );
   }
 
@@ -299,22 +523,25 @@ class OrderDetailsScreen extends GetView<OrdersController> {
         customText(
           label,
           color: AppColors.greyColor,
-          fontSize: 14.sp,
+          fontSize: 12.sp,
           fontWeight: FontWeight.normal,
         ),
-        customText(
-          value,
-          color: AppColors.blackColor,
-          fontSize: 14.sp,
-          fontWeight: FontWeight.w500,
+        Expanded(
+          child: customText(
+            value,
+            color: AppColors.blackColor,
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w500,
+            textAlign: TextAlign.end,
+          ),
         ),
       ],
     );
   }
 
   Widget _buildActionButtons(OrdersController controller, OrderModel order) {
-    // Don't show buttons for completed orders
-    if (order.status.toLowerCase() == 'completed') {
+    // Don't show buttons for completed/cancelled orders
+    if (['completed', 'cancelled'].contains(order.status.toLowerCase())) {
       return const SizedBox.shrink();
     }
 
@@ -367,7 +594,7 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                     child: CustomButton(
                       onPressed: () {
                         // Call customer functionality
-                        _callCustomer(order.customerPhone);
+                        _callCustomer(_getCustomerPhone(order));
                       },
                       title: "Call Customer",
                       backgroundColor: AppColors.whiteColor,
@@ -384,7 +611,7 @@ class OrderDetailsScreen extends GetView<OrdersController> {
               SizedBox(height: 12.h),
               CustomButton(
                 onPressed: () {
-                  _callCustomer(order.customerPhone);
+                  _callCustomer(_getCustomerPhone(order));
                 },
                 title: "Call Customer",
                 width: 1.sw,
@@ -404,13 +631,13 @@ class OrderDetailsScreen extends GetView<OrdersController> {
       case 'pending':
         controller.acceptOrder(order.id);
         break;
-      case 'accepted':
-        controller.startProcessingOrder(order.id);
-        break;
-      case 'processing':
+      case 'preparing':
         controller.markOrderReady(order.id);
         break;
       case 'ready':
+        controller.markOrderInTransit(order.id);
+        break;
+      case 'in_transit':
         controller.completeOrder(order.id);
         Get.back(); // Go back to orders list after completion
         break;
@@ -479,20 +706,58 @@ class OrderDetailsScreen extends GetView<OrdersController> {
     showToast(message: "Calling $phoneNumber", isError: false);
   }
 
+  // Helper methods for safe property access
+  String _getCustomerName(OrderModel order) {
+    return order.user.fname.isNotEmpty ? order.user.fname : 'Customer';
+  }
+
+  String _getCustomerPhone(OrderModel order) {
+    return order.user.phone;
+  }
+
+  String _getCustomerEmail(OrderModel order) {
+    return order.user.email;
+  }
+
+  String _getCustomerInitial(OrderModel order) {
+    return (order.user.fname.isNotEmpty ? order.user.fname[0] : 'U').toUpperCase();
+  }
+
   Color _getStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'pending':
         return Colors.orange;
-      case 'accepted':
+      case 'preparing':
         return Colors.blue;
-      case 'processing':
-        return AppColors.primaryColor;
       case 'ready':
         return Colors.green;
+      case 'in_transit':
+        return AppColors.primaryColor;
       case 'completed':
         return Colors.grey;
+      case 'cancelled':
+        return Colors.red;
       default:
         return AppColors.greyColor;
+    }
+  }
+
+  String _getStatusDisplayText(String status) {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return 'Pending';
+      case 'preparing':
+        return 'Preparing';
+      case 'ready':
+        return 'Ready';
+      case 'in_transit':
+        return 'In Transit';
+      case 'completed':
+        return 'Completed';
+      case 'cancelled':
+        return 'Cancelled';
+      default:
+        return status.toUpperCase();
     }
   }
 }

@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'package:sharpvendor/core/models/categories_model.dart';
 import 'package:sharpvendor/core/models/menu_item_model.dart';
+import 'package:sharpvendor/core/services/restaurant/menu/menu_service.dart';
 import 'package:sharpvendor/modules/menu/widgets/category_form.dart';
 import '../../../core/utils/exports.dart';
 
 class FoodMenuController extends GetxController {
+  final menuService = serviceLocator<MenuService>();
   final menuSetupFormKey = GlobalKey<FormState>();
   final categoryFormKey = GlobalKey<FormState>();
   final ImagePicker _picker = ImagePicker();
@@ -56,37 +58,24 @@ class FoodMenuController extends GetxController {
   TextEditingController menuNameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController priceController = TextEditingController();
+  TextEditingController prepTimeController = TextEditingController();
   TextEditingController categoryNameController = TextEditingController();
   TextEditingController searchController = TextEditingController();
 
   // Dropdowns
-  String? selectedCategory;
-  String? selectedFoodDuration;
+  CategoryModel? selectedCategory;
 
   // Dynamic categories list from CategoryModel
-  List<String> get categories => categoryModels.map((cat) => cat.name).toList();
+  List<CategoryModel> get categories => categoryModels;
 
-  List<String> foodDurations = [
-    '5-10 minutes',
-    '10-15 minutes',
-    '15-20 minutes',
-    '20-30 minutes',
-    '30+ minutes',
-  ];
-
-  setSelectedCategory(String category) {
+  setSelectedCategory(CategoryModel category) {
     selectedCategory = category;
     update();
   }
 
-  setSelectedFoodDuration(String duration) {
-    selectedFoodDuration = duration;
-    update();
-  }
-
   // Availability toggle
-  bool isAvailable = true;
-  toggleAvailability(bool value) {
+  int isAvailable = 1;
+  toggleAvailability(int value) {
     isAvailable = value;
     update();
   }
@@ -112,15 +101,37 @@ class FoodMenuController extends GetxController {
     }
   }
 
-  // Initialize default categories
+  // Plate size selection
+  String selectedPlateSize = "M"; // Default to Medium
+  List<String> plateSizes = ["S", "M", "L"];
+
+  setSelectedPlateSize(String size) {
+    selectedPlateSize = size;
+    update();
+  }
+
+  // Show on customer app toggle
+  bool showOnCustomerApp = true;
+  toggleShowOnCustomerApp(bool value) {
+    showOnCustomerApp = value;
+    update();
+  }
+
+  // Initialize default categories (fallback)
   void initializeDefaultCategories() {
-    categoryModels = [
-      CategoryModel(id: '1', name: 'Rice', description: "Nice one"),
-      CategoryModel(id: '2', name: 'Vegetable', description: "Nice one"),
-      CategoryModel(id: '3', name: 'Soup', description: "Nice one"),
-      CategoryModel(id: '4', name: 'Spaghetti', description: "Nice one"),
-    ];
-    filteredCategories = List.from(categoryModels);
+    if (categoryModels.isEmpty) {
+      categoryModels = [
+        CategoryModel(id: 1, name: 'Rice', description: "Rice dishes"),
+        CategoryModel(
+          id: 2,
+          name: 'Vegetable',
+          description: "Vegetable dishes",
+        ),
+        CategoryModel(id: 3, name: 'Soup', description: "Soup varieties"),
+        CategoryModel(id: 4, name: 'Spaghetti', description: "Pasta dishes"),
+      ];
+      filteredCategories = List.from(categoryModels);
+    }
   }
 
   // Get categories from API
@@ -128,13 +139,39 @@ class FoodMenuController extends GetxController {
     setCategoriesLoadingState(true);
 
     try {
-      // TODO: Replace with actual API call
-      await Future.delayed(const Duration(seconds: 1));
+      final response = await menuService.getMenuCategories({
+        'page': 1,
+        'per_page': 100, // Get all categories
+      });
 
-      // For now, use initialized categories
-      filteredCategories = List.from(categoryModels);
+      if (response.status == "success" && response.data != null) {
+        final Map<String, dynamic> responseData = response.data;
+        final List<dynamic> categoriesData = responseData['data'] ?? [];
+
+        categoryModels = categoriesData
+            .map((json) => CategoryModel.fromJson(json))
+            .toList();
+
+        if (categoryModels.isEmpty) {
+          // Use defaults if no categories from API
+          initializeDefaultCategories();
+        } else {
+          filteredCategories = List.from(categoryModels);
+        }
+      } else {
+        // Fallback to default categories
+        initializeDefaultCategories();
+        if (response.message != null && response.message!.isNotEmpty) {
+          showToast(message: response.message!, isError: true);
+        }
+      }
     } catch (e) {
-      showToast(message: "Error loading categories", isError: true);
+      // Fallback to default categories
+      initializeDefaultCategories();
+      showToast(
+        message: "Error loading categories: ${e.toString()}",
+        isError: true,
+      );
     } finally {
       setCategoriesLoadingState(false);
     }
@@ -216,7 +253,7 @@ class FoodMenuController extends GetxController {
       setLoadingState(true);
 
       try {
-        // TODO: Replace with actual API call
+        // TODO: Implement category save API call when available
         await Future.delayed(const Duration(seconds: 1));
 
         if (isEditMode && selectedCategoryModel != null) {
@@ -228,16 +265,16 @@ class FoodMenuController extends GetxController {
             categoryModels[index] = CategoryModel(
               id: selectedCategoryModel!.id,
               name: categoryNameController.text,
-                description: "Nice one"
+              description: "Updated category",
             );
           }
           showToast(message: "Category updated successfully", isError: false);
         } else {
           // Add new category
           final newCategory = CategoryModel(
-            id: DateTime.now().millisecondsSinceEpoch.toString(),
+            id: int.parse(DateTime.now().millisecondsSinceEpoch.toString()),
             name: categoryNameController.text,
-            description: "Nice one",
+            description: "New category",
           );
           categoryModels.add(newCategory);
           showToast(message: "Category added successfully", isError: false);
@@ -260,7 +297,7 @@ class FoodMenuController extends GetxController {
       setLoadingState(true);
 
       try {
-        // TODO: Replace with actual API call
+        // TODO: Implement category delete API call when available
         await Future.delayed(const Duration(seconds: 1));
 
         categoryModels.removeWhere(
@@ -285,7 +322,12 @@ class FoodMenuController extends GetxController {
     isEditMode = false;
   }
 
-  // Save menu item
+  // Helper method to get prep time from controller
+  int _getPrepTime() {
+    return int.tryParse(prepTimeController.text) ?? 15;
+  }
+
+  // Save menu item - UPDATED WITH PROPER API INTEGRATION
   saveMenuItem() async {
     if (menuSetupFormKey.currentState!.validate()) {
       if (foodImage == null) {
@@ -298,33 +340,145 @@ class FoodMenuController extends GetxController {
         return;
       }
 
-      if (selectedFoodDuration == null) {
-        showToast(message: "Please select food duration", isError: true);
+      setLoadingState(true);
+
+      try {
+        // Find the category ID from the selected category name
+        final CategoryModel? categoryModel = categoryModels.firstWhereOrNull(
+          (cat) => cat.name == selectedCategory,
+        );
+
+        if (selectedCategory == null) {
+          showToast(message: "Invalid category selected", isError: true);
+          setLoadingState(false);
+          return;
+        }
+
+        // Get prep time from controller
+        int prepTimeMinutes = _getPrepTime();
+
+        // Prepare data in the required format
+        final Map<String, dynamic> menuData = {
+          "name": menuNameController.text.trim(),
+          "description": descriptionController.text.trim(),
+          "plate_size": selectedPlateSize,
+          "price": double.tryParse(priceController.text) ?? 0.0,
+          "prep_time_minutes": prepTimeMinutes,
+          "category_id": selectedCategory?.id ?? 1,
+          "images": [foodImage], // Array of base64 images
+          "is_available": isAvailable,
+          "available_quantity": availableQuantity,
+          "show_on_customer_app": showOnCustomerApp,
+        };
+
+        // Call the API
+        final APIResponse response = await menuService.createMenu(menuData);
+
+        if (response.status == "success") {
+          showToast(message: "Menu item added successfully", isError: false);
+
+          // Clear form
+          clearForm();
+
+          // Refresh menu items
+          await getMenuItems();
+
+          // Navigate back
+          Get.back();
+        } else {
+          showToast(
+            message: response.message ?? "Failed to add menu item",
+            isError: true,
+          );
+        }
+      } catch (e) {
+        showToast(
+          message: "Error adding menu item: ${e.toString()}",
+          isError: true,
+        );
+      } finally {
+        setLoadingState(false);
+      }
+    }
+  }
+
+  // Update menu item - NEW METHOD FOR EDIT FUNCTIONALITY
+  updateMenuItem() async {
+    if (menuSetupFormKey.currentState!.validate()) {
+      if (foodImage == null) {
+        showToast(message: "Please select a food image", isError: true);
+        return;
+      }
+
+      if (selectedCategory == null) {
+        showToast(message: "Please select a category", isError: true);
+        return;
+      }
+
+      if (currentMenuItem == null) {
+        showToast(message: "No menu item selected for update", isError: true);
         return;
       }
 
       setLoadingState(true);
 
-      dynamic data = {
-        'name': menuNameController.text,
-        'description': descriptionController.text,
-        'price': double.tryParse(priceController.text) ?? 0.0,
-        'category': selectedCategory,
-        'food_duration': selectedFoodDuration,
-        'is_available': isAvailable,
-        'available_quantity': availableQuantity,
-        'image': foodImage,
-      };
+      try {
+        // Find the category ID from the selected category name
+        final CategoryModel? selectedCategoryModel = categoryModels
+            .firstWhereOrNull((cat) => cat.name == selectedCategory);
 
-      // TODO: Replace with actual API call
-      await Future.delayed(const Duration(seconds: 2)); // Simulate API call
+        if (selectedCategoryModel == null) {
+          showToast(message: "Invalid category selected", isError: true);
+          setLoadingState(false);
+          return;
+        }
 
-      showToast(message: "Menu item added successfully", isError: false);
-      setLoadingState(false);
+        // Get prep time from controller
+        int prepTimeMinutes = _getPrepTime();
 
-      // Clear form
-      clearForm();
-      Get.back();
+        // Prepare data in the required format
+        final Map<String, dynamic> menuData = {
+          "id": currentMenuItem!.id,
+          "name": menuNameController.text.trim(),
+          "description": descriptionController.text.trim(),
+          "plate_size": selectedPlateSize,
+          "price": double.tryParse(priceController.text) ?? 0.0,
+          "prep_time_minutes": prepTimeMinutes,
+          "category_id": selectedCategoryModel.id ?? 1,
+          "images": [foodImage], // Array of base64 images
+          "is_available": isAvailable,
+          "available_quantity": availableQuantity,
+          "show_on_customer_app": showOnCustomerApp,
+        };
+
+        // Call the API
+        final APIResponse response = await menuService.updateMenu(menuData);
+
+        if (response.status == "success") {
+          showToast(message: "Menu item updated successfully", isError: false);
+
+          // Clear form
+          clearForm();
+
+          // Refresh menu items
+          await getMenuItems();
+
+          // Navigate back
+          Get.back();
+        } else {
+          showToast(
+            message: response.message ?? "Failed to update menu item",
+            isError: true,
+          );
+        }
+      } catch (e) {
+        showToast(
+          message: "Error updating menu item: ${e.toString()}",
+          isError: true,
+        );
+      } finally {
+        setLoadingState(false);
+      }
     }
   }
 
@@ -332,59 +486,48 @@ class FoodMenuController extends GetxController {
     menuNameController.clear();
     descriptionController.clear();
     priceController.clear();
+    prepTimeController.clear();
     selectedCategory = null;
-    selectedFoodDuration = null;
     foodImage = null;
-    isAvailable = true;
+    isAvailable = 1;
     availableQuantity = 1;
+    selectedPlateSize = "M";
+    showOnCustomerApp = true;
     update();
   }
 
-  // Get menu items
+  // Get menu items - UPDATED WITH API INTEGRATION
   getMenuItems() async {
     setMenuItemsLoadingState(true);
 
-    // TODO: Replace with actual API call
-    await Future.delayed(const Duration(seconds: 1));
+    try {
+      final response = await menuService.getAllMenu({
+        'fresh': true,
+        'page': 'page=1',
+        'per_page': 50,
+      });
 
-    // Sample data - replace with actual API response
-    menuItems = [
-      MenuItemModel(
-        id: "1",
-        name: "Assorted vegetable soup",
-        category: "Soup",
-        price: 3000.00,
-        duration: "15-20 minutes",
-        image: "assets/imgs/menu_2.png",
-        isAvailable: true,
-        availableQuantity: 10,
-        description: "Delicious assorted vegetable soup",
-      ),
-      MenuItemModel(
-        id: "2",
-        name: "Efo riro",
-        category: "Vegetable",
-        price: 3000.00,
-        duration: "15-20 minutes",
-        image: "assets/imgs/menu_1.png",
-        isAvailable: true,
-        availableQuantity: 5,
-        description: "Traditional Nigerian spinach stew",
-      ),
-      MenuItemModel(
-        id: "3",
-        name: "Bitter leaf soup",
-        category: "Soup",
-        price: 3000.00,
-        duration: "15-20 minutes",
-        image: "assets/imgs/menu_3.png",
-        isAvailable: true,
-        availableQuantity: 8,
-        description: "Nutritious bitter leaf soup",
-      ),
-    ];
+      if (response.status == "success" && response.data != null) {
+        final Map<String, dynamic> responseData = response.data;
+        final List<dynamic> menuData = responseData['data'] ?? [];
 
-    setMenuItemsLoadingState(false);
+        menuItems = menuData.map((json) => MenuItemModel.fromJson(json)).toList();
+
+      } else {
+        if (response.message != null && response.message!.isNotEmpty) {
+          showToast(message: response.message!, isError: true);
+        }
+      }
+    } catch (e) {
+      // Keep existing sample data as fallback
+
+      showToast(
+        message: "Error loading menu items: ${e.toString()}",
+        isError: true,
+      );
+    } finally {
+      setMenuItemsLoadingState(false);
+    }
   }
 
   // Current menu item being viewed
@@ -395,66 +538,71 @@ class FoodMenuController extends GetxController {
     update();
   }
 
-  // Plate size selection
-  String selectedPlateSize = "M"; // Default to Medium
-  List<String> plateSizes = ["S", "M", "L"];
-
-  setSelectedPlateSize(String size) {
-    selectedPlateSize = size;
-    update();
-  }
-
-  // Show on customer app toggle
-  bool showOnCustomerApp = true;
-  toggleShowOnCustomerApp(bool value) {
-    showOnCustomerApp = value;
-    update();
-  }
-
-  // Update menu item availability
-  updateMenuItemAvailability(String itemId, bool isAvailable) async {
+  // Update menu item availability - TODO: Add API integration
+  updateMenuItemAvailability(int itemId, bool isAvailable) async {
     setLoadingState(true);
 
-    // TODO: Replace with actual API call
-    await Future.delayed(const Duration(seconds: 1));
+    try {
+      // TODO: Replace with actual API call using updateMenu method
+      await Future.delayed(const Duration(seconds: 1));
 
-    // Update in local list
-    int index = menuItems.indexWhere((item) => item.id == itemId);
-    if (index != -1) {
-      menuItems[index] = MenuItemModel(
-        id: menuItems[index].id,
-        name: menuItems[index].name,
-        category: menuItems[index].category,
-        price: menuItems[index].price,
-        duration: menuItems[index].duration,
-        image: menuItems[index].image,
-        isAvailable: isAvailable,
-        availableQuantity: menuItems[index].availableQuantity,
-        description: menuItems[index].description,
-      );
+      // Update in local list
+      int index = menuItems.indexWhere((item) => item.id == itemId);
+      if (index != -1) {
+        menuItems[index] = MenuItemModel(
+          id: menuItems[index].id,
+          name: menuItems[index].name,
+          restaurant: menuItems[index].restaurant,
+          category: menuItems[index].category,
+          price: menuItems[index].price,
+          duration: menuItems[index].duration,
+          image: menuItems[index].image,
+          isAvailable: 1,
+          availableQuantity: menuItems[index].availableQuantity,
+          description: menuItems[index].description,
+          plateSize: menuItems[index].plateSize,
+          showOnCustomerApp: menuItems[index].showOnCustomerApp,
+          files: menuItems[index].files
+        );
 
-      // Update current menu item if it's the same
-      if (currentMenuItem?.id == itemId) {
-        currentMenuItem = menuItems[index];
+        // Update current menu item if it's the same
+        if (currentMenuItem?.id == itemId) {
+          currentMenuItem = menuItems[index];
+        }
       }
-    }
 
-    showToast(
-      message: "Menu item ${isAvailable ? 'enabled' : 'disabled'} successfully",
-      isError: false,
-    );
-    setLoadingState(false);
+      showToast(
+        message:
+            "Menu item ${isAvailable ? 'enabled' : 'disabled'} successfully",
+        isError: false,
+      );
+    } catch (e) {
+      showToast(
+        message: "Error updating menu item: ${e.toString()}",
+        isError: true,
+      );
+    } finally {
+      setLoadingState(false);
+    }
   }
 
-  deleteMenuItem(String itemId) async {
+  deleteMenuItem(int itemId) async {
     setLoadingState(true);
 
-    // TODO: Replace with actual API call
-    await Future.delayed(const Duration(seconds: 1));
+    try {
+      // TODO: Replace with actual API call
+      await Future.delayed(const Duration(seconds: 1));
 
-    menuItems.removeWhere((item) => item.id == itemId);
-    showToast(message: "Menu item deleted successfully", isError: false);
-    setLoadingState(false);
+      menuItems.removeWhere((item) => item.id == itemId);
+      showToast(message: "Menu item deleted successfully", isError: false);
+    } catch (e) {
+      showToast(
+        message: "Error deleting menu item: ${e.toString()}",
+        isError: true,
+      );
+    } finally {
+      setLoadingState(false);
+    }
   }
 
   // Edit menu item
@@ -463,11 +611,16 @@ class FoodMenuController extends GetxController {
     menuNameController.text = item.name;
     descriptionController.text = item.description ?? "";
     priceController.text = item.price.toString();
+    prepTimeController.text = item.duration.replaceAll(
+      RegExp(r'[^0-9]'),
+      '',
+    ); // Extract numbers only
     selectedCategory = item.category;
-    selectedFoodDuration = item.duration;
     isAvailable = item.isAvailable;
     availableQuantity = item.availableQuantity;
     foodImage = item.image;
+    selectedPlateSize = item.plateSize ?? "M";
+    showOnCustomerApp = item.showOnCustomerApp ?? true;
     update();
 
     Get.toNamed(Routes.EDIT_MENU_SCREEN);
@@ -491,6 +644,7 @@ class FoodMenuController extends GetxController {
     menuNameController.dispose();
     descriptionController.dispose();
     priceController.dispose();
+    prepTimeController.dispose();
     categoryNameController.dispose();
     searchController.dispose();
     super.onClose();

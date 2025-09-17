@@ -1,14 +1,21 @@
+import 'package:sharpvendor/core/models/categories_model.dart';
+import 'package:sharpvendor/core/models/restaurant_model.dart';
+
+import 'item_file_model.dart';
+
 class MenuItemModel {
-  final String id;
+  final int id;
   final String name;
-  final String category;
+  final CategoryModel category;
   final double price;
   final String duration;
+  final RestaurantModel restaurant;
   final String image;
-  final bool isAvailable;
+  final int isAvailable;
   final int availableQuantity;
   final String? description;
   final String? plateSize;
+  final List<ItemFileModel> files;
   final bool? showOnCustomerApp;
 
   MenuItemModel({
@@ -21,15 +28,19 @@ class MenuItemModel {
     required this.isAvailable,
     required this.availableQuantity,
     this.description,
+    required this.restaurant,
     this.plateSize,
     this.showOnCustomerApp,
+    required this.files,
   });
 
   factory MenuItemModel.fromJson(Map<String, dynamic> json) {
+    final filesJson = json['files'] as List<dynamic>? ?? [];
     return MenuItemModel(
-      id: json['id']?.toString() ?? '',
+      id: json['id']??1 ,
       name: json['name']?.toString() ?? '',
-      category: json['category']?.toString() ?? '',
+      category: CategoryModel.fromJson(json['category']),
+      restaurant: RestaurantModel.fromJson(json['restaurant']),
       price: double.tryParse(json['price']?.toString() ?? '0') ?? 0.0,
       duration: json['duration']?.toString() ?? '',
       image: json['image']?.toString() ?? '',
@@ -38,6 +49,7 @@ class MenuItemModel {
       description: json['description']?.toString(),
       plateSize: json['plate_size']?.toString(),
       showOnCustomerApp: json['show_on_customer_app'],
+      files: filesJson.map((e) => ItemFileModel.fromJson(e)).toList(),
     );
   }
 
@@ -54,6 +66,10 @@ class MenuItemModel {
       'description': description,
       'plate_size': plateSize,
       'show_on_customer_app': showOnCustomerApp,
+      'files': files,
     };
   }
+
+
 }
+

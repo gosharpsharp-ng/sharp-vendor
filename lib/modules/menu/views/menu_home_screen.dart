@@ -206,17 +206,17 @@ class MenuItemCard extends StatelessWidget {
                   topLeft: Radius.circular(12.r),
                   topRight: Radius.circular(12.r),
                 ),
-                child: menuItem.image.isEmpty
+                child: menuItem.files.isEmpty
                     ? _buildPlaceholderImage()
-                    : menuItem.image.startsWith('http')
+                    : menuItem.files[0].url.startsWith('http')
                     ? Image.network(
-                        menuItem.image,
+                        menuItem.files[0].url,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
                           return _buildPlaceholderImage();
                         },
                       )
-                    : Image.asset(menuItem.image, fit: BoxFit.cover),
+                    : Image.asset(menuItem.files[0].url, fit: BoxFit.cover),
               ),
             ),
 
@@ -250,7 +250,7 @@ class MenuItemCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12.r),
                         ),
                         child: customText(
-                          menuItem.category,
+                          menuItem.category.name,
                           color: AppColors.primaryColor,
                           fontSize: 11.sp,
                           fontWeight: FontWeight.w500,
@@ -292,7 +292,7 @@ class MenuItemCard extends StatelessWidget {
                             width: 8.w,
                             height: 8.h,
                             decoration: BoxDecoration(
-                              color: menuItem.isAvailable
+                              color: menuItem.isAvailable==1
                                   ? Colors.green
                                   : Colors.red,
                               shape: BoxShape.circle,
@@ -300,8 +300,8 @@ class MenuItemCard extends StatelessWidget {
                           ),
                           SizedBox(width: 6.w),
                           customText(
-                            menuItem.isAvailable ? "Available" : "Unavailable",
-                            color: menuItem.isAvailable
+                            menuItem.isAvailable==1 ? "Available" : "Unavailable",
+                            color: menuItem.isAvailable==1
                                 ? Colors.green
                                 : Colors.red,
                             fontSize: 12.sp,
