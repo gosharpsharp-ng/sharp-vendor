@@ -173,6 +173,7 @@ class OrdersHomeScreen extends GetView<OrdersController> {
           customText(
             "No ${_getStatusDisplayName(status).toLowerCase()} orders",
             color: AppColors.greyColor,
+            overflow: TextOverflow.visible,
             fontSize: 16.sp,
             fontWeight: FontWeight.w500,
           ),
@@ -180,6 +181,7 @@ class OrdersHomeScreen extends GetView<OrdersController> {
           customText(
             _getEmptyStateMessage(status),
             color: AppColors.greyColor,
+            overflow: TextOverflow.visible,
             fontSize: 14.sp,
             textAlign: TextAlign.center,
           ),
