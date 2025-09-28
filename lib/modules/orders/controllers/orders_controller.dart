@@ -1,11 +1,10 @@
 
 import 'package:sharpvendor/core/models/order_model.dart';
-import 'package:sharpvendor/core/services/restaurant/orders/orders_service.dart';
 import '../../../core/utils/exports.dart';
 
 class OrdersController extends GetxController {
-  // Orders Service Instance
-  final OrdersService _ordersService = serviceLocator<OrdersService>();
+  // Profile Service Instance (now handles orders integration)
+  final ProfileService _profileService = serviceLocator<ProfileService>();
 
   // Loading states
   bool isLoading = false;
@@ -29,8 +28,8 @@ class OrdersController extends GetxController {
   OrderModel? selectedOrder;
 
   // Order status filter - Updated to match API statuses
-  String selectedOrderStatus = 'pending';
-  List<String> orderStatuses = ['pending', 'preparing', 'ready', 'in_transit', 'completed'];
+  String selectedOrderStatus = 'paid';
+  List<String> orderStatuses = ['paid', 'pending', 'preparing', 'ready', 'in_transit', 'completed'];
 
   setSelectedOrderStatus(String status) {
     selectedOrderStatus = status;
@@ -56,14 +55,14 @@ class OrdersController extends GetxController {
     setOrdersLoadingState(true);
 
     try {
-      final response = await _ordersService.getAllOrders({
-        'page': 'page=1',
-        'per_page': 50,
-      });
+      final response = await _profileService.getAllOrders();
 
-      if (response.status=="succes" && response.data != null) {
-        final Map<String, dynamic> responseData = response.data;
-        final List<dynamic> ordersData = responseData['data'] ?? [];
+      customDebugPrint(response.data);
+
+      if (response.status=="success" && response.data != null) {
+
+        // customDebugPrint(response.data);
+        final List<dynamic> ordersData = response.data['data'] ?? [];
 
         allOrders = ordersData.map((json) => OrderModel.fromJson(json)).toList();
         filterOrdersByStatus();
@@ -107,9 +106,9 @@ class OrdersController extends GetxController {
       };
 
       // Call the API
-      final response = await _ordersService.updateOrder(statusData, orderId);
+      final response = await _profileService.updateOrderStatus(statusData, orderId);
 
-      if (response.status=="succes") {
+      if (response.status=="success") {
         // Update in local list
         int index = allOrders.indexWhere((order) => order.id == orderId);
         if (index != -1) {
@@ -171,6 +170,8 @@ class OrdersController extends GetxController {
   // Helper method for status display text
   String _getStatusDisplayText(String status) {
     switch (status.toLowerCase()) {
+      case 'paid':
+        return 'Paid';
       case 'pending':
         return 'Pending';
       case 'preparing':
@@ -222,6 +223,7 @@ class OrdersController extends GetxController {
   bool _isValidStatusTransition(String currentStatus, String newStatus) {
     // Define valid transitions based on your business logic
     Map<String, List<String>> validTransitions = {
+      'paid': ['pending', 'preparing', 'cancelled'],
       'pending': ['preparing', 'cancelled'],
       'preparing': ['ready', 'cancelled'],
       'ready': ['in_transit', 'completed', 'cancelled'],
@@ -274,7 +276,7 @@ class OrdersController extends GetxController {
     setLoadingState(true);
 
     try {
-      final response = await _ordersService.getOrderById({'id': orderId});
+      final response = await _profileService.getOrderById({'id': orderId});
 
       if (response.status=="success" && response.data != null) {
         final orderData = response.data;

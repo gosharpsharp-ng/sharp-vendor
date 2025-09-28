@@ -5,6 +5,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 class WalletController extends GetxController {
   final walletService = serviceLocator<WalletsService>();
+  final profileService = serviceLocator<ProfileService>();
   bool _isLoading = false;
   get isLoading => _isLoading;
   setLoadingState(bool val) {
@@ -49,7 +50,7 @@ class WalletController extends GetxController {
       "per_page": transactionsPageSize,
     };
 
-    APIResponse response = await walletService.getAllTransactions(data);
+    APIResponse response = await profileService.getAllTransactions(data);
     fetchingTransactions = false;
 
     if (response.status == "success") {
@@ -85,7 +86,7 @@ class WalletController extends GetxController {
     dynamic data = {
       'id': selectedTransaction!.id,
     };
-    APIResponse response = await walletService.getSingleTransaction(data);
+    APIResponse response = await profileService.getTransactionById(data);
 
     setLoadingState(false);
     if (response.status == "success") {

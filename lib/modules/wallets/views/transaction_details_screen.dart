@@ -6,7 +6,7 @@ class TransactionDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<WalletController>(
-        builder: (walletController){
+      builder: (walletController) {
         return Scaffold(
           appBar: defaultAppBar(
             bgColor: AppColors.backgroundColor,
@@ -17,38 +17,57 @@ class TransactionDetailsScreen extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 2.sp, vertical: 12.sp),
             height: 1.sh,
             width: 1.sw,
-            child:  SingleChildScrollView(
+            child: SingleChildScrollView(
               child: Column(
                 children: [
-                  SectionBox(children:  [
-                    TransactionDetailSummaryItem(
-                      title: "Amount",
-                      value:formatToCurrency(double.parse(
-                          walletController
-                              .selectedTransaction?.amount ??
-                              "0.0")),
-                    ),
-                    TransactionDetailSummaryItem(
-                      title: "Transaction Ref",
-                      value: walletController.selectedTransaction?.paymentReference??"",
-                    ),
-                    TransactionDetailSummaryTypeItem(
-                      title: "Transaction type",
-                      value:  walletController.selectedTransaction?.type.capitalize??"",
-                    ),
-                    const TransactionDetailSummaryTypeItem(
-                      title: "Payment Method",
-                      value: "GoWallet",
-                    ),
-                    TransactionDetailSummaryItem(
-                      title: "Date",
-                      value: "${formatDate(walletController.selectedTransaction!.createdAt)} ${formatTime(walletController.selectedTransaction!.createdAt)}",
-                    ),
-                    TransactionDetailSummaryStatusItem(
-                      title: "Status",
-                      value: walletController.selectedTransaction!.status.capitalizeFirst??'',
-                    ),
-                  ]),
+                  SectionBox(
+                    children: [
+                      TransactionDetailSummaryItem(
+                        title: "Amount",
+                        value: formatToCurrency(
+                          double.parse(
+                            walletController.selectedTransaction?.amount ??
+                                "0.0",
+                          ),
+                        ),
+                      ),
+                      TransactionDetailSummaryItem(
+                        title: "Transaction Ref",
+                        value:
+                            walletController
+                                .selectedTransaction
+                                ?.paymentReference ??
+                            "",
+                      ),
+                      TransactionDetailSummaryTypeItem(
+                        title: "Transaction type",
+                        value:
+                            walletController
+                                .selectedTransaction
+                                ?.type
+                                .capitalize ??
+                            "",
+                      ),
+                      const TransactionDetailSummaryTypeItem(
+                        title: "Payment Method",
+                        value: "GoWallet",
+                      ),
+                      TransactionDetailSummaryItem(
+                        title: "Date",
+                        value:
+                            "${formatDate(walletController.selectedTransaction!.createdAt)} ${formatTime(walletController.selectedTransaction!.createdAt)}",
+                      ),
+                      TransactionDetailSummaryStatusItem(
+                        title: "Status",
+                        value:
+                            walletController
+                                .selectedTransaction!
+                                .status
+                                .capitalizeFirst ??
+                            '',
+                      ),
+                    ],
+                  ),
                   // SectionBox(children: const [
                   //   TransactionDetailSummaryItem(
                   //     title: "Sender's Name",
@@ -94,7 +113,7 @@ class TransactionDetailsScreen extends StatelessWidget {
             ),
           ),
         );
-      }
+      },
     );
   }
 }

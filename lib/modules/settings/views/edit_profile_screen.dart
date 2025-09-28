@@ -32,14 +32,14 @@ class EditProfileScreen extends StatelessWidget {
                       ),
                       Stack(
                         alignment:
-                            Alignment.center, // Aligns content within the stack
+                        Alignment.center, // Aligns content within the stack
                         children: [
                           Visibility(
                             visible:
-                                settingsController.userProfile?.avatar != null,
+                            settingsController.userProfile?.avatar != null,
                             replacement: Visibility(
                               visible:
-                                  settingsController.userProfilePicture != null,
+                              settingsController.userProfilePicture != null,
                               replacement: CircleAvatar(
                                 radius: 55.r,
                                 backgroundColor: AppColors.backgroundColor,
@@ -49,22 +49,22 @@ class EditProfileScreen extends StatelessWidget {
                                 ),
                               ),
                               child:
-                                  settingsController.userProfilePicture != null
-                                      ? CircleAvatar(
-                                          backgroundImage: FileImage(
-                                              settingsController
-                                                  .userProfilePicture!),
-                                          radius: 55.r,
-                                        )
-                                      : CircleAvatar(
-                                          backgroundImage: const AssetImage(
-                                              PngAssets.avatarIcon),
-                                          radius: 55.r,
-                                        ),
+                              settingsController.userProfilePicture != null
+                                  ? CircleAvatar(
+                                backgroundImage: base64ToMemoryImage(
+                                    settingsController
+                                        .userProfilePicture!),
+                                radius: 55.r,
+                              )
+                                  : CircleAvatar(
+                                backgroundImage: const AssetImage(
+                                    PngAssets.avatarIcon),
+                                radius: 55.r,
+                              ),
                             ),
                             child: CircleAvatar(
                               backgroundImage: NetworkImage(
-                                  settingsController.userProfile!.avatar ?? ''),
+                                  settingsController.userProfile?.avatar ?? ''),
                               radius: 55.r,
                             ),
                           ),

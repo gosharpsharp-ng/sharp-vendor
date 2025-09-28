@@ -11,11 +11,14 @@ import 'package:sharpvendor/modules/orders/bindings/orders_bindings.dart';
 import 'package:sharpvendor/modules/orders/views/order_details_screen.dart';
 import 'package:sharpvendor/modules/orders/views/orders_home_screen.dart';
 import 'package:sharpvendor/modules/settings/views/analytics_screen.dart';
+import 'package:sharpvendor/modules/settings/views/business_operations_screen.dart';
 import 'package:sharpvendor/modules/settings/views/order_transactions_screen.dart';
 import 'package:sharpvendor/modules/settings/views/reviews_screen.dart';
 import 'package:sharpvendor/modules/signup/views/bank_info_entry_screen.dart';
 import 'package:sharpvendor/modules/signup/views/business_information_entry_screen.dart';
 import 'package:sharpvendor/modules/signup/views/business_operations_entry_screen.dart';
+import 'package:sharpvendor/modules/support/bindings/support_bindings.dart';
+import 'package:sharpvendor/modules/support/views/faq_screen.dart';
 part 'app_routes.dart';
 
 class AppPages {
@@ -248,13 +251,20 @@ class AppPages {
     GetPage(
       name: Routes.FAQS_SCREEN,
       page: () => const FaqScreen(),
-      binding: SettingsBindings(),
+      binding: SupportBindings(),
       transition: Transition.rightToLeftWithFade,
       transitionDuration: const Duration(milliseconds: 400),
     ),
     GetPage(
       name: Routes.EDIT_PROFILE_SCREEN,
       page: () => const EditProfileScreen(),
+      binding: SettingsBindings(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: Routes.BUSINESS_OPERATIONS_SCREEN,
+      page: () => const BusinessOperationsScreen(),
       binding: SettingsBindings(),
       transition: Transition.rightToLeftWithFade,
       transitionDuration: const Duration(milliseconds: 400),
@@ -331,13 +341,15 @@ class AppPages {
       binding: MenuBindings(),
       transition: Transition.downToUp,
       transitionDuration: const Duration(milliseconds: 400),
-    ), GetPage(
+    ),
+    GetPage(
       name: Routes.ORDERS_HOME_SCREEN,
       page: () => OrdersHomeScreen(),
       binding: OrdersBindings(),
       transition: Transition.downToUp,
       transitionDuration: const Duration(milliseconds: 400),
-    ), GetPage(
+    ),
+    GetPage(
       name: Routes.ORDER_DETAILS_SCREEN,
       page: () => OrderDetailsScreen(),
       binding: OrdersBindings(),
