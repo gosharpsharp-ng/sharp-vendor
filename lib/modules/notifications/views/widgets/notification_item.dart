@@ -2,7 +2,7 @@
 import 'package:sharpvendor/core/utils/exports.dart';
 
 class NotificationItem extends StatelessWidget {
-final NotificationModel notification;
+  final NotificationModel notification;
   final Function onTap;
   final bool isLast;
   const NotificationItem({
@@ -45,7 +45,7 @@ final NotificationModel notification;
                 child: Stack(
                   children: [
                     Visibility(
-                      visible:notification.status=="unread",
+                      visible:notification.readAt==null,
                       child: Positioned(
                           top: 0,
                           right: 0,
@@ -68,6 +68,7 @@ final NotificationModel notification;
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 8.w),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -75,15 +76,19 @@ final NotificationModel notification;
                         customText(notification.title,
                             color: AppColors.primaryColor,
                             fontWeight: FontWeight.w500,
-                            fontSize: 15.sp,
+                            fontSize: 12.sp,
                             overflow: TextOverflow.visible),
-                        customText(
-                          "${formatDate(notification.createdAt)} ${formatTime(notification.createdAt)}",
-                          color: AppColors.obscureTextColor,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 12.sp,
-                        ),
+
                       ],
+                    ),
+                    SizedBox(
+                      height: 5.h,
+                    ),
+                    customText(
+                      "${formatDate(notification.createdAt)} ${formatTime(notification.createdAt)}",
+                      color: AppColors.obscureTextColor,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 12.sp,
                     ),
                     SizedBox(
                       height: 5.h,
@@ -91,11 +96,13 @@ final NotificationModel notification;
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        customText(notification.message,
-                            color: AppColors.blackColor,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 15.sp,
-                            overflow: TextOverflow.visible),
+                        Expanded(
+                          child: customText(notification.message,
+                              color: AppColors.blackColor,
+                              fontWeight: FontWeight.normal,
+                              fontSize: 12.sp,
+                              overflow: TextOverflow.visible),
+                        ),
                       ],
                     ),
                   ],

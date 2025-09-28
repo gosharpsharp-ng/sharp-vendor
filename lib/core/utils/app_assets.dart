@@ -58,6 +58,7 @@ class SvgAssets {
   static const String shareIcon = 'assets/svgs/share.svg';
   static const String locationIcon = 'assets/svgs/location.svg';
   static const String notificationIcon = 'assets/svgs/notification.svg';
+  static const String emptyNotificationIcon = 'assets/svgs/empty_notification.svg';
   static const String ratingIcon = 'assets/svgs/rating.svg';
   static const String leafIcon = 'assets/svgs/leaf.svg';
   static const String readNotificationIcon =

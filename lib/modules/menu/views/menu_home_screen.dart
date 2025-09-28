@@ -2,7 +2,6 @@ import 'package:sharpvendor/core/models/menu_item_model.dart';
 import 'package:sharpvendor/modules/menu/controllers/food_menu_controller.dart';
 
 import '../../../core/utils/exports.dart';
-import '../../../core/utils/widgets/base64_image.dart';
 
 class MenuHomeScreen extends GetView<FoodMenuController> {
   const MenuHomeScreen({super.key});
@@ -32,10 +31,10 @@ class MenuHomeScreen extends GetView<FoodMenuController> {
                 await menuController.getMenuItems();
               },
               child: menuController.isLoadingMenuItems
-                  ? Center(
-                      child: CircularProgressIndicator(
-                        color: AppColors.primaryColor,
-                      ),
+                  ? ListView(
+                      children: [
+                        SkeletonLoaders.menuItemCard(count: 4),
+                      ],
                     )
                   : menuController.menuItems.isEmpty
                   ? Center(

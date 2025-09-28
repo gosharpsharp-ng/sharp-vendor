@@ -45,6 +45,7 @@ abstract class Routes {
   static const PROFILE_SETTINGS_SCREEN = '/profile_settings_screen';
   static const DELETE_ACCOUNT_SCREEN = '/delete_account_screen';
   static const EDIT_PROFILE_SCREEN = '/edit_profile_screen';
+  static const BUSINESS_OPERATIONS_SCREEN = '/business_operations_screen';
   static const CHANGE_PASSWORD_SCREEN = '/change_password_screen';
   static const NEW_PASSWORD_ENTRY_SCREEN = '/new_password_entry_screen';
   static const FAQS_SCREEN = '/faqs_screen';

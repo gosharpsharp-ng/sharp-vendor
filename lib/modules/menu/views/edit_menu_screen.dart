@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:sharpvendor/core/models/categories_model.dart';
 import 'package:sharpvendor/modules/menu/controllers/food_menu_controller.dart';
@@ -504,25 +505,45 @@ class EditMenuScreen extends GetView<FoodMenuController> {
 
   // Helper method to determine image provider based on image source
   ImageProvider _getImageProvider(String imagePath) {
-    // Check if it's a base64 string
-    if (imagePath.contains('data:image') || _isBase64(imagePath)) {
-      return base64ToMemoryImage(imagePath);
-    }
-    // Check if it's a network URL
-    else if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
-      return NetworkImage(imagePath);
-    }
-    // Assume it's an asset path
-    else {
-      return AssetImage(imagePath);
+    try {
+      // Check if it's a base64 string (with or without data URI prefix)
+      if (imagePath.contains('data:image') || _isBase64(imagePath)) {
+        return base64ToMemoryImage(imagePath);
+      }
+      // Check if it's a network URL
+      else if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+        return NetworkImage(imagePath);
+      }
+      // Check if it's a file path
+      else if (imagePath.startsWith('/') || imagePath.contains('file://')) {
+        return FileImage(File(imagePath.replaceFirst('file://', '')));
+      }
+      // Assume it's an asset path
+      else {
+        return AssetImage(imagePath);
+      }
+    } catch (e) {
+      // Fallback - try network image first, then asset
+      if (imagePath.startsWith('http')) {
+        return NetworkImage(imagePath);
+      }
+      return AssetImage('assets/images/placeholder.png'); // Fallback image
     }
   }
 
   // Helper method to check if string is base64
   bool _isBase64(String str) {
     try {
+      // Remove any data URI prefix first
+      String cleanStr = str;
+      if (str.contains(',')) {
+        cleanStr = str.split(',').last;
+      }
+
       // Basic check for base64 pattern
-      return RegExp(r'^[A-Za-z0-9+/]*={0,2}$').hasMatch(str) && str.length % 4 == 0;
+      return RegExp(r'^[A-Za-z0-9+/]*={0,2}$').hasMatch(cleanStr) &&
+             cleanStr.length % 4 == 0 &&
+             cleanStr.length > 0;
     } catch (e) {
       return false;
     }

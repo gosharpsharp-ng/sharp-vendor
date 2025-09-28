@@ -44,7 +44,9 @@ class MenuItemModel {
       price: double.tryParse(json['price']?.toString() ?? '0') ?? 0.0,
       duration: json['duration']?.toString() ?? '',
       image: json['image']?.toString() ?? '',
-      isAvailable: json['is_available'] ?? true,
+      isAvailable: json['is_available'] is bool
+          ? (json['is_available'] ? 1 : 0)
+          : (int.tryParse(json['is_available']?.toString() ?? '1') ?? 1),
       availableQuantity: int.tryParse(json['available_quantity']?.toString() ?? '0') ?? 0,
       description: json['description']?.toString(),
       plateSize: json['plate_size']?.toString(),

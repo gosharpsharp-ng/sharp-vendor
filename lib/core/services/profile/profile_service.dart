@@ -4,27 +4,50 @@ class ProfileService extends CoreService {
   Future<ProfileService> init() async => this;
 
   Future<APIResponse> getProfile() async {
-    return await fetch("/me");
+    return await fetch("/restaurants/profile");
   }
 
   Future<APIResponse> updateProfile(dynamic data) async {
-    return await formUpdate("/me", data);
+    return await update("/restaurants/profile", data);
   }
 
   Future<APIResponse> getNotifications(dynamic data) async {
     return await fetch(
-        "/me/notifications?page=${data['page']}&page_size=${data['per_page']}");
+        "/restaurants/notification?page=${data['page']}&page_size=${data['per_page']}");
   }
 
   Future<APIResponse> getNotificationById(dynamic data) async {
-    return await fetch("/me/notifications/${data['id']}");
+    return await fetch("/restaurants/notification/${data['id']}");
   }
 
   Future<APIResponse> changePassword(dynamic data) async {
-    return await send("/auth/change-password", data);
+    return await send("/restaurants/change-password", data);
   }
 
   Future<APIResponse> deleteAccount(dynamic data) async {
     return await remove("/me", data);
+  }
+
+  // Orders integration
+  Future<APIResponse> getAllOrders() async {
+    return await fetch("/restaurants/orders");
+  }
+
+  Future<APIResponse> getOrderById(dynamic data) async {
+    return await fetch("/restaurants/orders/${data['id']}");
+  }
+
+  Future<APIResponse> updateOrderStatus(dynamic data, int orderId) async {
+    return await generalPatch("restaurants/orders/$orderId/status", data);
+  }
+
+  // Transactions integration
+  Future<APIResponse> getAllTransactions(dynamic data) async {
+    return await fetch(
+        "/restaurants/transactions?page=${data['page']}&page_size=${data['per_page']}");
+  }
+
+  Future<APIResponse> getTransactionById(dynamic data) async {
+    return await fetch("/restaurants/transactions/${data['id']}");
   }
 }

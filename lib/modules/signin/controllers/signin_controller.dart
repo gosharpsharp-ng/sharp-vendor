@@ -53,13 +53,18 @@ class SignInController extends GetxController {
           message: response.message, isError: response.status != "success");
       setLoadingState(false);
 
+
       if (response.status.toLowerCase() == "success") {
+        print("*****************************************************************************");
+        print(response.data['auth_token']);
+        print("******************************************************************************");
+
         loginController.clear();
         passwordController.clear();
         filledPhoneNumber=null;
         update();
         final getStorage = GetStorage();
-        getStorage.write("token", response.data['access_token']);
+        getStorage.write("token", response.data['auth_token']);
           Get.put(WalletController());
         Get.put(SettingsController());
         Get.put(DeliveriesController());

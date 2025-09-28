@@ -23,6 +23,7 @@ export 'package:sharpvendor/core/services/auth/auth_service.dart';
 export 'package:sharpvendor/core/services/profile/profile_service.dart';
 export 'package:sharpvendor/modules/settings/views/delete_account_password_screen.dart';
 export 'package:sharpvendor/core/utils/widgets/custom_appbar.dart';
+export 'package:sharpvendor/core/utils/widgets/skeleton_loaders.dart';
 
 export 'package:sharpvendor/modules/splash/views/splash_screen.dart';
 export 'package:sharpvendor/modules/onboarding/views/onboarding_screen.dart';
@@ -123,7 +124,6 @@ export 'package:sharpvendor/core/models/transaction_model.dart';
 export 'package:sharpvendor/modules/delivery/views/widgets/parcel_category_bottom_sheet.dart';
 export 'package:sharpvendor/core/utils/widgets/custom_image_picker_bottomsheet.dart';
 export 'package:sharpvendor/core/services/delivery/delivery_service.dart';
-export 'package:sharpvendor/modules/settings/views/faq_screen.dart';
 export 'package:sharpvendor/core/models/direction_details_Info.dart';
 export 'package:sharpvendor/core/models/delivery_model.dart';
 export 'package:image_picker/image_picker.dart';

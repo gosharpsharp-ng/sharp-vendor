@@ -156,15 +156,15 @@ class SettingsHomeScreen extends StatelessWidget {
                         title: "My Address",
                         icon: SvgAssets.locationIcon,
                       ),
-                      SettingsItem(
-                        onPressed: () {
-                          settingsController.setProfileFields();
-                          settingsController.toggleProfileEditState(false);
-                          Get.toNamed(Routes.EDIT_PROFILE_SCREEN);
-                        },
-                        title: "Menu management",
-                        icon: SvgAssets.menuIcon,
-                      ),
+                      // SettingsItem(
+                      //   onPressed: () {
+                      //     settingsController.setProfileFields();
+                      //     settingsController.toggleProfileEditState(false);
+                      //     Get.toNamed(Routes.EDIT_PROFILE_SCREEN);
+                      //   },
+                      //   title: "Menu management",
+                      //   icon: SvgAssets.menuIcon,
+                      // ),
                       SettingsItem(
                         onPressed: () {
                           Get.toNamed(Routes.WALLETS_HOME_SCREEN);
@@ -189,7 +189,8 @@ class SettingsHomeScreen extends StatelessWidget {
                       ),
                       SettingsItem(
                         onPressed: () {
-                          Get.toNamed(Routes.WALLETS_HOME_SCREEN);
+                          settingsController.setBusinessOperationsFields();
+                          Get.toNamed(Routes.BUSINESS_OPERATIONS_SCREEN);
                         },
                         title: "Business Operations",
                         iconColor: AppColors.purpleColor,
@@ -225,51 +226,43 @@ class SettingsHomeScreen extends StatelessWidget {
 
                       SettingsItem(
                         onPressed: () {
-                          showWebViewDialog(
-                            context,
-                            controller: webViewController,
-                            onDialogClosed: () {
-                              Get.back();
-                            },
-                            title: "FAQ",
-                            url: "https://sharpvendor.com/faq",
-                          );
+                         Get.toNamed(Routes.FAQS_SCREEN);
                         },
                         title: "FAQS",
                         icon: SvgAssets.faqsIcon,
                       ),
 
-                      SettingsItem(
-                        onPressed: () {
-                          showWebViewDialog(
-                            context,
-                            controller: webViewController,
-                            onDialogClosed: () {
-                              Get.back();
-                            },
-                            title: "Help and Support",
-                            url: "https://sharpvendor.com/contact",
-                          );
-                        },
-                        title: "Help and Support",
-                        icon: SvgAssets.supportIcon,
-                      ),
+                      // SettingsItem(
+                      //   onPressed: () {
+                      //     showWebViewDialog(
+                      //       context,
+                      //       controller: webViewController,
+                      //       onDialogClosed: () {
+                      //         Get.back();
+                      //       },
+                      //       title: "Help and Support",
+                      //       url: "https://sharpvendor.com/contact",
+                      //     );
+                      //   },
+                      //   title: "Help and Support",
+                      //   icon: SvgAssets.supportIcon,
+                      // ),
 
-                      SettingsItem(
-                        onPressed: () {
-                          showWebViewDialog(
-                            context,
-                            controller: webViewController,
-                            onDialogClosed: () {
-                              Get.back();
-                            },
-                            title: "Privacy Policy",
-                            url: "https://sharpvendor.com/privacy",
-                          );
-                        },
-                        title: "Privacy Policy",
-                        icon: SvgAssets.profileIcon,
-                      ),
+                      // SettingsItem(
+                      //   onPressed: () {
+                      //     showWebViewDialog(
+                      //       context,
+                      //       controller: webViewController,
+                      //       onDialogClosed: () {
+                      //         Get.back();
+                      //       },
+                      //       title: "Privacy Policy",
+                      //       url: "https://sharpvendor.com/privacy",
+                      //     );
+                      //   },
+                      //   title: "Privacy Policy",
+                      //   icon: SvgAssets.profileIcon,
+                      // ),
                       // SettingsItem(
                       //   onPressed: () {},
                       //   title: "Language",

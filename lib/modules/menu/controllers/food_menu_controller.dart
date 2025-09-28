@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:sharpvendor/core/models/categories_model.dart';
 import 'package:sharpvendor/core/models/menu_item_model.dart';
 import 'package:sharpvendor/core/services/restaurant/menu/menu_service.dart';
@@ -49,6 +50,7 @@ class FoodMenuController extends GetxController {
     }
     if (photo != null) {
       final croppedPhoto = await cropImage(photo);
+      // File image = compressImageWithLowerQuality(file);
       foodImage = await convertImageToBase64(croppedPhoto.path);
       update();
     }
@@ -327,7 +329,7 @@ class FoodMenuController extends GetxController {
     return int.tryParse(prepTimeController.text) ?? 15;
   }
 
-  // Save menu item - UPDATED WITH PROPER API INTEGRATION
+  // Save menu item -
   saveMenuItem() async {
     if (menuSetupFormKey.currentState!.validate()) {
       if (foodImage == null) {
@@ -343,16 +345,6 @@ class FoodMenuController extends GetxController {
       setLoadingState(true);
 
       try {
-        // Find the category ID from the selected category name
-        final CategoryModel? categoryModel = categoryModels.firstWhereOrNull(
-          (cat) => cat.name == selectedCategory,
-        );
-
-        if (selectedCategory == null) {
-          showToast(message: "Invalid category selected", isError: true);
-          setLoadingState(false);
-          return;
-        }
 
         // Get prep time from controller
         int prepTimeMinutes = _getPrepTime();
@@ -364,13 +356,14 @@ class FoodMenuController extends GetxController {
           "plate_size": selectedPlateSize,
           "price": double.tryParse(priceController.text) ?? 0.0,
           "prep_time_minutes": prepTimeMinutes,
-          "category_id": selectedCategory?.id ?? 1,
+          "category_id": selectedCategory!.id,
           "images": [foodImage], // Array of base64 images
-          "is_available": isAvailable,
-          "available_quantity": availableQuantity,
-          "show_on_customer_app": showOnCustomerApp,
+          // "is_available": isAvailable==1?true:true,
+          // "available_quantity": availableQuantity,
+          // "show_on_customer_app": showOnCustomerApp,
         };
 
+  customDebugPrint(menuData);
         // Call the API
         final APIResponse response = await menuService.createMenu(menuData);
 
@@ -386,6 +379,8 @@ class FoodMenuController extends GetxController {
           // Navigate back
           Get.back();
         } else {
+          // customDebugPrint(response.message);
+          customDebugPrint(response.message);
           showToast(
             message: response.message ?? "Failed to add menu item",
             isError: true,
@@ -402,7 +397,7 @@ class FoodMenuController extends GetxController {
     }
   }
 
-  // Update menu item - NEW METHOD FOR EDIT FUNCTIONALITY
+  // Update menu item -
   updateMenuItem() async {
     if (menuSetupFormKey.currentState!.validate()) {
       if (foodImage == null) {
@@ -423,36 +418,23 @@ class FoodMenuController extends GetxController {
       setLoadingState(true);
 
       try {
-        // Find the category ID from the selected category name
-        final CategoryModel? selectedCategoryModel = categoryModels
-            .firstWhereOrNull((cat) => cat.name == selectedCategory);
-
-        if (selectedCategoryModel == null) {
-          showToast(message: "Invalid category selected", isError: true);
-          setLoadingState(false);
-          return;
-        }
 
         // Get prep time from controller
         int prepTimeMinutes = _getPrepTime();
 
         // Prepare data in the required format
         final Map<String, dynamic> menuData = {
-          "id": currentMenuItem!.id,
           "name": menuNameController.text.trim(),
           "description": descriptionController.text.trim(),
           "plate_size": selectedPlateSize,
           "price": double.tryParse(priceController.text) ?? 0.0,
           "prep_time_minutes": prepTimeMinutes,
-          "category_id": selectedCategoryModel.id ?? 1,
+          "category_id": selectedCategory!.id,
           "images": [foodImage], // Array of base64 images
-          "is_available": isAvailable,
-          "available_quantity": availableQuantity,
-          "show_on_customer_app": showOnCustomerApp,
         };
 
         // Call the API
-        final APIResponse response = await menuService.updateMenu(menuData);
+        final APIResponse response = await menuService.updateMenu(menuData, currentMenuItem!.id,);
 
         if (response.status == "success") {
           showToast(message: "Menu item updated successfully", isError: false);
@@ -493,6 +475,7 @@ class FoodMenuController extends GetxController {
     availableQuantity = 1;
     selectedPlateSize = "M";
     showOnCustomerApp = true;
+    currentMenuItem = null; // Reset current menu item
     update();
   }
 
@@ -607,18 +590,55 @@ class FoodMenuController extends GetxController {
 
   // Edit menu item
   editMenuItem(MenuItemModel item) {
+    // Set the current menu item for updating
+    currentMenuItem = item;
+
     // Populate form with existing data
     menuNameController.text = item.name;
     descriptionController.text = item.description ?? "";
     priceController.text = item.price.toString();
-    prepTimeController.text = item.duration.replaceAll(
-      RegExp(r'[^0-9]'),
-      '',
-    ); // Extract numbers only
+
+    // Fix prep time parsing - handle different duration formats
+    String durationStr = item.duration;
+    String prepTimeValue = "";
+
+    // Try to extract numbers from duration string
+    RegExp numberRegex = RegExp(r'\d+');
+    Match? match = numberRegex.firstMatch(durationStr);
+    if (match != null) {
+      prepTimeValue = match.group(0) ?? "";
+    }
+
+    // If no numbers found, try parsing as direct number
+    if (prepTimeValue.isEmpty) {
+      int? parsedDuration = int.tryParse(durationStr);
+      if (parsedDuration != null) {
+        prepTimeValue = parsedDuration.toString();
+      }
+    }
+
+    prepTimeController.text = prepTimeValue.isNotEmpty ? prepTimeValue : "15"; // Default to 15 if parsing fails
+
     selectedCategory = item.category;
     isAvailable = item.isAvailable;
     availableQuantity = item.availableQuantity;
-    foodImage = item.image;
+
+    // Fix image handling - get image from files array
+    if (item.files.isNotEmpty) {
+      // Get the first image file from the files array
+      final imageFile = item.files.firstWhere(
+        (file) => file.mimeType.startsWith('image/'),
+        orElse: () => item.files.first, // Fallback to first file if no image found
+      );
+      foodImage = imageFile.url;
+    } else if (item.image.isNotEmpty) {
+      // Fallback to the direct image field if no files
+      foodImage = item.image;
+    } else {
+      // If no image, set to null to show placeholder
+      foodImage = null;
+    }
+
     selectedPlateSize = item.plateSize ?? "M";
     showOnCustomerApp = item.showOnCustomerApp ?? true;
     update();
