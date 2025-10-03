@@ -38,9 +38,7 @@ class NotificationsHomeScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    child: Center(
-                      child: customText("Loading...."),
-                    ),
+                    child: SkeletonLoaders.notificationsPage(),
                   ),
                   child: SingleChildScrollView(
                     controller:

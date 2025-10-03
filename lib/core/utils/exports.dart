@@ -21,6 +21,8 @@ export 'package:sharpvendor/core/services/core_service.dart';
 export 'package:sharpvendor/core/services/models/api_response.dart';
 export 'package:sharpvendor/core/services/auth/auth_service.dart';
 export 'package:sharpvendor/core/services/profile/profile_service.dart';
+export 'package:sharpvendor/modules/payouts/controllers/payout_controller.dart';
+export 'package:sharpvendor/modules/payouts/models/payout_request_model.dart';
 export 'package:sharpvendor/modules/settings/views/delete_account_password_screen.dart';
 export 'package:sharpvendor/core/utils/widgets/custom_appbar.dart';
 export 'package:sharpvendor/core/utils/widgets/skeleton_loaders.dart';
@@ -51,12 +53,8 @@ export 'package:sharpvendor/modules/delivery/views/create_delivery/ride_selectio
 export 'package:dotted_line/dotted_line.dart';
 export 'package:sharpvendor/modules/delivery/views/widgets/delivery_tracking_mini_info_item.dart';
 export 'package:sharpvendor/core/utils/widgets/rating_bottom_sheet.dart';
-export 'package:sharpvendor/modules/wallets/views/widgets/transaction_detail_summary_item.dart';
-export 'package:sharpvendor/modules/wallets/views/transaction_details_screen.dart';
-export 'package:sharpvendor/modules/wallets/views/widgets/transaction_item.dart';
 
 export 'package:sharpvendor/modules/settings/views/settings_home_screen.dart';
-export 'package:sharpvendor/modules/wallets/views/wallet_home_screen.dart';
 
 export 'package:sharpvendor/modules/settings/views/widgets/settings_item.dart';
 export 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -93,7 +91,6 @@ export 'package:sharpvendor/modules/notifications/views/widgets/notification_ite
 export 'package:sharpvendor/modules/delivery/controllers/deliveries_controller.dart';
 export 'package:sharpvendor/modules/splash/controllers/splash_controller.dart';
 
-export 'package:sharpvendor/modules/wallets/controllers/wallet_controller.dart';
 export 'package:sharpvendor/modules/settings/controllers/settings_controller.dart';
 
 export 'package:sharpvendor/modules/app_navigation/bindings/app_navigation_binding.dart';
@@ -107,8 +104,6 @@ export 'package:sharpvendor/modules/signin/bindings/sign_in_bindings.dart';
 export 'package:sharpvendor/modules/signup/bindings/sign_up_bindings.dart';
 export 'package:sharpvendor/modules/signup/views/sign_up_otp_screen.dart';
 export 'package:sharpvendor/modules/splash/bindings/splash_bindings.dart';
-export 'package:sharpvendor/modules/wallets/bindings/wallet_bindings.dart';
-export 'package:sharpvendor/modules/wallets/views/transactions_screen.dart';
 export 'package:sharpvendor/core/models/paystack_authorization_model.dart';
 export 'package:sharpvendor/core/models/wallet_balance_data_model.dart';
 export 'package:sharpvendor/core/routing/app_pages.dart';
@@ -118,7 +113,6 @@ export 'package:flutter_google_maps_webservices/places.dart';
 export 'package:geolocator/geolocator.dart';
 export 'package:sharpvendor/core/models/location_model.dart';
 export 'package:sharpvendor/core/models/delivery_item_data.dart';
-export 'package:sharpvendor/modules/wallets/views/fund_wallet_amount_screen.dart';
 export 'package:sharpvendor/core/models/bank_model.dart';
 export 'package:sharpvendor/core/models/transaction_model.dart';
 export 'package:sharpvendor/modules/delivery/views/widgets/parcel_category_bottom_sheet.dart';
@@ -133,6 +127,9 @@ export 'package:sharpvendor/modules/delivery/views/create_delivery/delivery_succ
 export 'package:sharpvendor/modules/delivery/views/create_delivery/processed_delivery_summary_screen.dart';
 export 'package:sharpvendor/modules/settings/views/change_password/change_password_screen.dart';
 export 'package:sharpvendor/core/models/notification_model.dart';
+export 'package:sharpvendor/core/models/restaurant_location_model.dart';
+export 'package:sharpvendor/core/models/restaurant_wallet_model.dart';
+export 'package:sharpvendor/core/models/restaurant_schedule_model.dart';
 export 'package:sharpvendor/modules/delivery/views/create_delivery/select_location_screen.dart';
 export 'package:sharpvendor/modules/delivery/views/widgets/delivery_item_accordion.dart';
 export 'package:sharpvendor/modules/delivery/views/widgets/currier_type_container.dart';
@@ -143,3 +140,17 @@ export 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 export 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
 export 'package:sharpvendor/core/services/websocket/websocket_service_manager.dart';
+
+// Restaurant Management
+export 'package:sharpvendor/modules/restaurant/controllers/restaurant_details_controller.dart';
+export 'package:sharpvendor/modules/restaurant/bindings/restaurant_bindings.dart';
+export 'package:sharpvendor/modules/restaurant/views/restaurant_details_screen.dart';
+export 'package:sharpvendor/modules/restaurant/views/edit_basic_info_screen.dart';
+export 'package:sharpvendor/modules/restaurant/views/edit_location_screen.dart';
+export 'package:sharpvendor/modules/restaurant/views/business_hours_screen.dart';
+export 'package:sharpvendor/modules/restaurant/views/business_settings_screen.dart';
+
+// Analytics
+export 'package:sharpvendor/core/models/restaurant_analytics_model.dart';
+export 'package:sharpvendor/core/services/restaurant/analytics/analytics_service.dart';
+export 'package:sharpvendor/modules/settings/controllers/analytics_controller.dart';

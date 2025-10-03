@@ -1,6 +1,7 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:sharpvendor/core/models/categories_model.dart';
 import 'package:sharpvendor/modules/menu/controllers/food_menu_controller.dart';
+import 'package:sharpvendor/modules/menu/widgets/addon_selection_bottom_sheet.dart';
 import '../../../core/utils/exports.dart';
 
 class AddMenuScreen extends GetView<FoodMenuController> {
@@ -360,6 +361,112 @@ class AddMenuScreen extends GetView<FoodMenuController> {
                         return null;
                       },
                     ),
+
+                    SizedBox(height: 20.h),
+
+                    // Addons Selection
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        customText(
+                          "Add-ons",
+                          color: AppColors.blackColor,
+                          fontSize: 13.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 8.h),
+                    ClickableCustomRoundedInputField(
+                      title: "Add-ons",
+                      label: "Select Add-ons (optional)",
+                      readOnly: true,
+                      showLabel: true,
+                      hasTitle: false,
+                      isRequired: false,
+                      controller: TextEditingController(
+                        text: menuController.selectedAddons.isEmpty
+                            ? ""
+                            : "${menuController.selectedAddons.length} add-on(s) selected",
+                      ),
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(25.0),
+                            ),
+                          ),
+                          builder: (context) => const AddonSelectionBottomSheet(),
+                        );
+                      },
+                      suffixWidget: IconButton(
+                        onPressed: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(25.0),
+                              ),
+                            ),
+                            builder: (context) => const AddonSelectionBottomSheet(),
+                          );
+                        },
+                        icon: SvgPicture.asset(
+                          SvgAssets.downChevronIcon,
+                          color: AppColors.primaryColor,
+                        ),
+                      ),
+                    ),
+
+                    // Selected addons display
+                    if (menuController.selectedAddons.isNotEmpty) ...[
+                      SizedBox(height: 12.h),
+                      Wrap(
+                        spacing: 8.w,
+                        runSpacing: 8.h,
+                        children: menuController.selectedAddons.map((addon) {
+                          return Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12.w,
+                              vertical: 6.h,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppColors.primaryColor.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(16.r),
+                              border: Border.all(
+                                color: AppColors.primaryColor.withOpacity(0.3),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                customText(
+                                  addon.name,
+                                  color: AppColors.primaryColor,
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                SizedBox(width: 6.w),
+                                GestureDetector(
+                                  onTap: () {
+                                    menuController.removeAddon(addon);
+                                  },
+                                  child: Icon(
+                                    Icons.close,
+                                    size: 16.sp,
+                                    color: AppColors.primaryColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ],
 
                     SizedBox(height: 20.h),
 

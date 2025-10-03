@@ -7,13 +7,22 @@ class ProfileService extends CoreService {
     return await fetch("/restaurants/profile");
   }
 
+  Future<APIResponse> getPayoutHistory() async {
+    return await fetch("/restaurants/payout/history");
+  }
+
   Future<APIResponse> updateProfile(dynamic data) async {
     return await update("/restaurants/profile", data);
   }
 
+  Future<APIResponse> submitPayoutRequest(dynamic data) async {
+    return await send("/restaurants/payout/request", data);
+  }
+
   Future<APIResponse> getNotifications(dynamic data) async {
     return await fetch(
-        "/restaurants/notification?page=${data['page']}&page_size=${data['per_page']}");
+      "/restaurants/notification?page=${data['page']}&page_size=${data['per_page']}",
+    );
   }
 
   Future<APIResponse> getNotificationById(dynamic data) async {
@@ -30,21 +39,22 @@ class ProfileService extends CoreService {
 
   // Orders integration
   Future<APIResponse> getAllOrders() async {
-    return await fetch("/restaurants/orders");
+    return await fetch("/restaurants/order");
   }
 
   Future<APIResponse> getOrderById(dynamic data) async {
-    return await fetch("/restaurants/orders/${data['id']}");
+    return await fetch("/restaurants/order/${data['id']}");
   }
 
   Future<APIResponse> updateOrderStatus(dynamic data, int orderId) async {
-    return await generalPatch("restaurants/orders/$orderId/status", data);
+    return await generalPatch("restaurant/order/$orderId/status", data);
   }
 
   // Transactions integration
   Future<APIResponse> getAllTransactions(dynamic data) async {
     return await fetch(
-        "/restaurants/transactions?page=${data['page']}&page_size=${data['per_page']}");
+      "/restaurants/transactions?page=${data['page']}&page_size=${data['per_page']}",
+    );
   }
 
   Future<APIResponse> getTransactionById(dynamic data) async {

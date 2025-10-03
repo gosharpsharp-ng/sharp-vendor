@@ -1,10 +1,14 @@
 import 'package:sharpvendor/core/utils/exports.dart';
 import 'package:sharpvendor/modules/menu/controllers/food_menu_controller.dart';
 import 'package:sharpvendor/modules/orders/controllers/orders_controller.dart';
+import 'package:sharpvendor/core/services/restaurant/analytics/analytics_service.dart';
 
 class AppNavigationBinding extends Bindings {
   @override
   void dependencies() {
+    // Register analytics service first
+    Get.put<AnalyticsService>(AnalyticsService());
+
     Get.put(
       AppNavigationController(),
     );
@@ -18,8 +22,6 @@ class AppNavigationBinding extends Bindings {
     );
     Get.put(
       OrdersController(),
-    ); Get.put(
-      WalletController(),
     );
     Get.put(
       SettingsController(),

@@ -1,12 +1,14 @@
 import 'package:sharpvendor/core/utils/exports.dart';
 import 'package:sharpvendor/core/utils/widgets/pagination_button.dart';
 
+import 'widgets/transaction_item.dart';
+
 class TransactionsScreen extends StatelessWidget {
   const TransactionsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<WalletController>(builder: (walletController) {
+    return GetBuilder<SettingsController>(builder: (settingsController) {
       return Scaffold(
         appBar: defaultAppBar(
           bgColor: AppColors.backgroundColor,
@@ -19,22 +21,22 @@ class TransactionsScreen extends StatelessWidget {
         //     children: [
         //       PaginationButton(
         //           isForward: false,
-        //           isActive: walletController.currentTransactionsPage > 1,
+        //           isActive: settingsController.currentTransactionsPage > 1,
         //           onPressed: () {
-        //             walletController.previousTransactionsPage();
+        //             settingsController.previousTransactionsPage();
         //           }),
-        //       customText("${walletController.currentTransactionsPage}",
+        //       customText("${settingsController.currentTransactionsPage}",
         //           color: AppColors.primaryColor, fontWeight: FontWeight.w600),
         //       customText(" of ",
         //           color: AppColors.primaryColor, fontWeight: FontWeight.w600),
-        //       customText("${walletController.totalTransactionsPages}",
+        //       customText("${settingsController.totalTransactionsPages}",
         //           color: AppColors.primaryColor, fontWeight: FontWeight.w600),
         //       PaginationButton(
         //           isForward: true,
-        //           isActive: (walletController.currentTransactionsPage <
-        //               walletController.totalTransactionsPages),
+        //           isActive: (settingsController.currentTransactionsPage <
+        //               settingsController.totalTransactionsPages),
         //           onPressed: () {
-        //             walletController.nextTransactionsPage();
+        //             settingsController.nextTransactionsPage();
         //           }),
         //     ],
         //   ),
@@ -44,17 +46,17 @@ class TransactionsScreen extends StatelessWidget {
           backgroundColor: AppColors.primaryColor,
           color: AppColors.whiteColor,
           onRefresh: () async {
-            walletController.getTransactions();
+            settingsController.getTransactions();
           },
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 8.sp, vertical: 12.sp),
             height: 1.sh,
             width: 1.sw,
             child: Visibility(
-              visible: walletController.transactions.isNotEmpty,
+              visible: settingsController.transactions.isNotEmpty,
               replacement: Visibility(
-                visible: walletController.isLoading &&
-                    walletController.transactions.isEmpty,
+                visible: settingsController.isLoading &&
+                    settingsController.transactions.isEmpty,
                 replacement: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -68,23 +70,23 @@ class TransactionsScreen extends StatelessWidget {
                 ),
               ),
               child: SingleChildScrollView(
-                controller: walletController.transactionsScrollController,
+                controller: settingsController.transactionsScrollController,
                 child: Column(
                   children: [
                     ...List.generate(
-                      walletController.transactions.length,
+                      settingsController.transactions.length,
                       (i) => TransactionItem(
                         onTap: () {
-                          walletController.setSelectedTransaction(
-                              walletController.transactions[i]);
+                          settingsController.setSelectedTransaction(
+                              settingsController.transactions[i]);
                           Get.toNamed(Routes.TRANSACTION_DETAILS_SCREEN);
                         },
-                        transaction: walletController.transactions[i],
+                        transaction: settingsController.transactions[i],
                       ),
                     ),
                     Visibility(
-                      visible: walletController.fetchingTransactions &&
-                          walletController.transactions.isNotEmpty,
+                      visible: settingsController.fetchingTransactions &&
+                          settingsController.transactions.isNotEmpty,
                       child: Center(
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -94,8 +96,8 @@ class TransactionsScreen extends StatelessWidget {
                       ),
                     ),
                     Visibility(
-                      visible: walletController.transactions ==
-                          walletController.totalTransactions,
+                      visible: settingsController.transactions ==
+                          settingsController.totalTransactions,
                       child: Center(
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),

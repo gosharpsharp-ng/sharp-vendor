@@ -19,11 +19,12 @@ class StatsContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        onPressed();
+        // onPressed();
       },
       child: Container(
         width: double.infinity,
         padding: EdgeInsets.symmetric(vertical: 15.sp, horizontal: 10.sp),
+        margin: EdgeInsets.symmetric(vertical: 5.h),
         decoration: BoxDecoration(
           color: backgroundColor,
           borderRadius: BorderRadius.circular(12.r),
@@ -50,7 +51,7 @@ class StatsContainer extends StatelessWidget {
                   ),
                 ),
 
-                Icon(Icons.chevron_right, color: textColor),
+                // Icon(Icons.chevron_right, color: textColor),
               ],
             ),
           ],

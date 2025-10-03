@@ -19,6 +19,16 @@ import 'package:sharpvendor/modules/signup/views/business_information_entry_scre
 import 'package:sharpvendor/modules/signup/views/business_operations_entry_screen.dart';
 import 'package:sharpvendor/modules/support/bindings/support_bindings.dart';
 import 'package:sharpvendor/modules/support/views/faq_screen.dart';
+import 'package:sharpvendor/modules/restaurant/bindings/restaurant_bindings.dart';
+import 'package:sharpvendor/modules/restaurant/views/restaurant_details_screen.dart';
+import 'package:sharpvendor/modules/restaurant/views/edit_basic_info_screen.dart';
+import 'package:sharpvendor/modules/restaurant/views/edit_location_screen.dart';
+import 'package:sharpvendor/modules/restaurant/views/business_hours_screen.dart';
+import 'package:sharpvendor/modules/restaurant/views/business_settings_screen.dart';
+import 'package:sharpvendor/modules/payouts/bindings/payout_bindings.dart';
+import 'package:sharpvendor/modules/payouts/views/payout_request_screen.dart';
+import 'package:sharpvendor/modules/payouts/views/payout_history_screen.dart';
+import 'package:sharpvendor/modules/payouts/views/payout_details_screen.dart';
 part 'app_routes.dart';
 
 class AppPages {
@@ -270,34 +280,7 @@ class AppPages {
       transitionDuration: const Duration(milliseconds: 400),
     ),
 
-    GetPage(
-      name: Routes.WALLETS_HOME_SCREEN,
-      page: () => const WalletHomeScreen(),
-      binding: WalletBindings(),
-      transition: Transition.rightToLeftWithFade,
-      transitionDuration: const Duration(milliseconds: 400),
-    ),
-    GetPage(
-      name: Routes.FUND_WALLET_SCREEN,
-      page: () => const FundWalletAmountScreen(),
-      binding: WalletBindings(),
-      transition: Transition.rightToLeftWithFade,
-      transitionDuration: const Duration(milliseconds: 400),
-    ),
-    GetPage(
-      name: Routes.TRANSACTIONS_SCREEN,
-      page: () => const TransactionsScreen(),
-      binding: WalletBindings(),
-      transition: Transition.rightToLeftWithFade,
-      transitionDuration: const Duration(milliseconds: 400),
-    ),
-    GetPage(
-      name: Routes.TRANSACTION_DETAILS_SCREEN,
-      page: () => const TransactionDetailsScreen(),
-      binding: WalletBindings(),
-      transition: Transition.rightToLeftWithFade,
-      transitionDuration: const Duration(milliseconds: 400),
-    ),
+
 
     GetPage(
       name: Routes.SELECT_LOCATION_SCREEN,
@@ -354,6 +337,66 @@ class AppPages {
       page: () => OrderDetailsScreen(),
       binding: OrdersBindings(),
       transition: Transition.leftToRight,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+
+    // Restaurant Management
+    GetPage(
+      name: Routes.RESTAURANT_DETAILS_SCREEN,
+      page: () => const RestaurantDetailsScreen(),
+      binding: RestaurantBindings(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: Routes.RESTAURANT_EDIT_BASIC_INFO,
+      page: () => const EditBasicInfoScreen(),
+      binding: RestaurantBindings(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: Routes.RESTAURANT_EDIT_LOCATION,
+      page: () => const EditLocationScreen(),
+      binding: RestaurantBindings(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: Routes.RESTAURANT_BUSINESS_HOURS,
+      page: () => const BusinessHoursScreen(),
+      binding: RestaurantBindings(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: Routes.RESTAURANT_BUSINESS_SETTINGS,
+      page: () => const BusinessSettingsScreen(),
+      binding: RestaurantBindings(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+
+    // Payouts
+    GetPage(
+      name: Routes.PAYOUT_REQUEST_SCREEN,
+      page: () => const PayoutRequestScreen(),
+      binding: PayoutBindings(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: Routes.PAYOUT_HISTORY_SCREEN,
+      page: () => const PayoutHistoryScreen(),
+      binding: PayoutBindings(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: Routes.PAYOUT_DETAILS_SCREEN,
+      page: () => const PayoutDetailsScreen(),
+      binding: PayoutBindings(),
+      transition: Transition.rightToLeftWithFade,
       transitionDuration: const Duration(milliseconds: 400),
     ),
   ];

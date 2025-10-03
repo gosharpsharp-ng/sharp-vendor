@@ -62,6 +62,20 @@ class CoreService extends GetConnect {
               ),
             );
           }
+
+          // Log URL for "Resource not found" errors
+          if (error.response?.statusCode == 404 ||
+              (error.response?.data != null &&
+               error.response!.data.toString().toLowerCase().contains('resource not found'))) {
+            String fullUrl = '${_dio.options.baseUrl}${error.requestOptions.path}';
+            if (error.requestOptions.queryParameters.isNotEmpty) {
+              fullUrl += '?${error.requestOptions.queryParameters.entries.map((e) => '${e.key}=${e.value}').join('&')}';
+            }
+            print('🔍 Resource not found - URL: $fullUrl');
+            print('🔍 Method: ${error.requestOptions.method}');
+            print('🔍 Response: ${error.response?.data}');
+          }
+
           if (error.response?.statusCode == 401) {
             if (Get.currentRoute != Routes.SIGN_IN) {
               handleUnauthorizedAccess();
@@ -224,6 +238,8 @@ class CoreService extends GetConnect {
   }
   // general patch
   Future<APIResponse> generalPatch(String url, data) async {
+    customDebugPrint(url);
+    customDebugPrint(data.toString());
     try {
       final res = await _dio.patch(url, data: data);
       if (res.statusCode == 200 || res.statusCode == 201) {

@@ -57,7 +57,6 @@ class OrdersController extends GetxController {
     try {
       final response = await _profileService.getAllOrders();
 
-      customDebugPrint(response.data);
 
       if (response.status=="success" && response.data != null) {
 
@@ -331,7 +330,7 @@ class OrdersController extends GetxController {
 
   // Format currency
   String formatCurrency(double amount) {
-    return "₦${amount.toStringAsFixed(2)}";
+    return formatToCurrency(amount);
   }
 
   // Get next action for order based on current status - UPDATED

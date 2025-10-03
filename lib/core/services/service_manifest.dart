@@ -19,6 +19,7 @@ void setupServiceLocator() {
   serviceLocator.registerLazySingleton<WalletsService>(() => WalletsService());
   serviceLocator.registerLazySingleton<MenuService>(() => MenuService());
   serviceLocator.registerLazySingleton<OrdersService>(() => OrdersService());
+  serviceLocator.registerLazySingleton<AnalyticsService>(() => AnalyticsService());
   serviceLocator.registerLazySingleton<TransactionsService>(
     () => TransactionsService(),
   );
