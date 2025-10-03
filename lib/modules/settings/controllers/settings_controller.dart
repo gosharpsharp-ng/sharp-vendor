@@ -3,6 +3,92 @@ import 'package:sharpvendor/core/utils/exports.dart';
 class SettingsController extends GetxController {
   final profileService = serviceLocator<ProfileService>();
 
+
+  final ScrollController transactionsScrollController = ScrollController();
+  bool fetchingTransactions = false;
+
+  void _transactionsScrollListener() {
+    if (transactionsScrollController.position.pixels >=
+        transactionsScrollController.position.maxScrollExtent - 100) {
+      getTransactions(isLoadMore: true);
+    }
+  }
+
+  int transactionsPageSize = 15;
+  int totalTransactions = 0;
+  int currentTransactionsPage = 1;
+  List<Transaction> transactions = [];
+
+  setTotalTransactions(int val) {
+    totalTransactions = val;
+    update();
+  }
+
+  getTransactions({bool isLoadMore = false}) async {
+    if (fetchingTransactions ||
+        (isLoadMore && transactions.length >= totalTransactions)) return;
+
+    fetchingTransactions = true;
+    update();
+
+    if (!isLoadMore) {
+      transactions.clear(); // Clear only when not loading more
+      currentTransactionsPage = 1;
+    }
+
+    dynamic data = {
+      "page": currentTransactionsPage,
+      "per_page": transactionsPageSize,
+    };
+
+    APIResponse response = await profileService.getAllTransactions(data);
+    fetchingTransactions = false;
+
+    if (response.status == "success") {
+      List<Transaction> newTransactions = (response.data['data'] as List)
+          .map((tr) => Transaction.fromJson(tr))
+          .toList();
+
+      if (isLoadMore) {
+        transactions.addAll(newTransactions);
+      } else {
+        transactions = newTransactions;
+      }
+
+      setTotalTransactions(response.data['total']);
+      currentTransactionsPage++; // Increment for next load more
+      update();
+    } else {
+      if (getStorage.read("token") != null) {
+        showToast(
+            message: response.message, isError: response.status != "success");
+      }
+    }
+  }
+
+  Transaction? selectedTransaction;
+  setSelectedTransaction(Transaction tr) {
+    selectedTransaction = tr;
+    update();
+  }
+
+  getTransactionById() async {
+    setLoadingState(true);
+    dynamic data = {
+      'id': selectedTransaction!.id,
+    };
+    APIResponse response = await profileService.getNotificationById(data);
+
+    setLoadingState(false);
+    if (response.status == "success") {
+      selectedTransaction = Transaction.fromJson(response.data);
+      update();
+    } else {
+      showToast(
+          message: response.message, isError: response.status != "success");
+    }
+  }
+
   // Initial values for comparison
   String? initialFName;
   String? initialLName;
@@ -23,7 +109,7 @@ class SettingsController extends GetxController {
 
     setLoadingState(false);
     if (response.status == "success") {
-      userProfile = UserProfile.fromJson(response.data['user']);
+      userProfile = UserProfile.fromJson(response.data);
       update();
       // Initialize the signaling plugin
       ZegoUIKitPrebuiltCallInvitationService().init(
@@ -546,6 +632,7 @@ class SettingsController extends GetxController {
     super.onInit();
     // Load profile when the controller is initialized
     getProfile();
+    transactionsScrollController.addListener(_transactionsScrollListener);
     setBusinessOperationsFields();
   }
 

@@ -1105,7 +1105,6 @@ class DeliveriesController extends GetxController {
             if (data.containsKey('status')) {
               if (data['status'] != selectedDelivery!.status) {
                 if (data['status'] == "delivered") {
-                  Get.find<WalletController>().getWalletBalance();
                   Get.find<SettingsController>().getProfile();
                   Get.find<NotificationsController>().getNotifications();
                 }
@@ -1140,7 +1139,6 @@ class DeliveriesController extends GetxController {
             if (data.containsKey('status')) {
               if (data['status'] != selectedDelivery!.status) {
                 if (data['status'] == "delivered") {
-                  Get.find<WalletController>().getWalletBalance();
                 }
                 await getDelivery();
                 FlutterRingtonePlayer().playNotification();

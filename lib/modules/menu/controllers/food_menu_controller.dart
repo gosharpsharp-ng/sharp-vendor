@@ -119,6 +119,30 @@ class FoodMenuController extends GetxController {
     update();
   }
 
+  // Selected addons
+  List<MenuItemModel> selectedAddons = [];
+
+  addAddon(MenuItemModel addon) {
+    if (!selectedAddons.any((item) => item.id == addon.id)) {
+      selectedAddons.add(addon);
+      update();
+    }
+  }
+
+  removeAddon(MenuItemModel addon) {
+    selectedAddons.removeWhere((item) => item.id == addon.id);
+    update();
+  }
+
+  clearAddons() {
+    selectedAddons.clear();
+    update();
+  }
+
+  bool isAddonSelected(MenuItemModel addon) {
+    return selectedAddons.any((item) => item.id == addon.id);
+  }
+
   // Initialize default categories (fallback)
   void initializeDefaultCategories() {
     if (categoryModels.isEmpty) {
@@ -358,12 +382,12 @@ class FoodMenuController extends GetxController {
           "prep_time_minutes": prepTimeMinutes,
           "category_id": selectedCategory!.id,
           "images": [foodImage], // Array of base64 images
+          "addons": selectedAddons.map((addon) => addon.id).toList(), // Array of addon IDs
           // "is_available": isAvailable==1?true:true,
           // "available_quantity": availableQuantity,
           // "show_on_customer_app": showOnCustomerApp,
         };
 
-  customDebugPrint(menuData);
         // Call the API
         final APIResponse response = await menuService.createMenu(menuData);
 
@@ -379,8 +403,6 @@ class FoodMenuController extends GetxController {
           // Navigate back
           Get.back();
         } else {
-          // customDebugPrint(response.message);
-          customDebugPrint(response.message);
           showToast(
             message: response.message ?? "Failed to add menu item",
             isError: true,
@@ -431,7 +453,16 @@ class FoodMenuController extends GetxController {
           "prep_time_minutes": prepTimeMinutes,
           "category_id": selectedCategory!.id,
           "images": [foodImage], // Array of base64 images
+          "addons": selectedAddons.map((addon) => addon.id).toList(), // Array of addon IDs
         };
+
+        // Print data being sent (excluding image)
+        final Map<String, dynamic> dataForLogging = Map.from(menuData);
+        dataForLogging.remove('images');
+        print('=== UPDATE MENU DATA ===');
+        print('Menu ID: ${currentMenuItem!.id}');
+        print('Data: $dataForLogging');
+        print('=======================');
 
         // Call the API
         final APIResponse response = await menuService.updateMenu(menuData, currentMenuItem!.id,);
@@ -476,6 +507,7 @@ class FoodMenuController extends GetxController {
     selectedPlateSize = "M";
     showOnCustomerApp = true;
     currentMenuItem = null; // Reset current menu item
+    selectedAddons.clear(); // Clear addons
     update();
   }
 
@@ -641,6 +673,7 @@ class FoodMenuController extends GetxController {
 
     selectedPlateSize = item.plateSize ?? "M";
     showOnCustomerApp = item.showOnCustomerApp ?? true;
+    selectedAddons = List.from(item.addons); // Populate addons
     update();
 
     Get.toNamed(Routes.EDIT_MENU_SCREEN);

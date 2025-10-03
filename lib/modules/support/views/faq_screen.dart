@@ -48,13 +48,7 @@ class FaqScreen extends StatelessWidget {
                               : MainAxisAlignment.center),
                     children: [
                       if (supportController.fetchingFaqs)
-                        const Center(
-                          child: Text(
-                            "Loading FAQs...",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 16),
-                          ),
-                        )
+                        SkeletonLoaders.faqPage()
                       else if (supportController.faqs.isEmpty)
                         const Center(
                           child: Text(

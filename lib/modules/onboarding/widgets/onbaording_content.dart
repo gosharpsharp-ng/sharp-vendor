@@ -14,18 +14,18 @@ class OnboardingContent {
 
 List<OnboardingContent> contents = [
   OnboardingContent(
-    title: "All Your Favorite Food in One Place",
-    desc: "Order from top restaurants and local eateries — all in one easy-to-use app.",
+    title: "Manage Your Menu with Ease",
+    desc: "Add, edit, and organize your dishes in seconds. Update prices, availability, and photos to keep your menu fresh and appealing to customers.",
     image: PngAssets.onboardingOne,
   ),
   OnboardingContent(
-    title: "Send Parcels and Foods Sharp Sharp",
-    desc: "Fast, safe delivery for your food and parcels — anytime, anywhere.",
+    title: "Track Orders in Real-Time",
+    desc: "Receive instant notifications for new orders. Accept, prepare, and complete orders seamlessly while keeping your customers updated every step of the way.",
     image: PngAssets.onboardingTwo,
   ),
   OnboardingContent(
-    title: "Smooth, Easy Order Tracking System",
-    desc: "Track your order live and get updates from pickup to doorstep.",
+    title: "Grow Your Business with Insights",
+    desc: "Monitor your sales, track popular dishes, and view earnings at a glance. Make data-driven decisions to boost your restaurant's performance.",
     image: PngAssets.onboardingThree,
   ),
 ];

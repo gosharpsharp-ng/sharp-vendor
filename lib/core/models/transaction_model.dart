@@ -85,6 +85,50 @@ class Transaction {
     'payment_method': paymentMethod,
     'gateway': gateway,
   };
+
+  // Convenience getters for better data handling
+  double get amountDouble => double.tryParse(amount) ?? 0.0;
+
+  bool get isCredit => type.toLowerCase() == 'credit';
+  bool get isDebit => type.toLowerCase() == 'debit';
+
+  bool get isSuccessful => status.toLowerCase() == 'successful';
+  bool get isPending => status.toLowerCase() == 'pending';
+  bool get isFailed => status.toLowerCase() == 'failed';
+
+  DateTime? get createdAtDateTime {
+    try {
+      return DateTime.parse(createdAt);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  DateTime? get updatedAtDateTime {
+    try {
+      return DateTime.parse(updatedAt);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  String get formattedCreatedAt {
+    final date = createdAtDateTime;
+    if (date == null) return createdAt;
+
+    final now = DateTime.now();
+    final difference = now.difference(date);
+
+    if (difference.inDays > 0) {
+      return '${difference.inDays}d ago';
+    } else if (difference.inHours > 0) {
+      return '${difference.inHours}h ago';
+    } else if (difference.inMinutes > 0) {
+      return '${difference.inMinutes}m ago';
+    } else {
+      return 'Just now';
+    }
+  }
 }
 
 class Payable {

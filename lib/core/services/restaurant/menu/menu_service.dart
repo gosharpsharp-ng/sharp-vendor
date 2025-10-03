@@ -13,7 +13,6 @@ class MenuService extends CoreService {
 
   Future<APIResponse> updateMenu(dynamic data, int id) async {
     dynamic data2=data;
-    customDebugPrint("${data2..remove('images').toString()}" + "$id");
     return await update("/restaurants/menus/$id", data);
   }
 

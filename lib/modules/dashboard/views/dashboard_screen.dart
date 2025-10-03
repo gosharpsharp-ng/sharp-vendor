@@ -153,11 +153,7 @@ class DashboardScreen extends StatelessWidget {
                 backgroundColor: AppColors.primaryColor,
                 color: AppColors.whiteColor,
                 onRefresh: () async {
-                  // ordersController.fetchDeliveries();
-                  // Get.find<WalletController>().getWalletBalance();
-                  // Get.find<WalletController>().getTransactions();
-                  // Get.find<SettingsController>().getProfile();
-                  // Get.find<NotificationsController>().getNotifications();
+                  await dashboardController.refreshDashboard();
                 },
                 child: Container(
                   padding: EdgeInsets.symmetric(
@@ -197,14 +193,14 @@ class DashboardScreen extends StatelessWidget {
                                     CrossAxisAlignment.start,
                                     children: [
                                       customText(
-                                        "Total Revenue",
+                                        "Wallet Balance",
                                         color: AppColors.greyColor,
                                         fontWeight: FontWeight.w500,
                                         fontSize: 16.sp,
                                       ),
                                       SizedBox(height: 8.sp),
                                       customText(
-                                        "₦3,000.00",
+                                        dashboardController.walletBalance,
                                         color: AppColors.primaryColor,
                                         fontWeight: FontWeight.w700,
                                         fontSize: 30.sp,
@@ -216,7 +212,9 @@ class DashboardScreen extends StatelessWidget {
                                   width: 100.w,
                                   height: 40.h,
                                   borderRadius: 8.r,
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Get.toNamed(Routes.PAYOUT_REQUEST_SCREEN);
+                                  },
                                   title: "Withdraw",
                                   backgroundColor: AppColors.primaryColor,
                                 ),
@@ -228,23 +226,23 @@ class DashboardScreen extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: StatsContainer(
-                                  onPressed: () {},
+                                  onPressed: () => Get.toNamed(Routes.ORDERS_HOME_SCREEN),
                                   backgroundColor:
                                   AppColors.lightOrangeColor,
                                   textColor: AppColors.orangeColor,
                                   title: "New Orders",
-                                  value: "56",
+                                  value: "${dashboardController.newOrders}",
                                 ),
                               ),
                               SizedBox(width: 10.w),
                               Expanded(
                                 child: StatsContainer(
-                                  onPressed: () {},
+                                  onPressed: () => Get.toNamed(Routes.ORDERS_HOME_SCREEN),
                                   backgroundColor:
                                   AppColors.lightPurpleColor,
                                   textColor: AppColors.purpleColor,
                                   title: "Completed Orders",
-                                  value: "256",
+                                  value: "${dashboardController.completedOrders}",
                                 ),
                               ),
                             ],
@@ -302,7 +300,7 @@ class DashboardScreen extends StatelessWidget {
                             ),
                           ),
                           SizedBox(height: 10.h),
-                          AreaChartWidget(chartData: usageData),
+                          AreaChartWidget(chartData: dashboardController.dashboardChartData),
                           SizedBox(height: 15.h),
                         ],
                       ),

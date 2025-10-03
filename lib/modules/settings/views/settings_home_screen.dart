@@ -113,7 +113,7 @@ class SettingsHomeScreen extends StatelessWidget {
                           height: 8.sp,
                         ),
                         customText(
-                          "₦3,000.00",
+                          settingsController.userProfile?.restaurant?.wallet?.formattedBalance ?? "₦0.00",
                           color: AppColors.whiteColor,
                           fontWeight: FontWeight.w700,
                           fontSize: 30.sp,
@@ -123,7 +123,9 @@ class SettingsHomeScreen extends StatelessWidget {
                           width: 140.w,
                           borderRadius: 8.r,
                           iconBackgroundColor: AppColors.whiteColor,
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.toNamed(Routes.PAYOUT_REQUEST_SCREEN);
+                          },
                           title: "Withdraw",
                           icon: Icons.trending_neutral,
                           iconColor: AppColors.primaryColor,
@@ -145,6 +147,14 @@ class SettingsHomeScreen extends StatelessWidget {
                         },
                         title: "Personal Information",
                         icon: SvgAssets.profileIcon,
+                      ),
+                      SettingsItem(
+                        onPressed: () {
+                          Get.toNamed(Routes.RESTAURANT_DETAILS_SCREEN);
+                        },
+                        iconColor: AppColors.primaryColor,
+                        title: "Business Details",
+                        icon: SvgAssets.operationsIcon,
                       ),
                       SettingsItem(
                         onPressed: () {
@@ -179,13 +189,22 @@ class SettingsHomeScreen extends StatelessWidget {
                         title: "Analytics",
                         iconColor: AppColors.purpleColor,
                         icon: SvgAssets.analyticsIcon,
-                      ),   SettingsItem(
+                      ),
+                      SettingsItem(
                         onPressed: () {
                           Get.toNamed(Routes.ORDER_TRANSACTIONS_SCREEN);
                         },
                         title: "Order Transactions",
                         iconColor: AppColors.purpleColor,
                         icon: SvgAssets.ordersIcon,
+                      ),
+                      SettingsItem(
+                        onPressed: () {
+                          Get.toNamed(Routes.PAYOUT_HISTORY_SCREEN);
+                        },
+                        title: "Payout History",
+                        iconColor: AppColors.forestGreenColor,
+                        icon: SvgAssets.walletIcon,
                       ),
                       SettingsItem(
                         onPressed: () {

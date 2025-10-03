@@ -1,25 +1,13 @@
-import 'package:json_annotation/json_annotation.dart';
-
-part 'bank_account_model.g.dart';
-
-@JsonSerializable()
 class BankAccount {
   final int id;
-  @JsonKey(name: 'bank_account_number')
   final String bankAccountNumber;
-  @JsonKey(name: 'bank_account_name')
   final String bankAccountName;
-  @JsonKey(name: 'bank_name')
   final String bankName;
-  @JsonKey(name: 'bank_code')
   final String bankCode;
-  @JsonKey(name: 'recipient_id')
-  final String recipientId;
-  @JsonKey(name: 'user_id')
-  final int userId;
-  @JsonKey(name: 'created_at')
+  final String? recipientId;
+  final String? accountableType;
+  final int? accountableId;
   final String createdAt;
-  @JsonKey(name: 'updated_at')
   final String updatedAt;
 
   BankAccount({
@@ -28,12 +16,25 @@ class BankAccount {
     required this.bankAccountName,
     required this.bankName,
     required this.bankCode,
-    required this.recipientId,
-    required this.userId,
+    this.recipientId,
+    this.accountableType,
+    this.accountableId,
     required this.createdAt,
     required this.updatedAt,
   });
 
-  factory BankAccount.fromJson(Map<String, dynamic> json) => _$BankAccountFromJson(json);
-  Map<String, dynamic> toJson() => _$BankAccountToJson(this);
+  factory BankAccount.fromJson(Map<String, dynamic> json) {
+    return BankAccount(
+      id: json['id'] ?? 0,
+      bankAccountNumber: json['bank_account_number'] ?? '',
+      bankAccountName: json['bank_account_name'] ?? '',
+      bankName: json['bank_name'] ?? '',
+      bankCode: json['bank_code'] ?? '',
+      recipientId: json['recipient_id'],
+      accountableType: json['accountable_type'],
+      accountableId: json['accountable_id'],
+      createdAt: json['created_at'] ?? '',
+      updatedAt: json['updated_at'] ?? '',
+    );
+  }
 }

@@ -265,7 +265,7 @@ class MenuItemCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       customText(
-                        "₦${menuItem.price.toStringAsFixed(2)}/plate",
+                        "${formatToCurrency(menuItem.price)}/plate",
                         color: AppColors.primaryColor,
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w600,

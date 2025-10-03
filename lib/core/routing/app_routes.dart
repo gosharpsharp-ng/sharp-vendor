@@ -55,6 +55,11 @@ abstract class Routes {
   static const TRANSACTIONS_SCREEN = '/transactions_screen';
   static const TRANSACTION_DETAILS_SCREEN = '/transaction_details_screen';
 
+  // Payouts
+  static const PAYOUT_REQUEST_SCREEN = '/payout_request_screen';
+  static const PAYOUT_HISTORY_SCREEN = '/payout_history_screen';
+  static const PAYOUT_DETAILS_SCREEN = '/payout_details_screen';
+
   static const RATINGS_AND_REVIEWS_HOME = '/ratings_and_reviews_home';
   static const SELECT_LOCATION_SCREEN = '/select_location_screen';
 
@@ -69,4 +74,11 @@ abstract class Routes {
   // Orders
   static const ORDERS_HOME_SCREEN = '/orders_home_screen';
   static const ORDER_DETAILS_SCREEN = '/order_details_screen';
+
+  // Restaurant Management
+  static const RESTAURANT_DETAILS_SCREEN = '/restaurant_details_screen';
+  static const RESTAURANT_EDIT_BASIC_INFO = '/restaurant/edit-basic-info';
+  static const RESTAURANT_EDIT_LOCATION = '/restaurant/edit-location';
+  static const RESTAURANT_BUSINESS_HOURS = '/restaurant/business-hours';
+  static const RESTAURANT_BUSINESS_SETTINGS = '/restaurant/business-settings';
 }

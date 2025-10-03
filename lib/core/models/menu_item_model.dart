@@ -17,6 +17,7 @@ class MenuItemModel {
   final String? plateSize;
   final List<ItemFileModel> files;
   final bool? showOnCustomerApp;
+  final List<MenuItemModel> addons;
 
   MenuItemModel({
     required this.id,
@@ -32,10 +33,16 @@ class MenuItemModel {
     this.plateSize,
     this.showOnCustomerApp,
     required this.files,
+    this.addons = const [],
   });
 
   factory MenuItemModel.fromJson(Map<String, dynamic> json) {
     final filesJson = json['files'] as List<dynamic>? ?? [];
+    // Try both 'addons' and 'addon_menus' keys
+    final addonsJson = (json['addon_menus'] as List<dynamic>?) ??
+                       (json['addons'] as List<dynamic>?) ??
+                       [];
+
     return MenuItemModel(
       id: json['id']??1 ,
       name: json['name']?.toString() ?? '',
@@ -52,6 +59,7 @@ class MenuItemModel {
       plateSize: json['plate_size']?.toString(),
       showOnCustomerApp: json['show_on_customer_app'],
       files: filesJson.map((e) => ItemFileModel.fromJson(e)).toList(),
+      addons: addonsJson.map((e) => MenuItemModel.fromJson(e)).toList(),
     );
   }
 
@@ -69,6 +77,7 @@ class MenuItemModel {
       'plate_size': plateSize,
       'show_on_customer_app': showOnCustomerApp,
       'files': files,
+      'addons': addons.map((e) => e.toJson()).toList(),
     };
   }
 

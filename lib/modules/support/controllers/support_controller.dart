@@ -23,12 +23,11 @@ class SupportController extends GetxController {
     fetchingFaqs = false;
     update();
     if (response.status == "success") {
-      customDebugPrint(response.data['categories']);
       faqs = (response.data['categories'] as List)
           .map((fq) => FaqDataModel.fromJson(fq))
           .toList();
       if (faqs.isNotEmpty) {
-          setSelectedFaq(faq: faqs[0]);
+        setSelectedFaq(faq: faqs[0]);
       }
       update();
     } else {
