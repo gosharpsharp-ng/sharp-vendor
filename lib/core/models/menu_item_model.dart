@@ -37,17 +37,61 @@ class MenuItemModel {
   });
 
   factory MenuItemModel.fromJson(Map<String, dynamic> json) {
+    // Handle files with null safety
     final filesJson = json['files'] as List<dynamic>? ?? [];
-    // Try both 'addons' and 'addon_menus' keys
-    final addonsJson = (json['addon_menus'] as List<dynamic>?) ??
-                       (json['addons'] as List<dynamic>?) ??
-                       [];
+
+    // Try both 'addons' and 'addon_menus' keys with proper null safety
+    List<dynamic> addonsJson = [];
+    try {
+      addonsJson = (json['addon_menus'] as List<dynamic>?) ??
+                   (json['addons'] as List<dynamic>?) ??
+                   [];
+    } catch (e) {
+      addonsJson = [];
+    }
+
+    // Parse addons with error handling to prevent circular reference issues
+    List<MenuItemModel> addonsList = [];
+    try {
+      addonsList = addonsJson
+          .where((e) => e != null && e is Map<String, dynamic>)
+          .map((e) {
+            try {
+              return MenuItemModel.fromJson(e as Map<String, dynamic>);
+            } catch (addonError) {
+              // Skip invalid addon entries
+              return null;
+            }
+          })
+          .where((e) => e != null)
+          .cast<MenuItemModel>()
+          .toList();
+    } catch (e) {
+      addonsList = [];
+    }
 
     return MenuItemModel(
-      id: json['id']??1 ,
+      id: json['id'] ?? 1,
       name: json['name']?.toString() ?? '',
-      category: CategoryModel.fromJson(json['category']),
-      restaurant: RestaurantModel.fromJson(json['restaurant']),
+      category: json['category'] != null
+          ? CategoryModel.fromJson(json['category'])
+          : CategoryModel(id: 0, name: 'Unknown', description: ''),
+      restaurant: json['restaurant'] != null
+          ? RestaurantModel.fromJson(json['restaurant'])
+          : RestaurantModel(
+              id: 0,
+              name: 'Unknown',
+              email: '',
+              phone: '',
+              cuisineType: '',
+              isActive: false,
+              isFeatured: false,
+              commissionRate: 0.0,
+              status: '',
+              userId: 0,
+              createdAt: DateTime.now(),
+              updatedAt: DateTime.now(),
+            ),
       price: double.tryParse(json['price']?.toString() ?? '0') ?? 0.0,
       duration: json['duration']?.toString() ?? '',
       image: json['image']?.toString() ?? '',
@@ -57,9 +101,23 @@ class MenuItemModel {
       availableQuantity: int.tryParse(json['available_quantity']?.toString() ?? '0') ?? 0,
       description: json['description']?.toString(),
       plateSize: json['plate_size']?.toString(),
-      showOnCustomerApp: json['show_on_customer_app'],
-      files: filesJson.map((e) => ItemFileModel.fromJson(e)).toList(),
-      addons: addonsJson.map((e) => MenuItemModel.fromJson(e)).toList(),
+      showOnCustomerApp: json['show_on_customer_app'] is bool
+          ? json['show_on_customer_app']
+          : (json['show_on_customer_app']?.toString() == 'true' ||
+             json['show_on_customer_app']?.toString() == '1'),
+      files: filesJson
+          .where((e) => e != null)
+          .map((e) {
+            try {
+              return ItemFileModel.fromJson(e);
+            } catch (fileError) {
+              return null;
+            }
+          })
+          .where((e) => e != null)
+          .cast<ItemFileModel>()
+          .toList(),
+      addons: addonsList,
     );
   }
 
