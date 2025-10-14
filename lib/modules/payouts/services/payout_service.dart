@@ -14,7 +14,7 @@ class PayoutService extends CoreService {
     int perPage = 20,
     String? status,
   }) async {
-    String endpoint = "/me/payout-requests?page=$page&per_page=$perPage";
+    String endpoint = "/restaurants/payout/history?page=$page&per_page=$perPage";
 
     if (status != null && status.isNotEmpty) {
       endpoint += "&status=$status";

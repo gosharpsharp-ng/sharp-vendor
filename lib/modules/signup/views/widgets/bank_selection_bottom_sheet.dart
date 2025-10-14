@@ -15,10 +15,48 @@ class BankSelectionBottomSheet extends StatelessWidget {
         ? Get.find<SignUpController>()
         : null;
 
-    // Determine which controller to use
-    final isLoading = restaurantController?.isLoading ?? signUpController?.isLoadingBanks ?? false;
-    final banks = restaurantController?.banks ?? signUpController?.filteredBanks ?? [];
+    // Wrap with appropriate GetBuilder for reactivity
+    if (restaurantController != null) {
+      return GetBuilder<RestaurantDetailsController>(
+        builder: (controller) => _buildContent(
+          context: context,
+          isLoading: controller.isLoading,
+          banks: controller.banks,
+          searchController: controller.banksSearchController,
+          onSearch: (val) => controller.searchBanks(val),
+          onReload: () => controller.getBankList(),
+        ),
+      );
+    } else if (signUpController != null) {
+      return GetBuilder<SignUpController>(
+        builder: (controller) => _buildContent(
+          context: context,
+          isLoading: controller.isLoadingBanks,
+          banks: controller.filteredBanks,
+          searchController: controller.banksFilterController,
+          onSearch: (val) => controller.filterBanks(val),
+          onReload: () => controller.getBankList(),
+        ),
+      );
+    }
 
+    // Fallback if no controller found
+    return Container(
+      height: 440.h,
+      child: Center(
+        child: customText("Unable to load bank list"),
+      ),
+    );
+  }
+
+  Widget _buildContent({
+    required BuildContext context,
+    required bool isLoading,
+    required List<BankModel> banks,
+    required TextEditingController searchController,
+    required Function(String) onSearch,
+    required VoidCallback onReload,
+  }) {
     return Container(
       padding: EdgeInsets.only(top: 20.sp, bottom: 12.sp, left: 14.sp, right: 14.sp),
       decoration: BoxDecoration(
@@ -35,19 +73,13 @@ class BankSelectionBottomSheet extends StatelessWidget {
             labelColor: AppColors.blackColor,
             cursorColor: AppColors.blackColor,
             label: "Search",
-            controller: restaurantController != null
-                ? TextEditingController()
-                : signUpController!.banksFilterController,
+            controller: searchController,
             prefixWidget: const Icon(
               Icons.search,
               color: AppColors.blackColor,
             ),
             onChanged: (val) {
-              if (restaurantController != null) {
-                restaurantController.searchBanks(val.toString());
-              } else {
-                signUpController!.filterBanks(val.toString());
-              }
+              onSearch(val.toString());
             },
           ),
           SizedBox(height: 10.h),
@@ -62,15 +94,7 @@ class BankSelectionBottomSheet extends StatelessWidget {
 
               // Show empty/error state
               if (banks.isEmpty) {
-                return _buildEmptyState(
-                  onReload: () {
-                    if (restaurantController != null) {
-                      restaurantController.getBankList();
-                    } else {
-                      signUpController!.getBankList();
-                    }
-                  },
-                );
+                return _buildEmptyState(onReload: onReload);
               }
 
               // Show bank list

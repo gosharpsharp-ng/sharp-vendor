@@ -4,7 +4,6 @@ import '../services/payout_service.dart';
 
 class PayoutController extends GetxController {
   final PayoutService _payoutService = PayoutService();
-  final WalletsService _walletsService = serviceLocator<WalletsService>();
 
   // Loading states
   bool _isLoading = false;
@@ -15,6 +14,10 @@ class PayoutController extends GetxController {
 
   bool _fetchingPayouts = false;
   bool get fetchingPayouts => _fetchingPayouts;
+
+  String _payoutError = '';
+  String get payoutError => _payoutError;
+  bool get hasPayoutError => _payoutError.isNotEmpty;
 
   void setLoadingState(bool val) {
     _isLoading = val;
@@ -53,8 +56,7 @@ class PayoutController extends GetxController {
     _payoutService.init();
     payoutHistoryScrollController.addListener(_payoutHistoryScrollListener);
     getPayoutHistory();
-    getWalletBalance();
-    getPayoutLimits();
+    _loadBalanceFromDashboard();
   }
 
   @override
@@ -84,39 +86,38 @@ class PayoutController extends GetxController {
     update();
   }
 
-  // Get wallet balance
-  Future<void> getWalletBalance() async {
+  // Load balance from settings controller (via restaurant wallet)
+  void _loadBalanceFromDashboard() {
     try {
-      final response = await _walletsService.getWalletBalance();
-      if (response.status == "success" && response.data != null) {
-        final balanceData = response.data;
-        // Assuming the wallet balance API returns available balance
-        availableBalance = double.tryParse(balanceData['available_balance']?.toString() ?? '0') ?? 0.0;
+      if (Get.isRegistered<SettingsController>()) {
+        final settingsController = Get.find<SettingsController>();
+        availableBalance =
+            settingsController.userProfile?.restaurant?.wallet?.balanceDouble ??
+            0.0;
         update();
       }
     } catch (e) {
-      debugPrint("Error getting wallet balance: $e");
+      debugPrint("Error loading balance: $e");
     }
   }
 
-  // Get payout limits
-  Future<void> getPayoutLimits() async {
-    try {
-      final response = await _payoutService.getPayoutLimits();
-      if (response.status == "success" && response.data != null) {
-        final limits = response.data;
-        minimumPayoutAmount = double.tryParse(limits['minimum_amount']?.toString() ?? '1000') ?? 1000.0;
-        maximumPayoutAmount = double.tryParse(limits['maximum_amount']?.toString() ?? '1000000') ?? 1000000.0;
-        update();
-      }
-    } catch (e) {
-      debugPrint("Error getting payout limits: $e");
+  // Refresh balance (called after payout submission)
+  Future<void> refreshBalance() async {
+    if (Get.isRegistered<SettingsController>()) {
+      final settingsController = Get.find<SettingsController>();
+      await settingsController.getProfile();
+      _loadBalanceFromDashboard();
     }
   }
 
   // Get payout history with pagination
-  Future<void> getPayoutHistory({bool isLoadMore = false, String? status}) async {
-    if (_fetchingPayouts || (isLoadMore && payoutRequests.length >= totalPayouts)) return;
+  Future<void> getPayoutHistory({
+    bool isLoadMore = false,
+    String? status,
+  }) async {
+    if (_fetchingPayouts ||
+        (isLoadMore && payoutRequests.length >= totalPayouts))
+      return;
 
     _fetchingPayouts = true;
     update();
@@ -154,7 +155,10 @@ class PayoutController extends GetxController {
       }
     } catch (e) {
       _fetchingPayouts = false;
-      showToast(message: "Error loading payout history: ${e.toString()}", isError: true);
+      showToast(
+        message: "Error loading payout history: ${e.toString()}",
+        isError: true,
+      );
       update();
     }
   }
@@ -167,12 +171,20 @@ class PayoutController extends GetxController {
 
     // Validate amount
     if (amount < minimumPayoutAmount) {
-      showToast(message: "Minimum payout amount is ${formatToCurrency(minimumPayoutAmount)}", isError: true);
+      showToast(
+        message:
+            "Minimum payout amount is ${formatToCurrency(minimumPayoutAmount)}",
+        isError: true,
+      );
       return;
     }
 
     if (amount > maximumPayoutAmount) {
-      showToast(message: "Maximum payout amount is ${formatToCurrency(maximumPayoutAmount)}", isError: true);
+      showToast(
+        message:
+            "Maximum payout amount is ${formatToCurrency(maximumPayoutAmount)}",
+        isError: true,
+      );
       return;
     }
 
@@ -189,10 +201,15 @@ class PayoutController extends GetxController {
         paymentMethod: selectedPaymentMethod,
       );
 
-      final response = await _payoutService.createPayoutRequest(requestData.toJson());
+      final response = await _payoutService.createPayoutRequest(
+        requestData.toJson(),
+      );
 
       if (response.status == "success") {
-        showToast(message: "Payout request submitted successfully", isError: false);
+        showToast(
+          message: "Payout request submitted successfully",
+          isError: false,
+        );
 
         // Clear form
         amountController.clear();
@@ -200,7 +217,7 @@ class PayoutController extends GetxController {
 
         // Refresh data
         getPayoutHistory();
-        getWalletBalance();
+        refreshBalance();
 
         // Navigate back
         Get.back();
@@ -208,7 +225,10 @@ class PayoutController extends GetxController {
         showToast(message: response.message, isError: true);
       }
     } catch (e) {
-      showToast(message: "Error submitting payout request: ${e.toString()}", isError: true);
+      showToast(
+        message: "Error submitting payout request: ${e.toString()}",
+        isError: true,
+      );
     } finally {
       setSubmittingState(false);
     }
@@ -228,7 +248,10 @@ class PayoutController extends GetxController {
         showToast(message: response.message, isError: true);
       }
     } catch (e) {
-      showToast(message: "Error loading payout details: ${e.toString()}", isError: true);
+      showToast(
+        message: "Error loading payout details: ${e.toString()}",
+        isError: true,
+      );
     } finally {
       setLoadingState(false);
     }
@@ -242,11 +265,14 @@ class PayoutController extends GetxController {
       final response = await _payoutService.cancelPayoutRequest(payoutId);
 
       if (response.status == "success") {
-        showToast(message: "Payout request cancelled successfully", isError: false);
+        showToast(
+          message: "Payout request cancelled successfully",
+          isError: false,
+        );
 
         // Refresh data
         getPayoutHistory();
-        getWalletBalance();
+        refreshBalance();
 
         // Update selected payout if it's the same one
         if (selectedPayoutRequest?.id == payoutId) {
@@ -256,7 +282,10 @@ class PayoutController extends GetxController {
         showToast(message: response.message, isError: true);
       }
     } catch (e) {
-      showToast(message: "Error cancelling payout request: ${e.toString()}", isError: true);
+      showToast(
+        message: "Error cancelling payout request: ${e.toString()}",
+        isError: true,
+      );
     } finally {
       setLoadingState(false);
     }
@@ -264,11 +293,8 @@ class PayoutController extends GetxController {
 
   // Refresh all data
   Future<void> refreshData() async {
-    await Future.wait([
-      getPayoutHistory(),
-      getWalletBalance(),
-      getPayoutLimits(),
-    ]);
+    await getPayoutHistory();
+    await refreshBalance();
   }
 
   // Validate amount input

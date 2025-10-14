@@ -397,8 +397,9 @@ class EditBasicInfoScreen extends GetView<RestaurantDetailsController> {
                           child: customText(
                             "This information will be visible to customers when they view your restaurant.",
                             color: AppColors.primaryColor,
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w500,
+                            fontSize: 11.sp,
+                            overflow: TextOverflow.visible,
+                            fontWeight: FontWeight.w400,
                           ),
                         ),
                       ],
