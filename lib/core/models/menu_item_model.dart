@@ -43,9 +43,10 @@ class MenuItemModel {
     // Try both 'addons' and 'addon_menus' keys with proper null safety
     List<dynamic> addonsJson = [];
     try {
-      addonsJson = (json['addon_menus'] as List<dynamic>?) ??
-                   (json['addons'] as List<dynamic>?) ??
-                   [];
+      addonsJson =
+          (json['addon_menus'] as List<dynamic>?) ??
+          (json['addons'] as List<dynamic>?) ??
+          [];
     } catch (e) {
       addonsJson = [];
     }
@@ -93,18 +94,19 @@ class MenuItemModel {
               updatedAt: DateTime.now(),
             ),
       price: double.tryParse(json['price']?.toString() ?? '0') ?? 0.0,
-      duration: json['duration']?.toString() ?? '',
+      duration: json['prep_time_minutes']?.toString() ?? '',
       image: json['image']?.toString() ?? '',
       isAvailable: json['is_available'] is bool
           ? (json['is_available'] ? 1 : 0)
           : (int.tryParse(json['is_available']?.toString() ?? '1') ?? 1),
-      availableQuantity: int.tryParse(json['available_quantity']?.toString() ?? '0') ?? 0,
+      availableQuantity:
+          int.tryParse(json['available_quantity']?.toString() ?? '0') ?? 0,
       description: json['description']?.toString(),
       plateSize: json['plate_size']?.toString(),
       showOnCustomerApp: json['show_on_customer_app'] is bool
           ? json['show_on_customer_app']
           : (json['show_on_customer_app']?.toString() == 'true' ||
-             json['show_on_customer_app']?.toString() == '1'),
+                json['show_on_customer_app']?.toString() == '1'),
       files: filesJson
           .where((e) => e != null)
           .map((e) {
@@ -138,7 +140,4 @@ class MenuItemModel {
       'addons': addons.map((e) => e.toJson()).toList(),
     };
   }
-
-
 }
-
