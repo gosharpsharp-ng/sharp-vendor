@@ -1,22 +1,25 @@
 import 'package:sharpvendor/core/utils/exports.dart';
 import 'package:lottie/lottie.dart';
 
-
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<SplashController>(
-        builder: (splashController){
+      builder: (splashController) {
         return Scaffold(
           backgroundColor: AppColors.fadedPrimaryColor,
           appBar: flatAppBar(
-              bgColor: AppColors.fadedPrimaryColor,
-              navigationColor: AppColors.fadedPrimaryColor),
+            bgColor: AppColors.fadedPrimaryColor,
+            navigationColor: AppColors.fadedPrimaryColor,
+          ),
           body: Container(
             decoration: BoxDecoration(
-              image: DecorationImage(image: AssetImage(PngAssets.lightWatermark),fit: BoxFit.cover)
+              image: DecorationImage(
+                image: AssetImage(PngAssets.lightWatermark),
+                fit: BoxFit.cover,
+              ),
             ),
             height: 1.sh,
             width: 1.sw,
@@ -31,7 +34,11 @@ class SplashScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Image.asset(PngAssets.goSharpSharpTextLogo, height: 150.sp,width: 150.sp,),
+                        Image.asset(
+                          PngAssets.goSharpSharpTextLogo,
+                          height: 150.sp,
+                          width: 150.sp,
+                        ),
                       ],
                     ),
                   ),
@@ -42,19 +49,12 @@ class SplashScreen extends StatelessWidget {
                   height: 40,
                   fit: BoxFit.fill,
                 ),
-                SizedBox(
-                  height: 80.sp,
-                ),
+                SizedBox(height: 80.sp),
               ],
             ),
           ),
         );
-      }
+      },
     );
   }
-
-  }
-
-
-
-
+}

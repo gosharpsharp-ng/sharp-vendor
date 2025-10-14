@@ -74,6 +74,7 @@ class RestaurantDetailsController extends GetxController {
     bankNameController = TextEditingController();
     accountNumberController = TextEditingController();
     accountNameController = TextEditingController();
+    banksSearchController = TextEditingController();
 
     _populateControllers();
   }
@@ -507,6 +508,7 @@ class RestaurantDetailsController extends GetxController {
   late TextEditingController bankNameController;
   late TextEditingController accountNumberController;
   late TextEditingController accountNameController;
+  late TextEditingController banksSearchController;
 
   bool _isVerifyingAccount = false;
   bool get isVerifyingAccount => _isVerifyingAccount;
@@ -585,7 +587,7 @@ class RestaurantDetailsController extends GetxController {
         'account_number': accountNumberController.text,
         'bank_code': selectedBank!.code,
       };
-
+      customDebugPrint(data.toString());
       final response = await _walletsService.verifyPayoutBank(data);
 
       if (response.status == "success") {
@@ -776,6 +778,7 @@ class RestaurantDetailsController extends GetxController {
     bankNameController.dispose();
     accountNumberController.dispose();
     accountNameController.dispose();
+    banksSearchController.dispose();
     super.onClose();
   }
 }

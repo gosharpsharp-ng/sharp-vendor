@@ -99,7 +99,7 @@ class PayoutHistoryScreen extends StatelessWidget {
                       visible: payoutController.payoutRequests.isNotEmpty,
                       replacement: Visibility(
                         visible:
-                            payoutController.fetchingPayouts &&
+                            !payoutController.fetchingPayouts &&
                             payoutController.payoutRequests.isEmpty,
                         replacement: Column(
                           mainAxisAlignment: MainAxisAlignment.center,

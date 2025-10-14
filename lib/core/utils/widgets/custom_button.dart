@@ -11,7 +11,7 @@ class CustomButton extends StatelessWidget {
     this.fontWeight = FontWeight.w600,
     this.width = 260,
     this.height = 55,
-    this.fontSize = 14,
+    this.fontSize = 12,
     this.borderRadius = 16, // Default border radius
     this.isBusy = false,
     this.icon = Icons.arrow_forward_outlined,
@@ -47,20 +47,20 @@ class CustomButton extends StatelessWidget {
         child: Center(
           child: isBusy
               ? SizedBox(
-            height: 25.sp,
-            width: 25.sp,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              strokeAlign: BorderSide.strokeAlignCenter,
-              color: fontColor,
-            ),
-          )
+                  height: 25.sp,
+                  width: 25.sp,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    strokeAlign: BorderSide.strokeAlignCenter,
+                    color: fontColor,
+                  ),
+                )
               : customText(
-            title,
-            fontSize: fontSize.sp,
-            color: fontColor,
-            fontWeight: fontWeight,
-          ),
+                  title,
+                  fontSize: fontSize.sp,
+                  color: fontColor,
+                  fontWeight: fontWeight,
+                ),
         ),
       ),
     );
@@ -116,29 +116,28 @@ class CustomIconButton extends StatelessWidget {
         ),
         child: isBusy
             ? Center(
-          child: SizedBox(
-            height: 25.sp,
-            width: 25.sp,
-            child: const CircularProgressIndicator(
-              color: AppColors.whiteColor,
-            ),
-          ),
-        )
+                child: SizedBox(
+                  height: 25.sp,
+                  width: 25.sp,
+                  child: const CircularProgressIndicator(
+                    color: AppColors.whiteColor,
+                  ),
+                ),
+              )
             : Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            customText(
-              title,
-              fontSize: fontSize.sp,
-              color: fontColor,
-              fontWeight: fontWeight,
-              overflow: TextOverflow.ellipsis, // Prevent overflow
-            ),
-            SizedBox(width: 5.w),
-            Icon(icon, color: iconColor,size: 25.sp,),
-          ],
-        )
-
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  customText(
+                    title,
+                    fontSize: fontSize.sp,
+                    color: fontColor,
+                    fontWeight: fontWeight,
+                    overflow: TextOverflow.ellipsis, // Prevent overflow
+                  ),
+                  SizedBox(width: 5.w),
+                  Icon(icon, color: iconColor, size: 25.sp),
+                ],
+              ),
       ),
     );
   }
@@ -189,20 +188,20 @@ class CustomFlatButton extends StatelessWidget {
         ),
         child: isBusy
             ? Center(
-          child: SizedBox(
-            height: 25.sp,
-            width: 25.sp,
-            child: CircularProgressIndicator(color: fontColor),
-          ),
-        )
+                child: SizedBox(
+                  height: 25.sp,
+                  width: 25.sp,
+                  child: CircularProgressIndicator(color: fontColor),
+                ),
+              )
             : Center(
-          child: customText(
-            title,
-            fontSize: fontSize.sp,
-            color: fontColor,
-            fontWeight: fontWeight,
-          ),
-        ),
+                child: customText(
+                  title,
+                  fontSize: fontSize.sp,
+                  color: fontColor,
+                  fontWeight: fontWeight,
+                ),
+              ),
       ),
     );
   }
@@ -240,19 +239,19 @@ class CustomGreenTextButton extends StatelessWidget {
         child: Center(
           child: isLoading
               ? SizedBox(
-            height: 15.sp,
-            width: 15.sp,
-            child: CircularProgressIndicator(
-              color: AppColors.whiteColor,
-              strokeWidth: 1.5.sp,
-            ),
-          )
+                  height: 15.sp,
+                  width: 15.sp,
+                  child: CircularProgressIndicator(
+                    color: AppColors.whiteColor,
+                    strokeWidth: 1.5.sp,
+                  ),
+                )
               : customText(
-            title,
-            color: AppColors.whiteColor,
-            fontWeight: fontWeight,
-            fontSize: 15.sp,
-          ),
+                  title,
+                  color: AppColors.whiteColor,
+                  fontWeight: fontWeight,
+                  fontSize: 15.sp,
+                ),
         ),
       ),
     );

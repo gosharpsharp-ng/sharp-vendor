@@ -41,7 +41,7 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
               child: Column(
                 children: [
                   SizedBox(height: 20.h),
-              
+
                   // Profile Card
                   Container(
                     width: double.infinity,
@@ -83,7 +83,8 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
                               child: Stack(
                                 children: [
                                   // Cover Image
-                                  if (restaurant.banner != null && restaurant.banner!.isNotEmpty)
+                                  if (restaurant.banner != null &&
+                                      restaurant.banner!.isNotEmpty)
                                     ClipRRect(
                                       borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(24.r),
@@ -102,12 +103,16 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
                                     top: 12.h,
                                     right: 12.w,
                                     child: GestureDetector(
-                                      onTap: () => Get.toNamed(Routes.RESTAURANT_EDIT_BASIC_INFO),
+                                      onTap: () => Get.toNamed(
+                                        Routes.RESTAURANT_EDIT_BASIC_INFO,
+                                      ),
                                       child: Container(
                                         padding: EdgeInsets.all(8.w),
                                         decoration: BoxDecoration(
                                           color: Colors.black.withOpacity(0.3),
-                                          borderRadius: BorderRadius.circular(8.r),
+                                          borderRadius: BorderRadius.circular(
+                                            8.r,
+                                          ),
                                         ),
                                         child: SvgPicture.asset(
                                           SvgAssets.cameraIcon,
@@ -146,56 +151,72 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
                                 child: Stack(
                                   children: [
                                     // Profile Image
-                                    restaurant.logo != null && restaurant.logo!.isNotEmpty
+                                    restaurant.logo != null &&
+                                            restaurant.logo!.isNotEmpty
                                         ? ClipOval(
-                                      child: CachedNetworkImage(
-                                        imageUrl: restaurant.logo!,
-                                        fit: BoxFit.cover,
-                                        width: 100.w,
-                                        height: 100.w,
-                                        placeholder: (context, url) => Container(
-                                          decoration: BoxDecoration(
-                                            color: AppColors.backgroundColor,
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: Center(
-                                            child: CircularProgressIndicator(
+                                            child: CachedNetworkImage(
+                                              imageUrl: restaurant.logo!,
+                                              fit: BoxFit.cover,
+                                              width: 100.w,
+                                              height: 100.w,
+                                              placeholder: (context, url) =>
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                      color: AppColors
+                                                          .backgroundColor,
+                                                      shape: BoxShape.circle,
+                                                    ),
+                                                    child: Center(
+                                                      child:
+                                                          CircularProgressIndicator(
+                                                            color: AppColors
+                                                                .primaryColor,
+                                                            strokeWidth: 2.w,
+                                                          ),
+                                                    ),
+                                                  ),
+                                              errorWidget:
+                                                  (
+                                                    context,
+                                                    url,
+                                                    error,
+                                                  ) => Container(
+                                                    decoration: BoxDecoration(
+                                                      color: AppColors
+                                                          .primaryColor
+                                                          .withOpacity(0.1),
+                                                      shape: BoxShape.circle,
+                                                    ),
+                                                    child: Icon(
+                                                      Icons.restaurant_menu,
+                                                      color: AppColors
+                                                          .primaryColor,
+                                                      size: 40.sp,
+                                                    ),
+                                                  ),
+                                            ),
+                                          )
+                                        : Container(
+                                            decoration: BoxDecoration(
+                                              color: AppColors.primaryColor
+                                                  .withOpacity(0.1),
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: Icon(
+                                              Icons.restaurant_menu,
                                               color: AppColors.primaryColor,
-                                              strokeWidth: 2.w,
+                                              size: 40.sp,
                                             ),
                                           ),
-                                        ),
-                                        errorWidget: (context, url, error) => Container(
-                                          decoration: BoxDecoration(
-                                            color: AppColors.primaryColor.withOpacity(0.1),
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: Icon(
-                                            Icons.restaurant_menu,
-                                            color: AppColors.primaryColor,
-                                            size: 40.sp,
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                        : Container(
-                                      decoration: BoxDecoration(
-                                        color: AppColors.primaryColor.withOpacity(0.1),
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: Icon(
-                                        Icons.restaurant_menu,
-                                        color: AppColors.primaryColor,
-                                        size: 40.sp,
-                                      ),
-                                    ),
 
                                     // Edit Profile Picture Button
                                     Positioned(
                                       bottom: 0,
                                       right: 0,
                                       child: GestureDetector(
-                                        onTap: () => Get.toNamed(Routes.RESTAURANT_EDIT_BASIC_INFO),
+                                        onTap: () => Get.toNamed(
+                                          Routes.RESTAURANT_EDIT_BASIC_INFO,
+                                        ),
                                         child: Container(
                                           padding: EdgeInsets.all(8.w),
                                           decoration: BoxDecoration(
@@ -232,7 +253,6 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-              
                                   // Restaurant Name
                                   customText(
                                     restaurant.name,
@@ -241,14 +261,19 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
                                     fontWeight: FontWeight.bold,
                                     textAlign: TextAlign.center,
                                   ),
-              
+
                                   SizedBox(height: 8.h),
-              
+
                                   // Cuisine Type Badge
                                   Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 16.w,
+                                      vertical: 8.h,
+                                    ),
                                     decoration: BoxDecoration(
-                                      color: AppColors.primaryColor.withOpacity(0.1),
+                                      color: AppColors.primaryColor.withOpacity(
+                                        0.1,
+                                      ),
                                       borderRadius: BorderRadius.circular(20.r),
                                     ),
                                     child: customText(
@@ -258,11 +283,12 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
-              
+
                                   SizedBox(height: 12.h),
-              
+
                                   // Description
-                                  if (restaurant.description != null && restaurant.description!.isNotEmpty)
+                                  if (restaurant.description != null &&
+                                      restaurant.description!.isNotEmpty)
                                     customText(
                                       restaurant.description!,
                                       color: AppColors.greyColor,
@@ -273,21 +299,29 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
                                       maxLines: 3,
                                       overflow: TextOverflow.ellipsis,
                                     ),
-              
+
                                   SizedBox(height: 16.h),
-              
+
                                   // Status and Location Row
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       // Status Badge
                                       Container(
-                                        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 12.w,
+                                          vertical: 6.h,
+                                        ),
                                         decoration: BoxDecoration(
-                                          color: restaurantController.getStatusColor().withOpacity(0.1),
-                                          borderRadius: BorderRadius.circular(16.r),
+                                          color: restaurantController
+                                              .getStatusColor()
+                                              .withOpacity(0.1),
+                                          borderRadius: BorderRadius.circular(
+                                            16.r,
+                                          ),
                                           border: Border.all(
-                                            color: restaurantController.getStatusColor(),
+                                            color: restaurantController
+                                                .getStatusColor(),
                                             width: 1.w,
                                           ),
                                         ),
@@ -298,29 +332,38 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
                                               width: 6.w,
                                               height: 6.w,
                                               decoration: BoxDecoration(
-                                                color: restaurantController.getStatusColor(),
+                                                color: restaurantController
+                                                    .getStatusColor(),
                                                 shape: BoxShape.circle,
                                               ),
                                             ),
                                             SizedBox(width: 6.w),
                                             customText(
-                                              restaurantController.getStatusText(),
-                                              color: restaurantController.getStatusColor(),
+                                              restaurantController
+                                                  .getStatusText(),
+                                              color: restaurantController
+                                                  .getStatusColor(),
                                               fontSize: 12.sp,
                                               fontWeight: FontWeight.w600,
                                             ),
                                           ],
                                         ),
                                       ),
-              
+
                                       if (restaurant.location != null) ...[
                                         SizedBox(width: 12.w),
                                         // Location Badge
                                         Container(
-                                          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 12.w,
+                                            vertical: 6.h,
+                                          ),
                                           decoration: BoxDecoration(
-                                            color: AppColors.greyColor.withOpacity(0.1),
-                                            borderRadius: BorderRadius.circular(16.r),
+                                            color: AppColors.greyColor
+                                                .withOpacity(0.1),
+                                            borderRadius: BorderRadius.circular(
+                                              16.r,
+                                            ),
                                           ),
                                           child: Row(
                                             mainAxisSize: MainAxisSize.min,
@@ -332,7 +375,11 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
                                               ),
                                               SizedBox(width: 4.w),
                                               customText(
-                                                restaurant.location!.name.length > 15
+                                                restaurant
+                                                            .location!
+                                                            .name
+                                                            .length >
+                                                        15
                                                     ? "${restaurant.location!.name.substring(0, 15)}..."
                                                     : restaurant.location!.name,
                                                 color: AppColors.greyColor,
@@ -353,53 +400,77 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
                       ],
                     ),
                   ),
-              
+
                   SizedBox(height: 24.h),
-              
+
                   // Information Sections
                   _buildInfoSection(
                     "Contact Information",
                     SvgAssets.callIcon,
                     [
-                      _buildInfoRow("Email", restaurant.email, SvgAssets.profileIcon),
-                      _buildInfoRow("Phone", restaurant.phone, SvgAssets.callIcon),
+                      _buildInfoRow(
+                        "Email",
+                        restaurant.email,
+                        SvgAssets.profileIcon,
+                      ),
+                      _buildInfoRow(
+                        "Phone",
+                        restaurant.phone,
+                        SvgAssets.callIcon,
+                      ),
                       if (restaurant.location != null)
-                        _buildInfoRow("Address", restaurant.location!.name, SvgAssets.locationIcon),
+                        _buildInfoRow(
+                          "Address",
+                          restaurant.location!.name,
+                          SvgAssets.locationIcon,
+                        ),
                     ],
-                        () => Get.toNamed(Routes.RESTAURANT_EDIT_BASIC_INFO),
+                    () => Get.toNamed(Routes.RESTAURANT_EDIT_BASIC_INFO),
                   ),
-              
+
                   SizedBox(height: 16.h),
-              
+
                   _buildInfoSection(
                     "Business Details",
                     SvgAssets.operationsIcon,
                     [
-                      _buildInfoRow("Commission Rate", "${restaurant.commissionRate.toStringAsFixed(1)}%", SvgAssets.analyticsIcon),
-                      _buildInfoRow("Registration", restaurant.businessRegistrationNumber ?? "Not set", SvgAssets.operationsIcon),
-                      _buildInfoRow("Tax ID", restaurant.taxIdentificationNumber ?? "Not set", SvgAssets.operationsIcon),
+                      _buildInfoRow(
+                        "Commission Rate",
+                        "${restaurant.commissionRate.toStringAsFixed(1)}%",
+                        SvgAssets.analyticsIcon,
+                      ),
+                      _buildInfoRow(
+                        "Registration",
+                        restaurant.businessRegistrationNumber ?? "Not set",
+                        SvgAssets.operationsIcon,
+                      ),
+                      _buildInfoRow(
+                        "Tax ID",
+                        restaurant.taxIdentificationNumber ?? "Not set",
+                        SvgAssets.operationsIcon,
+                      ),
                     ],
-                        () => Get.toNamed(Routes.RESTAURANT_BUSINESS_SETTINGS),
+                    () => Get.toNamed(Routes.RESTAURANT_BUSINESS_SETTINGS),
                   ),
-              
+
                   SizedBox(height: 16.h),
-              
+
                   _buildInfoSection(
                     "Operating Hours",
                     SvgAssets.timeIcon,
                     _buildScheduleRows(restaurant.schedules),
-                        () => Get.toNamed(Routes.RESTAURANT_BUSINESS_HOURS),
+                    () => Get.toNamed(Routes.RESTAURANT_BUSINESS_HOURS),
                   ),
-              
+
                   SizedBox(height: 16.h),
-              
+
                   _buildInfoSection(
                     "Bank Account",
                     SvgAssets.walletIcon,
                     _buildBankAccountRows(restaurant.bankAccount),
-                        () => _handleBankAccountEdit(restaurant.bankAccount),
+                    () => _handleBankAccountEdit(restaurant.bankAccount),
                   ),
-              
+
                   SizedBox(height: 40.h),
                 ],
               ),
@@ -410,9 +481,11 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
     );
   }
 
-
   // Show more options menu
-  void _showMoreOptions(BuildContext context, RestaurantDetailsController controller) {
+  void _showMoreOptions(
+    BuildContext context,
+    RestaurantDetailsController controller,
+  ) {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -449,10 +522,14 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
               Get.back();
               Get.toNamed(Routes.RESTAURANT_BUSINESS_HOURS);
             }),
-            _buildOptionItem("Toggle Status", Icons.power_settings_new_outlined, () {
-              Get.back();
-              controller.toggleRestaurantStatus();
-            }),
+            _buildOptionItem(
+              "Toggle Status",
+              Icons.power_settings_new_outlined,
+              () {
+                Get.back();
+                controller.toggleRestaurantStatus();
+              },
+            ),
           ],
         ),
       ),
@@ -480,7 +557,11 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
               fontWeight: FontWeight.w500,
             ),
             const Spacer(),
-            Icon(Icons.arrow_forward_ios, color: AppColors.greyColor, size: 16.sp),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: AppColors.greyColor,
+              size: 16.sp,
+            ),
           ],
         ),
       ),
@@ -488,7 +569,12 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
   }
 
   // Build info section with modern card design
-  Widget _buildInfoSection(String title, String titleIcon, List<Widget> children, VoidCallback onEdit) {
+  Widget _buildInfoSection(
+    String title,
+    String titleIcon,
+    List<Widget> children,
+    VoidCallback onEdit,
+  ) {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.whiteColor,
@@ -516,7 +602,15 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
             ),
             child: Row(
               children: [
-                SvgPicture.asset(titleIcon, colorFilter: ColorFilter.mode(AppColors.primaryColor, BlendMode.srcIn), height: 20.sp, width: 20.sp),
+                SvgPicture.asset(
+                  titleIcon,
+                  colorFilter: ColorFilter.mode(
+                    AppColors.primaryColor,
+                    BlendMode.srcIn,
+                  ),
+                  height: 20.sp,
+                  width: 20.sp,
+                ),
                 SizedBox(width: 12.w),
                 Expanded(
                   child: customText(
@@ -548,9 +642,7 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
           // Section Content
           Padding(
             padding: EdgeInsets.all(16.w),
-            child: Column(
-              children: children,
-            ),
+            child: Column(children: children),
           ),
         ],
       ),
@@ -571,7 +663,10 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
             child: SvgPicture.asset(
               icon,
               color: AppColors.primaryColor,
-              colorFilter: ColorFilter.mode(AppColors.primaryColor, BlendMode.srcIn),
+              colorFilter: ColorFilter.mode(
+                AppColors.primaryColor,
+                BlendMode.srcIn,
+              ),
               height: 16.sp,
               width: 16.sp,
             ),
@@ -606,9 +701,7 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
 
   List<Widget> _buildScheduleRows(List<RestaurantSchedule> schedules) {
     if (schedules.isEmpty) {
-      return [
-        _buildInfoRow("Status", "No schedule set", SvgAssets.timeIcon),
-      ];
+      return [_buildInfoRow("Status", "No schedule set", SvgAssets.timeIcon)];
     }
 
     return schedules.map((schedule) {
@@ -616,7 +709,8 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
       try {
         final openTime = TimeOfDay.fromDateTime(schedule.openTime);
         final closeTime = TimeOfDay.fromDateTime(schedule.closeTime);
-        timeRange = "${openTime.format(Get.context!)} - ${closeTime.format(Get.context!)}";
+        timeRange =
+            "${openTime.format(Get.context!)} - ${closeTime.format(Get.context!)}";
       } catch (e) {
         timeRange = schedule.timeRange;
       }
@@ -637,12 +731,19 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
     }
 
     return [
-      _buildInfoRow("Account Name", bankAccount.bankAccountName, SvgAssets.profileIcon),
-      _buildInfoRow("Account Number", bankAccount.bankAccountNumber, SvgAssets.walletIcon),
+      _buildInfoRow(
+        "Account Name",
+        bankAccount.bankAccountName,
+        SvgAssets.profileIcon,
+      ),
+      _buildInfoRow(
+        "Account Number",
+        bankAccount.bankAccountNumber,
+        SvgAssets.walletIcon,
+      ),
       _buildInfoRow("Bank Name", bankAccount.bankName, SvgAssets.walletIcon),
     ];
   }
-
 
   void _handleBankAccountEdit(BankAccount? bankAccount) {
     // Navigate to bank account edit screen

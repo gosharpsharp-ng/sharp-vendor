@@ -18,10 +18,14 @@ class MenuHomeScreen extends GetView<FoodMenuController> {
             title: "Menu",
           ),
           backgroundColor: AppColors.backgroundColor,
-          floatingActionButton: FloatingActionButton(onPressed: (){
-            menuController.clearForm();
-            Get.toNamed(Routes.ADD_MENU_SCREEN);
-          },backgroundColor: AppColors.primaryColor,child: Icon(Icons.add,color: AppColors.whiteColor,),),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              menuController.clearForm();
+              Get.toNamed(Routes.ADD_MENU_SCREEN);
+            },
+            backgroundColor: AppColors.primaryColor,
+            child: Icon(Icons.add, color: AppColors.whiteColor),
+          ),
           body: Container(
             padding: EdgeInsets.symmetric(horizontal: 22.sp, vertical: 20.sp),
             height: 1.sh,
@@ -31,11 +35,7 @@ class MenuHomeScreen extends GetView<FoodMenuController> {
                 await menuController.getMenuItems();
               },
               child: menuController.isLoadingMenuItems
-                  ? ListView(
-                      children: [
-                        SkeletonLoaders.menuItemCard(count: 4),
-                      ],
-                    )
+                  ? ListView(children: [SkeletonLoaders.menuItemCard(count: 4)])
                   : menuController.menuItems.isEmpty
                   ? Center(
                       child: Column(
@@ -61,17 +61,17 @@ class MenuHomeScreen extends GetView<FoodMenuController> {
                             fontWeight: FontWeight.normal,
                             textAlign: TextAlign.center,
                           ),
-                          SizedBox(height: 20.h),
-                          CustomButton(
-                            onPressed: () {
-                              menuController.clearForm();
-                              Get.toNamed(Routes.ADD_MENU_SCREEN);
-                            },
-                            title: "Add Menu Item",
-                            width: 200.w,
-                            backgroundColor: AppColors.primaryColor,
-                            fontColor: AppColors.whiteColor,
-                          ),
+                          // SizedBox(height: 20.h),
+                          // CustomButton(
+                          //   onPressed: () {
+                          //     menuController.clearForm();
+                          //     Get.toNamed(Routes.ADD_MENU_SCREEN);
+                          //   },
+                          //   title: "Add Menu Item",
+                          //   width: 200.w,
+                          //   backgroundColor: AppColors.primaryColor,
+                          //   fontColor: AppColors.whiteColor,
+                          // ),
                         ],
                       ),
                     )
@@ -291,7 +291,7 @@ class MenuItemCard extends StatelessWidget {
                             width: 8.w,
                             height: 8.h,
                             decoration: BoxDecoration(
-                              color: menuItem.isAvailable==1
+                              color: menuItem.isAvailable == 1
                                   ? Colors.green
                                   : Colors.red,
                               shape: BoxShape.circle,
@@ -299,8 +299,10 @@ class MenuItemCard extends StatelessWidget {
                           ),
                           SizedBox(width: 6.w),
                           customText(
-                            menuItem.isAvailable==1 ? "Available" : "Unavailable",
-                            color: menuItem.isAvailable==1
+                            menuItem.isAvailable == 1
+                                ? "Available"
+                                : "Unavailable",
+                            color: menuItem.isAvailable == 1
                                 ? Colors.green
                                 : Colors.red,
                             fontSize: 12.sp,
