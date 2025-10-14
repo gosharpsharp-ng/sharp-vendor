@@ -81,4 +81,5 @@ abstract class Routes {
   static const RESTAURANT_EDIT_LOCATION = '/restaurant/edit-location';
   static const RESTAURANT_BUSINESS_HOURS = '/restaurant/business-hours';
   static const RESTAURANT_BUSINESS_SETTINGS = '/restaurant/business-settings';
+  static const RESTAURANT_BANK_ACCOUNT = '/restaurant/bank-account';
 }

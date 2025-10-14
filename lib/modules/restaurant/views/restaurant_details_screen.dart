@@ -645,7 +645,7 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
 
 
   void _handleBankAccountEdit(BankAccount? bankAccount) {
-    // Navigate to existing bank account setup screen
-    Get.toNamed(Routes.BANK_INFO_ENTRY_SCREEN);
+    // Navigate to bank account edit screen
+    Get.toNamed(Routes.RESTAURANT_BANK_ACCOUNT);
   }
 }

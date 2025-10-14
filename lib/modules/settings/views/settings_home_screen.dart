@@ -84,22 +84,22 @@ class SettingsHomeScreen extends StatelessWidget {
                   //     ),
                   //   ],
                   // ),
-                  SizedBox(height: 12.h,),
+                  SizedBox(height: 12.h),
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 20.w),
                     width: 1.sw,
                     decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            Color(0xFF6C9E57),
-                            Color(0xFF47862D),
-                          ],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                        ),
-                        borderRadius: BorderRadius.circular(40.r)
+                      gradient: LinearGradient(
+                        colors: [Color(0xFF6C9E57), Color(0xFF47862D)],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
+                      borderRadius: BorderRadius.circular(40.r),
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 15.w,vertical: 20.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 15.w,
+                      vertical: 20.h,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -109,16 +109,19 @@ class SettingsHomeScreen extends StatelessWidget {
                           fontWeight: FontWeight.w500,
                           fontSize: 16.sp,
                         ),
-                        SizedBox(
-                          height: 8.sp,
-                        ),
+                        SizedBox(height: 8.sp),
                         customText(
-                          settingsController.userProfile?.restaurant?.wallet?.formattedBalance ?? "₦0.00",
+                          settingsController
+                                  .userProfile
+                                  ?.restaurant
+                                  ?.wallet
+                                  ?.formattedBalance ??
+                              "₦0.00",
                           color: AppColors.whiteColor,
                           fontWeight: FontWeight.w700,
                           fontSize: 30.sp,
                         ),
-                        SizedBox(height: 18.h,),
+                        SizedBox(height: 18.h),
                         CustomIconButton(
                           width: 140.w,
                           borderRadius: 8.r,
@@ -137,8 +140,6 @@ class SettingsHomeScreen extends StatelessWidget {
                   ),
                   SectionBox(
                     children: [
-
-
                       SettingsItem(
                         onPressed: () {
                           settingsController.setProfileFields();
@@ -155,6 +156,7 @@ class SettingsHomeScreen extends StatelessWidget {
                         iconColor: AppColors.primaryColor,
                         title: "Business Details",
                         icon: SvgAssets.operationsIcon,
+                        isLast: false,
                       ),
                       SettingsItem(
                         onPressed: () {
@@ -206,27 +208,28 @@ class SettingsHomeScreen extends StatelessWidget {
                         iconColor: AppColors.forestGreenColor,
                         icon: SvgAssets.walletIcon,
                       ),
-                      SettingsItem(
-                        onPressed: () {
-                          settingsController.setBusinessOperationsFields();
-                          Get.toNamed(Routes.BUSINESS_OPERATIONS_SCREEN);
-                        },
-                        title: "Business Operations",
-                        iconColor: AppColors.purpleColor,
-                        icon: SvgAssets.operationsIcon,
-                      ),
+                      // SettingsItem(
+                      //   onPressed: () {
+                      //     settingsController.setBusinessOperationsFields();
+                      //     Get.toNamed(Routes.BUSINESS_OPERATIONS_SCREEN);
+                      //   },
+                      //   title: "Business Operations",
+                      //   iconColor: AppColors.purpleColor,
+                      //   icon: SvgAssets.operationsIcon,
+                      // ),
                       SettingsItem(
                         onPressed: () {
                           Get.toNamed(Routes.NOTIFICATIONS_HOME);
                         },
                         title: "Notifications",
                         icon: SvgAssets.notificationIcon,
-                      ), SettingsItem(
+                      ),
+                      SettingsItem(
                         onPressed: () {
                           Get.toNamed(Routes.REVIEWS_SCREEN);
                         },
                         title: "Ratings",
-                        iconColor:AppColors.amberColor,
+                        iconColor: AppColors.amberColor,
                         icon: SvgAssets.ratingIcon,
                       ),
                       SettingsItem(
@@ -242,10 +245,9 @@ class SettingsHomeScreen extends StatelessWidget {
                       //   title: "Disputes",
                       //   icon: SvgAssets.supportIcon,
                       // ),
-
                       SettingsItem(
                         onPressed: () {
-                         Get.toNamed(Routes.FAQS_SCREEN);
+                          Get.toNamed(Routes.FAQS_SCREEN);
                         },
                         title: "FAQS",
                         icon: SvgAssets.faqsIcon,

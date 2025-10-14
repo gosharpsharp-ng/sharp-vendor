@@ -5,7 +5,8 @@ class WalletsService extends CoreService {
 
   Future<APIResponse> getAllTransactions(dynamic data) async {
     return await fetch(
-        "/me/transactions?page=${data['page']}&per_page=${data['per_page']}");
+      "/me/transactions?page=${data['page']}&per_page=${data['per_page']}",
+    );
   }
 
   Future<APIResponse> getSingleTransaction(dynamic data) async {
@@ -25,7 +26,7 @@ class WalletsService extends CoreService {
   }
 
   Future<APIResponse> verifyPayoutBank(dynamic data) async {
-    return await send("/me/verify/payout-account", data);
+    return await send("/banks/verify-account", data);
   }
 
   Future<APIResponse> updatePayoutAccount(dynamic data) async {

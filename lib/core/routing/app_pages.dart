@@ -25,6 +25,7 @@ import 'package:sharpvendor/modules/restaurant/views/edit_basic_info_screen.dart
 import 'package:sharpvendor/modules/restaurant/views/edit_location_screen.dart';
 import 'package:sharpvendor/modules/restaurant/views/business_hours_screen.dart';
 import 'package:sharpvendor/modules/restaurant/views/business_settings_screen.dart';
+import 'package:sharpvendor/modules/restaurant/views/bank_account_edit_screen.dart';
 import 'package:sharpvendor/modules/payouts/bindings/payout_bindings.dart';
 import 'package:sharpvendor/modules/payouts/views/payout_request_screen.dart';
 import 'package:sharpvendor/modules/payouts/views/payout_history_screen.dart';
@@ -372,6 +373,13 @@ class AppPages {
     GetPage(
       name: Routes.RESTAURANT_BUSINESS_SETTINGS,
       page: () => const BusinessSettingsScreen(),
+      binding: RestaurantBindings(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: Routes.RESTAURANT_BANK_ACCOUNT,
+      page: () => const BankAccountEditScreen(),
       binding: RestaurantBindings(),
       transition: Transition.rightToLeftWithFade,
       transitionDuration: const Duration(milliseconds: 400),
