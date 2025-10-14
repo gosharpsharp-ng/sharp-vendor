@@ -18,7 +18,8 @@ class OnboardingScreen extends StatelessWidget {
           appBar: AppBar(
             backgroundColor: AppColors.transparent,
             elevation: 0,
-            systemOverlayStyle: SystemUiOverlayStyle.dark, // For light status bar text
+            systemOverlayStyle:
+                SystemUiOverlayStyle.dark, // For light status bar text
           ),
           body: SafeArea(
             top: false,
@@ -29,13 +30,14 @@ class OnboardingScreen extends StatelessWidget {
               padding: EdgeInsets.only(top: 50.h),
               decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage(PngAssets.lightWatermark,),fit: BoxFit.cover
+                  image: AssetImage(PngAssets.lightWatermark),
+                  fit: BoxFit.cover,
                 ),
               ),
               child: Column(
                 children: [
                   Expanded(
-                    flex: 11,
+                    flex: 10,
                     child: PageView.builder(
                       controller: onboardingController.pageController,
                       physics: const BouncingScrollPhysics(),
@@ -50,9 +52,11 @@ class OnboardingScreen extends StatelessWidget {
                             Expanded(
                               flex: 2,
                               child: Container(
-                                padding: EdgeInsets.symmetric(vertical: 15.sp,horizontal: 35.sp),
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 15.sp,
+                                  horizontal: 35.sp,
+                                ),
                                 child: Container(
-
                                   width: 1.sw,
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
@@ -63,17 +67,19 @@ class OnboardingScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            SizedBox(height: 25.sp),
+                            SizedBox(height: 15.sp),
                             Expanded(
-                              flex:1,
+                              flex: 1,
                               child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 14.sp),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 14.sp,
+                                ),
                                 child: Column(
                                   children: [
                                     customText(
                                       contents[i].title,
                                       textAlign: TextAlign.center,
-                                      fontSize: 25.sp,
+                                      fontSize: 22.sp,
                                       fontWeight: FontWeight.w600,
                                       overflow: TextOverflow.visible,
                                     ),
@@ -81,11 +87,9 @@ class OnboardingScreen extends StatelessWidget {
                                     customText(
                                       contents[i].desc,
                                       textAlign: TextAlign.center,
-                                      fontSize: 16.sp,
+                                      fontSize: 14.sp,
                                       overflow: TextOverflow.visible,
                                     ),
-
-
                                   ],
                                 ),
                               ),
@@ -95,11 +99,11 @@ class OnboardingScreen extends StatelessWidget {
                       },
                     ),
                   ),
+                  SizedBox(height: 5.h),
                   Expanded(
                     flex: 3,
                     child: Column(
                       children: [
-
                         SizedBox(
                           child: AnimatedSmoothIndicator(
                             activeIndex: onboardingController.currentPageIndex,
@@ -112,7 +116,7 @@ class OnboardingScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(height: 25.h,),
+                        SizedBox(height: 25.h),
                         CustomButton(
                           borderRadius: 16.r,
                           onPressed: () {
@@ -127,16 +131,16 @@ class OnboardingScreen extends StatelessWidget {
                           height: 55.h,
                           fontWeight: FontWeight.w600,
                           title:
-                          onboardingController.currentPageIndex !=
-                              contents.length - 1
+                              onboardingController.currentPageIndex !=
+                                  contents.length - 1
                               ? "Next"
                               : "Continue",
                           backgroundColor: AppColors.primaryColor,
                         ),
-                        SizedBox(height: 20.sp),
+                        SizedBox(height: 8.sp),
                         Visibility(
                           visible:
-                          onboardingController.currentPageIndex !=
+                              onboardingController.currentPageIndex !=
                               contents.length - 1,
                           replacement: SizedBox(height: 19.sp),
                           child: InkWell(

@@ -6,6 +6,7 @@ import '../../../core/models/restaurant_model.dart';
 class RestaurantDetailsController extends GetxController {
   final ProfileService _profileService = serviceLocator<ProfileService>();
   final SettingsController _settingsController = Get.find<SettingsController>();
+  final WalletsService _walletsService = serviceLocator<WalletsService>();
 
   // Loading states
   bool _isLoading = false;
@@ -25,7 +26,8 @@ class RestaurantDetailsController extends GetxController {
   }
 
   // Restaurant data
-  RestaurantModel? get restaurant => _settingsController.userProfile?.restaurant;
+  RestaurantModel? get restaurant =>
+      _settingsController.userProfile?.restaurant;
   UserProfile? get userProfile => _settingsController.userProfile;
 
   // Form controllers for basic info editing
@@ -68,6 +70,11 @@ class RestaurantDetailsController extends GetxController {
     businessRegNumberController = TextEditingController();
     taxIdController = TextEditingController();
 
+    // Bank account controllers
+    bankNameController = TextEditingController();
+    accountNumberController = TextEditingController();
+    accountNameController = TextEditingController();
+
     _populateControllers();
   }
 
@@ -79,7 +86,8 @@ class RestaurantDetailsController extends GetxController {
       emailController.text = restaurant!.email;
       phoneController.text = restaurant!.phone;
       commissionRateController.text = restaurant!.commissionRate.toString();
-      businessRegNumberController.text = restaurant!.businessRegistrationNumber ?? '';
+      businessRegNumberController.text =
+          restaurant!.businessRegistrationNumber ?? '';
       taxIdController.text = restaurant!.taxIdentificationNumber ?? '';
       editingLocation = restaurant!.location;
     }
@@ -120,7 +128,8 @@ class RestaurantDetailsController extends GetxController {
 
       if (response.status == "success") {
         // Clear selected images after successful upload if images were included
-        if (updateData.containsKey('restaurant_banner') || updateData.containsKey('restaurant_logo')) {
+        if (updateData.containsKey('restaurant_banner') ||
+            updateData.containsKey('restaurant_logo')) {
           bannerImage = null;
           logoImage = null;
           bannerImageBase64 = null;
@@ -129,12 +138,18 @@ class RestaurantDetailsController extends GetxController {
 
         await refreshRestaurantData();
         if (shouldNavigateBack) Get.back();
-        showToast(message: successMessage ?? "Restaurant updated successfully", isError: false);
+        showToast(
+          message: successMessage ?? "Restaurant updated successfully",
+          isError: false,
+        );
       } else {
         showToast(message: response.message, isError: true);
       }
     } catch (e) {
-      showToast(message: "Error updating restaurant: ${e.toString()}", isError: true);
+      showToast(
+        message: "Error updating restaurant: ${e.toString()}",
+        isError: true,
+      );
     } finally {
       setUpdatingState(false);
     }
@@ -152,7 +167,8 @@ class RestaurantDetailsController extends GetxController {
       if (restaurantNameController.text.trim() != restaurant!.name) {
         updateData['restaurant_name'] = restaurantNameController.text.trim();
       }
-      if (descriptionController.text.trim() != (restaurant!.description ?? '')) {
+      if (descriptionController.text.trim() !=
+          (restaurant!.description ?? '')) {
         updateData['description'] = descriptionController.text.trim();
       }
       if (cuisineTypeController.text.trim() != restaurant!.cuisineType) {
@@ -192,10 +208,11 @@ class RestaurantDetailsController extends GetxController {
 
     final updateData = {
       'restaurant': {
-        'commission_rate': double.tryParse(commissionRateController.text) ?? 0.0,
+        'commission_rate':
+            double.tryParse(commissionRateController.text) ?? 0.0,
         'business_registration_number': businessRegNumberController.text,
         'tax_identification_number': taxIdController.text,
-      }
+      },
     };
 
     await _updateRestaurantProfile(
@@ -211,7 +228,7 @@ class RestaurantDetailsController extends GetxController {
         'name': location.name,
         'latitude': location.latitude.toString(),
         'longitude': location.longitude.toString(),
-      }
+      },
     };
 
     await _updateRestaurantProfile(
@@ -225,9 +242,7 @@ class RestaurantDetailsController extends GetxController {
     if (restaurant == null) return;
 
     final updateData = {
-      'restaurant': {
-        'is_active': !restaurant!.isActive,
-      }
+      'restaurant': {'is_active': !restaurant!.isActive},
     };
 
     final status = !restaurant!.isActive ? "activated" : "deactivated";
@@ -254,13 +269,19 @@ class RestaurantDetailsController extends GetxController {
         // Immediately convert to base64
         bannerImageBase64 = await _fileToBase64(bannerImage!);
         if (bannerImageBase64 != null) {
-          showToast(message: "Banner image selected successfully", isError: false);
+          showToast(
+            message: "Banner image selected successfully",
+            isError: false,
+          );
         }
 
         update();
       }
     } catch (e) {
-      showToast(message: "Error selecting banner image: ${e.toString()}", isError: true);
+      showToast(
+        message: "Error selecting banner image: ${e.toString()}",
+        isError: true,
+      );
     }
   }
 
@@ -279,13 +300,19 @@ class RestaurantDetailsController extends GetxController {
         // Immediately convert to base64
         logoImageBase64 = await _fileToBase64(logoImage!);
         if (logoImageBase64 != null) {
-          showToast(message: "Logo image selected successfully", isError: false);
+          showToast(
+            message: "Logo image selected successfully",
+            isError: false,
+          );
         }
 
         update();
       }
     } catch (e) {
-      showToast(message: "Error selecting logo image: ${e.toString()}", isError: true);
+      showToast(
+        message: "Error selecting logo image: ${e.toString()}",
+        isError: true,
+      );
     }
   }
 
@@ -293,6 +320,356 @@ class RestaurantDetailsController extends GetxController {
   void setEditingLocation() {
     editingLocation = restaurant?.location;
     update();
+  }
+
+  // Business Hours Management
+  Map<String, bool> selectedDays = {
+    'monday': false,
+    'tuesday': false,
+    'wednesday': false,
+    'thursday': false,
+    'friday': false,
+    'saturday': false,
+    'sunday': false,
+  };
+
+  Map<String, Map<String, String>> dayOperatingHours = {
+    'monday': {'openTime': '', 'closeTime': ''},
+    'tuesday': {'openTime': '', 'closeTime': ''},
+    'wednesday': {'openTime': '', 'closeTime': ''},
+    'thursday': {'openTime': '', 'closeTime': ''},
+    'friday': {'openTime': '', 'closeTime': ''},
+    'saturday': {'openTime': '', 'closeTime': ''},
+    'sunday': {'openTime': '', 'closeTime': ''},
+  };
+
+  // Initialize business hours from existing restaurant data
+  void initializeBusinessHours() {
+    if (restaurant?.schedules.isEmpty ?? true) {
+      selectedDays.forEach((key, value) {
+        selectedDays[key] = false;
+        dayOperatingHours[key] = {'openTime': '', 'closeTime': ''};
+      });
+    } else {
+      for (var schedule in restaurant!.schedules) {
+        String day = schedule.dayOfWeek.toLowerCase();
+        selectedDays[day] = true;
+        dayOperatingHours[day] = {
+          'openTime': schedule.formattedOpenTime,
+          'closeTime': schedule.formattedCloseTime,
+        };
+      }
+    }
+    update();
+  }
+
+  // Toggle day selection
+  void toggleDaySelection(String day) {
+    selectedDays[day] = !selectedDays[day]!;
+    if (!selectedDays[day]!) {
+      dayOperatingHours[day] = {'openTime': '', 'closeTime': ''};
+    } else {
+      if (dayOperatingHours[day]!['openTime']!.isEmpty) {
+        dayOperatingHours[day] = {
+          'openTime': '09:00 AM',
+          'closeTime': '09:00 PM',
+        };
+      }
+    }
+    update();
+  }
+
+  // Select time for specific day
+  Future<void> selectTimeForDay({
+    required BuildContext context,
+    required String day,
+    required bool isOpeningTime,
+  }) async {
+    TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(primary: AppColors.primaryColor),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (pickedTime != null && context.mounted) {
+      String formattedTime = pickedTime.format(context);
+      if (isOpeningTime) {
+        dayOperatingHours[day]!['openTime'] = formattedTime;
+      } else {
+        dayOperatingHours[day]!['closeTime'] = formattedTime;
+      }
+      update();
+    }
+  }
+
+  // Convert 12-hour time format to 24-hour format (e.g., "09:00 AM" -> "09:00")
+  String _convertTo24HourFormat(String time12h) {
+    try {
+      // Remove extra spaces
+      time12h = time12h.trim();
+
+      // Split time and period (AM/PM)
+      final parts = time12h.split(' ');
+      if (parts.length != 2) return time12h; // Already in 24h format
+
+      final timePart = parts[0];
+      final period = parts[1].toUpperCase();
+
+      final timeParts = timePart.split(':');
+      int hour = int.parse(timeParts[0]);
+      final minute = timeParts[1];
+
+      // Convert to 24-hour format
+      if (period == 'PM' && hour != 12) {
+        hour += 12;
+      } else if (period == 'AM' && hour == 12) {
+        hour = 0;
+      }
+
+      return '${hour.toString().padLeft(2, '0')}:$minute';
+    } catch (e) {
+      debugPrint("Error converting time format: $e");
+      return time12h;
+    }
+  }
+
+  // Update business hours
+  Future<void> updateBusinessHours() async {
+    bool hasSelectedDays = selectedDays.values.any((selected) => selected);
+    if (!hasSelectedDays) {
+      showToast(
+        message: "Please select at least one operating day",
+        isError: true,
+      );
+      return;
+    }
+
+    for (String day in selectedDays.keys) {
+      if (selectedDays[day]!) {
+        String openTime = dayOperatingHours[day]!['openTime'] ?? '';
+        String closeTime = dayOperatingHours[day]!['closeTime'] ?? '';
+        if (openTime.isEmpty || closeTime.isEmpty) {
+          String capitalizedDay =
+              day.substring(0, 1).toUpperCase() + day.substring(1);
+          showToast(
+            message:
+                "Please set both opening and closing times for $capitalizedDay",
+            isError: true,
+          );
+          return;
+        }
+      }
+    }
+
+    setUpdatingState(true);
+
+    try {
+      List<Map<String, dynamic>> schedules = [];
+      selectedDays.forEach((day, isSelected) {
+        if (isSelected && dayOperatingHours[day] != null) {
+          String openTime = dayOperatingHours[day]!['openTime'] ?? '';
+          String closeTime = dayOperatingHours[day]!['closeTime'] ?? '';
+          if (openTime.isNotEmpty && closeTime.isNotEmpty) {
+            schedules.add({
+              "day": day,
+              "open": _convertTo24HourFormat(openTime),
+              "close": _convertTo24HourFormat(closeTime),
+            });
+          }
+        }
+      });
+
+      final updateData = {'schedules': schedules};
+
+      await _updateRestaurantProfile(
+        updateData,
+        successMessage: "Business hours updated successfully",
+      );
+    } catch (e) {
+      showToast(
+        message: "Error updating business hours: ${e.toString()}",
+        isError: true,
+      );
+    } finally {
+      setUpdatingState(false);
+    }
+  }
+
+  // Bank Account Management
+  final bankAccountFormKey = GlobalKey<FormState>();
+  late TextEditingController bankNameController;
+  late TextEditingController accountNumberController;
+  late TextEditingController accountNameController;
+
+  bool _isVerifyingAccount = false;
+  bool get isVerifyingAccount => _isVerifyingAccount;
+
+  void setVerifyingAccountState(bool val) {
+    _isVerifyingAccount = val;
+    update();
+  }
+
+  // Bank list
+  List<BankModel> banks = [];
+  List<BankModel> originalBanks = [];
+  BankModel? selectedBank;
+
+  // Get list of banks
+  Future<void> getBankList() async {
+    if (banks.isNotEmpty) return; // Already loaded
+
+    setLoadingState(true);
+    try {
+      final response = await _walletsService.getBankList();
+      if (response.status == "success") {
+        banks = (response.data['banks'] as List)
+            .map((bank) => BankModel.fromJson(bank))
+            .toList();
+        originalBanks = List.from(banks);
+        update();
+      } else {
+        showToast(message: response.message, isError: true);
+      }
+    } catch (e) {
+      showToast(message: "Error loading banks: ${e.toString()}", isError: true);
+    } finally {
+      setLoadingState(false);
+    }
+  }
+
+  // Set selected bank
+  void setSelectedBank(BankModel bank) {
+    selectedBank = bank;
+    bankNameController.text = bank.name;
+    // Clear account name when bank changes
+    accountNameController.clear();
+    update();
+  }
+
+  // Search banks
+  void searchBanks(String query) {
+    if (query.isEmpty) {
+      banks = List.from(originalBanks);
+    } else {
+      banks = originalBanks
+          .where(
+            (bank) => bank.name.toLowerCase().contains(query.toLowerCase()),
+          )
+          .toList();
+    }
+    update();
+  }
+
+  // Verify bank account when account number reaches 10 digits
+  Future<void> verifyBankAccount() async {
+    if (selectedBank == null) {
+      showToast(message: "Please select a bank first", isError: true);
+      return;
+    }
+
+    if (accountNumberController.text.length != 10) {
+      return;
+    }
+
+    setVerifyingAccountState(true);
+
+    try {
+      final data = {
+        'account_number': accountNumberController.text,
+        'bank_code': selectedBank!.code,
+      };
+
+      final response = await _walletsService.verifyPayoutBank(data);
+
+      if (response.status == "success") {
+        accountNameController.text =
+            response.data['account_details']['account_name'];
+        showToast(message: "Account verified successfully", isError: false);
+        update();
+      } else {
+        accountNameController.clear();
+        showToast(message: response.message, isError: true);
+      }
+    } catch (e) {
+      accountNameController.clear();
+      showToast(
+        message: "Error verifying account: ${e.toString()}",
+        isError: true,
+      );
+    } finally {
+      setVerifyingAccountState(false);
+    }
+  }
+
+  // Update bank account
+  Future<void> updateBankAccount() async {
+    if (!bankAccountFormKey.currentState!.validate()) return;
+
+    if (selectedBank == null) {
+      showToast(message: "Please select a bank", isError: true);
+      return;
+    }
+
+    if (accountNameController.text.isEmpty) {
+      showToast(
+        message: "Please verify your account number first",
+        isError: true,
+      );
+      return;
+    }
+
+    setUpdatingState(true);
+
+    try {
+      final updateData = {
+        'bank_account': {
+          'bank_name': selectedBank!.name,
+          'bank_code': selectedBank!.code,
+          'account_number': accountNumberController.text,
+          'account_name': accountNameController.text,
+        },
+      };
+
+      await _updateRestaurantProfile(
+        updateData,
+        successMessage: "Bank account updated successfully",
+      );
+    } catch (e) {
+      showToast(
+        message: "Error updating bank account: ${e.toString()}",
+        isError: true,
+      );
+    } finally {
+      setUpdatingState(false);
+    }
+  }
+
+  // Initialize bank account form
+  void initializeBankAccountForm() {
+    bankNameController = TextEditingController();
+    accountNumberController = TextEditingController();
+    accountNameController = TextEditingController();
+
+    // Load existing bank account data if available
+    if (restaurant?.bankAccount != null) {
+      bankNameController.text = restaurant!.bankAccount!.bankName;
+      accountNumberController.text = restaurant!.bankAccount!.bankAccountNumber;
+      accountNameController.text = restaurant!.bankAccount!.bankAccountName;
+
+      // Try to find and set the selected bank
+      if (banks.isNotEmpty) {
+        selectedBank = banks.firstWhereOrNull(
+          (bank) => bank.name == restaurant!.bankAccount!.bankName,
+        );
+      }
+    }
   }
 
   // Helper methods
@@ -320,7 +697,16 @@ class RestaurantDetailsController extends GetxController {
     if (restaurant?.schedules.isEmpty ?? true) return "No schedule set";
 
     final today = DateTime.now().weekday;
-    final dayNames = ['', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+    final dayNames = [
+      '',
+      'monday',
+      'tuesday',
+      'wednesday',
+      'thursday',
+      'friday',
+      'saturday',
+      'sunday',
+    ];
     final todayName = dayNames[today];
 
     final todaySchedule = restaurant!.schedules.firstWhereOrNull(
@@ -339,7 +725,16 @@ class RestaurantDetailsController extends GetxController {
 
     final now = DateTime.now();
     final today = now.weekday;
-    final dayNames = ['', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+    final dayNames = [
+      '',
+      'monday',
+      'tuesday',
+      'wednesday',
+      'thursday',
+      'friday',
+      'saturday',
+      'sunday',
+    ];
     final todayName = dayNames[today];
 
     final todaySchedule = restaurant!.schedules.firstWhereOrNull(
@@ -378,6 +773,9 @@ class RestaurantDetailsController extends GetxController {
     commissionRateController.dispose();
     businessRegNumberController.dispose();
     taxIdController.dispose();
+    bankNameController.dispose();
+    accountNumberController.dispose();
+    accountNameController.dispose();
     super.onClose();
   }
 }

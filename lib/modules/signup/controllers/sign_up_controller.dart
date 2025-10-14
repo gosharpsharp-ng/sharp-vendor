@@ -189,13 +189,15 @@ class SignUpController extends GetxController {
 
     return schedule;
   }
-  TextEditingController restaurantAddressController=TextEditingController();
+
+  TextEditingController restaurantAddressController = TextEditingController();
   ItemLocation? restaurantLocation;
   void setRestaurantLocation(ItemLocation point) {
     restaurantLocation = point;
     restaurantAddressController.setText(point.formattedAddress!);
     update();
   }
+
   // Validate business operations form
   bool validateBusinessOperations() {
     // Check if at least one day is selected
@@ -351,7 +353,7 @@ class SignUpController extends GetxController {
         "restaurant_location": {
           "name": restaurantAddressController.text,
           "latitude": "${restaurantLocation?.latitude}",
-          "longitude": "${restaurantLocation?.longitude}"
+          "longitude": "${restaurantLocation?.longitude}",
         },
         "schedule": schedule,
       };
@@ -359,9 +361,13 @@ class SignUpController extends GetxController {
       dynamic dataWithoutImages = Map.from(data)
         ..remove("restaurant_logo")
         ..remove("restaurant_banner");
-print("******************************************Request****************************************************************");
-log(dataWithoutImages.toString());
-print("**********************************************************************************************************");
+      print(
+        "******************************************Request****************************************************************",
+      );
+      log(dataWithoutImages.toString());
+      print(
+        "**********************************************************************************************************",
+      );
       APIResponse response = await authService.signup(data);
       showToast(
         message: response.message,
@@ -387,7 +393,9 @@ print("*************************************************************************
     }
     if (photo != null) {
       final croppedPhoto = await cropImage(photo);
-      final compressed = await ImageCompressionService.compressImage(XFile(croppedPhoto.path));
+      final compressed = await ImageCompressionService.compressImage(
+        XFile(croppedPhoto.path),
+      );
 
       restaurantBanner = await convertImageToBase64(compressed.path);
       update();
@@ -404,7 +412,9 @@ print("*************************************************************************
     }
     if (photo != null) {
       final croppedPhoto = await cropImage(photo);
-      final compressed = await ImageCompressionService.compressImage(XFile(croppedPhoto.path));
+      final compressed = await ImageCompressionService.compressImage(
+        XFile(croppedPhoto.path),
+      );
       restaurantLogo = await convertImageToBase64(compressed.path);
       update();
     }
@@ -438,7 +448,7 @@ print("*************************************************************************
     isLoadingBanks = false;
     update();
     if (response.status == "success") {
-      originalBanks = (response.data as List)
+      originalBanks = (response.data['banks'] as List)
           .map((bk) => BankModel.fromJson(bk))
           .toList();
       filteredBanks = originalBanks;
@@ -483,7 +493,8 @@ print("*************************************************************************
       verifyingAccountNumber = false;
       update();
       if (response.status == "success") {
-        resolvedBankAccountName.text = response.data['account_name'];
+        resolvedBankAccountName.text =
+            response.data['account_details']['account_name'];
         update();
       } else {
         showToast(

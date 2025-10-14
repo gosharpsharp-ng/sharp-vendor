@@ -149,6 +149,7 @@ export 'package:sharpvendor/modules/restaurant/views/edit_basic_info_screen.dart
 export 'package:sharpvendor/modules/restaurant/views/edit_location_screen.dart';
 export 'package:sharpvendor/modules/restaurant/views/business_hours_screen.dart';
 export 'package:sharpvendor/modules/restaurant/views/business_settings_screen.dart';
+export 'package:sharpvendor/modules/restaurant/views/bank_account_edit_screen.dart';
 
 // Analytics
 export 'package:sharpvendor/core/models/restaurant_analytics_model.dart';
