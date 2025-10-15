@@ -1,0 +1,8 @@
+sdk.dir=/path/to/Android/Sdk
+flutter.sdk=/path/to/flutter/sdk
+flutter.buildMode=debug
+flutter.versionName=1.0.0
+flutter.versionCode=1
+
+# Google Maps API Key - Get your own key from: https://console.cloud.google.com/google/maps-apis
+GOOGLE_MAPS_API_KEY=YOUR_API_KEY_HERE
