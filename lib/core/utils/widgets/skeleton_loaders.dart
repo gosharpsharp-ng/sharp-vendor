@@ -1259,4 +1259,125 @@ class SkeletonLoaders {
       ),
     );
   }
+
+  /// Payout item skeleton loader (matches PayoutItem structure)
+  static Widget payoutItem({int count = 5}) {
+    return Skeletonizer(
+      enabled: true,
+      child: Column(
+        children: List.generate(count, (index) => Container(
+          width: 1.sw,
+          padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 16.w),
+          margin: EdgeInsets.symmetric(vertical: 4.h, horizontal: 2.w),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12.r),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              // Payout Icon skeleton
+              Container(
+                width: 48.w,
+                height: 48.h,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+              ),
+
+              SizedBox(width: 12.w),
+
+              // Payout Details skeleton
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Reference and Amount row
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          height: 15.sp,
+                          width: 120.w,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(4.r),
+                          ),
+                        ),
+                        Container(
+                          height: 16.sp,
+                          width: 100.w,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(4.r),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(height: 6.h),
+
+                    // Payment method and date row
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          height: 12.sp,
+                          width: 80.w,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(4.r),
+                          ),
+                        ),
+                        Container(
+                          height: 12.sp,
+                          width: 90.w,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(4.r),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(height: 8.h),
+
+                    // Status badge and arrow
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          height: 24.h,
+                          width: 70.w,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                        ),
+                        Container(
+                          width: 14.sp,
+                          height: 14.sp,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(2.r),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        )),
+      ),
+    );
+  }
 }

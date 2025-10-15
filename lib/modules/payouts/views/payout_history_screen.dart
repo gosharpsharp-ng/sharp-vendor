@@ -101,7 +101,10 @@ class PayoutHistoryScreen extends StatelessWidget {
                         visible:
                             !payoutController.fetchingPayouts &&
                             payoutController.payoutRequests.isEmpty,
-                        replacement: Column(
+                        replacement: SingleChildScrollView(
+                          child: SkeletonLoaders.payoutItem(count: 5),
+                        ),
+                        child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
@@ -145,23 +148,6 @@ class PayoutHistoryScreen extends StatelessWidget {
                               ),
                             ),
                           ],
-                        ),
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              CircularProgressIndicator(
-                                color: AppColors.primaryColor,
-                                strokeWidth: 2.sp,
-                              ),
-                              SizedBox(height: 16.h),
-                              customText(
-                                "Loading payout history...",
-                                fontSize: 14.sp,
-                                color: AppColors.greyColor,
-                              ),
-                            ],
-                          ),
                         ),
                       ),
                       child: SingleChildScrollView(
