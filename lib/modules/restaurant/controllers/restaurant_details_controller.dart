@@ -154,6 +154,38 @@ class RestaurantDetailsController extends GetxController {
     } finally {
       setUpdatingState(false);
     }
+  } // Generic method to update restaurant profile using the same endpoint as user profile
+
+  Future<void> _updateBankAccount(
+    Map<String, dynamic> updateData, {
+    String? successMessage,
+    bool shouldNavigateBack = true,
+  }) async {
+    setUpdatingState(true);
+    try {
+      final response = await _profileService.updateBankAccount(updateData);
+
+      if (response.status == "success") {
+        await refreshRestaurantData();
+        if (shouldNavigateBack) Get.back();
+        selectedBank = null;
+        accountNumberController.clear();
+        accountNameController.clear();
+        showToast(
+          message: successMessage ?? "Bank details updated successfully",
+          isError: false,
+        );
+      } else {
+        showToast(message: response.message, isError: true);
+      }
+    } catch (e) {
+      showToast(
+        message: "Error updating bank account: ${e.toString()}",
+        isError: true,
+      );
+    } finally {
+      setUpdatingState(false);
+    }
   }
 
   // Update basic restaurant information
@@ -631,15 +663,13 @@ class RestaurantDetailsController extends GetxController {
 
     try {
       final updateData = {
-        'bank_account': {
-          'bank_name': selectedBank!.name,
-          'bank_code': selectedBank!.code,
-          'account_number': accountNumberController.text,
-          'account_name': accountNameController.text,
-        },
+        'bank_name': selectedBank!.name,
+        'bank_code': selectedBank!.code,
+        'bank_account_number': accountNumberController.text,
+        'bank_account_name': accountNameController.text,
       };
 
-      await _updateRestaurantProfile(
+      await _updateBankAccount(
         updateData,
         successMessage: "Bank account updated successfully",
       );

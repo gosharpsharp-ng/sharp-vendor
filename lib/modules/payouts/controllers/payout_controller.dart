@@ -42,8 +42,8 @@ class PayoutController extends GetxController {
   // Form data for creating payout requests
   final GlobalKey<FormState> payoutRequestFormKey = GlobalKey<FormState>();
   final TextEditingController amountController = TextEditingController();
+  // Payment method is always 'bank'
   String selectedPaymentMethod = 'bank';
-  List<String> paymentMethods = ['bank', 'mobile_money'];
 
   // Wallet balance and limits
   double availableBalance = 0.0;
@@ -207,9 +207,14 @@ class PayoutController extends GetxController {
 
       if (response.status == "success") {
         showToast(
-          message: "Payout request submitted successfully",
+          message: response.message,
           isError: false,
         );
+
+        // Update available balance from response if provided
+        if (response.data != null && response.data['available_balance'] != null) {
+          availableBalance = double.tryParse(response.data['available_balance'].toString()) ?? availableBalance;
+        }
 
         // Clear form
         amountController.clear();

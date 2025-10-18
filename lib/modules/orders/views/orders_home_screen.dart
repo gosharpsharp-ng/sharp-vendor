@@ -36,8 +36,11 @@ class OrdersHomeScreen extends GetView<OrdersController> {
                     separatorBuilder: (context, index) => SizedBox(width: 16.w),
                     itemBuilder: (context, index) {
                       final status = ordersController.orderStatuses[index];
-                      final isSelected = ordersController.selectedOrderStatus == status;
-                      final orderCount = ordersController.getOrderCountByStatus(status);
+                      final isSelected =
+                          ordersController.selectedOrderStatus == status;
+                      final orderCount = ordersController.getOrderCountByStatus(
+                        status,
+                      );
                       final displayName = _getStatusDisplayName(status);
 
                       return InkWell(
@@ -128,15 +131,19 @@ class OrdersHomeScreen extends GetView<OrdersController> {
                             physics: const AlwaysScrollableScrollPhysics(),
                             children: [
                               SizedBox(height: 100.h),
-                              _buildEmptyState(ordersController.selectedOrderStatus),
+                              _buildEmptyState(
+                                ordersController.selectedOrderStatus,
+                              ),
                             ],
                           )
                         : ListView.separated(
                             physics: const AlwaysScrollableScrollPhysics(),
                             itemCount: ordersController.filteredOrders.length,
-                            separatorBuilder: (context, index) => SizedBox(height: 12.h),
+                            separatorBuilder: (context, index) =>
+                                SizedBox(height: 12.h),
                             itemBuilder: (context, index) {
-                              final order = ordersController.filteredOrders[index];
+                              final order =
+                                  ordersController.filteredOrders[index];
                               return OrderCard(
                                 order: order,
                                 onTap: () {
@@ -258,11 +265,7 @@ class OrderCard extends StatelessWidget {
   final OrderModel order;
   final VoidCallback onTap;
 
-  const OrderCard({
-    super.key,
-    required this.order,
-    required this.onTap,
-  });
+  const OrderCard({super.key, required this.order, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -291,7 +294,10 @@ class OrderCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 12.w,
+                      vertical: 6.h,
+                    ),
                     decoration: BoxDecoration(
                       color: _getStatusColor(order.status),
                       borderRadius: BorderRadius.circular(20.r),
@@ -411,8 +417,10 @@ class OrderCard extends StatelessWidget {
                       SizedBox(width: 8.w),
                       Expanded(
                         child: customText(
-                          order.items.first.orderable.name +
-                          (order.items.length > 1 ? " + ${order.items.length - 1} more" : ""),
+                          order.items.first.name +
+                              (order.items.length > 1
+                                  ? " + ${order.items.length - 1} more"
+                                  : ""),
                           color: AppColors.blackColor,
                           fontSize: 13.sp,
                           fontWeight: FontWeight.w500,
@@ -543,16 +551,14 @@ class OrderCard extends StatelessWidget {
     }
   }
 
-  // Helper methods to get customer info from current user profile
+  // Helper methods to get customer info from order
   String _getCustomerName() {
-    final settingsController = Get.find<SettingsController>();
-    final profile = settingsController.userProfile;
-    return profile != null ? "${profile.fname} ${profile.lname}".trim() : "Customer";
+    return order.customerName.isNotEmpty
+        ? order.customerName
+        : "Customer #${order.userId}";
   }
 
   String _getCustomerInitial() {
-    final settingsController = Get.find<SettingsController>();
-    final profile = settingsController.userProfile;
-    return (profile?.fname.isNotEmpty == true ? profile!.fname[0] : 'U').toUpperCase();
+    return order.customerInitials.isNotEmpty ? order.customerInitials : "C";
   }
 }
