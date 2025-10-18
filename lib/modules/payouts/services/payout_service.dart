@@ -5,7 +5,7 @@ class PayoutService extends CoreService {
 
   /// Submit a new payout request
   Future<APIResponse> createPayoutRequest(dynamic data) async {
-    return await send("/me/payout-requests", data);
+    return await send("/restaurants/payout/request", data);
   }
 
   /// Get all payout requests history with pagination

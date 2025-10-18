@@ -15,6 +15,10 @@ class ProfileService extends CoreService {
     return await update("/restaurants/profile", data);
   }
 
+  Future<APIResponse> updateBankAccount(dynamic data) async {
+    return await send("/restaurants/bank-account", data);
+  }
+
   Future<APIResponse> submitPayoutRequest(dynamic data) async {
     return await send("/restaurants/payout/request", data);
   }
