@@ -361,13 +361,6 @@ class SignUpController extends GetxController {
       dynamic dataWithoutImages = Map.from(data)
         ..remove("restaurant_logo")
         ..remove("restaurant_banner");
-      print(
-        "******************************************Request****************************************************************",
-      );
-      log(dataWithoutImages.toString());
-      print(
-        "**********************************************************************************************************",
-      );
       APIResponse response = await authService.signup(data);
       showToast(
         message: response.message,

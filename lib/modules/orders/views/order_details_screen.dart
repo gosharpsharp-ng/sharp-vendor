@@ -57,7 +57,8 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                       ),
                       OrderDetailSummaryItem(
                         title: "Order Date",
-                        value: "${formatDate(order.createdAt.toIso8601String())} ${formatTime(order.createdAt.toIso8601String())}",
+                        value:
+                            "${formatDate(order.createdAt.toIso8601String())} ${formatTime(order.createdAt.toIso8601String())}",
                       ),
                       if (order.paymentMethod != null)
                         OrderDetailSummaryItem(
@@ -110,7 +111,9 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                               ...package.items.map((item) {
                                 return OrderDetailMenuItem(
                                   name: item.menu.name,
-                                  imageUrl: item.menu.files.isNotEmpty ? item.menu.files.first.url : null,
+                                  imageUrl: item.menu.files.isNotEmpty
+                                      ? item.menu.files.first.url
+                                      : null,
                                   quantity: item.quantity,
                                   price: formatToCurrency(item.total),
                                   description: item.menu.description,
@@ -195,7 +198,10 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                           value: "- ${formatToCurrency(order.discountAmount)}",
                         ),
                       Container(
-                        margin: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
+                        margin: EdgeInsets.symmetric(
+                          horizontal: 8.w,
+                          vertical: 8.h,
+                        ),
                         height: 1,
                         color: AppColors.greyColor.withOpacity(0.2),
                       ),
@@ -232,9 +238,14 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                               InkWell(
                                 onTap: () => _callCustomer(order.customerPhone),
                                 child: Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 12.w,
+                                    vertical: 6.h,
+                                  ),
                                   decoration: BoxDecoration(
-                                    color: AppColors.primaryColor.withOpacity(0.1),
+                                    color: AppColors.primaryColor.withOpacity(
+                                      0.1,
+                                    ),
                                     borderRadius: BorderRadius.circular(8.r),
                                   ),
                                   child: Row(
@@ -304,7 +315,8 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                           value: order.deliveryLocation!.name,
                           isVertical: true,
                         ),
-                        if (order.deliveryInstructions != null && order.deliveryInstructions!.isNotEmpty)
+                        if (order.deliveryInstructions != null &&
+                            order.deliveryInstructions!.isNotEmpty)
                           OrderDetailSummaryItem(
                             title: "Delivery Instructions",
                             value: order.deliveryInstructions!,
@@ -316,7 +328,10 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                   SizedBox(height: 12.h),
 
                   // Order Status Actions - only show if not completed or cancelled
-                  if (!['completed', 'cancelled'].contains(order.status.toLowerCase()))
+                  if (![
+                    'completed',
+                    'cancelled',
+                  ].contains(order.status.toLowerCase()))
                     SectionBox(
                       children: [
                         // Section Header
@@ -336,7 +351,10 @@ class OrderDetailsScreen extends GetView<OrdersController> {
 
                         // Primary Action Button
                         Container(
-                          margin: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
+                          margin: EdgeInsets.symmetric(
+                            horizontal: 8.w,
+                            vertical: 8.h,
+                          ),
                           width: double.infinity,
                           height: 50.h,
                           decoration: BoxDecoration(
@@ -354,7 +372,10 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                               borderRadius: BorderRadius.circular(12.r),
                               onTap: ordersController.isLoading
                                   ? null
-                                  : () => _handlePrimaryAction(ordersController, order),
+                                  : () => _handlePrimaryAction(
+                                      ordersController,
+                                      order,
+                                    ),
                               child: Center(
                                 child: ordersController.isLoading
                                     ? SizedBox(
@@ -366,7 +387,8 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                                         ),
                                       )
                                     : Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           Icon(
                                             _getNextActionIcon(order.status),
@@ -375,7 +397,9 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                                           ),
                                           SizedBox(width: 12.w),
                                           customText(
-                                            ordersController.getNextAction(order.status),
+                                            ordersController.getNextAction(
+                                              order.status,
+                                            ),
                                             color: AppColors.whiteColor,
                                             fontSize: 16.sp,
                                             fontWeight: FontWeight.w600,
@@ -390,7 +414,10 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                         // Reject/Cancel Button for pending orders
                         if (order.status.toLowerCase() == 'pending')
                           Container(
-                            margin: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                            margin: EdgeInsets.symmetric(
+                              horizontal: 8.w,
+                              vertical: 4.h,
+                            ),
                             width: double.infinity,
                             height: 48.h,
                             decoration: BoxDecoration(
@@ -405,7 +432,10 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                               color: Colors.transparent,
                               child: InkWell(
                                 borderRadius: BorderRadius.circular(12.r),
-                                onTap: () => _showRejectOrderDialog(ordersController, order),
+                                onTap: () => _showRejectOrderDialog(
+                                  ordersController,
+                                  order,
+                                ),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -593,7 +623,8 @@ class OrderDetailsScreen extends GetView<OrdersController> {
         await launchUrl(phoneUri);
       } else {
         showToast(
-          message: "Unable to make phone call. Please try again or contact manually: $cleanedNumber",
+          message:
+              "Unable to make phone call. Please try again or contact manually: $cleanedNumber",
           isError: true,
         );
       }
