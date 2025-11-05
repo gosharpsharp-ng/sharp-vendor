@@ -361,6 +361,7 @@ class OrdersController extends GetxController {
   String getNextAction(String currentStatus) {
     switch (currentStatus.toLowerCase()) {
       case 'pending':
+      case 'paid':
         return 'Accept Order';
       case 'preparing':
         return 'Mark as Ready';
