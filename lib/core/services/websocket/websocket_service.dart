@@ -8,7 +8,7 @@ class SocketService extends GetxService {
 
   late IO.Socket socket;
   final isConnected = false.obs;
-  late UserProfile _userProfile;
+  int? _currentRestaurantId;
 
   Future<SocketService> init() async {
     _initializeSocket();
@@ -18,7 +18,7 @@ class SocketService extends GetxService {
 
   void _initializeSocket() {
     socket = IO.io(
-        'http://164.90.143.42:8082',
+        'http://socket.gosharpsharp.com/',
         IO.OptionBuilder()
             .setTransports(['websocket'])
             .enableAutoConnect()
@@ -32,22 +32,72 @@ class SocketService extends GetxService {
   void _setupSocketListeners() {
     socket
       ..onConnect((_) {
-        print('Socket Connected');
+        log('🟢 Socket Connected to http://socket.gosharpsharp.com/');
         isConnected.value = true;
+        // Rejoin restaurant room if restaurantId was set
+        if (_currentRestaurantId != null) {
+          joinRestaurantRoom(_currentRestaurantId!);
+        }
         joinRidersTrackingRoom();
       })
       ..onDisconnect((_) {
-        print('Socket Disconnected');
+        log('🔴 Socket Disconnected');
         isConnected.value = false;
       })
       ..onReconnect((_) {
-        log('Socket Reconnected');
+        log('🟡 Socket Reconnected');
         isConnected.value = true;
+        // Rejoin restaurant room on reconnection
+        if (_currentRestaurantId != null) {
+          joinRestaurantRoom(_currentRestaurantId!);
+        }
         joinRidersTrackingRoom();
       })
-      ..onError((error) => log('Socket Error: $error'))
-      ..onConnectError((error) => log('Socket Connect Error: $error'));
+      ..onError((error) => log('❌ Socket Error: $error'))
+      ..onConnectError((error) => log('❌ Socket Connect Error: $error'));
   }
+
+  // ==================== RESTAURANT ROOM ====================
+
+  /// Join restaurant room to receive new orders
+  /// Emits to: "restaurant:join" with payload { "restaurantId": restaurantId }
+  void joinRestaurantRoom(int restaurantId) {
+    if (isConnected.value) {
+      _currentRestaurantId = restaurantId;
+      socket.emit('restaurant:join', {'restaurantId': restaurantId});
+      log('🍽️ Joined restaurant room with restaurantId: $restaurantId');
+    } else {
+      log('⚠️ Cannot join restaurant room - socket not connected');
+    }
+  }
+
+  /// Listen for new incoming orders
+  /// Event: "restaurant:new-order"
+  /// Data: {orderId, orderNumber, userId, status, total, currency, items, packages, createdAt}
+  void listenForNewOrders(Function(Map<String, dynamic>) onNewOrder) {
+    socket.on('restaurant:new-order', (data) {
+      log('🔔 New order received: ${data.toString()}');
+      if (data is Map<String, dynamic>) {
+        onNewOrder(data);
+      }
+    });
+  }
+
+  /// Stop listening for new orders
+  void stopListeningForNewOrders() {
+    socket.off('restaurant:new-order');
+    log('🔇 Stopped listening for new orders');
+  }
+
+  /// Leave restaurant room
+  void leaveRestaurantRoom() {
+    if (_currentRestaurantId != null && isConnected.value) {
+      log('👋 Left restaurant room for restaurantId: $_currentRestaurantId');
+      _currentRestaurantId = null;
+    }
+  }
+
+  // ==================== LEGACY METHODS (kept for backward compatibility) ====================
 
   void listenForParcelLocationUpdate(
       {required String roomId, required Function(dynamic) onLocationUpdate}) {
@@ -77,8 +127,17 @@ class SocketService extends GetxService {
     }
   }
 
+  // ==================== CLEANUP ====================
+
   @override
   void onClose() {
+    // Clean up restaurant room
+    leaveRestaurantRoom();
+
+    // Stop all listeners
+    stopListeningForNewOrders();
+
+    // Dispose socket
     socket.dispose();
     super.onClose();
   }

@@ -44,30 +44,38 @@ class SignInController extends GetxController {
   signIn() async {
     if (signInFormKey.currentState!.validate()) {
       setLoadingState(true);
-      dynamic data = {
-        'login':  loginController.text,
-        'password': passwordController.text,
-      };
-      APIResponse response = await authService.login(data);
-      showToast(
-          message: response.message, isError: response.status != "success");
-      setLoadingState(false);
+      try {
+        dynamic data = {
+          'login':  loginController.text,
+          'password': passwordController.text,
+        };
+        APIResponse response = await authService.login(data);
+        showToast(
+            message: response.message, isError: response.status != "success");
 
+        if (response.status.toLowerCase() == "success") {
+          print("*****************************************************************************");
+          print(response.data['auth_token']);
+          print("******************************************************************************");
 
-      if (response.status.toLowerCase() == "success") {
-        print("*****************************************************************************");
-        print(response.data['auth_token']);
-        print("******************************************************************************");
-
-        loginController.clear();
-        passwordController.clear();
-        filledPhoneNumber=null;
-        update();
-        final getStorage = GetStorage();
-        getStorage.write("token", response.data['auth_token']);
-        Get.put(SettingsController());
-        Get.put(DeliveriesController());
-        Get.toNamed(Routes.APP_NAVIGATION);
+          loginController.clear();
+          passwordController.clear();
+          filledPhoneNumber=null;
+          update();
+          final getStorage = GetStorage();
+          getStorage.write("token", response.data['auth_token']);
+          Get.put(SettingsController());
+          Get.put(DeliveriesController());
+          Get.toNamed(Routes.APP_NAVIGATION);
+        }
+      } catch (e) {
+        print("Error during sign in: $e");
+        showToast(
+            message: "An unexpected error occurred. Please try again.",
+            isError: true);
+      } finally {
+        // Always reset loading state, even if an error occurs
+        setLoadingState(false);
       }
     }
   }

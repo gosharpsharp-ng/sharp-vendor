@@ -1,4 +1,4 @@
-
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:sharpvendor/core/models/order_model.dart';
 import '../../../core/utils/exports.dart';
 
@@ -29,7 +29,14 @@ class OrdersController extends GetxController {
 
   // Order status filter - Updated to match API statuses
   String selectedOrderStatus = 'paid';
-  List<String> orderStatuses = ['paid', 'pending', 'preparing', 'ready', 'in_transit', 'completed'];
+  List<String> orderStatuses = [
+    'paid',
+    'pending',
+    'preparing',
+    'ready',
+    'in_transit',
+    'completed',
+  ];
 
   setSelectedOrderStatus(String status) {
     selectedOrderStatus = status;
@@ -46,7 +53,10 @@ class OrdersController extends GetxController {
   // Filter orders by status
   void filterOrdersByStatus() {
     filteredOrders = allOrders
-        .where((order) => order.status.toLowerCase() == selectedOrderStatus.toLowerCase())
+        .where(
+          (order) =>
+              order.status.toLowerCase() == selectedOrderStatus.toLowerCase(),
+        )
         .toList();
   }
 
@@ -57,13 +67,13 @@ class OrdersController extends GetxController {
     try {
       final response = await _profileService.getAllOrders();
 
-
-      if (response.status=="success" && response.data != null) {
-
+      if (response.status == "success" && response.data != null) {
         // customDebugPrint(response.data);
         final List<dynamic> ordersData = response.data['data'] ?? [];
 
-        allOrders = ordersData.map((json) => OrderModel.fromJson(json)).toList();
+        allOrders = ordersData
+            .map((json) => OrderModel.fromJson(json))
+            .toList();
         filterOrdersByStatus();
       } else {
         // Keep existing sample data as fallback
@@ -72,10 +82,7 @@ class OrdersController extends GetxController {
         }
 
         if (response.message.isNotEmpty && response.message.isNotEmpty) {
-          showToast(
-            message: response.message,
-            isError: true,
-          );
+          showToast(message: response.message, isError: true);
         }
       }
     } catch (e) {
@@ -92,8 +99,6 @@ class OrdersController extends GetxController {
     }
   }
 
-
-
   // Update order status - UPDATED WITH API INTEGRATION
   updateOrderStatus(int orderId, String newStatus) async {
     setLoadingState(true);
@@ -105,9 +110,12 @@ class OrdersController extends GetxController {
       };
 
       // Call the API
-      final response = await _profileService.updateOrderStatus(statusData, orderId);
+      final response = await _profileService.updateOrderStatus(
+        statusData,
+        orderId,
+      );
 
-      if (response.status=="success") {
+      if (response.status == "success") {
         // Update in local list
         int index = allOrders.indexWhere((order) => order.id == orderId);
         if (index != -1) {
@@ -117,13 +125,19 @@ class OrdersController extends GetxController {
             status: newStatus,
             updatedAt: now,
             // Set status-specific timestamps based on the new status
-            confirmedAt: newStatus.toLowerCase() == 'preparing' && allOrders[index].confirmedAt == null
+            confirmedAt:
+                newStatus.toLowerCase() == 'preparing' &&
+                    allOrders[index].confirmedAt == null
                 ? now
                 : allOrders[index].confirmedAt,
-            completedAt: newStatus.toLowerCase() == 'completed' && allOrders[index].completedAt == null
+            completedAt:
+                newStatus.toLowerCase() == 'completed' &&
+                    allOrders[index].completedAt == null
                 ? now
                 : allOrders[index].completedAt,
-            cancelledAt: newStatus.toLowerCase() == 'cancelled' && allOrders[index].cancelledAt == null
+            cancelledAt:
+                newStatus.toLowerCase() == 'cancelled' &&
+                    allOrders[index].cancelledAt == null
                 ? now
                 : allOrders[index].cancelledAt,
           );
@@ -136,7 +150,8 @@ class OrdersController extends GetxController {
 
         filterOrdersByStatus();
         showToast(
-          message: "Order status updated to ${_getStatusDisplayText(newStatus)}",
+          message:
+              "Order status updated to ${_getStatusDisplayText(newStatus)}",
           isError: false,
         );
       } else {
@@ -205,14 +220,21 @@ class OrdersController extends GetxController {
 
       // Validate status transition (optional - customize based on your business logic)
       if (!_isValidStatusTransition(currentStatus, targetStatus)) {
-        showToast(message: "Invalid status transition from $currentStatus to $targetStatus", isError: true);
+        showToast(
+          message:
+              "Invalid status transition from $currentStatus to $targetStatus",
+          isError: true,
+        );
         return;
       }
 
       // Call the regular update method
       await updateOrderStatus(orderId, newStatus);
     } catch (e) {
-      showToast(message: "Error updating order status: ${e.toString()}", isError: true);
+      showToast(
+        message: "Error updating order status: ${e.toString()}",
+        isError: true,
+      );
     } finally {
       setLoadingState(false);
     }
@@ -277,7 +299,7 @@ class OrdersController extends GetxController {
     try {
       final response = await _profileService.getOrderById({'id': orderId});
 
-      if (response.status=="success" && response.data != null) {
+      if (response.status == "success" && response.data != null) {
         final orderData = response.data;
         final order = OrderModel.fromJson(orderData);
 
@@ -309,7 +331,9 @@ class OrdersController extends GetxController {
 
   // Get order count by status
   int getOrderCountByStatus(String status) {
-    return allOrders.where((order) => order.status.toLowerCase() == status.toLowerCase()).length;
+    return allOrders
+        .where((order) => order.status.toLowerCase() == status.toLowerCase())
+        .length;
   }
 
   // Format order time
@@ -370,14 +394,255 @@ class OrdersController extends GetxController {
     await getOrders();
   }
 
+  // Initialize WebSocket listener for new orders
+  void _initializeOrderNotifications() {
+    try {
+      if (Get.isRegistered<SocketService>()) {
+        final socketService = Get.find<SocketService>();
+
+        // Listen for new incoming orders
+        socketService.listenForNewOrders((orderData) {
+          _handleNewOrderNotification(orderData);
+        });
+      }
+    } catch (e) {
+      debugPrint('Error initializing order notifications: $e');
+    }
+  }
+
+  // Handle new order notification
+  void _handleNewOrderNotification(Map<String, dynamic> orderData) {
+    try {
+      // Play notification sound (similar to go-rider)
+      FlutterRingtonePlayer().playNotification();
+
+      // Show new order dialog
+      _showNewOrderDialog(orderData);
+
+      // Refresh orders list to include the new order
+      getOrders();
+    } catch (e) {
+      debugPrint('Error handling new order notification: $e');
+    }
+  }
+
+  // Show new order notification dialog
+  void _showNewOrderDialog(Map<String, dynamic> orderData) {
+    final orderId = orderData['orderId'] ?? 0;
+    final orderNumber = orderData['orderNumber'] ?? 'N/A';
+    final total = orderData['total'] ?? '0.00';
+    final currency = orderData['currency'] ?? 'NGN';
+
+    // Extract first package/item info for "From" and "To" display
+    final packages = orderData['packages'] as List<dynamic>? ?? [];
+    final items = orderData['items'] as List<dynamic>? ?? [];
+
+    String itemsInfo = '';
+    if (packages.isNotEmpty) {
+      final firstPackage = packages[0];
+      itemsInfo =
+          '${firstPackage['name'] ?? 'Item'} x${firstPackage['quantity'] ?? 1}';
+      if (packages.length > 1) {
+        itemsInfo += ' + ${packages.length - 1} more';
+      }
+    } else if (items.isNotEmpty) {
+      final firstItem = items[0];
+      itemsInfo =
+          '${firstItem['name'] ?? 'Item'} x${firstItem['quantity'] ?? 1}';
+      if (items.length > 1) {
+        itemsInfo += ' + ${items.length - 1} more';
+      }
+    }
+
+    Get.dialog(
+      WillPopScope(
+        onWillPop: () async => false,
+        child: Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.r),
+          ),
+          child: Container(
+            padding: EdgeInsets.all(24.sp),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Bike icon at the top
+                Container(
+                  width: 80.sp,
+                  height: 80.sp,
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFFFC107), // Yellow color
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Icon(
+                      Icons.restaurant_menu,
+                      size: 50.sp,
+                      color: AppColors.blackColor,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20.h),
+
+                // Title
+                customText(
+                  'New Incoming Order',
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.blackColor,
+                ),
+                SizedBox(height: 24.h),
+
+                // Order info rows
+                _buildOrderInfoRow('Order Number', orderNumber),
+                SizedBox(height: 16.h),
+                _buildOrderInfoRow('Amount', '$currency $total'),
+                SizedBox(height: 16.h),
+                _buildOrderInfoRow(
+                  'Items',
+                  itemsInfo.isEmpty ? 'View details' : itemsInfo,
+                ),
+                SizedBox(height: 16.h),
+                _buildOrderInfoRow('Status', 'Pending'),
+                SizedBox(height: 24.h),
+
+                // View Order link
+                InkWell(
+                  onTap: () async {
+                    FlutterRingtonePlayer().stop();
+                    Get.back(); // Close dialog
+                    await getOrderById(orderId);
+                    if (selectedOrder != null) {
+                      Get.toNamed(Routes.ORDER_DETAILS_SCREEN);
+                    }
+                  },
+                  child: customText(
+                    'View Order',
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.greenColor,
+                    // textDecoration: TextDecoration.underline,
+                  ),
+                ),
+                SizedBox(height: 24.h),
+
+                // Action buttons
+                Row(
+                  children: [
+                    // Decline button
+                    Expanded(
+                      child: InkWell(
+                        onTap: () async {
+                          FlutterRingtonePlayer().stop();
+                          Get.back();
+                          await updateOrderStatus(orderId, 'rejected');
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 14.h),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFFE5E5), // Light red
+                            borderRadius: BorderRadius.circular(8.r),
+                          ),
+                          child: Center(
+                            child: customText(
+                              'Decline',
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w600,
+                              color: const Color(0xFFD32F2F), // Red text
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 12.w),
+
+                    // Accept button
+                    Expanded(
+                      child: InkWell(
+                        onTap: isLoading
+                            ? null
+                            : () async {
+                                FlutterRingtonePlayer().stop();
+                                Get.back();
+                                await updateOrderStatus(orderId, 'ready');
+                              },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 14.h),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF2E7D32), // Dark green
+                            borderRadius: BorderRadius.circular(8.r),
+                          ),
+                          child: Center(
+                            child: isLoading
+                                ? SizedBox(
+                                    width: 20.sp,
+                                    height: 20.sp,
+                                    child: const CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        AppColors.whiteColor,
+                                      ),
+                                    ),
+                                  )
+                                : customText(
+                                    'Accept',
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.whiteColor,
+                                  ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      barrierDismissible: false,
+    );
+  }
+
+  // Helper method to build order info rows
+  Widget _buildOrderInfoRow(String label, String value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        customText(
+          label,
+          fontSize: 14.sp,
+          fontWeight: FontWeight.w400,
+          color: AppColors.obscureTextColor,
+        ),
+        Flexible(
+          child: customText(
+            value,
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w600,
+            color: AppColors.blackColor,
+            textAlign: TextAlign.right,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   void onInit() {
     super.onInit();
     getOrders();
+    _initializeOrderNotifications();
   }
 
   @override
   void onClose() {
+    // Stop listening for new orders when controller is disposed
+    if (Get.isRegistered<SocketService>()) {
+      Get.find<SocketService>().stopListeningForNewOrders();
+    }
     super.onClose();
   }
 }
