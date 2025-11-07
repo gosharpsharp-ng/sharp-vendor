@@ -19,7 +19,12 @@ class _SelectLocationState extends State<SelectLocation> {
   Set<Marker> _markers = {};
   ItemLocation? location;
   LatLng? initialPosition;
-  // OverlayEntry? _overlayEntry;
+  bool isLoadingPosition = false;
+  bool isConfirmingLocation = false;
+
+  // Default fallback position (can be changed to your preferred default)
+  static const LatLng _defaultPosition = LatLng(9.0765, 7.3986); // Abuja, Nigeria
+
   Future _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -62,17 +67,28 @@ class _SelectLocationState extends State<SelectLocation> {
   }
 
   Future<void> _useCurrentLocation() async {
+    setState(() {
+      isLoadingPosition = true;
+    });
+
     await _determinePosition(); // Get current position
 
     if (initialPosition != null) {
       // Call _showLocationDetails to get the formatted address
       _showLocationDetails(initialPosition!);
     }
+
+    setState(() {
+      isLoadingPosition = false;
+    });
   }
 
   @override
   void initState() {
     super.initState();
+    // Set default position immediately so map shows right away
+    initialPosition = _defaultPosition;
+    // Try to get actual position in background
     _determinePosition();
     _textEditingController.addListener(_onSearchTextChanged);
     // _textFieldFocusNode.addListener(_onTextFieldFocusChanged);
@@ -87,8 +103,7 @@ class _SelectLocationState extends State<SelectLocation> {
 
   @override
   Widget build(BuildContext context) {
-    return initialPosition != null
-        ? Scaffold(
+    return Scaffold(
             body: Stack(
               children: [
                 GestureDetector(
@@ -166,8 +181,11 @@ class _SelectLocationState extends State<SelectLocation> {
                       ),
                       CustomButton(
                         onPressed: () {
-                          _useCurrentLocation();
+                          if (!isLoadingPosition) {
+                            _useCurrentLocation();
+                          }
                         },
+                        isBusy: isLoadingPosition,
                         title: "Use Current Location",
                         backgroundColor: AppColors.primaryColor,
                         fontColor: AppColors.whiteColor,
@@ -243,8 +261,14 @@ class _SelectLocationState extends State<SelectLocation> {
                         const SizedBox(height: 16),
                         CustomButton(
                           onPressed: () {
-                            Get.back(result: location);
+                            if (!isConfirmingLocation) {
+                              setState(() {
+                                isConfirmingLocation = true;
+                              });
+                              Get.back(result: location);
+                            }
                           },
+                          isBusy: isConfirmingLocation,
                           backgroundColor: AppColors.primaryColor,
                           title: "Confirm",
                           fontColor: AppColors.whiteColor,
@@ -253,9 +277,8 @@ class _SelectLocationState extends State<SelectLocation> {
                       ],
                     ),
                   )
-                : null)
-        : const Scaffold(
-            body: Center(child: CircularProgressIndicator.adaptive()));
+                : null,
+          );
   }
 
   void _onSearchTextChanged() async {

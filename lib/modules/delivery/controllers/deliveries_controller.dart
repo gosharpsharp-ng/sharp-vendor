@@ -21,6 +21,30 @@ class DeliveriesController extends GetxController {
 
   Set<String> shownStatusToasts = {};
 
+  // Online/Offline status for restaurant
+  bool isOnline = false;
+  final DeliveryNotificationServiceManager serviceManager = DeliveryNotificationServiceManager.instance;
+
+  Future<void> toggleOnlineStatus() async {
+    isOnline = !isOnline;
+    if (isOnline) {
+      try {
+        await serviceManager.initializeServices();
+        showToast(message: "You're online! Ready to receive orders.", isError: false);
+      } catch (e) {
+        showToast(
+          message: "Failed to go online: ${e.toString()}",
+          isError: true,
+        );
+        isOnline = false; // Revert status on error
+      }
+    } else {
+      await serviceManager.disposeServices();
+      showToast(message: "You're offline", isError: false);
+    }
+    update();
+  }
+
   TextEditingController trackingIdController = TextEditingController();
   DeliveryModel? selectedDelivery;
   setSelectedDelivery(DeliveryModel sh) {
