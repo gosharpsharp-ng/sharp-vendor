@@ -63,14 +63,11 @@ class DashboardScreen extends StatelessWidget {
                               children: [
                                 Visibility(
                                   visible:
-                                  settingsController
-                                      .userProfile
-                                      ?.avatar !=
+                                      settingsController.userProfile?.avatar !=
                                       null,
                                   replacement: CircleAvatar(
                                     radius: 22.r,
-                                    backgroundColor:
-                                    AppColors.backgroundColor,
+                                    backgroundColor: AppColors.backgroundColor,
                                     child: customText(
                                       // "${settingsController.userProfile?.fname.substring(0, 1) ?? ""}${settingsController.userProfile?.lname.substring(0, 1) ?? ""}",
                                       "Ab",
@@ -78,11 +75,8 @@ class DashboardScreen extends StatelessWidget {
                                     ),
                                   ),
                                   child: CircleAvatar(
-                                    backgroundImage:
-                                    CachedNetworkImageProvider(
-                                      settingsController
-                                          .userProfile
-                                          ?.avatar ??
+                                    backgroundImage: CachedNetworkImageProvider(
+                                      settingsController.userProfile?.avatar ??
                                           '',
                                     ),
                                     radius: 22.r,
@@ -118,18 +112,17 @@ class DashboardScreen extends StatelessWidget {
                                     backgroundColor: AppColors.redColor,
                                     isLabelVisible: true,
                                     label: customText(
-                                      settingsController
-                                          .isLoadingNotification
+                                      settingsController.isLoadingNotification
                                           ? ''
                                           : settingsController
-                                          .notifications
-                                          .length >
-                                          10
+                                                    .notifications
+                                                    .length >
+                                                10
                                           ? '10+'
                                           : settingsController
-                                          .notifications
-                                          .length
-                                          .toString(),
+                                                .notifications
+                                                .length
+                                                .toString(),
                                       fontSize: 12.sp,
                                     ),
                                     child: SvgPicture.asset(
@@ -184,13 +177,12 @@ class DashboardScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(12.r),
                             ),
                             child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       customText(
                                         "Wallet Balance",
@@ -233,8 +225,8 @@ class DashboardScreen extends StatelessWidget {
                                 ),
                                 decoration: BoxDecoration(
                                   color: ordersController.isOnline
-                                      ? AppColors.greenColor.withAlpha(25)
-                                      : AppColors.greyColor.withAlpha(25),
+                                      ? AppColors.primaryColor.withAlpha(25)
+                                      : AppColors.blackColor.withAlpha(25),
                                   borderRadius: BorderRadius.circular(12.r),
                                   border: Border.all(
                                     color: ordersController.isOnline
@@ -252,15 +244,17 @@ class DashboardScreen extends StatelessWidget {
                                       fontWeight: FontWeight.w500,
                                       fontSize: 13.sp,
                                       textAlign: TextAlign.center,
+                                      overflow: TextOverflow.visible,
                                       color: ordersController.isOnline
-                                          ? AppColors.greenColor
-                                          : AppColors.greyColor,
+                                          ? AppColors.primaryColor
+                                          : AppColors.blackColor,
                                     ),
                                     SizedBox(height: 15.h),
                                     SizedBox(
                                       width: 1.sw,
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           customText(
                                             ordersController.isOnline
@@ -277,7 +271,8 @@ class DashboardScreen extends StatelessWidget {
                                             activeColor: AppColors.greenColor,
                                             value: ordersController.isOnline,
                                             onChanged: (value) {
-                                              ordersController.toggleOnlineStatus();
+                                              ordersController
+                                                  .toggleOnlineStatus();
                                             },
                                           ),
                                         ],
@@ -294,9 +289,9 @@ class DashboardScreen extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: StatsContainer(
-                                  onPressed: () => Get.toNamed(Routes.ORDERS_HOME_SCREEN),
-                                  backgroundColor:
-                                  AppColors.lightOrangeColor,
+                                  onPressed: () =>
+                                      Get.toNamed(Routes.ORDERS_HOME_SCREEN),
+                                  backgroundColor: AppColors.lightOrangeColor,
                                   textColor: AppColors.orangeColor,
                                   title: "New Orders",
                                   value: "${dashboardController.newOrders}",
@@ -305,12 +300,13 @@ class DashboardScreen extends StatelessWidget {
                               SizedBox(width: 10.w),
                               Expanded(
                                 child: StatsContainer(
-                                  onPressed: () => Get.toNamed(Routes.ORDERS_HOME_SCREEN),
-                                  backgroundColor:
-                                  AppColors.lightPurpleColor,
+                                  onPressed: () =>
+                                      Get.toNamed(Routes.ORDERS_HOME_SCREEN),
+                                  backgroundColor: AppColors.lightPurpleColor,
                                   textColor: AppColors.purpleColor,
                                   title: "Completed Orders",
-                                  value: "${dashboardController.completedOrders}",
+                                  value:
+                                      "${dashboardController.completedOrders}",
                                 ),
                               ),
                             ],
@@ -319,8 +315,7 @@ class DashboardScreen extends StatelessWidget {
                           Container(
                             width: 1.sw,
                             child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 customText(
                                   "Sales Summary",
@@ -342,9 +337,7 @@ class DashboardScreen extends StatelessWidget {
                                         color: AppColors.primaryColor,
                                         width: 1.sp,
                                       ),
-                                      borderRadius: BorderRadius.circular(
-                                        8.r,
-                                      ),
+                                      borderRadius: BorderRadius.circular(8.r),
                                     ),
                                     child: Row(
                                       children: [
@@ -368,7 +361,9 @@ class DashboardScreen extends StatelessWidget {
                             ),
                           ),
                           SizedBox(height: 10.h),
-                          AreaChartWidget(chartData: dashboardController.dashboardChartData),
+                          AreaChartWidget(
+                            chartData: dashboardController.dashboardChartData,
+                          ),
                           SizedBox(height: 15.h),
                         ],
                       ),
@@ -383,5 +378,3 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 }
-
-

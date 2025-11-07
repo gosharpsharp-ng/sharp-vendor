@@ -41,6 +41,10 @@ class FoodMenuController extends GetxController {
 
   // Image handling
   String? foodImage;
+
+  // Track original values when editing to detect changes
+  MenuItemModel? _originalMenuItem;
+
   selectFoodImage({required bool pickFromCamera}) async {
     XFile? photo;
     if (pickFromCamera) {
@@ -437,32 +441,123 @@ class FoodMenuController extends GetxController {
         return;
       }
 
+      if (_originalMenuItem == null) {
+        showToast(message: "Original menu item data not found", isError: true);
+        return;
+      }
+
       setLoadingState(true);
 
       try {
-
         // Get prep time from controller
         int prepTimeMinutes = _getPrepTime();
 
-        // Prepare data in the required format
-        final Map<String, dynamic> menuData = {
-          "name": menuNameController.text.trim(),
-          "description": descriptionController.text.trim(),
-          "plate_size": selectedPlateSize,
-          "price": double.tryParse(priceController.text) ?? 0.0,
-          "prep_time_minutes": prepTimeMinutes,
-          "category_id": selectedCategory!.id,
-          "images": [foodImage], // Array of base64 images
-          "addons": selectedAddons.map((addon) => addon.id).toList(), // Array of addon IDs
-        };
+        // Build menuData with only changed fields
+        final Map<String, dynamic> menuData = {};
 
-        // Print data being sent (excluding image)
-        final Map<String, dynamic> dataForLogging = Map.from(menuData);
-        dataForLogging.remove('images');
-        print('=== UPDATE MENU DATA ===');
+        // Check each field and only add if changed
+        String newName = menuNameController.text.trim();
+        if (newName != _originalMenuItem!.name) {
+          menuData["name"] = newName;
+        }
+
+        String newDescription = descriptionController.text.trim();
+        if (newDescription != (_originalMenuItem!.description ?? "")) {
+          menuData["description"] = newDescription;
+        }
+
+        if (selectedPlateSize != (_originalMenuItem!.plateSize ?? "M")) {
+          menuData["plate_size"] = selectedPlateSize;
+        }
+
+        double newPrice = double.tryParse(priceController.text) ?? 0.0;
+        if (newPrice != _originalMenuItem!.price) {
+          menuData["price"] = newPrice;
+        }
+
+        // Compare prep time (extract from original duration)
+        String originalDurationStr = _originalMenuItem!.duration;
+        int originalPrepTime = 15; // default
+        RegExp numberRegex = RegExp(r'\d+');
+        Match? match = numberRegex.firstMatch(originalDurationStr);
+        if (match != null) {
+          originalPrepTime = int.tryParse(match.group(0) ?? "15") ?? 15;
+        }
+
+        if (prepTimeMinutes != originalPrepTime) {
+          menuData["prep_time_minutes"] = prepTimeMinutes;
+        }
+
+        if (selectedCategory!.id != _originalMenuItem!.category.id) {
+          menuData["category_id"] = selectedCategory!.id;
+        }
+
+        // Check if addons changed
+        List<int> newAddonIds = selectedAddons.map((addon) => addon.id).toList();
+        List<int> originalAddonIds = _originalMenuItem!.addons.map((addon) => addon.id).toList();
+
+        // Sort for comparison
+        newAddonIds.sort();
+        originalAddonIds.sort();
+
+        if (newAddonIds.toString() != originalAddonIds.toString()) {
+          menuData["addons"] = newAddonIds;
+        }
+
+        // Only include images if a new image was selected (base64 format)
+        // If foodImage is a URL (from existing item), don't send it
+        bool imageChanged = false;
+        if (foodImage != null && foodImage!.startsWith('data:image')) {
+          menuData["images"] = [foodImage]; // Array of base64 images
+          imageChanged = true;
+        }
+
+        // Check if anything changed
+        if (menuData.isEmpty) {
+          showToast(message: "No changes detected", isError: false);
+          setLoadingState(false);
+          return;
+        }
+
+        // Print detailed logging
+        print('\n' + '=' * 60);
+        print('UPDATE MENU REQUEST');
+        print('=' * 60);
         print('Menu ID: ${currentMenuItem!.id}');
-        print('Data: $dataForLogging');
-        print('=======================');
+        print('Menu Name: ${currentMenuItem!.name}');
+        print('\nChanged Fields:');
+
+        menuData.forEach((key, value) {
+          if (key == 'images') {
+            // For images, show format info instead of full base64 string
+            if (value is List && value.isNotEmpty) {
+              String imageData = value[0] as String;
+              String mimeType = 'unknown';
+              int dataLength = imageData.length;
+
+              // Extract MIME type from data URI
+              if (imageData.startsWith('data:image/')) {
+                int semicolonIndex = imageData.indexOf(';');
+                if (semicolonIndex > 0) {
+                  mimeType = imageData.substring(5, semicolonIndex); // Extract after "data:"
+                }
+              }
+
+              print('  - $key: [1 image]');
+              print('    • Format: $mimeType');
+              print('    • Data URI length: $dataLength characters');
+              print('    • Preview: ${imageData.substring(0, 50)}...');
+            }
+          } else {
+            print('  - $key: $value');
+          }
+        });
+
+        print('\nImage Status:');
+        print('  • Image changed: $imageChanged');
+        print('  • Current foodImage type: ${foodImage!.startsWith('data:image') ? 'Base64 Data URI' : 'URL'}');
+
+        print('=' * 60 + '\n');
 
         // Call the API
         final APIResponse response = await menuService.updateMenu(menuData, currentMenuItem!.id,);
@@ -507,6 +602,7 @@ class FoodMenuController extends GetxController {
     selectedPlateSize = "M";
     showOnCustomerApp = true;
     currentMenuItem = null; // Reset current menu item
+    _originalMenuItem = null; // Reset original menu item
     selectedAddons.clear(); // Clear addons
     update();
   }
@@ -624,6 +720,9 @@ class FoodMenuController extends GetxController {
   editMenuItem(MenuItemModel item) {
     // Set the current menu item for updating
     currentMenuItem = item;
+
+    // Store original item for comparison during update
+    _originalMenuItem = item;
 
     // Populate form with existing data
     menuNameController.text = item.name;

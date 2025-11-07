@@ -418,12 +418,6 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
                         restaurant.phone,
                         SvgAssets.callIcon,
                       ),
-                      if (restaurant.location != null)
-                        _buildInfoRow(
-                          "Address",
-                          restaurant.location!.name,
-                          SvgAssets.locationIcon,
-                        ),
                     ],
                     () => Get.toNamed(Routes.RESTAURANT_EDIT_BASIC_INFO),
                   ),
@@ -434,6 +428,13 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
                     "Business Details",
                     SvgAssets.operationsIcon,
                     [
+                      if (restaurant.location != null)
+                        _buildInfoRowWithAction(
+                          "Business Address",
+                          restaurant.location!.name,
+                          SvgAssets.locationIcon,
+                          () => Get.toNamed(Routes.RESTAURANT_EDIT_LOCATION),
+                        ),
                       _buildInfoRow(
                         "Commission Rate",
                         "${restaurant.commissionRate.toStringAsFixed(1)}%",
@@ -692,6 +693,89 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
                   overflow: TextOverflow.ellipsis,
                 ),
               ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoRowWithAction(
+    String label,
+    String value,
+    String icon,
+    VoidCallback onTap,
+  ) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 8.h),
+      child: Row(
+        children: [
+          Container(
+            padding: EdgeInsets.all(8.w),
+            decoration: BoxDecoration(
+              color: AppColors.primaryColor.withAlpha(25),
+              borderRadius: BorderRadius.circular(8.r),
+            ),
+            child: SvgPicture.asset(
+              icon,
+              color: AppColors.primaryColor,
+              colorFilter: ColorFilter.mode(
+                AppColors.primaryColor,
+                BlendMode.srcIn,
+              ),
+              height: 16.sp,
+              width: 16.sp,
+            ),
+          ),
+          SizedBox(width: 12.w),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                customText(
+                  label,
+                  color: AppColors.greyColor,
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w500,
+                ),
+                SizedBox(height: 2.h),
+                customText(
+                  value,
+                  color: AppColors.blackColor,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w600,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(width: 8.w),
+          GestureDetector(
+            onTap: onTap,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+              decoration: BoxDecoration(
+                color: AppColors.primaryColor.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(6.r),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  customText(
+                    "Edit",
+                    color: AppColors.primaryColor,
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  SizedBox(width: 4.w),
+                  Icon(
+                    Icons.edit,
+                    color: AppColors.primaryColor,
+                    size: 14.sp,
+                  ),
+                ],
+              ),
             ),
           ),
         ],

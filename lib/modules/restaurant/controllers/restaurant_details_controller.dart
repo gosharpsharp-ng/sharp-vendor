@@ -46,6 +46,14 @@ class RestaurantDetailsController extends GetxController {
 
   // Location editing
   RestaurantLocation? editingLocation;
+  TextEditingController restaurantAddressController = TextEditingController();
+  ItemLocation? restaurantLocation;
+
+  void setRestaurantLocation(ItemLocation point) {
+    restaurantLocation = point;
+    restaurantAddressController.setText(point.formattedAddress!);
+    update();
+  }
 
   // Image selection
   final ImagePicker _picker = ImagePicker();
@@ -251,6 +259,30 @@ class RestaurantDetailsController extends GetxController {
         'name': location.name,
         'latitude': location.latitude.toString(),
         'longitude': location.longitude.toString(),
+      },
+    };
+
+    await _updateRestaurantProfile(
+      updateData,
+      successMessage: "Restaurant location updated successfully",
+    );
+  }
+
+  // Update restaurant location using map selection (like during registration)
+  Future<void> updateLocationFromMap() async {
+    if (restaurantLocation == null) {
+      showToast(
+        message: "Please select a location from the map",
+        isError: true,
+      );
+      return;
+    }
+
+    final updateData = {
+      'restaurant_location': {
+        'name': restaurantAddressController.text,
+        'latitude': "${restaurantLocation?.latitude}",
+        'longitude': "${restaurantLocation?.longitude}",
       },
     };
 
@@ -797,6 +829,7 @@ class RestaurantDetailsController extends GetxController {
     accountNumberController.dispose();
     accountNameController.dispose();
     banksSearchController.dispose();
+    restaurantAddressController.dispose();
     super.onClose();
   }
 }

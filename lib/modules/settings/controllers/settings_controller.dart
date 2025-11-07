@@ -112,19 +112,19 @@ class SettingsController extends GetxController {
       userProfile = UserProfile.fromJson(response.data);
       update();
       // Initialize the signaling plugin
-      ZegoUIKitPrebuiltCallInvitationService().init(
-        appID: int.parse(Secret.zegoCloudAppID),
-        appSign: Secret.zegoCloudAppSign,
-        userID: userProfile!.id.toString(),
-        userName: "${userProfile!.fname} ${userProfile!.lname}",
-        plugins: [ZegoUIKitSignalingPlugin()],
-        notificationConfig: ZegoCallInvitationNotificationConfig(
-            androidNotificationConfig: ZegoCallAndroidNotificationConfig(
-              showFullScreen: true,
-            ),
-            iOSNotificationConfig:
-                ZegoCallIOSNotificationConfig(appName: "sharpvendor_mobile")),
-      );
+      // ZegoUIKitPrebuiltCallInvitationService().init(
+      //   appID: int.parse(Secret.zegoCloudAppID),
+      //   appSign: Secret.zegoCloudAppSign,
+      //   userID: userProfile!.id.toString(),
+      //   userName: "${userProfile!.fname} ${userProfile!.lname}",
+      //   plugins: [ZegoUIKitSignalingPlugin()],
+      //   notificationConfig: ZegoCallInvitationNotificationConfig(
+      //       androidNotificationConfig: ZegoCallAndroidNotificationConfig(
+      //         showFullScreen: true,
+      //       ),
+      //       iOSNotificationConfig:
+      //           ZegoCallIOSNotificationConfig(appName: "sharpvendor_mobile")),
+      // );
       setProfileFields();
     } else {
       if (getStorage.read("token") != null) {
@@ -301,7 +301,7 @@ class SettingsController extends GetxController {
     DeliveryNotificationServiceManager serviceManager =
         DeliveryNotificationServiceManager();
     serviceManager.disposeServices();
-    ZegoUIKitPrebuiltCallInvitationService().uninit();
+    // ZegoUIKitPrebuiltCallInvitationService().uninit();
   }
 
   bool deletePasswordVisibility = false;
@@ -325,7 +325,7 @@ class SettingsController extends GetxController {
         DeliveryNotificationServiceManager serviceManager =
             DeliveryNotificationServiceManager();
         serviceManager.disposeServices();
-        ZegoUIKitPrebuiltCallInvitationService().uninit();
+        // ZegoUIKitPrebuiltCallInvitationService().uninit();
       } else {
         showToast(message: "could not delete your account", isError: true);
       }
