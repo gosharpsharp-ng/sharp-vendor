@@ -327,10 +327,17 @@ class OrderDetailsScreen extends GetView<OrdersController> {
 
                   SizedBox(height: 12.h),
 
-                  // Order Status Actions - only show if not completed or cancelled
+                  // Order Status Actions - Updated to match business requirements:
+                  // - paid: show Accept and Reject buttons
+                  // - preparing: show Mark as Ready button
+                  // - ready/in_transit: no restaurant actions (informational only)
+                  // - rejected/completed/cancelled: no actions
                   if (![
+                    'ready',
+                    'in_transit',
                     'completed',
                     'cancelled',
+                    'rejected',
                   ].contains(order.status.toLowerCase()))
                     SectionBox(
                       children: [
@@ -349,114 +356,265 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                           ),
                         ),
 
-                        // Primary Action Button
-                        Container(
-                          margin: EdgeInsets.symmetric(
-                            horizontal: 8.w,
-                            vertical: 8.h,
-                          ),
-                          width: double.infinity,
-                          height: 50.h,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                _getStatusColor(order.status),
-                                _getStatusColor(order.status).withOpacity(0.8),
-                              ],
-                            ),
-                            borderRadius: BorderRadius.circular(12.r),
-                          ),
-                          child: Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(12.r),
-                              onTap: ordersController.isLoading
-                                  ? null
-                                  : () => _handlePrimaryAction(
-                                      ordersController,
-                                      order,
-                                    ),
-                              child: Center(
-                                child: ordersController.isLoading
-                                    ? SizedBox(
-                                        width: 24.w,
-                                        height: 24.h,
-                                        child: CircularProgressIndicator(
-                                          color: AppColors.whiteColor,
-                                          strokeWidth: 2,
-                                        ),
-                                      )
-                                    : Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            _getNextActionIcon(order.status),
-                                            color: AppColors.whiteColor,
-                                            size: 20.sp,
-                                          ),
-                                          SizedBox(width: 12.w),
-                                          customText(
-                                            ordersController.getNextAction(
-                                              order.status,
-                                            ),
-                                            color: AppColors.whiteColor,
-                                            fontSize: 16.sp,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ],
-                                      ),
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        // Reject/Cancel Button for pending orders
-                        if (order.status.toLowerCase() == 'pending')
+                        // For "paid" status: show Accept and Reject buttons side by side
+                        if (order.status.toLowerCase() == 'paid')
                           Container(
                             margin: EdgeInsets.symmetric(
                               horizontal: 8.w,
-                              vertical: 4.h,
+                              vertical: 8.h,
+                            ),
+                            child: Row(
+                              children: [
+                                // Reject Button
+                                Expanded(
+                                  child: Container(
+                                    height: 50.h,
+                                    decoration: BoxDecoration(
+                                      color: Colors.red.shade50,
+                                      borderRadius: BorderRadius.circular(12.r),
+                                      border: Border.all(
+                                        color: Colors.red.withOpacity(0.3),
+                                        width: 1.5,
+                                      ),
+                                    ),
+                                    child: Material(
+                                      color: Colors.transparent,
+                                      child: InkWell(
+                                        borderRadius: BorderRadius.circular(12.r),
+                                        onTap: ordersController.isLoading
+                                            ? null
+                                            : () => _showRejectOrderDialog(
+                                                ordersController,
+                                                order,
+                                              ),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Icons.cancel_outlined,
+                                              color: Colors.red,
+                                              size: 18.sp,
+                                            ),
+                                            SizedBox(width: 8.w),
+                                            customText(
+                                              "Reject",
+                                              color: Colors.red,
+                                              fontSize: 14.sp,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 12.w),
+                                // Accept Button
+                                Expanded(
+                                  flex: 2,
+                                  child: Container(
+                                    height: 50.h,
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          AppColors.greenColor,
+                                          AppColors.greenColor.withOpacity(0.8),
+                                        ],
+                                      ),
+                                      borderRadius: BorderRadius.circular(12.r),
+                                    ),
+                                    child: Material(
+                                      color: Colors.transparent,
+                                      child: InkWell(
+                                        borderRadius: BorderRadius.circular(12.r),
+                                        onTap: ordersController.isLoading
+                                            ? null
+                                            : () => ordersController.acceptOrder(order.id),
+                                        child: Center(
+                                          child: ordersController.isLoading
+                                              ? SizedBox(
+                                                  width: 24.w,
+                                                  height: 24.h,
+                                                  child: CircularProgressIndicator(
+                                                    color: AppColors.whiteColor,
+                                                    strokeWidth: 2,
+                                                  ),
+                                                )
+                                              : Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Icon(
+                                                      Icons.check_circle_outline,
+                                                      color: AppColors.whiteColor,
+                                                      size: 20.sp,
+                                                    ),
+                                                    SizedBox(width: 12.w),
+                                                    customText(
+                                                      "Accept Order",
+                                                      color: AppColors.whiteColor,
+                                                      fontSize: 16.sp,
+                                                      fontWeight: FontWeight.w600,
+                                                    ),
+                                                  ],
+                                                ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                        // For "preparing" status: show Mark as Ready button
+                        if (order.status.toLowerCase() == 'preparing')
+                          Container(
+                            margin: EdgeInsets.symmetric(
+                              horizontal: 8.w,
+                              vertical: 8.h,
                             ),
                             width: double.infinity,
-                            height: 48.h,
+                            height: 50.h,
                             decoration: BoxDecoration(
-                              color: Colors.red.shade50,
-                              borderRadius: BorderRadius.circular(12.r),
-                              border: Border.all(
-                                color: Colors.red.withOpacity(0.3),
-                                width: 1,
+                              gradient: LinearGradient(
+                                colors: [
+                                  Colors.blue,
+                                  Colors.blue.withOpacity(0.8),
+                                ],
                               ),
+                              borderRadius: BorderRadius.circular(12.r),
                             ),
                             child: Material(
                               color: Colors.transparent,
                               child: InkWell(
                                 borderRadius: BorderRadius.circular(12.r),
-                                onTap: () => _showRejectOrderDialog(
-                                  ordersController,
-                                  order,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.cancel_outlined,
-                                      color: Colors.red,
-                                      size: 18.sp,
-                                    ),
-                                    SizedBox(width: 8.w),
-                                    customText(
-                                      "Reject Order",
-                                      color: Colors.red,
-                                      fontSize: 14.sp,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ],
+                                onTap: ordersController.isLoading
+                                    ? null
+                                    : () => ordersController.markOrderReady(order.id),
+                                child: Center(
+                                  child: ordersController.isLoading
+                                      ? SizedBox(
+                                          width: 24.w,
+                                          height: 24.h,
+                                          child: CircularProgressIndicator(
+                                            color: AppColors.whiteColor,
+                                            strokeWidth: 2,
+                                          ),
+                                        )
+                                      : Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Icons.restaurant_menu,
+                                              color: AppColors.whiteColor,
+                                              size: 20.sp,
+                                            ),
+                                            SizedBox(width: 12.w),
+                                            customText(
+                                              "Mark as Ready",
+                                              color: AppColors.whiteColor,
+                                              fontSize: 16.sp,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ],
+                                        ),
                                 ),
                               ),
                             ),
                           ),
                       ],
+                    ),
+
+                  // Show info message for "ready" status (waiting for rider pickup)
+                  if (order.status.toLowerCase() == 'ready')
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 2.sp),
+                      padding: EdgeInsets.all(16.sp),
+                      decoration: BoxDecoration(
+                        color: AppColors.greenColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(12.r),
+                        border: Border.all(
+                          color: AppColors.greenColor.withOpacity(0.3),
+                          width: 1.5,
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.check_circle,
+                            color: AppColors.greenColor,
+                            size: 24.sp,
+                          ),
+                          SizedBox(width: 12.w),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                customText(
+                                  "Order is Ready",
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.greenColor,
+                                ),
+                                SizedBox(height: 4.h),
+                                customText(
+                                  "The order is ready and waiting for rider pickup. No further actions required from restaurant.",
+                                  fontSize: 13.sp,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColors.greyColor,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                  // Show info message for "in_transit" status (rider picked up)
+                  if (order.status.toLowerCase() == 'in_transit')
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 2.sp),
+                      padding: EdgeInsets.all(16.sp),
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(12.r),
+                        border: Border.all(
+                          color: AppColors.primaryColor.withOpacity(0.3),
+                          width: 1.5,
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.local_shipping,
+                            color: AppColors.primaryColor,
+                            size: 24.sp,
+                          ),
+                          SizedBox(width: 12.w),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                customText(
+                                  "Order In Transit",
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.primaryColor,
+                                ),
+                                SizedBox(height: 4.h),
+                                customText(
+                                  "The order is on its way to the customer. Rider is currently delivering the order.",
+                                  fontSize: 13.sp,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColors.greyColor,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
 
                   SizedBox(height: 20.h),
@@ -487,60 +645,6 @@ class OrderDetailsScreen extends GetView<OrdersController> {
         return 'Cancelled';
       default:
         return status.toUpperCase();
-    }
-  }
-
-  Color _getStatusColor(String status) {
-    switch (status.toLowerCase()) {
-      case 'paid':
-        return AppColors.greenColor;
-      case 'pending':
-        return Colors.orange;
-      case 'preparing':
-        return Colors.blue;
-      case 'ready':
-        return AppColors.greenColor;
-      case 'in_transit':
-        return AppColors.primaryColor;
-      case 'completed':
-        return Colors.grey;
-      case 'cancelled':
-        return Colors.red;
-      default:
-        return AppColors.greyColor;
-    }
-  }
-
-  IconData _getNextActionIcon(String currentStatus) {
-    switch (currentStatus.toLowerCase()) {
-      case 'pending':
-        return Icons.restaurant_menu;
-      case 'preparing':
-        return Icons.check_circle_outline;
-      case 'ready':
-        return Icons.local_shipping_outlined;
-      case 'in_transit':
-        return Icons.done_all;
-      default:
-        return Icons.arrow_forward;
-    }
-  }
-
-  void _handlePrimaryAction(OrdersController controller, OrderModel order) {
-    switch (order.status.toLowerCase()) {
-      case 'pending':
-        controller.acceptOrder(order.id);
-        break;
-      case 'preparing':
-        controller.markOrderReady(order.id);
-        break;
-      case 'ready':
-        controller.markOrderInTransit(order.id);
-        break;
-      case 'in_transit':
-        controller.completeOrder(order.id);
-        Get.back(); // Go back to orders list after completion
-        break;
     }
   }
 

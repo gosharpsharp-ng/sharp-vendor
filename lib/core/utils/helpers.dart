@@ -375,9 +375,18 @@ Future<CroppedFile> cropImage(XFile image) async {
     AndroidUiSettings(
         toolbarColor: AppColors.primaryColor,
         toolbarTitle: "Crop Image",
-        toolbarWidgetColor: Colors.white,
+        toolbarWidgetColor: AppColors.whiteColor,
+        statusBarColor: AppColors.primaryColor,
+        activeControlsWidgetColor: AppColors.primaryColor,
+        backgroundColor: AppColors.backgroundColor,
+        dimmedLayerColor: AppColors.blackColor,
         lockAspectRatio: false),
-    IOSUiSettings(title: "Crop Image")
+    IOSUiSettings(
+        title: "Crop Image",
+        doneButtonTitle: "Done",
+        cancelButtonTitle: "Cancel",
+        aspectRatioPickerButtonHidden: false,
+        resetAspectRatioEnabled: true)
   ]);
   return croppedImageFile!;
 }

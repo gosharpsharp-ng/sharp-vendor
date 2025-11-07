@@ -106,16 +106,6 @@ class RestaurantDetailsController extends GetxController {
     logoImageBase64 = null;
   }
 
-  // Convert File to base64
-  Future<String?> _fileToBase64(File file) async {
-    try {
-      List<int> imageBytes = await file.readAsBytes();
-      return base64Encode(imageBytes);
-    } catch (e) {
-      debugPrint("Error converting file to base64: $e");
-      return null;
-    }
-  }
 
   // Generic method to update restaurant profile using the same endpoint as user profile
   Future<void> _updateRestaurantProfile(
@@ -297,16 +287,15 @@ class RestaurantDetailsController extends GetxController {
       );
 
       if (pickedFile != null) {
-        bannerImage = File(pickedFile.path);
+        final croppedPhoto = await cropImage(pickedFile);
+        bannerImage = File(croppedPhoto.path);
 
         // Immediately convert to base64
-        bannerImageBase64 = await _fileToBase64(bannerImage!);
-        if (bannerImageBase64 != null) {
-          showToast(
-            message: "Banner image selected successfully",
-            isError: false,
-          );
-        }
+        bannerImageBase64 = await convertImageToBase64(croppedPhoto.path);
+        showToast(
+          message: "Banner image selected successfully",
+          isError: false,
+        );
 
         update();
       }
@@ -328,16 +317,15 @@ class RestaurantDetailsController extends GetxController {
       );
 
       if (pickedFile != null) {
-        logoImage = File(pickedFile.path);
+        final croppedPhoto = await cropImage(pickedFile);
+        logoImage = File(croppedPhoto.path);
 
         // Immediately convert to base64
-        logoImageBase64 = await _fileToBase64(logoImage!);
-        if (logoImageBase64 != null) {
-          showToast(
-            message: "Logo image selected successfully",
-            isError: false,
-          );
-        }
+        logoImageBase64 = await convertImageToBase64(croppedPhoto.path);
+        showToast(
+          message: "Logo image selected successfully",
+          isError: false,
+        );
 
         update();
       }

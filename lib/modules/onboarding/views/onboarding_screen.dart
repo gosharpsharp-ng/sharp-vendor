@@ -12,29 +12,21 @@ class OnboardingScreen extends StatelessWidget {
     return GetBuilder<OnboardingController>(
       builder: (onboardingController) {
         return Scaffold(
-          extendBodyBehindAppBar: true,
-          extendBody: true,
           backgroundColor: AppColors.backgroundColor,
-          appBar: AppBar(
-            backgroundColor: AppColors.transparent,
-            elevation: 0,
-            systemOverlayStyle:
-                SystemUiOverlayStyle.dark, // For light status bar text
+          appBar: flatAppBar(
+            bgColor: AppColors.backgroundColor,
+            navigationColor: AppColors.backgroundColor,
           ),
-          body: SafeArea(
-            top: false,
-            bottom: false,
-            child: Container(
-              height: 1.sh,
-              width: 1.sw,
-              padding: EdgeInsets.only(top: 50.h),
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(PngAssets.lightWatermark),
-                  fit: BoxFit.cover,
-                ),
+          body: Container(
+            height: 1.sh,
+            width: 1.sw,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(PngAssets.lightWatermark),
+                fit: BoxFit.cover,
               ),
-              child: Column(
+            ),
+            child: Column(
                 children: [
                   Expanded(
                     flex: 10,
@@ -161,7 +153,6 @@ class OnboardingScreen extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
           ),
         );
       },

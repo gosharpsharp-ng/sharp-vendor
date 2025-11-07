@@ -28,10 +28,11 @@ class OrdersController extends GetxController {
   OrderModel? selectedOrder;
 
   // Order status filter - Updated to match API statuses
-  String selectedOrderStatus = 'paid';
+  // Ordered as: pending → paid → preparing → ready → in_transit → completed
+  String selectedOrderStatus = 'pending';
   List<String> orderStatuses = [
-    'paid',
     'pending',
+    'paid',
     'preparing',
     'ready',
     'in_transit',
@@ -241,14 +242,19 @@ class OrdersController extends GetxController {
   }
 
   // Helper method to validate status transitions
+  // Updated to match business requirements:
+  // - From "paid" → can go to "preparing" OR "rejected"
+  // - From "preparing" → can go to "ready"
+  // - From "ready" → can go to "in_transit" (when rider picks up)
+  // - From "in_transit" → can go to "completed"
   bool _isValidStatusTransition(String currentStatus, String newStatus) {
-    // Define valid transitions based on your business logic
+    // Define valid transitions based on business requirements
     Map<String, List<String>> validTransitions = {
-      'paid': ['pending', 'preparing', 'cancelled'],
-      'pending': ['preparing', 'cancelled'],
-      'preparing': ['ready', 'cancelled'],
-      'ready': ['in_transit', 'completed', 'cancelled'],
-      'in_transit': ['completed'],
+      'paid': ['preparing', 'rejected'],
+      'preparing': ['ready'],
+      'ready': ['in_transit'], // Can transition to in_transit when rider picks up
+      'in_transit': ['completed'], // Can be marked completed
+      'rejected': [], // No transitions from rejected
       'completed': [], // No transitions from completed
       'cancelled': [], // No transitions from cancelled
     };
@@ -256,40 +262,38 @@ class OrdersController extends GetxController {
     return validTransitions[currentStatus]?.contains(newStatus) ?? false;
   }
 
-  // Specific order action methods - UPDATED WITH NEW STATUSES
+  // Specific order action methods - UPDATED TO MATCH BUSINESS REQUIREMENTS
+  // From "paid" → accept to "preparing"
   acceptOrder(int orderId) async {
-    await updateOrderStatus(orderId, "preparing");
+    await updateOrderStatusWithValidation(orderId, "preparing");
   }
 
-  // Start processing order (renamed from startProcessingOrder for clarity)
+  // From "paid" → reject to "rejected"
+  rejectOrder(int orderId) async {
+    await updateOrderStatusWithValidation(orderId, "rejected");
+    Get.back(); // Go back if on order details screen
+  }
+
+  // From "preparing" → mark as "ready"
+  markOrderReady(int orderId) async {
+    await updateOrderStatusWithValidation(orderId, "ready");
+  }
+
+  // Legacy methods kept for backward compatibility (not used in new flow)
   startPreparingOrder(int orderId) async {
     await updateOrderStatus(orderId, "preparing");
   }
 
-  // Mark order as ready
-  markOrderReady(int orderId) async {
-    await updateOrderStatus(orderId, "ready");
-  }
-
-  // Mark order as in transit
   markOrderInTransit(int orderId) async {
     await updateOrderStatus(orderId, "in_transit");
   }
 
-  // Complete order
   completeOrder(int orderId) async {
     await updateOrderStatus(orderId, "completed");
   }
 
-  // Cancel order
   cancelOrder(int orderId) async {
     await updateOrderStatus(orderId, "cancelled");
-  }
-
-  // Reject order (for pending orders)
-  rejectOrder(int orderId) async {
-    await cancelOrder(orderId);
-    Get.back(); // Go back if on order details screen
   }
 
   // Get single order by ID - NEW METHOD
@@ -357,34 +361,33 @@ class OrdersController extends GetxController {
     return formatToCurrency(amount);
   }
 
-  // Get next action for order based on current status - UPDATED
+  // Get next action for order based on current status
+  // Updated to match business requirements:
+  // - paid → "Accept Order" (goes to preparing)
+  // - preparing → "Mark as Ready" (goes to ready)
+  // - ready → no action allowed
   String getNextAction(String currentStatus) {
     switch (currentStatus.toLowerCase()) {
-      case 'pending':
       case 'paid':
         return 'Accept Order';
       case 'preparing':
         return 'Mark as Ready';
       case 'ready':
-        return 'Mark In Transit';
-      case 'in_transit':
-        return 'Complete Order';
+        return 'Order Ready'; // No action allowed, just display status
       default:
         return 'View Order';
     }
   }
 
-  // Get next status for order - UPDATED
+  // Get next status for order - UPDATED TO MATCH BUSINESS REQUIREMENTS
   String getNextStatus(String currentStatus) {
     switch (currentStatus.toLowerCase()) {
-      case 'pending':
+      case 'paid':
         return 'preparing';
       case 'preparing':
         return 'ready';
       case 'ready':
-        return 'in_transit';
-      case 'in_transit':
-        return 'completed';
+        return 'ready'; // No further transitions
       default:
         return currentStatus;
     }

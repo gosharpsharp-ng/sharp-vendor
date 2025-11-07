@@ -221,7 +221,75 @@ class DashboardScreen extends StatelessWidget {
                               ],
                             ),
                           ),
-                          SizedBox(height: 30.h),
+                          SizedBox(height: 20.h),
+
+                          // Go Online/Offline Section
+                          GetBuilder<DeliveriesController>(
+                            builder: (ordersController) {
+                              return Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 25.sp,
+                                  vertical: 15.sp,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: ordersController.isOnline
+                                      ? AppColors.greenColor.withAlpha(25)
+                                      : AppColors.greyColor.withAlpha(25),
+                                  borderRadius: BorderRadius.circular(12.r),
+                                  border: Border.all(
+                                    color: ordersController.isOnline
+                                        ? AppColors.greenColor.withAlpha(100)
+                                        : AppColors.greyColor.withAlpha(100),
+                                    width: 1.5,
+                                  ),
+                                ),
+                                child: Column(
+                                  children: [
+                                    customText(
+                                      ordersController.isOnline
+                                          ? "You're online! Your restaurant is visible to customers and can receive orders."
+                                          : "You're offline. Turn on the switch to start receiving orders from customers.",
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 13.sp,
+                                      textAlign: TextAlign.center,
+                                      color: ordersController.isOnline
+                                          ? AppColors.greenColor
+                                          : AppColors.greyColor,
+                                    ),
+                                    SizedBox(height: 15.h),
+                                    SizedBox(
+                                      width: 1.sw,
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          customText(
+                                            ordersController.isOnline
+                                                ? 'Go Offline'
+                                                : 'Go Online',
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 20.sp,
+                                            color: ordersController.isOnline
+                                                ? AppColors.greenColor
+                                                : AppColors.blackColor,
+                                          ),
+                                          SizedBox(width: 10.sp),
+                                          Switch(
+                                            activeColor: AppColors.greenColor,
+                                            value: ordersController.isOnline,
+                                            onChanged: (value) {
+                                              ordersController.toggleOnlineStatus();
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+
+                          SizedBox(height: 20.h),
                           Row(
                             children: [
                               Expanded(

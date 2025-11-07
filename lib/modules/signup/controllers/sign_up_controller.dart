@@ -92,38 +92,8 @@ class SignUpController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // Set default times
-    dayOperatingHours['monday'] = {
-      'openTime': '08:00 AM',
-      'closeTime': '09:00 PM',
-    };
-    dayOperatingHours['tuesday'] = {
-      'openTime': '08:00 AM',
-      'closeTime': '09:00 PM',
-    };
-    dayOperatingHours['wednesday'] = {
-      'openTime': '08:00 AM',
-      'closeTime': '09:00 PM',
-    };
-    dayOperatingHours['thursday'] = {
-      'openTime': '08:00 AM',
-      'closeTime': '09:00 PM',
-    };
-    dayOperatingHours['friday'] = {
-      'openTime': '08:00 AM',
-      'closeTime': '09:00 PM',
-    };
-    dayOperatingHours['saturday'] = {'openTime': '', 'closeTime': ''};
-    dayOperatingHours['sunday'] = {'openTime': '', 'closeTime': ''};
-
-    // Set default selected days (Monday to Friday)
-    selectedDays['monday'] = true;
-    selectedDays['tuesday'] = true;
-    selectedDays['wednesday'] = false;
-    selectedDays['thursday'] = false;
-    selectedDays['friday'] = false;
-    selectedDays['saturday'] = true;
-    selectedDays['sunday'] = true;
+    // No days pre-selected - user must choose
+    // Default times are set when a day is selected (8am - 9pm)
   }
 
   // Toggle day selection
@@ -358,9 +328,28 @@ class SignUpController extends GetxController {
         "schedule": schedule,
       };
 
-      dynamic dataWithoutImages = Map.from(data)
-        ..remove("restaurant_logo")
-        ..remove("restaurant_banner");
+      // Log registration data - create a copy with truncated base64 for logging
+      Map<String, dynamic> dataForLogging = Map.from(data);
+
+      // Truncate base64 strings for logging
+      if (restaurantLogo != null) {
+        dataForLogging['restaurant_logo'] =
+            '${restaurantLogo!.substring(0, restaurantLogo!.length > 100 ? 100 : restaurantLogo!.length)}... [Total: ${restaurantLogo!.length} chars]';
+      }
+      if (restaurantBanner != null) {
+        dataForLogging['restaurant_banner'] =
+            '${restaurantBanner!.substring(0, restaurantBanner!.length > 100 ? 100 : restaurantBanner!.length)}... [Total: ${restaurantBanner!.length} chars]';
+      }
+
+      // Hide password
+      dataForLogging['password'] = '***hidden***';
+
+      customDebugPrint(
+        "=== REGISTRATION DATA OBJECT (Body sent to backend) ===",
+      );
+      customDebugPrint(dataForLogging.toString());
+      customDebugPrint("=== END REGISTRATION DATA OBJECT HERE ===");
+
       APIResponse response = await authService.signup(data);
       showToast(
         message: response.message,
@@ -386,11 +375,7 @@ class SignUpController extends GetxController {
     }
     if (photo != null) {
       final croppedPhoto = await cropImage(photo);
-      final compressed = await ImageCompressionService.compressImage(
-        XFile(croppedPhoto.path),
-      );
-
-      restaurantBanner = await convertImageToBase64(compressed.path);
+      restaurantBanner = await convertImageToBase64(croppedPhoto.path);
       update();
     }
   }
@@ -405,10 +390,7 @@ class SignUpController extends GetxController {
     }
     if (photo != null) {
       final croppedPhoto = await cropImage(photo);
-      final compressed = await ImageCompressionService.compressImage(
-        XFile(croppedPhoto.path),
-      );
-      restaurantLogo = await convertImageToBase64(compressed.path);
+      restaurantLogo = await convertImageToBase64(croppedPhoto.path);
       update();
     }
   }
