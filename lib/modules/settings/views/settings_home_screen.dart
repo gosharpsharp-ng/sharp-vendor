@@ -158,16 +158,16 @@ class SettingsHomeScreen extends StatelessWidget {
                         icon: SvgAssets.operationsIcon,
                         isLast: false,
                       ),
-                      SettingsItem(
-                        onPressed: () {
-                          settingsController.setProfileFields();
-                          settingsController.toggleProfileEditState(false);
-                          Get.toNamed(Routes.EDIT_PROFILE_SCREEN);
-                        },
-                        iconColor: AppColors.primaryColor,
-                        title: "My Address",
-                        icon: SvgAssets.locationIcon,
-                      ),
+                      // SettingsItem(
+                      //   onPressed: () {
+                      //     settingsController.setProfileFields();
+                      //     settingsController.toggleProfileEditState(false);
+                      //     Get.toNamed(Routes.EDIT_PROFILE_SCREEN);
+                      //   },
+                      //   iconColor: AppColors.primaryColor,
+                      //   title: "My Address",
+                      //   icon: SvgAssets.locationIcon,
+                      // ),
                       // SettingsItem(
                       //   onPressed: () {
                       //     settingsController.setProfileFields();
@@ -208,15 +208,6 @@ class SettingsHomeScreen extends StatelessWidget {
                         iconColor: AppColors.forestGreenColor,
                         icon: SvgAssets.walletIcon,
                       ),
-                      // SettingsItem(
-                      //   onPressed: () {
-                      //     settingsController.setBusinessOperationsFields();
-                      //     Get.toNamed(Routes.BUSINESS_OPERATIONS_SCREEN);
-                      //   },
-                      //   title: "Business Operations",
-                      //   iconColor: AppColors.purpleColor,
-                      //   icon: SvgAssets.operationsIcon,
-                      // ),
                       SettingsItem(
                         onPressed: () {
                           Get.toNamed(Routes.NOTIFICATIONS_HOME);

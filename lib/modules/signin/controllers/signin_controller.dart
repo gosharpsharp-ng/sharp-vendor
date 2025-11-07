@@ -64,6 +64,11 @@ class SignInController extends GetxController {
           update();
           final getStorage = GetStorage();
           getStorage.write("token", response.data['auth_token']);
+
+          // Initialize DeliveryNotificationServiceManager first
+          Get.put(DeliveryNotificationServiceManager());
+
+          // Then initialize other controllers
           Get.put(SettingsController());
           Get.put(DeliveriesController());
           Get.toNamed(Routes.APP_NAVIGATION);

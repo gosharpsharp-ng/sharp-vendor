@@ -28,6 +28,10 @@ class SplashController extends GetxController {
 
   // Method to initiate calls from the WalletController and ProfileController
   Future<void> _loadData() async {
+    // Initialize DeliveryNotificationServiceManager first
+    Get.put(DeliveryNotificationServiceManager());
+
+    // Then initialize other controllers
     Get.put(SettingsController());
     Get.put(DeliveriesController());
   }

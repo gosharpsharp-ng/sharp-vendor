@@ -80,45 +80,10 @@ class CoreService extends GetConnect {
             if (Get.currentRoute != Routes.SIGN_IN) {
               handleUnauthorizedAccess();
             }
-
-            // Check if response body contains valid JSON
-            dynamic responseData;
-            try {
-              responseData = error.response?.data;
-              if (responseData is String) {
-                // Try to parse if it's a JSON string
-                try {
-                  responseData = json.decode(responseData);
-                } catch (e) {
-                  // Not valid JSON, use default response
-                  responseData = null;
-                }
-              }
-            } catch (e) {
-              responseData = null;
-            }
-
-            // Return default 401 response if body is not valid JSON
-            if (responseData == null ||
-                (responseData is Map && !responseData.containsKey('status'))) {
-              return handler.resolve(
-                dio_pack.Response(
-                  requestOptions: error.requestOptions,
-                  data: {
-                    'status': 'error',
-                    'data': 'Error',
-                    'message': 'Unauthorized access. Please log in again.',
-                  },
-                  statusCode: 401,
-                ),
-              );
-            }
-
-            // Cancel this error with valid response data
+            // Cancel this error
             return handler.reject(
               dio_pack.DioException(
                 requestOptions: error.requestOptions,
-                response: error.response,
                 type: dio_pack.DioExceptionType.cancel,
                 error: 'Request cancelled due to 401 error',
               ),
