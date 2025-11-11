@@ -73,15 +73,38 @@ class DashboardController extends GetxController {
       _setAnalyticsLoading(true);
       _setAnalyticsError('');
 
+      print('📊 ==================== FETCHING ANALYTICS DATA ====================');
       final response = await _analyticsService.getRestaurantAnalytics();
 
+      print('📊 Response Status: ${response.status}');
+      print('📊 Response Message: ${response.message}');
+      print('📊 Response Data Type: ${response.data.runtimeType}');
+      print('📊 Response Data: ${response.data}');
+
       if (response.status == "success" && response.data != null) {
+        print('📊 Parsing analytics data...');
         _analytics = RestaurantAnalytics.fromJson(response.data);
+        print('📊 ✅ Analytics parsed successfully');
+        print('📊 Total Orders: ${_analytics?.totalOrders}');
+        print('📊 New Orders: ${_analytics?.newOrders}');
+        print('📊 Completed Orders: ${_analytics?.completedOrders}');
+        print('📊 Daily Orders Count: ${_analytics?.dailyOrders.length}');
+        if (_analytics?.dailyOrders.isNotEmpty ?? false) {
+          print('📊 Daily Orders Data:');
+          for (var day in _analytics!.dailyOrders) {
+            print('   ${day.dayName} (${day.date}): ${day.ordersCount} orders');
+          }
+        }
         _setAnalyticsError('');
       } else {
+        print('📊 ❌ Analytics request failed');
+        print('📊 Error: ${response.message}');
         _setAnalyticsError(response.message ?? 'Failed to load analytics');
       }
-    } catch (e) {
+      print('📊 ================================================================');
+    } catch (e, stackTrace) {
+      print('📊 ❌ Exception loading analytics: $e');
+      print('📊 Stack trace: $stackTrace');
       _setAnalyticsError('Error loading analytics data');
     } finally {
       _setAnalyticsLoading(false);

@@ -9,6 +9,7 @@ class SocketService extends GetxService {
   late IO.Socket socket;
   final isConnected = false.obs;
   int? _currentRestaurantId;
+  Function(Map<String, dynamic>)? _onNewOrderCallback;
 
   Future<SocketService> init() async {
     _initializeSocket();
@@ -18,25 +19,37 @@ class SocketService extends GetxService {
 
   void _initializeSocket() {
     socket = IO.io(
-        'http://socket.gosharpsharp.com/',
-        IO.OptionBuilder()
-            .setTransports(['websocket'])
-            .enableAutoConnect()
-            .enableReconnection()
-            .setReconnectionAttempts(5)
-            .setReconnectionDelay(3000)
-            .build());
+      'https://socket.gosharpsharp.com',
+      IO.OptionBuilder()
+          .setTransports(['websocket'])
+          .enableAutoConnect()
+          .enableReconnection()
+          .setReconnectionAttempts(5)
+          .setReconnectionDelay(3000)
+          .build(),
+    );
     socket.connect();
   }
 
   void _setupSocketListeners() {
+    // Setup catch-all listener to see ALL events
+    socket.onAny((event, data) {
+      log('📨 Socket Event Received: $event');
+      log('📨 Event Data: ${data.toString()}');
+    });
+
     socket
       ..onConnect((_) {
-        log('🟢 Socket Connected to http://socket.gosharpsharp.com/');
+        log('🟢 Socket Connected to http://socket.gosharpsharp.com');
+        log('🟢 Socket ID: ${socket.id}');
         isConnected.value = true;
         // Rejoin restaurant room if restaurantId was set
         if (_currentRestaurantId != null) {
           joinRestaurantRoom(_currentRestaurantId!);
+          // Re-setup listener after joining room
+          if (_onNewOrderCallback != null) {
+            _setupNewOrderListener();
+          }
         }
         joinRidersTrackingRoom();
       })
@@ -50,6 +63,10 @@ class SocketService extends GetxService {
         // Rejoin restaurant room on reconnection
         if (_currentRestaurantId != null) {
           joinRestaurantRoom(_currentRestaurantId!);
+          // Re-setup listener after joining room
+          if (_onNewOrderCallback != null) {
+            _setupNewOrderListener();
+          }
         }
         joinRidersTrackingRoom();
       })
@@ -58,6 +75,15 @@ class SocketService extends GetxService {
   }
 
   // ==================== RESTAURANT ROOM ====================
+
+  /// Set restaurant ID (will auto-join when socket connects)
+  void setRestaurantId(int restaurantId) {
+    _currentRestaurantId = restaurantId;
+    // If already connected, join immediately
+    if (isConnected.value) {
+      joinRestaurantRoom(restaurantId);
+    }
+  }
 
   /// Join restaurant room to receive new orders
   /// Emits to: "restaurant:join" with payload { "restaurantId": restaurantId }
@@ -75,12 +101,61 @@ class SocketService extends GetxService {
   /// Event: "restaurant:new-order"
   /// Data: {orderId, orderNumber, userId, status, total, currency, items, packages, createdAt}
   void listenForNewOrders(Function(Map<String, dynamic>) onNewOrder) {
+    _onNewOrderCallback = onNewOrder;
+    // If already connected, setup listener immediately
+    if (isConnected.value) {
+      _setupNewOrderListener();
+    }
+  }
+
+  /// Internal method to setup the new order listener
+  void _setupNewOrderListener() {
+    // Remove any existing listener first
+    socket.off('restaurant:new-order');
+
+    log('📡 Setting up listener for restaurant:new-order event...');
+    log('📡 Socket connected: ${socket.connected}');
+    log('📡 Socket ID: ${socket.id}');
+    log('📡 Callback registered: ${_onNewOrderCallback != null}');
+
+    // Setup new listener
     socket.on('restaurant:new-order', (data) {
-      log('🔔 New order received: ${data.toString()}');
+      log(
+        '🔔 ==================== NEW ORDER EVENT RECEIVED ====================',
+      );
+      log('🔔 Raw data type: ${data.runtimeType}');
+      log('🔔 Raw data: ${data.toString()}');
+
       if (data is Map<String, dynamic>) {
-        onNewOrder(data);
+        log('✅ Data is Map<String, dynamic>');
+        if (_onNewOrderCallback != null) {
+          log('✅ Calling callback with order data');
+          _onNewOrderCallback!(data);
+        } else {
+          log('❌ No callback registered!');
+        }
+      } else {
+        log('❌ Data is not Map<String, dynamic>, it is: ${data.runtimeType}');
+        // Try to convert if it's a different type
+        try {
+          if (data is Map) {
+            Map<String, dynamic> convertedData = Map<String, dynamic>.from(
+              data,
+            );
+            log('✅ Converted to Map<String, dynamic>');
+            if (_onNewOrderCallback != null) {
+              _onNewOrderCallback!(convertedData);
+            }
+          }
+        } catch (e) {
+          log('❌ Error converting data: $e');
+        }
       }
+      log(
+        '🔔 ================================================================',
+      );
     });
+    log('✅ Listener attached to restaurant:new-order event');
   }
 
   /// Stop listening for new orders
@@ -99,8 +174,10 @@ class SocketService extends GetxService {
 
   // ==================== LEGACY METHODS (kept for backward compatibility) ====================
 
-  void listenForParcelLocationUpdate(
-      {required String roomId, required Function(dynamic) onLocationUpdate}) {
+  void listenForParcelLocationUpdate({
+    required String roomId,
+    required Function(dynamic) onLocationUpdate,
+  }) {
     socket.on(roomId, onLocationUpdate);
   }
 
@@ -120,8 +197,10 @@ class SocketService extends GetxService {
     socket.on("riders_list", onRiderOnline);
   }
 
-  void leaveTrackingRoom(
-      {required String trackingId, required String msg}) async {
+  void leaveTrackingRoom({
+    required String trackingId,
+    required String msg,
+  }) async {
     if (isConnected.value) {
       socket.emit(msg, trackingId);
     }

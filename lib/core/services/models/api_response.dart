@@ -15,9 +15,43 @@ class APIResponse {
   }
 
   factory APIResponse.fromMap(Map<String, dynamic> map) {
+    String message = map['message'] ?? "";
+
+    // If there are validation errors, extract the first error and append to message
+    if (map.containsKey('errors') && map['errors'] != null) {
+      try {
+        Map<String, dynamic> errors = map['errors'] as Map<String, dynamic>;
+        if (errors.isNotEmpty) {
+          // Get the first error field
+          String firstField = errors.keys.first;
+          dynamic firstError = errors[firstField];
+
+          // Extract the error message (could be a list or string)
+          String errorMessage = '';
+          if (firstError is List && firstError.isNotEmpty) {
+            errorMessage = firstError[0].toString();
+          } else if (firstError is String) {
+            errorMessage = firstError;
+          }
+
+          // Append to message if we have an error message
+          if (errorMessage.isNotEmpty) {
+            if (message.isNotEmpty) {
+              message = '$message $errorMessage';
+            } else {
+              message = errorMessage;
+            }
+          }
+        }
+      } catch (e) {
+        // If parsing fails, fallback to the original message or errors object
+        message = message.isEmpty ? (map['errors']?.toString() ?? "") : message;
+      }
+    }
+
     return APIResponse(
       status: map['status'] ?? "",
-      message: map['message'] ?? map['errors'] ?? "",
+      message: message,
       data: map['data'] ?? "",
     );
   }

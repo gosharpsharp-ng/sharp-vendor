@@ -19,7 +19,7 @@ class SettingsHomeScreen extends StatelessWidget {
             implyLeading: false,
             bgColor: AppColors.backgroundColor,
             title: "Settings",
-            centerTitle: false,
+            centerTitle: true,
           ),
           body: Container(
             height: 1.sh,
@@ -84,60 +84,60 @@ class SettingsHomeScreen extends StatelessWidget {
                   //     ),
                   //   ],
                   // ),
-                  SizedBox(height: 12.h),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20.w),
-                    width: 1.sw,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Color(0xFF6C9E57), Color(0xFF47862D)],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                      ),
-                      borderRadius: BorderRadius.circular(40.r),
-                    ),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 15.w,
-                      vertical: 20.h,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        customText(
-                          "Available Balance",
-                          color: AppColors.amberColor,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16.sp,
-                        ),
-                        SizedBox(height: 8.sp),
-                        customText(
-                          settingsController
-                                  .userProfile
-                                  ?.restaurant
-                                  ?.wallet
-                                  ?.formattedBalance ??
-                              "₦0.00",
-                          color: AppColors.whiteColor,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 30.sp,
-                        ),
-                        SizedBox(height: 18.h),
-                        CustomIconButton(
-                          width: 140.w,
-                          borderRadius: 8.r,
-                          iconBackgroundColor: AppColors.whiteColor,
-                          onPressed: () {
-                            Get.toNamed(Routes.PAYOUT_REQUEST_SCREEN);
-                          },
-                          title: "Withdraw",
-                          icon: Icons.trending_neutral,
-                          iconColor: AppColors.primaryColor,
-                          fontColor: AppColors.primaryColor,
-                          backgroundColor: AppColors.whiteColor,
-                        ),
-                      ],
-                    ),
-                  ),
+                  // SizedBox(height: 12.h),
+                  // Container(
+                  //   margin: EdgeInsets.symmetric(horizontal: 20.w),
+                  //   width: 1.sw,
+                  //   decoration: BoxDecoration(
+                  //     gradient: LinearGradient(
+                  //       colors: [Color(0xFF6C9E57), Color(0xFF47862D)],
+                  //       begin: Alignment.topCenter,
+                  //       end: Alignment.bottomCenter,
+                  //     ),
+                  //     borderRadius: BorderRadius.circular(40.r),
+                  //   ),
+                  //   padding: EdgeInsets.symmetric(
+                  //     horizontal: 15.w,
+                  //     vertical: 20.h,
+                  //   ),
+                  //   child: Column(
+                  //     crossAxisAlignment: CrossAxisAlignment.center,
+                  //     children: [
+                  //       customText(
+                  //         "Available Balance",
+                  //         color: AppColors.amberColor,
+                  //         fontWeight: FontWeight.w500,
+                  //         fontSize: 16.sp,
+                  //       ),
+                  //       SizedBox(height: 8.sp),
+                  //       customText(
+                  //         settingsController
+                  //                 .userProfile
+                  //                 ?.restaurant
+                  //                 ?.wallet
+                  //                 ?.formattedBalance ??
+                  //             "₦0.00",
+                  //         color: AppColors.whiteColor,
+                  //         fontWeight: FontWeight.w700,
+                  //         fontSize: 30.sp,
+                  //       ),
+                  //       SizedBox(height: 18.h),
+                  //       CustomIconButton(
+                  //         width: 140.w,
+                  //         borderRadius: 8.r,
+                  //         iconBackgroundColor: AppColors.whiteColor,
+                  //         onPressed: () {
+                  //           Get.toNamed(Routes.PAYOUT_REQUEST_SCREEN);
+                  //         },
+                  //         title: "Withdraw",
+                  //         icon: Icons.trending_neutral,
+                  //         iconColor: AppColors.primaryColor,
+                  //         fontColor: AppColors.primaryColor,
+                  //         backgroundColor: AppColors.whiteColor,
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                   SectionBox(
                     children: [
                       SettingsItem(
