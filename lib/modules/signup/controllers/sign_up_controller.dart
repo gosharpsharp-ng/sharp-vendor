@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
-import 'dart:io' show File;
 
 import 'package:sharpvendor/core/utils/exports.dart';
 import 'package:intl_phone_field/phone_number.dart';
@@ -341,16 +339,85 @@ class SignUpController extends GetxController {
             '${restaurantBanner!.substring(0, restaurantBanner!.length > 100 ? 100 : restaurantBanner!.length)}... [Total: ${restaurantBanner!.length} chars]';
       }
 
-      // Hide password
-      dataForLogging['password'] = '***hidden***';
+      // Save complete request body as JSON to file
+      print('\n' + '=' * 60);
+      print('SIGNUP REQUEST - SAVING JSON BODY TO FILE');
+      print('=' * 60);
 
-      customDebugPrint(
-        "=== REGISTRATION DATA OBJECT (Body sent to backend) ===",
-      );
-      customDebugPrint(dataForLogging.toString());
-      customDebugPrint("=== END REGISTRATION DATA OBJECT HERE ===");
+      // Convert to JSON string
+      try {
+        // Also create a readable summary file
+        Map<String, dynamic> summary = Map.from(data);
+        if (summary.containsKey('restaurant_logo') &&
+            summary['restaurant_logo'] != null) {
+          String logo = summary['restaurant_logo'].toString();
+          if (logo.startsWith('data:image')) {
+            String mimeType = logo.substring(5, logo.indexOf(';'));
+            summary['restaurant_logo'] =
+                '[Base64 Image - $mimeType - ${logo.length} chars]';
+          }
+        }
+        if (summary.containsKey('restaurant_banner') &&
+            summary['restaurant_banner'] != null) {
+          String banner = summary['restaurant_banner'].toString();
+          if (banner.startsWith('data:image')) {
+            String mimeType = banner.substring(5, banner.indexOf(';'));
+            summary['restaurant_banner'] =
+                '[Base64 Image - $mimeType - ${banner.length} chars]';
+          }
+        }
+        if (summary.containsKey('password')) {
+          summary['password'] = '***hidden***';
+        }
+      } catch (e) {
+        print('Error saving JSON to file: $e');
+        print('Data object: $data');
+      }
+
+      print('=' * 60 + '\n');
 
       APIResponse response = await authService.signup(data);
+
+      // Print full response details
+      print('\n' + '=' * 60);
+      print('SIGNUP API RESPONSE');
+      print('=' * 60);
+      print('Status: ${response.status}');
+      print('Message: ${response.message}');
+
+      // Check if response data contains validation errors
+      if (response.data is Map) {
+        Map<String, dynamic> responseMap =
+            response.data as Map<String, dynamic>;
+
+        // Check for validation errors
+        if (responseMap.containsKey('errors') &&
+            responseMap['errors'] != null) {
+          print('\nValidation Errors:');
+          Map<String, dynamic> errors =
+              responseMap['errors'] as Map<String, dynamic>;
+          errors.forEach((field, messages) {
+            print('  • $field:');
+            if (messages is List) {
+              for (var message in messages) {
+                print('    - $message');
+              }
+            } else {
+              print('    - $messages');
+            }
+          });
+        }
+
+        // Print timestamp if available
+        if (responseMap.containsKey('timestamp')) {
+          print('\nTimestamp: ${responseMap['timestamp']}');
+        }
+      }
+
+      print('\nFull Response Data:');
+      print(response.data.toString());
+      print('=' * 60 + '\n');
+
       showToast(
         message: response.message,
         isError: response.status != "success",

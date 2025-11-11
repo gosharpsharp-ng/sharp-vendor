@@ -406,7 +406,7 @@ class OrdersController extends GetxController {
 
         // Listen for new incoming orders
         socketService.listenForNewOrders((orderData) {
-          _handleNewOrderNotification(orderData);
+          handleNewOrderNotification(orderData);
         });
       }
     } catch (e) {
@@ -414,8 +414,8 @@ class OrdersController extends GetxController {
     }
   }
 
-  // Handle new order notification
-  void _handleNewOrderNotification(Map<String, dynamic> orderData) {
+  // Handle new order notification (public method for external calls)
+  void handleNewOrderNotification(Map<String, dynamic> orderData) {
     try {
       // Play notification sound (similar to go-rider)
       FlutterRingtonePlayer().playNotification();

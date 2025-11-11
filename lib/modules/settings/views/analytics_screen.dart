@@ -169,54 +169,14 @@ class AnalyticsScreen extends GetView<AnalyticsController> {
 
         SizedBox(height: 35.h),
 
-        // Weekly Overview Section
+        // This week's summary Section
         SizedBox(
           width: 1.sw,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              customText(
-                "Weekly Overview",
-                fontWeight: FontWeight.w500,
-                fontSize: 18.sp,
-                color: AppColors.blackColor,
-              ),
-              GestureDetector(
-                onTap: () {
-                  // TODO: Show date picker for custom range
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 8.w,
-                    vertical: 8.h,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.whiteColor,
-                    border: Border.all(
-                      color: AppColors.primaryColor,
-                      width: 1.sp,
-                    ),
-                    borderRadius: BorderRadius.circular(8.r),
-                  ),
-                  child: Row(
-                    children: [
-                      customText(
-                        controller.weekRangeText,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14.sp,
-                        color: AppColors.blackColor,
-                      ),
-                      SizedBox(width: 5.w),
-                      Icon(
-                        Icons.keyboard_arrow_down,
-                        color: AppColors.blackColor,
-                        size: 16.sp,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+          child: customText(
+            "This week's summary",
+            fontWeight: FontWeight.w500,
+            fontSize: 18.sp,
+            color: AppColors.blackColor,
           ),
         ),
 
