@@ -311,86 +311,7 @@ class BusinessHoursScreen extends GetView<RestaurantDetailsController> {
 
                 SizedBox(height: 30.h),
 
-                // Quick Actions
-                Container(
-                  padding: EdgeInsets.all(16.sp),
-                  decoration: BoxDecoration(
-                    color: AppColors.whiteColor,
-                    borderRadius: BorderRadius.circular(12.r),
-                    border: Border.all(
-                      color: AppColors.greyColor.withOpacity(0.2),
-                    ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      customText(
-                        "Quick Actions",
-                        color: AppColors.blackColor,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      SizedBox(height: 16.h),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: CustomButton(
-                              onPressed: () {
-                                // TODO: Set weekday hours (Mon-Fri)
-                                showToast(
-                                  message: "Set weekday hours coming soon",
-                                  isError: false,
-                                );
-                              },
-                              title: "Set Weekdays",
-                              backgroundColor: AppColors.primaryColor
-                                  .withOpacity(0.1),
-                              fontColor: AppColors.primaryColor,
-                              fontSize: 12.sp,
-                              height: 40.h,
-                            ),
-                          ),
-                          SizedBox(width: 12.w),
-                          Expanded(
-                            child: CustomButton(
-                              onPressed: () {
-                                // TODO: Set weekend hours (Sat-Sun)
-                                showToast(
-                                  message: "Set weekend hours coming soon",
-                                  isError: false,
-                                );
-                              },
-                              title: "Set Weekends",
-                              backgroundColor: AppColors.primaryColor
-                                  .withOpacity(0.1),
-                              fontColor: AppColors.primaryColor,
-                              fontSize: 12.sp,
-                              height: 40.h,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 12.h),
-                      CustomButton(
-                        onPressed: () {
-                          // TODO: Copy previous day schedule
-                          showToast(
-                            message: "Copy schedule coming soon",
-                            isError: false,
-                          );
-                        },
-                        title: "Copy Previous Day",
-                        backgroundColor: AppColors.greyColor.withOpacity(0.1),
-                        fontColor: AppColors.blackColor,
-                        fontSize: 12.sp,
-                        height: 40.h,
-                        width: double.infinity,
-                      ),
-                    ],
-                  ),
-                ),
-
-                SizedBox(height: 30.h),
+            
 
                 // Information Card
                 Container(
@@ -416,6 +337,7 @@ class BusinessHoursScreen extends GetView<RestaurantDetailsController> {
                           color: AppColors.primaryColor,
                           fontSize: 12.sp,
                           fontWeight: FontWeight.w500,
+                          overflow: TextOverflow.visible
                         ),
                       ),
                     ],

@@ -327,9 +327,10 @@ class MenuItemCard extends StatelessWidget {
                                 color: AppColors.primaryColor.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(6.r),
                               ),
-                              child: Icon(
-                                Icons.edit_outlined,
-                                size: 16.sp,
+                              child: SvgPicture.asset(
+                                SvgAssets.editIcon,
+                                height: 16.sp,
+                                width: 16.sp,
                                 color: AppColors.primaryColor,
                               ),
                             ),
@@ -343,10 +344,11 @@ class MenuItemCard extends StatelessWidget {
                                 color: Colors.red.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(6.r),
                               ),
-                              child: Icon(
-                                Icons.delete_outline,
-                                size: 16.sp,
-                                color: Colors.red,
+                              child: SvgPicture.asset(
+                                SvgAssets.deleteIcon,
+                                height: 16.sp,
+                                width: 16.sp,
+                                color: AppColors.redColor,
                               ),
                             ),
                           ),

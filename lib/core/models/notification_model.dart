@@ -6,6 +6,7 @@ class NotificationModel {
   final String message;
   final String priority;
   final String? readAt;
+  final String? status;
   final String? deletedAt;
   final String createdAt;
   final String updatedAt;
@@ -16,6 +17,7 @@ class NotificationModel {
     required this.notifiableId,
     required this.title,
     required this.message,
+     required this.status,
     required this.priority,
     this.readAt,
     this.deletedAt,
@@ -30,6 +32,7 @@ class NotificationModel {
       notifiableId: json['notifiable_id'],
       title: json['title'],
       message: json['message'],
+      status: json['status']??"",
       priority: json['priority'],
       readAt: json['read_at'],
       deletedAt: json['deleted_at'],
@@ -45,6 +48,7 @@ class NotificationModel {
       'notifiable_id': notifiableId,
       'title': title,
       'message': message,
+      'status': status,
       'priority': priority,
       'read_at': readAt,
       'deleted_at': deletedAt,

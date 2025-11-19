@@ -37,4 +37,19 @@ class BankAccount {
       updatedAt: json['updated_at'] ?? '',
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'bank_account_number': bankAccountNumber,
+      'bank_account_name': bankAccountName,
+      'bank_name': bankName,
+      'bank_code': bankCode,
+      'recipient_id': recipientId,
+      'accountable_type': accountableType,
+      'accountable_id': accountableId,
+      'created_at': createdAt,
+      'updated_at': updatedAt,
+    };
+  }
 }

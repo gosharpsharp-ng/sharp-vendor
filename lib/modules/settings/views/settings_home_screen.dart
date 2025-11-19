@@ -84,76 +84,144 @@ class SettingsHomeScreen extends StatelessWidget {
                   //     ),
                   //   ],
                   // ),
-                  // SizedBox(height: 12.h),
-                  // Container(
-                  //   margin: EdgeInsets.symmetric(horizontal: 20.w),
-                  //   width: 1.sw,
-                  //   decoration: BoxDecoration(
-                  //     gradient: LinearGradient(
-                  //       colors: [Color(0xFF6C9E57), Color(0xFF47862D)],
-                  //       begin: Alignment.topCenter,
-                  //       end: Alignment.bottomCenter,
-                  //     ),
-                  //     borderRadius: BorderRadius.circular(40.r),
-                  //   ),
-                  //   padding: EdgeInsets.symmetric(
-                  //     horizontal: 15.w,
-                  //     vertical: 20.h,
-                  //   ),
-                  //   child: Column(
-                  //     crossAxisAlignment: CrossAxisAlignment.center,
-                  //     children: [
-                  //       customText(
-                  //         "Available Balance",
-                  //         color: AppColors.amberColor,
-                  //         fontWeight: FontWeight.w500,
-                  //         fontSize: 16.sp,
-                  //       ),
-                  //       SizedBox(height: 8.sp),
-                  //       customText(
-                  //         settingsController
-                  //                 .userProfile
-                  //                 ?.restaurant
-                  //                 ?.wallet
-                  //                 ?.formattedBalance ??
-                  //             "₦0.00",
-                  //         color: AppColors.whiteColor,
-                  //         fontWeight: FontWeight.w700,
-                  //         fontSize: 30.sp,
-                  //       ),
-                  //       SizedBox(height: 18.h),
-                  //       CustomIconButton(
-                  //         width: 140.w,
-                  //         borderRadius: 8.r,
-                  //         iconBackgroundColor: AppColors.whiteColor,
-                  //         onPressed: () {
-                  //           Get.toNamed(Routes.PAYOUT_REQUEST_SCREEN);
-                  //         },
-                  //         title: "Withdraw",
-                  //         icon: Icons.trending_neutral,
-                  //         iconColor: AppColors.primaryColor,
-                  //         fontColor: AppColors.primaryColor,
-                  //         backgroundColor: AppColors.whiteColor,
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
+                  // User Profile Section
+                  Container(
+                    margin: EdgeInsets.symmetric(
+                      horizontal: 16.w,
+                      vertical: 8.h,
+                    ),
+                    padding: EdgeInsets.all(16.sp),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          AppColors.primaryColor,
+                          AppColors.primaryColor.withOpacity(0.8),
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(16.r),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.primaryColor.withOpacity(0.3),
+                          blurRadius: 12,
+                          offset: Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      children: [
+                        // Profile Picture
+                        Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: AppColors.whiteColor,
+                              width: 3.w,
+                            ),
+                          ),
+                          child:
+                              settingsController.userProfile?.avatarUrl !=
+                                      null &&
+                                  settingsController
+                                      .userProfile!
+                                      .avatarUrl!
+                                      .isNotEmpty
+                              ? CircleAvatar(
+                                  radius: 30.r,
+                                  backgroundImage: CachedNetworkImageProvider(
+                                    settingsController.userProfile!.avatarUrl!,
+                                  ),
+                                )
+                              : CircleAvatar(
+                                  radius: 35.r,
+                                  backgroundColor: AppColors.whiteColor,
+                                  child: customText(
+                                    "${settingsController.userProfile?.fname.isNotEmpty == true ? settingsController.userProfile!.fname[0].toUpperCase() : ''}${settingsController.userProfile?.lname.isNotEmpty == true ? settingsController.userProfile!.lname[0].toUpperCase() : ''}",
+                                    fontSize: 22.sp,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.primaryColor,
+                                  ),
+                                ),
+                        ),
+                        SizedBox(width: 16.w),
+                        // User Info
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              customText(
+                                "${settingsController.userProfile?.fname ?? ''} ${settingsController.userProfile?.lname ?? ''}",
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.whiteColor,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              SizedBox(height: 4.h),
+                              customText(
+                                settingsController.userProfile?.email ?? '',
+                                fontSize: 13.sp,
+                                fontWeight: FontWeight.w400,
+                                color: AppColors.whiteColor.withOpacity(0.9),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              SizedBox(height: 2.h),
+                              customText(
+                                settingsController
+                                        .userProfile
+                                        ?.restaurant
+                                        ?.name ??
+                                    '',
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.whiteColor.withOpacity(0.8),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
+                        ),
+                        // Edit Profile Icon
+                        InkWell(
+                          onTap: () {
+                            settingsController.setProfileFields();
+                            settingsController.toggleProfileEditState(false);
+                            Get.toNamed(Routes.EDIT_PROFILE_SCREEN);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(8.sp),
+                            decoration: BoxDecoration(
+                              color: AppColors.whiteColor.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(8.r),
+                            ),
+                            child: SvgPicture.asset(
+                              SvgAssets.editIcon,
+                              height: 20.sp,
+                              width: 20.sp,
+                              color: AppColors.whiteColor,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 8.h),
                   SectionBox(
                     children: [
-                      SettingsItem(
-                        onPressed: () {
-                          settingsController.setProfileFields();
-                          settingsController.toggleProfileEditState(false);
-                          Get.toNamed(Routes.EDIT_PROFILE_SCREEN);
-                        },
-                        title: "Personal Information",
-                        icon: SvgAssets.profileIcon,
-                      ),
+                      // SettingsItem(
+                      //   onPressed: () {
+                      //     settingsController.setProfileFields();
+                      //     settingsController.toggleProfileEditState(false);
+                      //     Get.toNamed(Routes.EDIT_PROFILE_SCREEN);
+                      //   },
+                      //   title: "Personal Information",
+                      // ),
                       SettingsItem(
                         onPressed: () {
                           Get.toNamed(Routes.RESTAURANT_DETAILS_SCREEN);
                         },
-                        iconColor: AppColors.primaryColor,
                         title: "Business Details",
                         icon: SvgAssets.operationsIcon,
                         isLast: false,
@@ -183,30 +251,47 @@ class SettingsHomeScreen extends StatelessWidget {
                         },
                         title: "GoWallet",
                         icon: SvgAssets.walletIcon,
+                        isLast: false,
                       ),
                       SettingsItem(
                         onPressed: () {
                           Get.toNamed(Routes.ANALYTICS_SCREEN);
                         },
                         title: "Analytics",
-                        iconColor: AppColors.purpleColor,
                         icon: SvgAssets.analyticsIcon,
+                        isLast: false,
+                      ),
+                      SettingsItem(
+                        onPressed: () {
+                          Get.toNamed(Routes.CAMPAIGNS_HOME_SCREEN);
+                        },
+                        title: "Campaigns",
+                        icon: SvgAssets.campaignIcon,
+                        isLast: false,
+                      ),
+                      SettingsItem(
+                        onPressed: () {
+                          Get.toNamed(Routes.RESTAURANT_DISCOUNTS_SCREEN);
+                        },
+                        title: "Manage Discounts",
+                        icon: SvgAssets.discountIcon,
+                        isLast: false,
                       ),
                       SettingsItem(
                         onPressed: () {
                           Get.toNamed(Routes.ORDER_TRANSACTIONS_SCREEN);
                         },
                         title: "Order Transactions",
-                        iconColor: AppColors.purpleColor,
                         icon: SvgAssets.ordersIcon,
+                        isLast: false,
                       ),
                       SettingsItem(
                         onPressed: () {
                           Get.toNamed(Routes.PAYOUT_HISTORY_SCREEN);
                         },
                         title: "Payout History",
-                        iconColor: AppColors.forestGreenColor,
                         icon: SvgAssets.walletIcon,
+                        isLast: false,
                       ),
                       SettingsItem(
                         onPressed: () {
@@ -214,14 +299,15 @@ class SettingsHomeScreen extends StatelessWidget {
                         },
                         title: "Notifications",
                         icon: SvgAssets.notificationIcon,
+                        isLast: false,
                       ),
                       SettingsItem(
                         onPressed: () {
                           Get.toNamed(Routes.REVIEWS_SCREEN);
                         },
                         title: "Ratings",
-                        iconColor: AppColors.amberColor,
                         icon: SvgAssets.ratingIcon,
+                        isLast: false,
                       ),
                       SettingsItem(
                         onPressed: () {
@@ -229,6 +315,7 @@ class SettingsHomeScreen extends StatelessWidget {
                         },
                         title: "Change Password",
                         icon: SvgAssets.passwordChangeIcon,
+                        isLast: false,
                       ),
 
                       // SettingsItem(
@@ -242,6 +329,7 @@ class SettingsHomeScreen extends StatelessWidget {
                         },
                         title: "FAQS",
                         icon: SvgAssets.faqsIcon,
+                        isLast: false,
                       ),
 
                       // SettingsItem(
@@ -291,8 +379,8 @@ class SettingsHomeScreen extends StatelessWidget {
                         },
                         title: "Logout",
                         icon: SvgAssets.logoutIcon,
-                        isLogout: true,
-                        isLast: true,
+                        // isLogout: true,
+                        isLast: false,
                       ),
                       SettingsItem(
                         onPressed: () {
@@ -301,7 +389,7 @@ class SettingsHomeScreen extends StatelessWidget {
                         },
                         title: "Delete Account",
                         icon: SvgAssets.deleteIcon,
-                        isLogout: true,
+                        // isLogout: true,
                         isLast: true,
                       ),
                     ],

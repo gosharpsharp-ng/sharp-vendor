@@ -83,15 +83,17 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
                               child: Stack(
                                 children: [
                                   // Cover Image
-                                  if (restaurant.banner != null &&
-                                      restaurant.banner!.isNotEmpty)
+                                  if ((restaurant.bannerUrl != null &&
+                                      restaurant.bannerUrl!.isNotEmpty) ||
+                                      (restaurant.banner != null &&
+                                      restaurant.banner!.isNotEmpty))
                                     ClipRRect(
                                       borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(24.r),
                                         topRight: Radius.circular(24.r),
                                       ),
                                       child: CachedNetworkImage(
-                                        imageUrl: restaurant.banner!,
+                                        imageUrl: restaurant.bannerUrl ?? restaurant.banner!,
                                         width: double.infinity,
                                         height: 120.h,
                                         fit: BoxFit.cover,
@@ -151,11 +153,13 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
                                 child: Stack(
                                   children: [
                                     // Profile Image
-                                    restaurant.logo != null &&
-                                            restaurant.logo!.isNotEmpty
+                                    (restaurant.logoUrl != null &&
+                                            restaurant.logoUrl!.isNotEmpty) ||
+                                        (restaurant.logo != null &&
+                                            restaurant.logo!.isNotEmpty)
                                         ? ClipOval(
                                             child: CachedNetworkImage(
-                                              imageUrl: restaurant.logo!,
+                                              imageUrl: restaurant.logoUrl ?? restaurant.logo!,
                                               fit: BoxFit.cover,
                                               width: 100.w,
                                               height: 100.w,
@@ -523,6 +527,10 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
               Get.back();
               Get.toNamed(Routes.RESTAURANT_BUSINESS_HOURS);
             }),
+            _buildOptionItem("Manage Discounts", Icons.discount_outlined, () {
+              Get.back();
+              Get.toNamed(Routes.RESTAURANT_DISCOUNTS_SCREEN);
+            }),
             _buildOptionItem(
               "Toggle Status",
               Icons.power_settings_new_outlined,
@@ -769,10 +777,11 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
                     fontWeight: FontWeight.w600,
                   ),
                   SizedBox(width: 4.w),
-                  Icon(
-                    Icons.edit,
+                  SvgPicture.asset(
+                    SvgAssets.editIcon,
+                    height: 14.sp,
+                    width: 14.sp,
                     color: AppColors.primaryColor,
-                    size: 14.sp,
                   ),
                 ],
               ),

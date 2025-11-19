@@ -10,8 +10,31 @@ class AppNavigationScreen extends StatelessWidget {
           return false;
         },
         child: Scaffold(
-          body: appNavigationController
-              .screens[appNavigationController.currentScreenIndex],
+          body: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            switchInCurve: Curves.easeInOut,
+            switchOutCurve: Curves.easeInOut,
+            transitionBuilder: (Widget child, Animation<double> animation) {
+              return FadeTransition(
+                opacity: animation,
+                child: SlideTransition(
+                  position: Tween<Offset>(
+                    begin: const Offset(0.05, 0),
+                    end: Offset.zero,
+                  ).animate(CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.easeOutCubic,
+                  )),
+                  child: child,
+                ),
+              );
+            },
+            child: KeyedSubtree(
+              key: ValueKey<int>(appNavigationController.currentScreenIndex),
+              child: appNavigationController
+                  .screens[appNavigationController.currentScreenIndex],
+            ),
+          ),
           bottomNavigationBar: BottomAppBar(
             surfaceTintColor: AppColors.whiteColor,
             padding: const EdgeInsets.all(0.0),
@@ -74,7 +97,7 @@ class AppNavigationScreen extends StatelessWidget {
   }
 }
 
-class BottomNavItem extends StatelessWidget {
+class BottomNavItem extends StatefulWidget {
   final String title;
   final String activeIcon;
   final int index;
@@ -87,39 +110,105 @@ class BottomNavItem extends StatelessWidget {
       required this.index});
 
   @override
+  State<BottomNavItem> createState() => _BottomNavItemState();
+}
+
+class _BottomNavItemState extends State<BottomNavItem>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 150),
+      vsync: this,
+    );
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.85).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void _onTapDown(TapDownDetails details) {
+    _animationController.forward();
+  }
+
+  void _onTapUp(TapUpDetails details) {
+    _animationController.reverse();
+  }
+
+  void _onTapCancel() {
+    _animationController.reverse();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GetBuilder<AppNavigationController>(
-        builder: (homeController) => Container(
+        builder: (homeController) {
+          final isSelected = widget.index == homeController.currentScreenIndex;
+
+          return GestureDetector(
+            onTapDown: _onTapDown,
+            onTapUp: _onTapUp,
+            onTapCancel: _onTapCancel,
+            onTap: () {
+              HapticFeedback.selectionClick();
+              homeController.changeScreenIndex(widget.index);
+            },
+            child: Container(
               color: Colors.transparent,
-              child: InkWell(
-                onTap: () {
-                  homeController.changeScreenIndex(index);
+              child: AnimatedBuilder(
+                animation: _scaleAnimation,
+                builder: (context, child) {
+                  return Transform.scale(
+                    scale: _scaleAnimation.value,
+                    child: child,
+                  );
                 },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SvgPicture.asset(
-                      activeIcon,
-                      height: iconSize.sp,
-                      color: index == homeController.currentScreenIndex
-                          ? AppColors.primaryColor
-                          : AppColors.blackColor,
-                      width: iconSize.sp,
-                    ),
-                    SizedBox(
-                      height: 5.sp,
-                    ),
-                    customText(title,
-                        fontWeight: index == homeController.currentScreenIndex
-                            ? FontWeight.w700
-                            : FontWeight.w400,
-                        color: index == homeController.currentScreenIndex
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      curve: Curves.easeInOut,
+                      padding: EdgeInsets.all(isSelected ? 4.sp : 0),
+                      child: SvgPicture.asset(
+                        widget.activeIcon,
+                        height: widget.iconSize.sp,
+                        color: isSelected
                             ? AppColors.primaryColor
                             : AppColors.blackColor,
-                        fontSize: 13.sp)
+                        width: widget.iconSize.sp,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 3.sp,
+                    ),
+                    AnimatedDefaultTextStyle(
+                      duration: const Duration(milliseconds: 200),
+                      style: TextStyle(
+                        fontWeight: isSelected
+                            ? FontWeight.w700
+                            : FontWeight.w400,
+                        color: isSelected
+                            ? AppColors.primaryColor
+                            : AppColors.blackColor,
+                        fontSize: 13.sp,
+                      ),
+                      child: Text(widget.title),
+                    ),
                   ],
                 ),
               ),
-            ));
+            ),
+          );
+        });
   }
 }

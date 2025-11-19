@@ -125,28 +125,6 @@ class PayoutHistoryScreen extends StatelessWidget {
                               fontSize: 14.sp,
                               color: AppColors.greyColor,
                             ),
-                            SizedBox(height: 24.h),
-                            GestureDetector(
-                              onTap: () {
-                                Get.toNamed(Routes.PAYOUT_REQUEST_SCREEN);
-                              },
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 24.w,
-                                  vertical: 12.h,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: AppColors.primaryColor,
-                                  borderRadius: BorderRadius.circular(25.r),
-                                ),
-                                child: customText(
-                                  "Request Payout",
-                                  fontSize: 14.sp,
-                                  color: AppColors.whiteColor,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
                           ],
                         ),
                       ),
@@ -224,19 +202,6 @@ class PayoutHistoryScreen extends StatelessWidget {
               ),
             ),
           ),
-          floatingActionButton: payoutController.payoutRequests.isNotEmpty
-              ? FloatingActionButton(
-                  onPressed: () {
-                    Get.toNamed(Routes.PAYOUT_REQUEST_SCREEN);
-                  },
-                  backgroundColor: AppColors.primaryColor,
-                  child: Icon(
-                    Icons.add,
-                    color: AppColors.whiteColor,
-                    size: 24.sp,
-                  ),
-                )
-              : null,
         );
       },
     );

@@ -170,64 +170,60 @@ class DashboardScreen extends StatelessWidget {
                           GetBuilder<DeliveriesController>(
                             builder: (ordersController) {
                               return Container(
+                                width: 1.sw,
+                                decoration: BoxDecoration(
+                                  gradient: const LinearGradient(
+                                    colors: [
+                                      Color(0xFFFFF6E3),
+                                      Color(0xFFFFFFFF),
+                                    ],
+                                    begin: Alignment.topRight,
+                                    end: Alignment.bottomLeft,
+                                  ),
+                                  borderRadius: BorderRadius.circular(12.r),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.1),
+                                      blurRadius: 10,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
                                 padding: EdgeInsets.symmetric(
                                   horizontal: 25.sp,
-                                  vertical: 8.sp,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: ordersController.isOnline
-                                      ? AppColors.primaryColor.withAlpha(25)
-                                      : AppColors.blackColor.withAlpha(25),
-                                  borderRadius: BorderRadius.circular(12.r),
-                                  border: Border.all(
-                                    color: ordersController.isOnline
-                                        ? AppColors.greenColor.withAlpha(100)
-                                        : AppColors.greyColor.withAlpha(100),
-                                    width: 1.5,
-                                  ),
+                                  vertical: 15.sp,
                                 ),
                                 child: Column(
                                   children: [
                                     customText(
                                       ordersController.isOnline
-                                          ? "You're online! Your restaurant is visible to customers and can receive orders."
-                                          : "You're offline. Turn on the switch to start receiving orders from customers.",
-                                      fontWeight: FontWeight.w400,
+                                          ? "You're online! Stay active to earn more."
+                                          : "You're offline. Go online to start earning!",
+                                      fontWeight: FontWeight.w500,
                                       fontSize: 12.sp,
                                       textAlign: TextAlign.center,
                                       overflow: TextOverflow.visible,
-                                      color: ordersController.isOnline
-                                          ? AppColors.primaryColor
-                                          : AppColors.blackColor,
                                     ),
-                                    SizedBox(height: 5.h),
-                                    SizedBox(
-                                      width: 1.sw,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          customText(
-                                            ordersController.isOnline
-                                                ? 'Go Offline'
-                                                : 'Go Online',
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 20.sp,
-                                            color: ordersController.isOnline
-                                                ? AppColors.primaryColor
-                                                : AppColors.blackColor,
-                                          ),
-                                          SizedBox(width: 10.sp),
-                                          Switch(
-                                            activeColor: AppColors.greenColor,
-                                            value: ordersController.isOnline,
-                                            onChanged: (value) {
-                                              ordersController
-                                                  .toggleOnlineStatus();
-                                            },
-                                          ),
-                                        ],
-                                      ),
+                                    SizedBox(height: 8.h),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        customText(
+                                          ordersController.isOnline
+                                              ? 'Go Offline'
+                                              : 'Go Online',
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 18.sp,
+                                        ),
+                                        SizedBox(width: 10.sp),
+                                        Switch(
+                                          activeColor: AppColors.greenColor,
+                                          value: ordersController.isOnline,
+                                          onChanged: (value) {
+                                            ordersController.toggleOnlineStatus();
+                                          },
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),

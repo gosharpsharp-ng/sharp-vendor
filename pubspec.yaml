@@ -98,9 +98,11 @@ flutter:
   # see https://flutter.dev/to/font-from-package
 
 flutter_native_splash:
-  background_image: "assets/imgs/splash_img.png"
+  color: "#000000"
+  image: "assets/icons/gosharp_icon.png"
   android: true
   ios: true
   web: false
   android_12:
-    color: "#274A19"
+    color: "#000000"
+    image: "assets/icons/gosharp_icon.png"
