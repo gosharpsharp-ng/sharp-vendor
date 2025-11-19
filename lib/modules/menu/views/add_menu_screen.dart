@@ -292,36 +292,36 @@ class AddMenuScreen extends GetView<FoodMenuController> {
                     SizedBox(height: 15.h),
 
                     // Category Selection
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        customText(
-                          "Category",
-                          color: AppColors.blackColor,
-                          fontSize: 13.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Get.toNamed(Routes.CATEGORIES_MANAGEMENT_SCREEN);
-                          },
-                          child: customText(
-                            "Add Category",
-                            color: AppColors.greenColor,
-                            fontSize: 13.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 8.h),
+                    // Row(
+                    //   mainAxisSize: MainAxisSize.max,
+                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   children: [
+                    //     customText(
+                    //       "Category",
+                    //       color: AppColors.blackColor,
+                    //       fontSize: 13.sp,
+                    //       fontWeight: FontWeight.w500,
+                    //     ),
+                    //     GestureDetector(
+                    //       onTap: () {
+                    //         Get.toNamed(Routes.CATEGORIES_MANAGEMENT_SCREEN);
+                    //       },
+                    //       child: customText(
+                    //         "Add Category",
+                    //         color: AppColors.greenColor,
+                    //         fontSize: 13.sp,
+                    //         fontWeight: FontWeight.w600,
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+                    // SizedBox(height: 8.h),
                     ClickableCustomRoundedInputField(
                       title: "Category",
                       label: "Select Category",
                       readOnly: true,
                       showLabel: true,
-                      hasTitle: false,
+                      hasTitle: true,
                       isRequired: true,
                       controller: TextEditingController(
                         text: menuController.selectedCategory?.name ?? "",
@@ -469,135 +469,6 @@ class AddMenuScreen extends GetView<FoodMenuController> {
                     ],
 
                     SizedBox(height: 20.h),
-
-                    // Show on customer app toggle
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              customText(
-                                "Show on customer app",
-                                color: AppColors.blackColor,
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              customText(
-                                "Toggle visibility for customers",
-                                color: AppColors.greyColor,
-                                fontSize: 12.sp,
-                                fontWeight: FontWeight.normal,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Switch(
-                          value: menuController.showOnCustomerApp,
-                          onChanged: menuController.toggleShowOnCustomerApp,
-                          activeColor: AppColors.primaryColor,
-                        ),
-                      ],
-                    ),
-
-                    SizedBox(height: 20.h),
-
-                    // Availability Toggle
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        customText(
-                          "Available",
-                          color: AppColors.blackColor,
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        Switch(
-                          value: menuController.isAvailable==1,
-                          onChanged: (bool value){
-                            menuController.toggleAvailability(value ? 1 : 0);
-                          },
-                          activeColor: AppColors.primaryColor,
-                        ),
-                      ],
-                    ),
-
-                    SizedBox(height: 15.h),
-
-                    // Available Quantity
-                    if (menuController.isAvailable==1) ...[
-                      customText(
-                        "Available quantity",
-                        color: AppColors.blackColor,
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      SizedBox(height: 8.h),
-                      Row(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              menuController.decrementQuantity();
-                            },
-                            child: Container(
-                              padding: EdgeInsets.all(8.sp),
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: AppColors.greyColor.withOpacity(0.3),
-                                ),
-                                borderRadius: BorderRadius.circular(4.r),
-                              ),
-                              child: Icon(
-                                Icons.remove,
-                                size: 20.sp,
-                                color: AppColors.blackColor,
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 12.w),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 16.w,
-                              vertical: 12.h,
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: AppColors.greyColor.withOpacity(0.3),
-                              ),
-                              borderRadius: BorderRadius.circular(4.r),
-                            ),
-                            child: customText(
-                              menuController.availableQuantity.toString(),
-                              color: AppColors.blackColor,
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          SizedBox(width: 12.w),
-                          InkWell(
-                            onTap: () {
-                              menuController.incrementQuantity();
-                            },
-                            child: Container(
-                              padding: EdgeInsets.all(8.sp),
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: AppColors.greyColor.withOpacity(0.3),
-                                ),
-                                borderRadius: BorderRadius.circular(4.r),
-                              ),
-                              child: Icon(
-                                Icons.add,
-                                size: 20.sp,
-                                color: AppColors.blackColor,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 15.h),
-                    ],
 
                     SizedBox(height: 30.h),
                   ],

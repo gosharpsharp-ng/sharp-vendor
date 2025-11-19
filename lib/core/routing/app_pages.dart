@@ -7,6 +7,9 @@ import 'package:sharpvendor/modules/menu/views/category_management_screen.dart';
 import 'package:sharpvendor/modules/menu/views/edit_menu_screen.dart';
 import 'package:sharpvendor/modules/menu/views/menu_details_screen.dart';
 import 'package:sharpvendor/modules/menu/views/menu_home_screen.dart';
+import 'package:sharpvendor/modules/menu/views/discounts/menu_discounts_list_screen.dart';
+import 'package:sharpvendor/modules/menu/views/discounts/add_discount_screen.dart';
+import 'package:sharpvendor/modules/menu/views/discounts/edit_discount_screen.dart';
 import 'package:sharpvendor/modules/orders/bindings/orders_bindings.dart';
 import 'package:sharpvendor/modules/orders/views/order_details_screen.dart';
 import 'package:sharpvendor/modules/orders/views/orders_home_screen.dart';
@@ -26,10 +29,16 @@ import 'package:sharpvendor/modules/restaurant/views/edit_location_screen.dart';
 import 'package:sharpvendor/modules/restaurant/views/business_hours_screen.dart';
 import 'package:sharpvendor/modules/restaurant/views/business_settings_screen.dart';
 import 'package:sharpvendor/modules/restaurant/views/bank_account_edit_screen.dart';
+import 'package:sharpvendor/modules/restaurant/views/restaurant_discounts_screen.dart';
+import 'package:sharpvendor/modules/restaurant/views/add_restaurant_discount_screen.dart';
+import 'package:sharpvendor/modules/restaurant/views/edit_restaurant_discount_screen.dart';
 import 'package:sharpvendor/modules/payouts/bindings/payout_bindings.dart';
 import 'package:sharpvendor/modules/payouts/views/payout_request_screen.dart';
 import 'package:sharpvendor/modules/payouts/views/payout_history_screen.dart';
 import 'package:sharpvendor/modules/payouts/views/payout_details_screen.dart';
+import 'package:sharpvendor/modules/campaigns/views/campaigns_home_screen.dart';
+import 'package:sharpvendor/modules/campaigns/views/add_campaign_screen.dart';
+import 'package:sharpvendor/modules/campaigns/views/campaign_details_screen.dart';
 part 'app_routes.dart';
 
 class AppPages {
@@ -84,7 +93,6 @@ class AppPages {
     GetPage(
       name: Routes.SIGNUP_OTP_SCREEN,
       page: () => SignUpOtpScreen(),
-      binding: SignUpBindings(),
       transition: Transition.rightToLeftWithFade,
       transitionDuration: const Duration(milliseconds: 400),
     ),
@@ -326,6 +334,27 @@ class AppPages {
       transition: Transition.downToUp,
       transitionDuration: const Duration(milliseconds: 400),
     ),
+
+    // Menu Discounts
+    GetPage(
+      name: Routes.MENU_DISCOUNTS_LIST_SCREEN,
+      page: () => const MenuDiscountsListScreen(),
+      transition: Transition.downToUp,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: Routes.ADD_DISCOUNT_SCREEN,
+      page: () => const AddDiscountScreen(),
+      transition: Transition.downToUp,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: Routes.EDIT_DISCOUNT_SCREEN,
+      page: () => const EditDiscountScreen(),
+      transition: Transition.downToUp,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+
     GetPage(
       name: Routes.ORDERS_HOME_SCREEN,
       page: () => OrdersHomeScreen(),
@@ -385,6 +414,26 @@ class AppPages {
       transitionDuration: const Duration(milliseconds: 400),
     ),
 
+    // Restaurant Discounts
+    GetPage(
+      name: Routes.RESTAURANT_DISCOUNTS_SCREEN,
+      page: () => const RestaurantDiscountsScreen(),
+      transition: Transition.downToUp,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: Routes.ADD_RESTAURANT_DISCOUNT_SCREEN,
+      page: () => const AddRestaurantDiscountScreen(),
+      transition: Transition.downToUp,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: Routes.EDIT_RESTAURANT_DISCOUNT_SCREEN,
+      page: () => const EditRestaurantDiscountScreen(),
+      transition: Transition.downToUp,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+
     // Payouts
     GetPage(
       name: Routes.PAYOUT_REQUEST_SCREEN,
@@ -404,6 +453,29 @@ class AppPages {
       name: Routes.PAYOUT_DETAILS_SCREEN,
       page: () => const PayoutDetailsScreen(),
       binding: PayoutBindings(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+
+    // Campaigns
+    GetPage(
+      name: Routes.CAMPAIGNS_HOME_SCREEN,
+      page: () => const CampaignsHomeScreen(),
+      binding: CampaignsBindings(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: Routes.ADD_CAMPAIGN_SCREEN,
+      page: () => const AddCampaignScreen(),
+      binding: CampaignsBindings(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: Routes.CAMPAIGN_DETAILS_SCREEN,
+      page: () => const CampaignDetailsScreen(),
+      binding: CampaignsBindings(),
       transition: Transition.rightToLeftWithFade,
       transitionDuration: const Duration(milliseconds: 400),
     ),

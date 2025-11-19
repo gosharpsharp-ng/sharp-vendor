@@ -73,4 +73,6 @@ class SvgAssets {
   static const String profileIcon = 'assets/svgs/profile.svg';
   static const String securityIcon = 'assets/svgs/security.svg';
   static const String supportIcon = 'assets/svgs/support.svg';
+  static const String discountIcon = 'assets/svgs/discount.svg';
+  static const String campaignIcon = 'assets/svgs/campaign.svg';
 }

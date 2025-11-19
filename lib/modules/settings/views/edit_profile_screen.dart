@@ -106,10 +106,11 @@ class EditProfileScreen extends StatelessWidget {
                                 child: settingsController.isUpdatingAvatar?SizedBox(
                                   height: 20.sp,width: 20.sp,
                                   child: CircularProgressIndicator(color: AppColors.primaryColor,strokeWidth: 1.2.sp,),
-                                ):Icon(
-                                  Icons.edit, // or Icons.camera_alt
-                                  size: 20.sp,
-                                  color: Colors.black,
+                                ):SvgPicture.asset(
+                                  SvgAssets.editIcon,
+                                  height: 20.sp,
+                                  width: 20.sp,
+                                  color: AppColors.blackColor,
                                 ),
                               ),
                             ),

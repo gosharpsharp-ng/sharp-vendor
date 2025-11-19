@@ -29,18 +29,28 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
             },
             title: "",
           ),
-          bottomNavigationBar: Container(
-            padding: EdgeInsets.symmetric(horizontal: 22.sp, vertical: 20.sp),
-            child: CustomButton(
-              onPressed: () {
-                menuController.editMenuItem(menuItem);
-              },
-              isBusy: menuController.isLoading,
-              title: "Edit",
-              width: 1.sw,
-              backgroundColor: AppColors.primaryColor,
-              fontColor: AppColors.whiteColor,
-            ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: menuController.isLoading
+                ? null
+                : () {
+                    menuController.editMenuItem(menuItem);
+                  },
+            backgroundColor: AppColors.primaryColor,
+            child: menuController.isLoading
+                ? SizedBox(
+                    width: 24.sp,
+                    height: 24.sp,
+                    child: CircularProgressIndicator(
+                      color: AppColors.whiteColor,
+                      strokeWidth: 2.sp,
+                    ),
+                  )
+                : SvgPicture.asset(
+                    SvgAssets.editIcon,
+                    height: 24.sp,
+                    width: 24.sp,
+                    color: AppColors.whiteColor,
+                  ),
           ),
           backgroundColor: AppColors.backgroundColor,
           body: SingleChildScrollView(
@@ -59,29 +69,37 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
                       child: menuItem.files.isEmpty
                           ? _buildPlaceholderImage()
                           : menuItem.files[0].url.startsWith('http')
-                              ? Image.network(
-                                  menuItem.files[0].url,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return _buildPlaceholderImage();
-                                  },
-                                )
-                              : Image.asset(menuItem.files[0].url, fit: BoxFit.cover),
+                          ? Image.network(
+                              menuItem.files[0].url,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return _buildPlaceholderImage();
+                              },
+                            )
+                          : Image.asset(
+                              menuItem.files[0].url,
+                              fit: BoxFit.cover,
+                            ),
                     ),
                     // Availability Badge
                     Positioned(
                       top: 16.h,
                       right: 16.w,
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 12.w,
+                          vertical: 6.h,
+                        ),
                         decoration: BoxDecoration(
                           color: menuItem.isAvailable == 1
-                              ? AppColors.greenColor
-                              : AppColors.redColor,
+                              ? AppColors.blackColor
+                              : AppColors.greyColor,
                           borderRadius: BorderRadius.circular(20.r),
                         ),
                         child: customText(
-                          menuItem.isAvailable == 1 ? "Available" : "Unavailable",
+                          menuItem.isAvailable == 1
+                              ? "Available"
+                              : "Unavailable",
                           color: AppColors.whiteColor,
                           fontSize: 12.sp,
                           fontWeight: FontWeight.w600,
@@ -113,7 +131,10 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
                           ),
                           SizedBox(width: 12.w),
                           Container(
-                            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12.w,
+                              vertical: 6.h,
+                            ),
                             decoration: BoxDecoration(
                               color: AppColors.primaryColor.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(8.r),
@@ -132,7 +153,10 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
 
                       // Category Badge
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 10.w,
+                          vertical: 4.h,
+                        ),
                         decoration: BoxDecoration(
                           color: AppColors.greyColor.withOpacity(0.15),
                           borderRadius: BorderRadius.circular(6.r),
@@ -148,7 +172,8 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
                       SizedBox(height: 16.h),
 
                       // Description
-                      if (menuItem.description != null && menuItem.description!.isNotEmpty)
+                      if (menuItem.description != null &&
+                          menuItem.description!.isNotEmpty)
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -206,7 +231,8 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
                       SizedBox(height: 12.h),
                       Row(
                         children: controller.plateSizes.map((size) {
-                          bool isSelected = controller.selectedPlateSize == size;
+                          bool isSelected =
+                              controller.selectedPlateSize == size;
                           return Expanded(
                             child: GestureDetector(
                               onTap: () {
@@ -214,7 +240,9 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
                               },
                               child: Container(
                                 margin: EdgeInsets.only(
-                                  right: size != controller.plateSizes.last ? 8.w : 0,
+                                  right: size != controller.plateSizes.last
+                                      ? 8.w
+                                      : 0,
                                 ),
                                 padding: EdgeInsets.symmetric(vertical: 14.h),
                                 decoration: BoxDecoration(
@@ -258,23 +286,27 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
 
                       _buildSettingCard(
                         title: "Availability",
-                        subtitle: "Make this menu ${menuItem.isAvailable == 1 ? 'unavailable' : 'available'}",
+                        subtitle:
+                            "Make this menu ${menuItem.isAvailable == 1 ? 'unavailable' : 'available'}",
                         value: menuItem.isAvailable == 1,
                         onChanged: (value) {
-                          controller.updateMenuItemAvailability(menuItem.id, value);
+                          controller.updateMenuItemAvailability(
+                            menuItem.id,
+                            value,
+                          );
                         },
                       ),
 
-                      SizedBox(height: 12.h),
+                      // SizedBox(height: 12.h),
 
-                      _buildSettingCard(
-                        title: "Show on customer app",
-                        subtitle: "Display this menu in customer app",
-                        value: controller.showOnCustomerApp,
-                        onChanged: (value) {
-                          controller.toggleShowOnCustomerApp(value);
-                        },
-                      ),
+                      // _buildSettingCard(
+                      //   title: "Show on customer app",
+                      //   subtitle: "Display this menu in customer app",
+                      //   value: controller.showOnCustomerApp,
+                      //   onChanged: (value) {
+                      //     controller.toggleShowOnCustomerApp(value);
+                      //   },
+                      // ),
 
                       // Addons section
                       if (menuItem.addons.isNotEmpty) ...[
@@ -289,7 +321,10 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
                               fontWeight: FontWeight.w600,
                             ),
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 8.w,
+                                vertical: 4.h,
+                              ),
                               decoration: BoxDecoration(
                                 color: AppColors.primaryColor.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(12.r),
@@ -321,7 +356,9 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
                                 ),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: AppColors.blackColor.withOpacity(0.05),
+                                    color: AppColors.blackColor.withOpacity(
+                                      0.05,
+                                    ),
                                     blurRadius: 8,
                                     offset: const Offset(0, 2),
                                   ),
@@ -334,11 +371,15 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
                                     width: 60.w,
                                     height: 60.h,
                                     decoration: BoxDecoration(
-                                      color: AppColors.greyColor.withOpacity(0.1),
+                                      color: AppColors.greyColor.withOpacity(
+                                        0.1,
+                                      ),
                                       borderRadius: BorderRadius.circular(8.r),
                                       image: addon.files.isNotEmpty
                                           ? DecorationImage(
-                                              image: NetworkImage(addon.files[0].url),
+                                              image: NetworkImage(
+                                                addon.files[0].url,
+                                              ),
                                               fit: BoxFit.cover,
                                             )
                                           : null,
@@ -355,7 +396,8 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
                                   // Addon details
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         customText(
                                           addon.name,
@@ -365,20 +407,11 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
                                           maxLines: 1,
                                         ),
                                         SizedBox(height: 6.h),
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              Icons.attach_money,
-                                              size: 16.sp,
-                                              color: AppColors.greenColor,
-                                            ),
-                                            customText(
-                                              formatToCurrency(addon.price),
-                                              color: AppColors.greenColor,
-                                              fontSize: 14.sp,
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                          ],
+                                        customText(
+                                          formatToCurrency(addon.price),
+                                          color: AppColors.primaryColor,
+                                          fontSize: 14.sp,
+                                          fontWeight: FontWeight.w700,
                                         ),
                                       ],
                                     ),
@@ -394,6 +427,51 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
                           },
                         ),
                       ],
+
+                      // Discounts section
+                      SizedBox(height: 24.h),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          customText(
+                            "Discounts",
+                            color: AppColors.blackColor,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Get.toNamed(
+                                Routes.MENU_DISCOUNTS_LIST_SCREEN,
+                                arguments: menuItem,
+                              );
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 12.w,
+                                vertical: 6.h,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.primaryColor,
+                                borderRadius: BorderRadius.circular(6.r),
+                              ),
+                              child: customText(
+                                "Manage",
+                                color: AppColors.whiteColor,
+                                fontSize: 13.sp,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 8.h),
+                      customText(
+                        "Create and manage discount offers for this menu item",
+                        color: AppColors.greyColor,
+                        fontSize: 13.sp,
+                        fontWeight: FontWeight.normal,
+                      ),
 
                       SizedBox(height: 40.h),
                     ],
@@ -416,11 +494,7 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.restaurant,
-              size: 60.sp,
-              color: AppColors.greyColor,
-            ),
+            Icon(Icons.restaurant, size: 60.sp, color: AppColors.greyColor),
             SizedBox(height: 12.h),
             customText(
               "No Image Available",
@@ -473,10 +547,7 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
               },
               child: Container(
                 margin: EdgeInsets.only(left: 12.w),
-                padding: EdgeInsets.symmetric(
-                  horizontal: 16.w,
-                  vertical: 8.h,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
                 decoration: BoxDecoration(
                   color: isSelected
                       ? AppColors.primaryColor
@@ -493,7 +564,7 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
                   color: isSelected
                       ? AppColors.whiteColor
                       : AppColors.blackColor,
-                  fontSize: 14.sp,
+                  fontSize: 12.sp,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -515,36 +586,36 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
           fontWeight: FontWeight.normal,
         ),
         Switch(
-          value: menuItem.isAvailable==1,
+          value: menuItem.isAvailable == 1,
           onChanged: (value) {
             controller.updateMenuItemAvailability(menuItem.id, value);
           },
-          activeColor: AppColors.primaryColor,
+          activeColor: AppColors.blackColor,
         ),
       ],
     );
   }
 
-  Widget _buildShowOnCustomerAppRow() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        customText(
-          "Show on customer app",
-          color: AppColors.blackColor,
-          fontSize: 16.sp,
-          fontWeight: FontWeight.normal,
-        ),
-        Switch(
-          value: controller.showOnCustomerApp,
-          onChanged: (value) {
-            controller.toggleShowOnCustomerApp(value);
-          },
-          activeColor: AppColors.primaryColor,
-        ),
-      ],
-    );
-  }
+  // Widget _buildShowOnCustomerAppRow() {
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //     children: [
+  //       customText(
+  //         "Show on customer app",
+  //         color: AppColors.blackColor,
+  //         fontSize: 16.sp,
+  //         fontWeight: FontWeight.normal,
+  //       ),
+  //       Switch(
+  //         value: controller.showOnCustomerApp,
+  //         onChanged: (value) {
+  //           controller.toggleShowOnCustomerApp(value);
+  //         },
+  //         activeColor: AppColors.primaryColor,
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Widget _buildInfoCard({
     required IconData icon,
@@ -552,13 +623,11 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
     required String value,
   }) {
     return Container(
-      padding: EdgeInsets.all(16.sp),
+      padding: EdgeInsets.all(12.sp),
       decoration: BoxDecoration(
         color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(
-          color: AppColors.greyColor.withOpacity(0.2),
-        ),
+        border: Border.all(color: AppColors.greyColor.withOpacity(0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -569,11 +638,7 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
               color: AppColors.primaryColor.withOpacity(0.1),
               borderRadius: BorderRadius.circular(8.r),
             ),
-            child: Icon(
-              icon,
-              size: 20.sp,
-              color: AppColors.primaryColor,
-            ),
+            child: Icon(icon, size: 15.sp, color: AppColors.primaryColor),
           ),
           SizedBox(height: 12.h),
           customText(
@@ -605,9 +670,7 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
       decoration: BoxDecoration(
         color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(
-          color: AppColors.greyColor.withOpacity(0.2),
-        ),
+        border: Border.all(color: AppColors.greyColor.withOpacity(0.2)),
       ),
       child: Row(
         children: [
@@ -634,7 +697,7 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
           Switch(
             value: value,
             onChanged: onChanged,
-            activeColor: AppColors.primaryColor,
+            activeColor: AppColors.blackColor,
           ),
         ],
       ),

@@ -218,9 +218,12 @@ class OrderPackageItemModel {
   });
 
   factory OrderPackageItemModel.fromJson(Map<String, dynamic> json) {
+    // API sends 'orderable' field, but we store it as 'menu'
+    final menuData = json['orderable'] ?? json['menu'];
+
     return OrderPackageItemModel(
       id: json['id'] ?? 0,
-      menu: MenuItemModel.fromJson(json['menu'] ?? {}),
+      menu: menuData != null ? MenuItemModel.fromJson(menuData) : MenuItemModel.fromJson({}),
       quantity: json['quantity'] ?? 1,
       price: double.tryParse(json['price']?.toString() ?? '0') ?? 0.0,
       total: double.tryParse(json['total']?.toString() ?? '0') ?? 0.0,
@@ -435,10 +438,10 @@ class OrderModel {
       discountId: json['discount_id'],
       discountAmount: double.tryParse(json['discount_amount']?.toString() ?? '0') ?? 0.0,
       paymentMethodId: json['payment_method_id'],
-      paymentMethod: json['payment_method'] != null
+      paymentMethod: json['payment_method'] != null && json['payment_method'] is Map
           ? PaymentMethodModel.fromJson(json['payment_method'])
           : null,
-      paymentReference: json['payment_reference'] ?? '',
+      paymentReference: json['payment_reference'] ?? json['payment_method'] ?? '',
       total: double.tryParse(json['total']?.toString() ?? '0') ?? 0.0,
       confirmedAt: json['confirmed_at'] != null
           ? DateTime.tryParse(json['confirmed_at'])

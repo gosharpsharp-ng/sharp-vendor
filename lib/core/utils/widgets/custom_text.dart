@@ -31,7 +31,7 @@ Widget customText(String text,
             fontWeight: fontWeight,
             decoration: decoration,
           )
-        : GoogleFonts.roboto(
+        : GoogleFonts.inter(
             fontStyle: FontStyle.normal,
             color: color,
             letterSpacing: letterSpacing,

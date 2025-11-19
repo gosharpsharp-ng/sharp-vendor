@@ -59,8 +59,12 @@ class InvertedPlateClipper extends CustomClipper<Path> {
   Path getClip(Size size) {
     Path path = Path();
     path.moveTo(0, 0); // Start at the top-left corner
-    path.quadraticBezierTo(size.width / 2, 100, size.width,
-        0); // Create an outward bulge at the top
+    path.quadraticBezierTo(
+      size.width / 2,
+      100,
+      size.width,
+      0,
+    ); // Create an outward bulge at the top
     path.lineTo(size.width, size.height); // Right side
     path.lineTo(0, size.height); // Bottom side
     path.close(); // Left side to complete the shape
@@ -152,14 +156,15 @@ detailHorizontalItem({required String title, required String detail}) {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         customText(title, fontSize: 12.sp, color: AppColors.obscureTextColor),
-        SizedBox(
-          width: 3.sp,
-        ),
+        SizedBox(width: 3.sp),
         Expanded(
-            child: customText(detail,
-                fontSize: 12.sp,
-                color: AppColors.obscureTextColor,
-                overflow: TextOverflow.visible)),
+          child: customText(
+            detail,
+            fontSize: 12.sp,
+            color: AppColors.obscureTextColor,
+            overflow: TextOverflow.visible,
+          ),
+        ),
       ],
     ),
   );
@@ -172,13 +177,13 @@ detailVerticalItem({required String title, required String detail}) {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        customText(title,
-            fontSize: 16.sp,
-            color: AppColors.blackColor,
-            fontWeight: FontWeight.w500),
-        SizedBox(
-          height: 2.sp,
+        customText(
+          title,
+          fontSize: 16.sp,
+          color: AppColors.blackColor,
+          fontWeight: FontWeight.w500,
         ),
+        SizedBox(height: 2.sp),
         customText(
           detail,
           fontSize: 12.sp,
@@ -201,22 +206,19 @@ detailHeader({required String header}) {
 class UserVerticalStatsItem extends StatelessWidget {
   final String metric;
   final String value;
-  const UserVerticalStatsItem(
-      {super.key, required this.metric, required this.value});
+  const UserVerticalStatsItem({
+    super.key,
+    required this.metric,
+    required this.value,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        customText(
-          value,
-          fontSize: 24.sp,
-          fontWeight: FontWeight.w700,
-        ),
-        SizedBox(
-          height: 5.sp,
-        ),
+        customText(value, fontSize: 24.sp, fontWeight: FontWeight.w700),
+        SizedBox(height: 5.sp),
         customText(
           metric,
           fontSize: 12.sp,
@@ -232,11 +234,12 @@ class EditIcon extends StatelessWidget {
   final Function onPressed;
   final bool isLoading;
   final String title;
-  const EditIcon(
-      {super.key,
-      required this.onPressed,
-      this.isLoading = false,
-      this.title = "Edit"});
+  const EditIcon({
+    super.key,
+    required this.onPressed,
+    this.isLoading = false,
+    this.title = "Edit",
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -247,8 +250,9 @@ class EditIcon extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-            color: AppColors.primaryColor.withOpacity(0.2),
-            borderRadius: BorderRadius.circular(20.r)),
+          color: AppColors.primaryColor.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(20.r),
+        ),
         padding: EdgeInsets.symmetric(horizontal: 8.sp, vertical: 4.sp),
         margin: EdgeInsets.symmetric(vertical: 5.sp),
         child: isLoading
@@ -264,13 +268,13 @@ class EditIcon extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  customText(title,
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.primaryColor),
-                  SizedBox(
-                    width: 8.sp,
+                  customText(
+                    title,
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.primaryColor,
                   ),
+                  SizedBox(width: 8.sp),
                   SvgPicture.asset(
                     SvgAssets.editIcon,
                     color: AppColors.primaryColor,
@@ -287,11 +291,12 @@ class SaveIcon extends StatelessWidget {
   final Function onPressed;
   final bool isLoading;
   final String title;
-  const SaveIcon(
-      {super.key,
-      required this.onPressed,
-      this.isLoading = false,
-      this.title = "Save"});
+  const SaveIcon({
+    super.key,
+    required this.onPressed,
+    this.isLoading = false,
+    this.title = "Save",
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -302,8 +307,9 @@ class SaveIcon extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-            color: AppColors.primaryColor.withOpacity(0.2),
-            borderRadius: BorderRadius.circular(20.r)),
+          color: AppColors.primaryColor.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(20.r),
+        ),
         padding: EdgeInsets.symmetric(horizontal: 8.sp, vertical: 4.sp),
         margin: EdgeInsets.symmetric(vertical: 5.sp),
         child: isLoading
@@ -319,13 +325,13 @@ class SaveIcon extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  customText(title,
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.primaryColor),
-                  SizedBox(
-                    width: 8.sp,
+                  customText(
+                    title,
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.primaryColor,
                   ),
+                  SizedBox(width: 8.sp),
                   SvgPicture.asset(
                     SvgAssets.saveIcon,
                     color: AppColors.primaryColor,
@@ -339,40 +345,18 @@ class SaveIcon extends StatelessWidget {
 }
 
 showToast({String message = "", bool isError = false}) {
-  Get.snackbar(
-    "",
-    "",
-    titleText: customText(isError ? "Error!" : "Success!",
-        color: isError ? Colors.red : AppColors.primaryColor,
-        fontWeight: FontWeight.w700,
-        fontSize: 15.sp),
-    messageText: customText(message.trim(),
-        color: isError ? Colors.red : AppColors.primaryColor,
-        overflow: TextOverflow.visible,
-        fontSize: 12.sp),
-    snackPosition: SnackPosition.TOP,
-    backgroundColor: CupertinoColors.systemGrey5,
-    colorText: isError ? Colors.red : AppColors.primaryColor,
-    maxWidth: 1.sw * 0.7,
-    icon: Container(
-      // padding: EdgeInsets.only(left: 8.0.sp),
-      margin: EdgeInsets.symmetric(horizontal: 5.0.sp),
-      child: SvgPicture.asset(
-        isError ? SvgAssets.errorIcon : SvgAssets.successIcon,
-        height: 15.sp,
-        width: 15.sp,
-      ),
-    ),
-    borderRadius: 10.r,
-    margin: EdgeInsets.only(left: 12.sp, top: 14.sp),
+  CustomNotification.show(
+    message: message.trim(),
+    type: isError ? NotificationType.error : NotificationType.success,
     duration: const Duration(seconds: 3),
   );
 }
 
 Future<CroppedFile> cropImage(XFile image) async {
-  final croppedImageFile =
-      await ImageCropper().cropImage(sourcePath: image.path, uiSettings: [
-    AndroidUiSettings(
+  final croppedImageFile = await ImageCropper().cropImage(
+    sourcePath: image.path,
+    uiSettings: [
+      AndroidUiSettings(
         toolbarColor: AppColors.primaryColor,
         toolbarTitle: "Crop Image",
         toolbarWidgetColor: AppColors.whiteColor,
@@ -380,14 +364,17 @@ Future<CroppedFile> cropImage(XFile image) async {
         activeControlsWidgetColor: AppColors.primaryColor,
         backgroundColor: AppColors.backgroundColor,
         dimmedLayerColor: AppColors.blackColor,
-        lockAspectRatio: false),
-    IOSUiSettings(
+        lockAspectRatio: false,
+      ),
+      IOSUiSettings(
         title: "Crop Image",
         doneButtonTitle: "Done",
         cancelButtonTitle: "Cancel",
         aspectRatioPickerButtonHidden: false,
-        resetAspectRatioEnabled: true)
-  ]);
+        resetAspectRatioEnabled: true,
+      ),
+    ],
+  );
   return croppedImageFile!;
 }
 
@@ -405,13 +392,14 @@ Future<String?> uploadImageToCloudinary({
   );
   try {
     final response = await cloudinary.upload(
-        file: file.path,
-        fileBytes: file.readAsBytesSync(),
-        resourceType: CloudinaryResourceType.image,
-        folder: folderName,
-        progressCallback: (count, total) {
-          print('Uploading image from file with progress: $count/$total');
-        });
+      file: file.path,
+      fileBytes: file.readAsBytesSync(),
+      resourceType: CloudinaryResourceType.image,
+      folder: folderName,
+      progressCallback: (count, total) {
+        print('Uploading image from file with progress: $count/$total');
+      },
+    );
     if (response.isSuccessful) {
       return response.secureUrl;
     } else {
@@ -436,7 +424,7 @@ String _getWeekday(int weekday) {
     "Thursday",
     "Friday",
     "Saturday",
-    "Sunday"
+    "Sunday",
   ];
   return weekdays[weekday - 1];
 }
@@ -470,7 +458,7 @@ String _getMonth(int month) {
     "September",
     "October",
     "November",
-    "December"
+    "December",
   ];
   return months[month - 1];
 }
@@ -537,8 +525,11 @@ String computeAgeRange(String? dateString) {
 class PartialViewHeader extends StatelessWidget {
   final String title;
   final Function onPressed;
-  const PartialViewHeader(
-      {super.key, required this.onPressed, required this.title});
+  const PartialViewHeader({
+    super.key,
+    required this.onPressed,
+    required this.title,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -547,27 +538,30 @@ class PartialViewHeader extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-              child: customText(title,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 18.sp,
-                  color: AppColors.blackColor)),
+            child: customText(
+              title,
+              fontWeight: FontWeight.w500,
+              fontSize: 18.sp,
+              color: AppColors.blackColor,
+            ),
+          ),
           InkWell(
             onTap: () {
               onPressed();
             },
             child: Row(
               children: [
-                customText("View all",
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16.sp,
-                    color: AppColors.primaryColor),
-                SizedBox(
-                  width: 5.sp,
+                customText(
+                  "View all",
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16.sp,
+                  color: AppColors.primaryColor,
                 ),
+                SizedBox(width: 5.sp),
                 SvgPicture.asset(
                   SvgAssets.rightChevronIcon,
                   color: AppColors.primaryColor,
-                )
+                ),
               ],
             ),
           ),
@@ -588,10 +582,12 @@ class SectionHeader extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          customText(title,
-              fontWeight: FontWeight.w500,
-              fontSize: 18.sp,
-              color: AppColors.blackColor),
+          customText(
+            title,
+            fontWeight: FontWeight.w500,
+            fontSize: 18.sp,
+            color: AppColors.blackColor,
+          ),
         ],
       ),
     );
@@ -602,11 +598,12 @@ class TitleSectionBox extends StatelessWidget {
   final String title;
   final Color backgroundColor;
   final List<Widget> children;
-  const TitleSectionBox(
-      {super.key,
-      required this.title,
-      required this.children,
-      this.backgroundColor = AppColors.whiteColor});
+  const TitleSectionBox({
+    super.key,
+    required this.title,
+    required this.children,
+    this.backgroundColor = AppColors.whiteColor,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -615,21 +612,23 @@ class TitleSectionBox extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 10.sp, vertical: 10.sp),
       width: 1.sw,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12.r), color: backgroundColor),
+        borderRadius: BorderRadius.circular(12.r),
+        color: backgroundColor,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          customText(title,
-              fontWeight: FontWeight.w500,
-              fontSize: 14.sp,
-              color: AppColors.blackColor,
-              overflow: TextOverflow.visible),
-          SizedBox(
-            height: 5.h,
+          customText(
+            title,
+            fontWeight: FontWeight.w500,
+            fontSize: 14.sp,
+            color: AppColors.blackColor,
+            overflow: TextOverflow.visible,
           ),
-          ...children
+          SizedBox(height: 5.h),
+          ...children,
         ],
       ),
     );
@@ -640,11 +639,12 @@ class SectionBox extends StatelessWidget {
   final Color backgroundColor;
   CrossAxisAlignment crossAxisAlignment;
   final List<Widget> children;
-  SectionBox(
-      {super.key,
-      required this.children,
-      this.backgroundColor = AppColors.whiteColor,
-      this.crossAxisAlignment = CrossAxisAlignment.start});
+  SectionBox({
+    super.key,
+    required this.children,
+    this.backgroundColor = AppColors.whiteColor,
+    this.crossAxisAlignment = CrossAxisAlignment.start,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -653,7 +653,9 @@ class SectionBox extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 10.sp, vertical: 10.sp),
       width: 1.sw,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12.r), color: backgroundColor),
+        borderRadius: BorderRadius.circular(12.r),
+        color: backgroundColor,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -746,6 +748,180 @@ String getFormattedResendOTPTime(int remainingTime) {
   }
 }
 
+// Payment WebView Controller for handling Paystack payments
+class PaymentWebViewController {
+  bool paymentCompleted = false;
+  bool autoClosing = false;
+  String paymentStatus =
+      'pending'; // 'pending', 'success', 'failed', 'cancelled'
+  Timer? autoCloseTimer;
+  Timer? statusCheckTimer;
+
+  final WebViewController controller;
+  final VoidCallback onSuccess;
+  final VoidCallback onFailure;
+
+  PaymentWebViewController({
+    required this.controller,
+    required this.onSuccess,
+    required this.onFailure,
+  }) {
+    _setupController();
+  }
+
+  void _setupController() {
+    controller
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(const Color(0x00000000))
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onPageFinished: (String url) async {
+            // Focus on input field for better UX
+            try {
+              controller.runJavaScript(
+                'document.querySelector("input")?.focus();',
+              );
+            } catch (e) {
+              debugPrint('Error focusing input: $e');
+            }
+
+            // Check payment status after page loads
+            await _checkPaymentStatus();
+          },
+          onUrlChange: (UrlChange? urlChange) {
+            // Additional check on URL change
+            _checkPaymentStatus();
+          },
+          onNavigationRequest: (NavigationRequest request) {
+            // Allow navigation
+            return NavigationDecision.navigate;
+          },
+        ),
+      );
+
+    // Periodic status check (backup method) - check every 2 seconds
+    statusCheckTimer = Timer.periodic(Duration(seconds: 2), (timer) {
+      if (!paymentCompleted) {
+        _checkPaymentStatus();
+      }
+    });
+  }
+
+  Future<void> _checkPaymentStatus() async {
+    if (paymentCompleted) return;
+
+    try {
+      // Method 1: Check page title
+      final title = await controller.getTitle();
+
+      if (title != null) {
+        final titleLower = title.toLowerCase();
+
+        // Check for success indicators in title
+        if (titleLower.contains('success') ||
+            titleLower.contains('successful') ||
+            titleLower.contains('complete')) {
+          _handleSuccess();
+          return;
+        }
+
+        // Check for failure indicators in title
+        if (titleLower.contains('fail') ||
+            titleLower.contains('error') ||
+            titleLower.contains('declined')) {
+          _handleFailure();
+          return;
+        }
+      }
+
+      // Method 2: Check page content via JavaScript
+      final result = await controller.runJavaScriptReturningResult('''
+        (function() {
+          const bodyText = document.body.innerText.toLowerCase();
+          if (bodyText.includes('payment successful') ||
+              bodyText.includes('transaction successful') ||
+              bodyText.includes('payment complete') ||
+              bodyText.includes('transaction complete')) {
+            return 'success';
+          }
+          if (bodyText.includes('payment failed') ||
+              bodyText.includes('transaction failed') ||
+              bodyText.includes('payment declined') ||
+              bodyText.includes('transaction declined')) {
+            return 'failed';
+          }
+          return 'unknown';
+        })();
+      ''');
+
+      final status = result.toString().replaceAll('"', '');
+
+      if (status == 'success') {
+        _handleSuccess();
+      } else if (status == 'failed') {
+        _handleFailure();
+      }
+    } catch (e) {
+      debugPrint('Error checking payment status: $e');
+    }
+  }
+
+  void _handleSuccess() {
+    if (paymentCompleted) return;
+
+    paymentCompleted = true;
+    paymentStatus = 'success';
+    autoClosing = true;
+
+    // Cancel status check timer
+    statusCheckTimer?.cancel();
+
+    debugPrint('Payment successful - auto-closing in 3 seconds');
+
+    // Auto-close after 3 seconds to let user see success message
+    autoCloseTimer = Timer(Duration(seconds: 3), () {
+      Get.back();
+      onSuccess();
+    });
+  }
+
+  void _handleFailure() {
+    if (paymentCompleted) return;
+
+    paymentCompleted = true;
+    paymentStatus = 'failed';
+    autoClosing = true;
+
+    // Cancel status check timer
+    statusCheckTimer?.cancel();
+
+    debugPrint('Payment failed - auto-closing in 2 seconds');
+
+    // Auto-close after 2 seconds
+    autoCloseTimer = Timer(Duration(seconds: 2), () {
+      Get.back();
+      onFailure();
+    });
+  }
+
+  void handleManualClose() {
+    statusCheckTimer?.cancel();
+    autoCloseTimer?.cancel();
+
+    // User closed webview manually before payment completed
+    if (!paymentCompleted) {
+      paymentStatus = 'cancelled';
+      debugPrint('Payment cancelled by user');
+      onFailure();
+    }
+  }
+
+  void dispose() {
+    statusCheckTimer?.cancel();
+    autoCloseTimer?.cancel();
+  }
+}
+
 WebViewController createWebViewController({required Function successCallback}) {
   final WebViewController controller = WebViewController();
 
@@ -753,30 +929,89 @@ WebViewController createWebViewController({required Function successCallback}) {
     ..setJavaScriptMode(JavaScriptMode.unrestricted)
     ..setBackgroundColor(const Color(0x00000000))
     ..setNavigationDelegate(
-      NavigationDelegate(onPageFinished: (String url) {
-        // Inject JavaScript to focus on an input field
-        controller.runJavaScript('document.querySelector("input").focus();');
-        if (url.contains("https://www.youtube.com")) {
-          Get.back();
-        }
-      }, onNavigationRequest: (NavigationRequest request) {
-        if (request.url.startsWith('https://www.youtube.com/')) {
-          return NavigationDecision.prevent;
-        }
-        if (request.url.startsWith('https://www.youtube.com')) {
-          Get.back();
-          return NavigationDecision.prevent;
-        }
-        return NavigationDecision.navigate;
-      }, onUrlChange: (UrlChange? urlChange) {
-        if (urlChange!.url != null &&
-            urlChange.url!.contains("https://logistics.sharpvendor.com")) {
-          successCallback();
-        }
-      }),
+      NavigationDelegate(
+        onPageFinished: (String url) {
+          // Inject JavaScript to focus on an input field
+          controller.runJavaScript('document.querySelector("input").focus();');
+          if (url.contains("https://www.youtube.com")) {
+            Get.back();
+          }
+        },
+        onNavigationRequest: (NavigationRequest request) {
+          if (request.url.startsWith('https://www.youtube.com/')) {
+            return NavigationDecision.prevent;
+          }
+          if (request.url.startsWith('https://www.youtube.com')) {
+            Get.back();
+            return NavigationDecision.prevent;
+          }
+          return NavigationDecision.navigate;
+        },
+        onUrlChange: (UrlChange? urlChange) {
+          if (urlChange!.url != null &&
+              urlChange.url!.contains("https://logistics.sharpvendor.com")) {
+            successCallback();
+          }
+        },
+      ),
     );
 
   return controller;
+}
+
+// Show WebView Dialog for Payment with automatic success/failure detection
+void showPaymentWebViewDialog(
+  BuildContext context, {
+  required String url,
+  required VoidCallback onSuccess,
+  required VoidCallback onFailure,
+  String title = "Payment",
+}) {
+  final WebViewController webViewController = WebViewController();
+  PaymentWebViewController? paymentController;
+
+  paymentController = PaymentWebViewController(
+    controller: webViewController,
+    onSuccess: onSuccess,
+    onFailure: onFailure,
+  );
+
+  showGeneralDialog(
+    context: context,
+    barrierDismissible: true,
+    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+    pageBuilder:
+        (
+          BuildContext context,
+          Animation<double> animation,
+          Animation<double> secondaryAnimation,
+        ) {
+          webViewController.loadRequest(Uri.parse(url));
+          return PopScope(
+            canPop: true,
+            onPopInvokedWithResult: (didPop, result) {
+              if (didPop) {
+                paymentController?.handleManualClose();
+                paymentController?.dispose();
+              }
+            },
+            child: Scaffold(
+              appBar: AppBar(
+                title: customText(title),
+                leading: IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () {
+                    paymentController?.handleManualClose();
+                    paymentController?.dispose();
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ),
+              body: WebViewWidget(controller: webViewController),
+            ),
+          );
+        },
+  );
 }
 
 void showWebViewDialog(
@@ -790,36 +1025,37 @@ void showWebViewDialog(
     context: context,
     barrierDismissible: true,
     barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-    pageBuilder: (BuildContext context, Animation<double> animation,
-        Animation<double> secondaryAnimation) {
-      controller.loadRequest(Uri.parse(url));
-      return WillPopScope(
-        onWillPop: () async {
-          if (onDialogClosed != null) {
-            onDialogClosed();
-          }
-          onDialogClosed!();
-          return true;
-        },
-        child: Scaffold(
-          appBar: AppBar(
-            title: customText(title),
-            leading: IconButton(
-              icon: const Icon(Icons.close),
-              onPressed: () {
-                Navigator.of(context).pop();
-                if (onDialogClosed != null) {
-                  onDialogClosed();
-                }
-              },
+    pageBuilder:
+        (
+          BuildContext context,
+          Animation<double> animation,
+          Animation<double> secondaryAnimation,
+        ) {
+          controller.loadRequest(Uri.parse(url));
+          return WillPopScope(
+            onWillPop: () async {
+              if (onDialogClosed != null) {
+                onDialogClosed();
+              }
+              return true;
+            },
+            child: Scaffold(
+              appBar: AppBar(
+                title: customText(title),
+                leading: IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    if (onDialogClosed != null) {
+                      onDialogClosed();
+                    }
+                  },
+                ),
+              ),
+              body: WebViewWidget(controller: controller),
             ),
-          ),
-          body: WebViewWidget(
-            controller: controller,
-          ),
-        ),
-      );
-    },
+          );
+        },
   );
 }
 
@@ -841,9 +1077,7 @@ void showWebViewScreen(
               onPressed: () => Navigator.of(context).pop(),
             ),
           ),
-          body: WebViewWidget(
-            controller: controller,
-          ),
+          body: WebViewWidget(controller: controller),
         );
       },
     ),
@@ -854,8 +1088,9 @@ double stripCurrencyFormat(String formattedAmount) {
   if (formattedAmount.isEmpty) {
     return 1.0;
   }
-  String cleanedString =
-      formattedAmount.replaceAll('₦', '').replaceAll(RegExp(r'[^0-9.]'), '');
+  String cleanedString = formattedAmount
+      .replaceAll('₦', '')
+      .replaceAll(RegExp(r'[^0-9.]'), '');
 
   return double.parse(cleanedString);
 }
@@ -916,7 +1151,9 @@ String formatTextFieldAmountToCurrency(String value) {
 //   return DirectionDetailsInfo();
 // }
 Future<DirectionDetailsInfo> obtainOriginToDestinationDirectionDetails(
-    LatLng originPosition, LatLng destinationPosition) async {
+  LatLng originPosition,
+  LatLng destinationPosition,
+) async {
   // Construct Google Maps API URL
   String googleMapsUrl =
       "https://maps.googleapis.com/maps/api/directions/json?origin=${originPosition.latitude},${originPosition.longitude}&destination=${destinationPosition.latitude},${destinationPosition.longitude}&mode=driving&key=${Secret.apiKey}";
@@ -976,7 +1213,8 @@ double calculateLocationDegrees(LatLng startPoint, LatLng endPoint) {
   final double deltaLng = endLng - startLng;
 
   final double y = math.sin(deltaLng) * math.cos(endLat);
-  final double x = math.cos(startLat) * math.sin(endLat) -
+  final double x =
+      math.cos(startLat) * math.sin(endLat) -
       math.sin(startLat) * math.cos(endLat) * math.cos(deltaLng);
 
   final double bearing = math.atan2(y, x);
@@ -1056,12 +1294,16 @@ Color getStatusTextColor(String? status) {
 //   return MemoryImage(bytes);
 // }
 
-customDebugPrint(dynamic message){
-  print("*****************************************************************************************************************");
+customDebugPrint(dynamic message) {
+  print(
+    "*****************************************************************************************************************",
+  );
   log(message.toString());
-  print("*****************************************************************************************************************");
-
+  print(
+    "*****************************************************************************************************************",
+  );
 }
+
 Future<String> convertImageToBase64(String imagePath) async {
   File imageFile = File(imagePath);
   Uint8List imageBytes = await imageFile.readAsBytes();
@@ -1150,7 +1392,6 @@ bool isValidDataUri(String dataUri) {
       dataUri.split(',').length == 2;
 }
 
-
 class ImageCompressionService {
   static const int maxSize = 2 * 1024 * 1024; // 2MB
 
@@ -1219,110 +1460,113 @@ double getDeliveryProgress(String status) {
   }
 }
 
-
-void showRiderAndDeliveryStatusDialog(
-    {required BuildContext context,
-    required String title,
-    required String message,
-    required DeliveryModel delivery}) {
+void showRiderAndDeliveryStatusDialog({
+  required BuildContext context,
+  required String title,
+  required String message,
+  required DeliveryModel delivery,
+}) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
       return WillPopScope(
         onWillPop: () async => false,
-        child:
-            GetBuilder<DeliveriesController>(builder: (deliveriesController) {
-          return AlertDialog(
-            backgroundColor: AppColors.primaryColor,
-            titlePadding: EdgeInsets.zero,
-            title: customText("",
+        child: GetBuilder<DeliveriesController>(
+          builder: (deliveriesController) {
+            return AlertDialog(
+              backgroundColor: AppColors.primaryColor,
+              titlePadding: EdgeInsets.zero,
+              title: customText(
+                "",
                 fontSize: 20.sp,
                 fontWeight: FontWeight.w600,
                 color: AppColors.whiteColor,
-                overflow: TextOverflow.visible),
-            content: Container(
-              decoration: BoxDecoration(color: AppColors.primaryColor),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  customText(title,
+                overflow: TextOverflow.visible,
+              ),
+              content: Container(
+                decoration: BoxDecoration(color: AppColors.primaryColor),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    customText(
+                      title,
                       fontSize: 20.sp,
                       fontWeight: FontWeight.w600,
                       color: AppColors.whiteColor,
-                      overflow: TextOverflow.visible),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  customText(message,
+                      overflow: TextOverflow.visible,
+                    ),
+                    SizedBox(height: 10.h),
+                    customText(
+                      message,
                       fontSize: 16.sp,
                       color: AppColors.whiteColor,
-                      overflow: TextOverflow.visible),
-                  SizedBox(
-                    height: 5.h,
-                  ),
-                  Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 25.r,
-                        backgroundImage: delivery.rider?.avatar != null
-                            ? CachedNetworkImageProvider(
-                                delivery.rider!.avatar!)
-                            : null,
-                        backgroundColor: AppColors.backgroundColor,
-                        child: delivery.rider?.avatar == null
-                            ? customText(
-                                "${delivery.rider?.firstName?[0] ?? ""}${delivery.rider?.lastName?[0] ?? ""}",
-                                fontSize: 8.sp,
-                                color: AppColors.blackColor)
-                            : null,
-                      ),
-                      SizedBox(
-                        width: 10.w,
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            customText(
-                              "${delivery.rider?.firstName ?? ""} ${delivery.rider?.lastName ?? ""}",
-                              color: AppColors.whiteColor,
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w500,
-                              overflow: TextOverflow.visible,
-                            ),
-                            SizedBox(
-                              height: 10.h,
-                            ),
-                            customText(
-                              "Rider",
-                              color: AppColors.whiteColor,
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.normal,
-                              overflow: TextOverflow.visible,
-                            ),
-                          ],
+                      overflow: TextOverflow.visible,
+                    ),
+                    SizedBox(height: 5.h),
+                    Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 25.r,
+                          backgroundImage: delivery.rider?.avatar != null
+                              ? CachedNetworkImageProvider(
+                                  delivery.rider!.avatar!,
+                                )
+                              : null,
+                          backgroundColor: AppColors.backgroundColor,
+                          child: delivery.rider?.avatar == null
+                              ? customText(
+                                  "${delivery.rider?.firstName?[0] ?? ""}${delivery.rider?.lastName?[0] ?? ""}",
+                                  fontSize: 8.sp,
+                                  color: AppColors.blackColor,
+                                )
+                              : null,
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                        SizedBox(width: 10.w),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              customText(
+                                "${delivery.rider?.firstName ?? ""} ${delivery.rider?.lastName ?? ""}",
+                                color: AppColors.whiteColor,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w500,
+                                overflow: TextOverflow.visible,
+                              ),
+                              SizedBox(height: 10.h),
+                              customText(
+                                "Rider",
+                                color: AppColors.whiteColor,
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.normal,
+                                overflow: TextOverflow.visible,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  deliveriesController.statusDialogIsOpened = false;
-                  Navigator.of(context).pop(); // Close the dialog
-                },
-                child: customText("OK",
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    deliveriesController.statusDialogIsOpened = false;
+                    Navigator.of(context).pop(); // Close the dialog
+                  },
+                  child: customText(
+                    "OK",
                     fontWeight: FontWeight.w600,
                     fontSize: 16,
-                    color: AppColors.whiteColor),
-              ),
-            ],
-          );
-        }),
+                    color: AppColors.whiteColor,
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       );
     },
   );
@@ -1364,11 +1608,12 @@ Future<bool> showLocationPermissionDialog() async {
 
   await Get.dialog(
     AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      title: customText(
+        "Enable Location",
+        fontWeight: FontWeight.bold,
+        fontSize: 18.sp,
       ),
-      title: customText("Enable Location",
-          fontWeight: FontWeight.bold, fontSize: 18.sp),
       content: customText(
         "To go online, please enable location services and allow permissions.",
         textAlign: TextAlign.center,
@@ -1384,10 +1629,12 @@ Future<bool> showLocationPermissionDialog() async {
                 isGranted = false;
                 Get.back();
               },
-              child: customText("Cancel",
-                  fontWeight: FontWeight.w500,
-                  fontSize: 12.sp,
-                  color: AppColors.obscureTextColor),
+              child: customText(
+                "Cancel",
+                fontWeight: FontWeight.w500,
+                fontSize: 12.sp,
+                color: AppColors.obscureTextColor,
+              ),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -1442,7 +1689,6 @@ void makePhoneCall(String phoneNumber) async {
     print('Could not launch $url');
   }
 }
-
 
 // Format TimeOfDay to readable string
 String formatTimeOfDay(TimeOfDay time) {
@@ -1506,4 +1752,3 @@ bool isValidTimeRange(TimeOfDay openTime, TimeOfDay closeTime) {
   int closeMinutes = closeTime.hour * 60 + closeTime.minute;
   return closeMinutes > openMinutes;
 }
-

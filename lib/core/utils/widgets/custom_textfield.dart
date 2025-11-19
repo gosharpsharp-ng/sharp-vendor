@@ -142,13 +142,13 @@ class _CustomRoundedInputFieldState extends State<CustomRoundedInputField> {
               style: widget.isNumber
                   ? TextStyle(
                       color: AppColors.blackColor,
-                      fontFamily: GoogleFonts.montserrat().fontFamily,
+                      fontFamily: GoogleFonts.inter().fontFamily,
                       fontSize: widget.fontSize.sp,
                       fontWeight: FontWeight.bold,
                     )
                   : TextStyle(
                       color: widget.textColor,
-                      fontFamily: GoogleFonts.poppins().fontFamily,
+                      fontFamily: GoogleFonts.inter().fontFamily,
                       fontSize: widget.fontSize.sp,
                     ),
               decoration: InputDecoration(
@@ -450,13 +450,13 @@ class _ClickableCustomRoundedInputFieldState
               style: widget.isNumber
                   ? TextStyle(
                       color: AppColors.blackColor,
-                      fontFamily: GoogleFonts.montserrat().fontFamily,
+                      fontFamily: GoogleFonts.inter().fontFamily,
                       fontSize: widget.fontSize.sp,
                       fontWeight: FontWeight.bold,
                     )
                   : TextStyle(
                       color: widget.textColor,
-                      fontFamily: GoogleFonts.poppins().fontFamily,
+                      fontFamily: GoogleFonts.inter().fontFamily,
                       fontSize: widget.fontSize.sp,
                     ),
               decoration: InputDecoration(
@@ -744,13 +744,13 @@ class _CustomOutlinedRoundedInputFieldState
               style: widget.isCurrency
                   ? TextStyle(
                       color: AppColors.primaryColor,
-                      fontFamily: GoogleFonts.montserrat().fontFamily,
+                      fontFamily: GoogleFonts.inter().fontFamily,
                       fontSize: widget.fontSize.sp,
                       fontWeight: FontWeight.bold,
                     )
                   : TextStyle(
                       color: widget.color,
-                      fontFamily: GoogleFonts.poppins().fontFamily,
+                      fontFamily: GoogleFonts.inter().fontFamily,
                       fontSize: widget.fontSize.sp,
                     ),
               decoration: InputDecoration(
@@ -847,12 +847,12 @@ class _CustomOutlinedRoundedInputFieldState
                 floatingLabelStyle: TextStyle(
                   color: widget.labelColor,
                   fontSize: widget.labelFontSize.sp,
-                  fontFamily: GoogleFonts.poppins().fontFamily,
+                  fontFamily: GoogleFonts.inter().fontFamily,
                 ),
                 labelStyle: TextStyle(
                   color: widget.labelColor,
                   fontSize: widget.labelFontSize.sp,
-                  fontFamily: GoogleFonts.poppins().fontFamily,
+                  fontFamily: GoogleFonts.inter().fontFamily,
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(
@@ -1002,13 +1002,13 @@ class _CustomOutlinedRoundedPhoneInputFieldState
               style: widget.isCurrency
                   ? TextStyle(
                       color: AppColors.primaryColor,
-                      fontFamily: GoogleFonts.montserrat().fontFamily,
+                      fontFamily: GoogleFonts.inter().fontFamily,
                       fontSize: widget.fontSize.sp,
                       fontWeight: FontWeight.bold,
                     )
                   : TextStyle(
                       color: widget.color,
-                      fontFamily: GoogleFonts.poppins().fontFamily,
+                      fontFamily: GoogleFonts.inter().fontFamily,
                       fontSize: widget.fontSize.sp,
                     ),
               decoration: InputDecoration(
@@ -1105,12 +1105,12 @@ class _CustomOutlinedRoundedPhoneInputFieldState
                 floatingLabelStyle: TextStyle(
                   color: widget.labelColor,
                   fontSize: widget.labelFontSize.sp,
-                  fontFamily: GoogleFonts.poppins().fontFamily,
+                  fontFamily: GoogleFonts.inter().fontFamily,
                 ),
                 labelStyle: TextStyle(
                   color: widget.labelColor,
                   fontSize: widget.labelFontSize.sp,
-                  fontFamily: GoogleFonts.poppins().fontFamily,
+                  fontFamily: GoogleFonts.inter().fontFamily,
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(
@@ -1272,13 +1272,13 @@ class _CustomRoundedPhoneInputFieldState
               style: widget.isNumber
                   ? TextStyle(
                       color: AppColors.blackColor,
-                      fontFamily: GoogleFonts.montserrat().fontFamily,
+                      fontFamily: GoogleFonts.inter().fontFamily,
                       fontSize: widget.fontSize.sp,
                       fontWeight: FontWeight.bold,
                     )
                   : TextStyle(
                       color: widget.textColor,
-                      fontFamily: GoogleFonts.poppins().fontFamily,
+                      fontFamily: GoogleFonts.inter().fontFamily,
                       fontSize: widget.fontSize.sp,
                     ),
               decoration: InputDecoration(

@@ -51,7 +51,7 @@ class ProfileService extends CoreService {
   }
 
   Future<APIResponse> updateOrderStatus(dynamic data, int orderId) async {
-    return await generalPatch("restaurant/order/$orderId/status", data);
+    return await generalPatch("restaurants/order/$orderId/status", data);
   }
 
   // Transactions integration

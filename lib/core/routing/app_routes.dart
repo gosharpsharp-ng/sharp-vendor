@@ -71,6 +71,11 @@ abstract class Routes {
   static const MENU_HOME_SCREEN = '/menu_home_screen';
   static const CATEGORIES_MANAGEMENT_SCREEN = '/categories_management_screen';
 
+  // Menu Discounts
+  static const MENU_DISCOUNTS_LIST_SCREEN = '/menu_discounts_list_screen';
+  static const ADD_DISCOUNT_SCREEN = '/add_discount_screen';
+  static const EDIT_DISCOUNT_SCREEN = '/edit_discount_screen';
+
   // Orders
   static const ORDERS_HOME_SCREEN = '/orders_home_screen';
   static const ORDER_DETAILS_SCREEN = '/order_details_screen';
@@ -82,4 +87,14 @@ abstract class Routes {
   static const RESTAURANT_BUSINESS_HOURS = '/restaurant/business-hours';
   static const RESTAURANT_BUSINESS_SETTINGS = '/restaurant/business-settings';
   static const RESTAURANT_BANK_ACCOUNT = '/restaurant/bank-account';
+
+  // Restaurant Discounts
+  static const RESTAURANT_DISCOUNTS_SCREEN = '/restaurant_discounts_screen';
+  static const ADD_RESTAURANT_DISCOUNT_SCREEN = '/add_restaurant_discount_screen';
+  static const EDIT_RESTAURANT_DISCOUNT_SCREEN = '/edit_restaurant_discount_screen';
+
+  // Campaigns
+  static const CAMPAIGNS_HOME_SCREEN = '/campaigns_home_screen';
+  static const ADD_CAMPAIGN_SCREEN = '/add_campaign_screen';
+  static const CAMPAIGN_DETAILS_SCREEN = '/campaign_details_screen';
 }

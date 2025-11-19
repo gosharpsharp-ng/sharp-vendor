@@ -253,7 +253,7 @@ class SignUpController extends GetxController {
   verifyOtp() async {
     if (signOTPFormKey.currentState!.validate()) {
       setLoadingState(true);
-      dynamic data = {'otp': otpController.text, 'email': emailController.text};
+      dynamic data = {'otp': otpController.text, 'identifier': emailController.text};
       APIResponse response = await authService.verifyEmailOtp(data);
       showToast(
         message: response.message,
@@ -261,6 +261,8 @@ class SignUpController extends GetxController {
       );
       setLoadingState(false);
       if (response.status == "success") {
+        // Delete the controller before navigating away
+        Get.delete<SignUpController>(force: true);
         Get.offAllNamed(Routes.SIGN_IN);
       }
     }
@@ -268,7 +270,7 @@ class SignUpController extends GetxController {
 
   sendOtp() async {
     setIsResendingOTPState(true);
-    dynamic data = {'login': emailController.text};
+    dynamic data = {'identifier': emailController.text};
     APIResponse response = await authService.sendOtp(data);
     showToast(message: response.message, isError: response.status != "success");
     setIsResendingOTPState(false);
@@ -425,7 +427,8 @@ class SignUpController extends GetxController {
       setLoadingState(false);
       if (response.status == "success") {
         _startOtpResendTimer();
-        Get.offAndToNamed(Routes.SIGNUP_OTP_SCREEN);
+        // Use Get.toNamed instead of Get.offAndToNamed to keep controller alive
+        Get.toNamed(Routes.SIGNUP_OTP_SCREEN);
       }
     }
   }
