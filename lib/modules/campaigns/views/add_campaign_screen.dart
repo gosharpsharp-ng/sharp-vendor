@@ -3,7 +3,10 @@ import 'package:sharpvendor/core/utils/exports.dart';
 class AddCampaignScreen extends StatelessWidget {
   const AddCampaignScreen({super.key});
 
-  void _showStatusBottomSheet(BuildContext context, CampaignsController controller) {
+  void _showStatusBottomSheet(
+    BuildContext context,
+    CampaignsController controller,
+  ) {
     showAnyBottomSheet(
       child: Container(
         padding: EdgeInsets.all(20.sp),
@@ -56,10 +59,14 @@ class AddCampaignScreen extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(16.sp),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primaryColor.withOpacity(0.1) : AppColors.backgroundColor,
+          color: isSelected
+              ? AppColors.primaryColor.withOpacity(0.1)
+              : AppColors.backgroundColor,
           borderRadius: BorderRadius.circular(12.r),
           border: Border.all(
-            color: isSelected ? AppColors.primaryColor : AppColors.greyColor.withOpacity(0.3),
+            color: isSelected
+                ? AppColors.primaryColor
+                : AppColors.greyColor.withOpacity(0.3),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -73,7 +80,9 @@ class AddCampaignScreen extends StatelessWidget {
                     title,
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w600,
-                    color: isSelected ? AppColors.primaryColor : AppColors.blackColor,
+                    color: isSelected
+                        ? AppColors.primaryColor
+                        : AppColors.blackColor,
                   ),
                   SizedBox(height: 4.h),
                   customText(
@@ -127,7 +136,8 @@ class AddCampaignScreen extends StatelessWidget {
                           showLabel: true,
                           hasTitle: true,
                           isRequired: true,
-                          controller: campaignsController.campaignNameController,
+                          controller:
+                              campaignsController.campaignNameController,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter a campaign name';
@@ -146,7 +156,10 @@ class AddCampaignScreen extends StatelessWidget {
                           readOnly: true,
                           controller: campaignsController.startDateController,
                           suffixWidget: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12.w,
+                              vertical: 8.h,
+                            ),
                             child: SvgPicture.asset(
                               SvgAssets.calendarIcon,
                               height: 20.sp,
@@ -183,22 +196,23 @@ class AddCampaignScreen extends StatelessWidget {
                               },
                             );
                             if (picked != null) {
-                              final TimeOfDay? timePicked = await showTimePicker(
-                                context: context,
-                                initialTime: TimeOfDay.now(),
-                                builder: (context, child) {
-                                  return Theme(
-                                    data: Theme.of(context).copyWith(
-                                      colorScheme: ColorScheme.light(
-                                        primary: AppColors.primaryColor,
-                                        onPrimary: AppColors.whiteColor,
-                                        onSurface: AppColors.blackColor,
-                                      ),
-                                    ),
-                                    child: child!,
+                              final TimeOfDay? timePicked =
+                                  await showTimePicker(
+                                    context: context,
+                                    initialTime: TimeOfDay.now(),
+                                    builder: (context, child) {
+                                      return Theme(
+                                        data: Theme.of(context).copyWith(
+                                          colorScheme: ColorScheme.light(
+                                            primary: AppColors.primaryColor,
+                                            onPrimary: AppColors.whiteColor,
+                                            onSurface: AppColors.blackColor,
+                                          ),
+                                        ),
+                                        child: child!,
+                                      );
+                                    },
                                   );
-                                },
-                              );
                               if (timePicked != null) {
                                 final DateTime fullDateTime = DateTime(
                                   picked.year,
@@ -224,7 +238,10 @@ class AddCampaignScreen extends StatelessWidget {
                           readOnly: true,
                           controller: campaignsController.endDateController,
                           suffixWidget: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12.w,
+                              vertical: 8.h,
+                            ),
                             child: SvgPicture.asset(
                               SvgAssets.calendarIcon,
                               height: 20.sp,
@@ -240,10 +257,14 @@ class AddCampaignScreen extends StatelessWidget {
                               return 'Please select an end date';
                             }
                             // Validate end date is after start date
-                            if (campaignsController.startDateController.text.isNotEmpty) {
+                            if (campaignsController
+                                .startDateController
+                                .text
+                                .isNotEmpty) {
                               try {
                                 final startDate = DateTime.parse(
-                                    campaignsController.startDateController.text);
+                                  campaignsController.startDateController.text,
+                                );
                                 final endDate = DateTime.parse(value);
                                 if (endDate.isBefore(startDate)) {
                                   return 'End date must be after start date';
@@ -255,12 +276,17 @@ class AddCampaignScreen extends StatelessWidget {
                             return null;
                           },
                           onPressed: () async {
-                            DateTime initialDate = DateTime.now().add(Duration(days: 7));
-                            if (campaignsController.startDateController.text.isNotEmpty) {
+                            DateTime initialDate = DateTime.now().add(
+                              Duration(days: 7),
+                            );
+                            if (campaignsController
+                                .startDateController
+                                .text
+                                .isNotEmpty) {
                               try {
                                 initialDate = DateTime.parse(
-                                    campaignsController.startDateController.text)
-                                    .add(Duration(days: 1));
+                                  campaignsController.startDateController.text,
+                                ).add(Duration(days: 1));
                               } catch (e) {
                                 // Use default initial date
                               }
@@ -285,22 +311,26 @@ class AddCampaignScreen extends StatelessWidget {
                               },
                             );
                             if (picked != null) {
-                              final TimeOfDay? timePicked = await showTimePicker(
-                                context: context,
-                                initialTime: TimeOfDay(hour: 23, minute: 59),
-                                builder: (context, child) {
-                                  return Theme(
-                                    data: Theme.of(context).copyWith(
-                                      colorScheme: ColorScheme.light(
-                                        primary: AppColors.primaryColor,
-                                        onPrimary: AppColors.whiteColor,
-                                        onSurface: AppColors.blackColor,
-                                      ),
+                              final TimeOfDay? timePicked =
+                                  await showTimePicker(
+                                    context: context,
+                                    initialTime: TimeOfDay(
+                                      hour: 23,
+                                      minute: 59,
                                     ),
-                                    child: child!,
+                                    builder: (context, child) {
+                                      return Theme(
+                                        data: Theme.of(context).copyWith(
+                                          colorScheme: ColorScheme.light(
+                                            primary: AppColors.primaryColor,
+                                            onPrimary: AppColors.whiteColor,
+                                            onSurface: AppColors.blackColor,
+                                          ),
+                                        ),
+                                        child: child!,
+                                      );
+                                    },
                                   );
-                                },
-                              );
                               if (timePicked != null) {
                                 final DateTime fullDateTime = DateTime(
                                   picked.year,
@@ -319,13 +349,17 @@ class AddCampaignScreen extends StatelessWidget {
                         // Status
                         ClickableCustomRoundedInputField(
                           title: "Status",
-                          label: campaignsController.selectedStatus == 'draft' ? "Draft" : "Active",
+                          label: "Select status",
+                          controller: campaignsController.statusController,
                           showLabel: true,
                           hasTitle: true,
                           isRequired: true,
                           readOnly: true,
                           suffixWidget: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12.w,
+                              vertical: 8.h,
+                            ),
                             child: Icon(
                               Icons.keyboard_arrow_down_rounded,
                               color: AppColors.obscureTextColor,
@@ -333,7 +367,95 @@ class AddCampaignScreen extends StatelessWidget {
                             ),
                           ),
                           onPressed: () {
-                            _showStatusBottomSheet(context, campaignsController);
+                            _showStatusBottomSheet(
+                              context,
+                              campaignsController,
+                            );
+                          },
+                        ),
+
+                        SizedBox(height: 20.h),
+
+                        // Wallet Charge Notice
+                        GetBuilder<SettingsController>(
+                          builder: (settingsController) {
+                            final walletBalance =
+                                settingsController.walletBalance;
+                            return Container(
+                              padding: EdgeInsets.all(16.sp),
+                              decoration: BoxDecoration(
+                                color: AppColors.primaryColor.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(12.r),
+                                border: Border.all(
+                                  color: AppColors.primaryColor.withOpacity(
+                                    0.3,
+                                  ),
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.all(10.sp),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.primaryColor.withOpacity(
+                                        0.2,
+                                      ),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(
+                                      Icons.account_balance_wallet,
+                                      color: AppColors.primaryColor,
+                                      size: 24.sp,
+                                    ),
+                                  ),
+                                  SizedBox(width: 12.w),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        customText(
+                                          "Payment from Wallet",
+                                          fontSize: 14.sp,
+                                          fontWeight: FontWeight.w600,
+                                          color: AppColors.blackColor,
+                                        ),
+                                        SizedBox(height: 4.h),
+                                        customText(
+                                          "Campaign cost will be charged from your wallet balance",
+                                          fontSize: 12.sp,
+                                          color: AppColors.obscureTextColor,
+                                        ),
+                                        SizedBox(height: 8.h),
+                                        Row(
+                                          children: [
+                                            customText(
+                                              "Available Balance: ",
+                                              fontSize: 12.sp,
+                                              color: AppColors.obscureTextColor,
+                                            ),
+                                            customText(
+                                              walletBalance != null
+                                                  ? formatToCurrency(
+                                                      double.parse(
+                                                        walletBalance
+                                                                .availableBalance ??
+                                                            "0.0",
+                                                      ),
+                                                    )
+                                                  : "Loading...",
+                                              fontSize: 14.sp,
+                                              fontWeight: FontWeight.w700,
+                                              color: AppColors.primaryColor,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
                           },
                         ),
 

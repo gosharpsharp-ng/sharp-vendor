@@ -18,6 +18,7 @@ class MenuItemModel {
   final List<ItemFileModel> files;
   final bool? showOnCustomerApp;
   final List<MenuItemModel> addons;
+  final double? packagingPrice;
 
   MenuItemModel({
     required this.id,
@@ -34,6 +35,7 @@ class MenuItemModel {
     this.showOnCustomerApp,
     required this.files,
     this.addons = const [],
+    this.packagingPrice,
   });
 
   factory MenuItemModel.fromJson(Map<String, dynamic> json) {
@@ -120,6 +122,9 @@ class MenuItemModel {
           .cast<ItemFileModel>()
           .toList(),
       addons: addonsList,
+      packagingPrice: json['packaging_price'] != null
+          ? double.tryParse(json['packaging_price']?.toString() ?? '0')
+          : null,
     );
   }
 
@@ -138,6 +143,7 @@ class MenuItemModel {
       'show_on_customer_app': showOnCustomerApp,
       'files': files,
       'addons': addons.map((e) => e.toJson()).toList(),
+      'packaging_price': packagingPrice,
     };
   }
 }

@@ -283,6 +283,7 @@ class DiscountController extends GetxController {
 
       if (response.status == "success") {
         showToast(message: response.message.isNotEmpty ? response.message : "Discount deleted successfully");
+        Get.back();
         // Refresh the discounts list
         await getDiscountsForMenuItem(menuId);
       } else {

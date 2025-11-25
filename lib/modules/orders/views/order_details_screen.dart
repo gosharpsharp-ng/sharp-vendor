@@ -39,44 +39,7 @@ class OrderDetailsScreen extends GetView<OrdersController> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  // Main Order Details Section
-                  SectionBox(
-                    children: [
-                      OrderDetailSummaryItem(
-                        title: "Order Number",
-                        value: order.orderNumber,
-                      ),
-                      OrderDetailSummaryStatusItem(
-                        title: "Status",
-                        value: _getStatusDisplayText(order.status),
-                        status: order.status,
-                      ),
-                      OrderDetailSummaryItem(
-                        title: "Total",
-                        value: formatToCurrency(order.total),
-                      ),
-                      OrderDetailSummaryItem(
-                        title: "Order Date",
-                        value:
-                            "${formatDate(order.createdAt.toIso8601String())} ${formatTime(order.createdAt.toIso8601String())}",
-                      ),
-                      if (order.paymentMethod != null)
-                        OrderDetailSummaryItem(
-                          title: "Payment Method",
-                          value: order.paymentMethodName,
-                        ),
-                      if (order.notes.isNotEmpty)
-                        OrderDetailSummaryItem(
-                          title: "Notes",
-                          value: order.notes,
-                          isVertical: true,
-                        ),
-                    ],
-                  ),
-
-                  SizedBox(height: 12.h),
-
-                  // Order Items Section
+                  // Order Items Section (Moved to first position)
                   if (order.packages.isNotEmpty)
                     SectionBox(
                       children: [
@@ -118,6 +81,9 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                                   price: formatToCurrency(item.total),
                                   description: item.menu.description,
                                   plateSize: item.menu.plateSize,
+                                  packagingPrice: item.menu.packagingPrice != null && item.menu.packagingPrice! > 0
+                                      ? '${item.quantity} × ${formatToCurrency(item.menu.packagingPrice!)}'
+                                      : null,
                                 );
                               }).toList(),
 
@@ -154,6 +120,9 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                             price: formatToCurrency(item.total),
                             description: item.description,
                             plateSize: item.plateSize,
+                            packagingPrice: item.menu?.packagingPrice != null && item.menu!.packagingPrice! > 0
+                                ? '${item.quantity} × ${formatToCurrency(item.menu!.packagingPrice!)}'
+                                : null,
                           );
                         }).toList(),
                       ],
@@ -161,7 +130,7 @@ class OrderDetailsScreen extends GetView<OrdersController> {
 
                   SizedBox(height: 12.h),
 
-                  // Price Breakdown Section
+                  // Order Details & Price Breakdown Combined
                   SectionBox(
                     children: [
                       // Section Header
@@ -172,12 +141,49 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                           vertical: 12.h,
                         ),
                         child: customText(
-                          "Price Breakdown",
+                          "Order Details",
                           fontSize: 16.sp,
                           color: AppColors.blackColor,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
+                      OrderDetailSummaryItem(
+                        title: "Order Number",
+                        value: order.orderNumber,
+                      ),
+                      OrderDetailSummaryStatusItem(
+                        title: "Status",
+                        value: _getStatusDisplayText(order.status),
+                        status: order.status,
+                      ),
+                      OrderDetailSummaryItem(
+                        title: "Order Date",
+                        value:
+                            "${formatDate(order.createdAt.toIso8601String())} ${formatTime(order.createdAt.toIso8601String())}",
+                      ),
+                      if (order.paymentMethod != null)
+                        OrderDetailSummaryItem(
+                          title: "Payment Method",
+                          value: order.paymentMethodName,
+                        ),
+                      if (order.notes.isNotEmpty)
+                        OrderDetailSummaryItem(
+                          title: "Notes",
+                          value: order.notes,
+                          isVertical: true,
+                        ),
+
+                      // Price Breakdown Divider
+                      Container(
+                        margin: EdgeInsets.symmetric(
+                          horizontal: 8.w,
+                          vertical: 12.h,
+                        ),
+                        height: 1,
+                        color: AppColors.greyColor.withOpacity(0.3),
+                      ),
+
+                      // Price Breakdown Items
                       OrderDetailSummaryItem(
                         title: "Subtotal",
                         value: formatToCurrency(order.subtotal),
@@ -218,7 +224,7 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                   if (order.user != null)
                     SectionBox(
                       children: [
-                        // Section Header
+                        // Section Header with Call Button
                         Container(
                           width: double.infinity,
                           padding: EdgeInsets.symmetric(
@@ -234,55 +240,46 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                                 color: AppColors.blackColor,
                                 fontWeight: FontWeight.w600,
                               ),
-                              // Call button
-                              InkWell(
-                                onTap: () => _callCustomer(order.customerPhone),
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 12.w,
-                                    vertical: 6.h,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.primaryColor.withOpacity(
-                                      0.1,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8.r),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Icon(
-                                        Icons.phone,
-                                        color: AppColors.primaryColor,
-                                        size: 14.sp,
-                                      ),
-                                      SizedBox(width: 4.w),
-                                      customText(
-                                        "Call",
-                                        color: AppColors.primaryColor,
-                                        fontSize: 12.sp,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                              // Call button - REMOVED: Restaurants should not be able to call customers
+                              // InkWell(
+                              //   onTap: () => _callCustomer(order.customerPhone),
+                              //   child: Container(
+                              //     padding: EdgeInsets.symmetric(
+                              //       horizontal: 12.w,
+                              //       vertical: 6.h,
+                              //     ),
+                              //     decoration: BoxDecoration(
+                              //       color: AppColors.primaryColor.withOpacity(
+                              //         0.1,
+                              //       ),
+                              //       borderRadius: BorderRadius.circular(8.r),
+                              //     ),
+                              //     child: Row(
+                              //       mainAxisSize: MainAxisSize.min,
+                              //       children: [
+                              //         Icon(
+                              //           Icons.phone,
+                              //           color: AppColors.primaryColor,
+                              //           size: 14.sp,
+                              //         ),
+                              //         SizedBox(width: 4.w),
+                              //         customText(
+                              //           "Call",
+                              //           color: AppColors.primaryColor,
+                              //           fontSize: 12.sp,
+                              //           fontWeight: FontWeight.w600,
+                              //         ),
+                              //       ],
+                              //     ),
+                              //   ),
+                              // ),
                             ],
                           ),
                         ),
                         OrderDetailSummaryItem(
-                          title: "Name",
+                          title: "Customer Name",
                           value: order.customerName,
                         ),
-                        OrderDetailSummaryItem(
-                          title: "Phone",
-                          value: order.customerPhone,
-                        ),
-                        if (order.customerEmail.isNotEmpty)
-                          OrderDetailSummaryItem(
-                            title: "Email",
-                            value: order.customerEmail,
-                          ),
                       ],
                     ),
 
@@ -328,7 +325,8 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                   SizedBox(height: 12.h),
 
                   // Order Status Actions - Updated to match business requirements:
-                  // - paid: show Accept and Reject buttons
+                  // - pending: show Accept and Reject buttons (for regular orders, not delivery)
+                  // - confirmed: show Move to Preparing button
                   // - preparing: show Mark as Ready button
                   // - ready/in_transit: no restaurant actions (informational only)
                   // - rejected/completed/cancelled: no actions
@@ -356,8 +354,8 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                           ),
                         ),
 
-                        // For "paid" status: show Accept and Reject buttons side by side
-                        if (order.status.toLowerCase() == 'paid')
+                        // For "pending" status: show Accept and Reject buttons side by side
+                        if (order.status.toLowerCase() == 'pending')
                           Container(
                             margin: EdgeInsets.symmetric(
                               horizontal: 8.w,
@@ -464,6 +462,67 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                                   ),
                                 ),
                               ],
+                            ),
+                          ),
+
+                        // For "confirmed" status: show Move to Preparing button
+                        if (order.status.toLowerCase() == 'confirmed')
+                          Container(
+                            margin: EdgeInsets.symmetric(
+                              horizontal: 8.w,
+                              vertical: 8.h,
+                            ),
+                            width: double.infinity,
+                            height: 50.h,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  AppColors.primaryColor,
+                                  AppColors.primaryColor.withOpacity(0.8),
+                                ],
+                              ),
+                              borderRadius: BorderRadius.circular(12.r),
+                            ),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(12.r),
+                                onTap: ordersController.isLoading
+                                    ? null
+                                    : () => ordersController.updateOrderStatus(
+                                          order.id,
+                                          'preparing',
+                                        ),
+                                child: Center(
+                                  child: ordersController.isLoading
+                                      ? SizedBox(
+                                          width: 24.w,
+                                          height: 24.h,
+                                          child: CircularProgressIndicator(
+                                            color: AppColors.whiteColor,
+                                            strokeWidth: 2,
+                                          ),
+                                        )
+                                      : Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Icons.restaurant,
+                                              color: AppColors.whiteColor,
+                                              size: 20.sp,
+                                            ),
+                                            SizedBox(width: 12.w),
+                                            customText(
+                                              "Move to Preparing",
+                                              color: AppColors.whiteColor,
+                                              fontSize: 16.sp,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ],
+                                        ),
+                                ),
+                              ),
                             ),
                           ),
 
@@ -629,10 +688,10 @@ class OrderDetailsScreen extends GetView<OrdersController> {
 
   String _getStatusDisplayText(String status) {
     switch (status.toLowerCase()) {
-      case 'paid':
-        return 'Paid';
       case 'pending':
         return 'Pending';
+      case 'confirmed':
+        return 'Confirmed';
       case 'preparing':
         return 'Preparing';
       case 'ready':

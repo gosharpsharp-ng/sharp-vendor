@@ -17,6 +17,9 @@ import 'package:sharpvendor/modules/settings/views/analytics_screen.dart';
 import 'package:sharpvendor/modules/settings/views/business_operations_screen.dart';
 import 'package:sharpvendor/modules/settings/views/order_transactions_screen.dart';
 import 'package:sharpvendor/modules/settings/views/reviews_screen.dart';
+import 'package:sharpvendor/modules/settings/views/wallets_home_screen.dart';
+import 'package:sharpvendor/modules/settings/views/transactions_screen.dart';
+import 'package:sharpvendor/modules/settings/views/transaction_details_screen.dart';
 import 'package:sharpvendor/modules/signup/views/bank_info_entry_screen.dart';
 import 'package:sharpvendor/modules/signup/views/business_information_entry_screen.dart';
 import 'package:sharpvendor/modules/signup/views/business_operations_entry_screen.dart';
@@ -289,7 +292,28 @@ class AppPages {
       transitionDuration: const Duration(milliseconds: 400),
     ),
 
-
+    // Wallet & Transactions
+    GetPage(
+      name: Routes.WALLETS_HOME_SCREEN,
+      page: () => const WalletsHomeScreen(),
+      binding: SettingsBindings(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: Routes.TRANSACTIONS_SCREEN,
+      page: () => const TransactionsScreen(),
+      binding: SettingsBindings(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: Routes.TRANSACTION_DETAILS_SCREEN,
+      page: () => const TransactionDetailsScreen(),
+      binding: SettingsBindings(),
+      transition: Transition.rightToLeftWithFade,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
 
     GetPage(
       name: Routes.SELECT_LOCATION_SCREEN,

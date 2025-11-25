@@ -1380,4 +1380,239 @@ class SkeletonLoaders {
       ),
     );
   }
+
+  /// Campaign card skeleton loader (matches CampaignsHomeScreen structure)
+  static Widget campaignCard({int count = 4}) {
+    return Skeletonizer(
+      enabled: true,
+      child: Column(
+        children: List.generate(count, (index) => Container(
+          margin: EdgeInsets.only(bottom: 12.h),
+          padding: EdgeInsets.all(16.sp),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12.r),
+            border: Border.all(
+              color: Colors.grey[300]!,
+              width: 1,
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Campaign name and status badge row
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: 16.h,
+                      width: 160.w,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(4.r),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 8.w),
+                  Container(
+                    height: 24.h,
+                    width: 70.w,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(20.r),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 12.h),
+              // Date row
+              Row(
+                children: [
+                  Container(
+                    width: 16.sp,
+                    height: 16.sp,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(2.r),
+                    ),
+                  ),
+                  SizedBox(width: 6.w),
+                  Container(
+                    height: 13.h,
+                    width: 180.w,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(4.r),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8.h),
+              // Priority and cost row
+              Row(
+                children: [
+                  Container(
+                    width: 16.sp,
+                    height: 16.sp,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(2.r),
+                    ),
+                  ),
+                  SizedBox(width: 6.w),
+                  Container(
+                    height: 13.h,
+                    width: 70.w,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(4.r),
+                    ),
+                  ),
+                  SizedBox(width: 16.w),
+                  Container(
+                    width: 16.sp,
+                    height: 16.sp,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(2.r),
+                    ),
+                  ),
+                  SizedBox(width: 6.w),
+                  Container(
+                    height: 13.h,
+                    width: 80.w,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(4.r),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        )),
+      ),
+    );
+  }
+
+  /// Discount card skeleton loader (matches discount list structure)
+  static Widget discountCard({int count = 4}) {
+    return Skeletonizer(
+      enabled: true,
+      child: Column(
+        children: List.generate(count, (index) => Container(
+          margin: EdgeInsets.only(bottom: 12.h),
+          padding: EdgeInsets.all(16.sp),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12.r),
+            border: Border.all(
+              color: Colors.grey[300]!,
+              width: 1,
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Discount name and type badge row
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: 16.h,
+                      width: 140.w,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(4.r),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 8.w),
+                  Container(
+                    height: 24.h,
+                    width: 80.w,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(20.r),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 12.h),
+              // Value row
+              Row(
+                children: [
+                  Container(
+                    width: 16.sp,
+                    height: 16.sp,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(2.r),
+                    ),
+                  ),
+                  SizedBox(width: 6.w),
+                  Container(
+                    height: 14.h,
+                    width: 100.w,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(4.r),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8.h),
+              // Date range row
+              Row(
+                children: [
+                  Container(
+                    width: 16.sp,
+                    height: 16.sp,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(2.r),
+                    ),
+                  ),
+                  SizedBox(width: 6.w),
+                  Container(
+                    height: 13.h,
+                    width: 200.w,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(4.r),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8.h),
+              // Status row
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    height: 22.h,
+                    width: 60.w,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(12.r),
+                    ),
+                  ),
+                  Container(
+                    width: 24.sp,
+                    height: 24.sp,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(4.r),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        )),
+      ),
+    );
+  }
 }

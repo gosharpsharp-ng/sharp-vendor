@@ -169,9 +169,11 @@ class AreaChartWidget extends StatelessWidget {
   // Get maximum value for Y axis scaling
   double _getMaxValue() {
     if (chartData.isEmpty) return 100;
-    return chartData
+    final maxValue = chartData
         .map((data) => data.value)
         .reduce((a, b) => a > b ? a : b)
         .toDouble();
+    // Return a minimum value of 10 to ensure chart is visible even with 0 values
+    return maxValue > 0 ? maxValue : 10;
   }
 }

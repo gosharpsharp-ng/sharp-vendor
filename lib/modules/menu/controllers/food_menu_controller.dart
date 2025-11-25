@@ -67,6 +67,7 @@ class FoodMenuController extends GetxController {
   TextEditingController prepTimeController = TextEditingController();
   TextEditingController categoryNameController = TextEditingController();
   TextEditingController searchController = TextEditingController();
+  TextEditingController packagingPriceController = TextEditingController();
 
   // Dropdowns
   CategoryModel? selectedCategory;
@@ -120,6 +121,16 @@ class FoodMenuController extends GetxController {
   bool showOnCustomerApp = true;
   toggleShowOnCustomerApp(bool value) {
     showOnCustomerApp = value;
+    update();
+  }
+
+  // Packaging toggle
+  bool hasPackaging = false;
+  toggleHasPackaging(bool value) {
+    hasPackaging = value;
+    if (!value) {
+      packagingPriceController.clear();
+    }
     update();
   }
 
@@ -392,20 +403,26 @@ class FoodMenuController extends GetxController {
           // "show_on_customer_app": showOnCustomerApp,
         };
 
+        // Add packaging_price only if hasPackaging is true
+        if (hasPackaging && packagingPriceController.text.isNotEmpty) {
+          menuData["packaging_price"] = double.tryParse(packagingPriceController.text) ?? 0.0;
+        }
+
         // Call the API
         final APIResponse response = await menuService.createMenu(menuData);
 
         if (response.status == "success") {
-          showToast(message: "Menu item added successfully", isError: false);
-
           // Clear form
           clearForm();
 
-          // Refresh menu items
-          await getMenuItems();
-
-          // Navigate back
+          // Navigate back first
           Get.back();
+
+          // Show toast after navigation
+          showToast(message: "Menu item added successfully", isError: false);
+
+          // Refresh menu items in the background
+          getMenuItems();
         } else {
           showToast(
             message: response.message ?? "Failed to add menu item",
@@ -504,6 +521,24 @@ class FoodMenuController extends GetxController {
           menuData["addons"] = newAddonIds;
         }
 
+        // Check if packaging price changed
+        double? newPackagingPrice;
+        if (hasPackaging && packagingPriceController.text.isNotEmpty) {
+          newPackagingPrice = double.tryParse(packagingPriceController.text);
+        }
+
+        double? originalPackagingPrice = _originalMenuItem!.packagingPrice;
+
+        // Compare packaging prices (handle null cases)
+        if (newPackagingPrice != originalPackagingPrice) {
+          if (newPackagingPrice != null && newPackagingPrice > 0) {
+            menuData["packaging_price"] = newPackagingPrice;
+          } else {
+            // If packaging was removed or set to null/0, send null to clear it
+            menuData["packaging_price"] = null;
+          }
+        }
+
         // Only include images if a new image was selected (base64 format)
         // If foodImage is a URL (from existing item), don't send it
         bool imageChanged = false;
@@ -563,16 +598,17 @@ class FoodMenuController extends GetxController {
         final APIResponse response = await menuService.updateMenu(menuData, currentMenuItem!.id,);
 
         if (response.status == "success") {
-          showToast(message: "Menu item updated successfully", isError: false);
-
           // Clear form
           clearForm();
 
-          // Refresh menu items
-          await getMenuItems();
-
-          // Navigate back
+          // Navigate back first
           Get.back();
+
+          // Show toast after navigation
+          showToast(message: "Menu item updated successfully", isError: false);
+
+          // Refresh menu items in the background
+          getMenuItems();
         } else {
           showToast(
             message: response.message ?? "Failed to update menu item",
@@ -590,17 +626,19 @@ class FoodMenuController extends GetxController {
     }
   }
 
-  clearForm() {
+  void clearForm() {
     menuNameController.clear();
     descriptionController.clear();
     priceController.clear();
     prepTimeController.clear();
+    packagingPriceController.clear();
     selectedCategory = null;
     foodImage = null;
     isAvailable = 1;
     availableQuantity = 1;
     selectedPlateSize = "M";
     showOnCustomerApp = true;
+    hasPackaging = false;
     currentMenuItem = null; // Reset current menu item
     _originalMenuItem = null; // Reset original menu item
     selectedAddons.clear(); // Clear addons
@@ -673,7 +711,8 @@ class FoodMenuController extends GetxController {
           description: menuItems[index].description,
           plateSize: menuItems[index].plateSize,
           showOnCustomerApp: menuItems[index].showOnCustomerApp,
-          files: menuItems[index].files
+          files: menuItems[index].files,
+          packagingPrice: menuItems[index].packagingPrice,
         );
 
         // Update current menu item if it's the same
@@ -706,6 +745,7 @@ class FoodMenuController extends GetxController {
 
       menuItems.removeWhere((item) => item.id == itemId);
       showToast(message: "Menu item deleted successfully", isError: false);
+      Get.back();
     } catch (e) {
       showToast(
         message: "Error deleting menu item: ${e.toString()}",
@@ -773,6 +813,16 @@ class FoodMenuController extends GetxController {
     selectedPlateSize = item.plateSize ?? "M";
     showOnCustomerApp = item.showOnCustomerApp ?? true;
     selectedAddons = List.from(item.addons); // Populate addons
+
+    // Populate packaging fields
+    if (item.packagingPrice != null && item.packagingPrice! > 0) {
+      hasPackaging = true;
+      packagingPriceController.text = item.packagingPrice.toString();
+    } else {
+      hasPackaging = false;
+      packagingPriceController.clear();
+    }
+
     update();
 
     Get.toNamed(Routes.EDIT_MENU_SCREEN);
@@ -789,16 +839,31 @@ class FoodMenuController extends GetxController {
     searchController.addListener(() {
       filterCategories(searchController.text);
     });
+
+    // Setup price listener to update commission calculator
+    priceController.addListener(() {
+      update(); // Trigger rebuild to show updated commission
+    });
   }
 
   @override
   void onClose() {
+    // Remove listeners before disposal
+    searchController.removeListener(() {
+      filterCategories(searchController.text);
+    });
+    priceController.removeListener(() {
+      update();
+    });
+
+    // Dispose controllers
     menuNameController.dispose();
     descriptionController.dispose();
     priceController.dispose();
     prepTimeController.dispose();
     categoryNameController.dispose();
     searchController.dispose();
+    packagingPriceController.dispose();
     super.onClose();
   }
 }

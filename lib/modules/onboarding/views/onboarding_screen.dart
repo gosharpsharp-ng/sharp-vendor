@@ -60,13 +60,13 @@ class OnboardingScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          SizedBox(height: 15.sp),
+                          SizedBox(height: 5.sp),
                           Expanded(
                             flex: 1,
                             child: Container(
                               padding: EdgeInsets.symmetric(
                                 horizontal: 14.sp,
-                                vertical: 12.h,
+                                vertical: 8.h,
                               ),
                               child: Column(
                                 children: [
@@ -77,7 +77,7 @@ class OnboardingScreen extends StatelessWidget {
                                     fontWeight: FontWeight.w600,
                                     overflow: TextOverflow.visible,
                                   ),
-                                  SizedBox(height: 10.sp),
+                                  SizedBox(height: 5.sp),
                                   customText(
                                     contents[i].desc,
                                     textAlign: TextAlign.center,

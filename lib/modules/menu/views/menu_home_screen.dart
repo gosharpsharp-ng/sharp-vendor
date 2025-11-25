@@ -265,16 +265,26 @@ class MenuItemCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       customText(
-                        "${formatToCurrency(menuItem.price)}/plate",
+                        "${formatToCurrency(menuItem.price)}",
                         color: AppColors.primaryColor,
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
                       ),
-                      customText(
-                        menuItem.duration,
-                        color: AppColors.greyColor,
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.normal,
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.schedule,
+                            size: 14.sp,
+                            color: AppColors.greyColor,
+                          ),
+                          SizedBox(width: 4.w),
+                          customText(
+                            menuItem.duration,
+                            color: AppColors.greyColor,
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ],
                       ),
                     ],
                   ),

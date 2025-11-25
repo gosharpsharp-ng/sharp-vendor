@@ -50,8 +50,6 @@ class SignInController extends GetxController {
           'password': passwordController.text,
         };
         APIResponse response = await authService.login(data);
-        showToast(
-            message: response.message, isError: response.status != "success");
 
         if (response.status.toLowerCase() == "success") {
           print("*****************************************************************************");

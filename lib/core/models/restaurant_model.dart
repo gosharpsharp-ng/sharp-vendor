@@ -2,6 +2,7 @@ import 'restaurant_location_model.dart';
 import 'restaurant_wallet_model.dart';
 import 'restaurant_schedule_model.dart';
 import 'bank_account_model.dart';
+import 'commission_formula_model.dart';
 
 class RestaurantModel {
   final int id;
@@ -39,6 +40,7 @@ class RestaurantModel {
   final BankAccount? bankAccount;
   final List<RestaurantSchedule> schedules;
   final List<dynamic> deliveryZones;
+  final CommissionFormula? commissionFormula;
 
   RestaurantModel({
     required this.id,
@@ -76,6 +78,7 @@ class RestaurantModel {
     this.bankAccount,
     this.schedules = const [],
     this.deliveryZones = const [],
+    this.commissionFormula,
   });
 
   factory RestaurantModel.fromJson(Map<String, dynamic> json) {
@@ -134,6 +137,9 @@ class RestaurantModel {
           : null,
       schedules: schedulesList,
       deliveryZones: json['delivery_zones'] as List<dynamic>? ?? [],
+      commissionFormula: json['commission_formula'] != null
+          ? CommissionFormula.fromJson(json['commission_formula'])
+          : null,
     );
   }
 
@@ -174,6 +180,7 @@ class RestaurantModel {
       'bank_account': bankAccount?.toJson(),
       'schedules': schedules.map((schedule) => schedule.toJson()).toList(),
       'delivery_zones': deliveryZones,
+      'commission_formula': commissionFormula?.toJson(),
     };
   }
 }

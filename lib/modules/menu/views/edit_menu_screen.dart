@@ -216,6 +216,115 @@ class EditMenuScreen extends GetView<FoodMenuController> {
                       },
                     ),
 
+                    // Commission Calculator - Shows what customer will see
+                    GetBuilder<SettingsController>(
+                      builder: (settingsController) {
+                        final restaurant = settingsController.userProfile?.restaurant;
+                        final formula = restaurant?.commissionFormula;
+
+                        if (formula == null) return SizedBox.shrink();
+
+                        // Listen to price changes
+                        final priceText = menuController.priceController.text;
+                        final menuPrice = double.tryParse(priceText) ?? 0.0;
+
+                        if (menuPrice <= 0) return SizedBox.shrink();
+
+                        final commission = formula.calculateCommission(menuPrice);
+                        final customerPrice = menuPrice + commission;
+
+                        return Container(
+                          margin: EdgeInsets.only(top: 12.h),
+                          padding: EdgeInsets.all(14.w),
+                          decoration: BoxDecoration(
+                            color: AppColors.primaryColor.withAlpha(20),
+                            borderRadius: BorderRadius.circular(12.r),
+                            border: Border.all(
+                              color: AppColors.primaryColor.withAlpha(80),
+                              width: 1,
+                            ),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.info_outline,
+                                    color: AppColors.primaryColor,
+                                    size: 18.sp,
+                                  ),
+                                  SizedBox(width: 8.w),
+                                  Expanded(
+                                    child: customText(
+                                      "Customer will see",
+                                      fontSize: 13.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.primaryColor,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 10.h),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  customText(
+                                    "Your price:",
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.w500,
+                                    color: AppColors.blackColor.withAlpha(180),
+                                  ),
+                                  customText(
+                                    formatToCurrency(menuPrice),
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.blackColor,
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 6.h),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  customText(
+                                    "Commission:",
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.w500,
+                                    color: AppColors.blackColor.withAlpha(180),
+                                  ),
+                                  customText(
+                                    formatToCurrency(commission),
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.redColor,
+                                  ),
+                                ],
+                              ),
+                              Divider(height: 16.h, color: AppColors.greyColor.withAlpha(100)),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  customText(
+                                    "Final price:",
+                                    fontSize: 13.sp,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.blackColor,
+                                  ),
+                                  customText(
+                                    formatToCurrency(customerPrice),
+                                    fontSize: 15.sp,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.primaryColor,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+
                     SizedBox(height: 15.h),
 
                     // Prep Time (minutes)
@@ -288,6 +397,56 @@ class EditMenuScreen extends GetView<FoodMenuController> {
                         );
                       }).toList(),
                     ),
+
+                    SizedBox(height: 15.h),
+
+                    // Packaging Section
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: menuController.hasPackaging,
+                          onChanged: (value) {
+                            menuController.toggleHasPackaging(value ?? false);
+                          },
+                          activeColor: AppColors.primaryColor,
+                        ),
+                        SizedBox(width: 8.w),
+                        customText(
+                          "Has Packaging",
+                          color: AppColors.blackColor,
+                          fontSize: 13.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ],
+                    ),
+
+                    // Packaging Price (conditional)
+                    if (menuController.hasPackaging) ...[
+                      SizedBox(height: 8.h),
+                      CustomRoundedInputField(
+                        title: "Packaging Price",
+                        label: "2.50",
+                        showLabel: true,
+                        isRequired: true,
+                        hasTitle: true,
+                        keyboardType: TextInputType.number,
+                        controller: menuController.packagingPriceController,
+                        validator: (value) {
+                          if (menuController.hasPackaging) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter packaging price';
+                            }
+                            if (double.tryParse(value) == null) {
+                              return 'Please enter a valid price';
+                            }
+                            if (double.parse(value) <= 0) {
+                              return 'Packaging price must be greater than 0';
+                            }
+                          }
+                          return null;
+                        },
+                      ),
+                    ],
 
                     SizedBox(height: 15.h),
 
@@ -573,15 +732,69 @@ class CategoryBottomSheet extends StatelessWidget {
                 shrinkWrap: true,
                 itemCount: categories.length,
                 itemBuilder: (context, index) {
+                  final category = categories[index];
                   return ListTile(
+                    leading: category.iconUrl != null && category.iconUrl!.isNotEmpty
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(8.r),
+                            child: CachedNetworkImage(
+                              imageUrl: category.iconUrl!,
+                              width: 40.sp,
+                              height: 40.sp,
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) => Container(
+                                width: 40.sp,
+                                height: 40.sp,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.shade300,
+                                  borderRadius: BorderRadius.circular(8.r),
+                                ),
+                              ),
+                              errorWidget: (context, url, error) => Container(
+                                width: 40.sp,
+                                height: 40.sp,
+                                decoration: BoxDecoration(
+                                  color: AppColors.backgroundColor,
+                                  borderRadius: BorderRadius.circular(8.r),
+                                ),
+                                child: Icon(
+                                  Icons.restaurant,
+                                  size: 20.sp,
+                                  color: AppColors.primaryColor,
+                                ),
+                              ),
+                            ),
+                          )
+                        : Container(
+                            width: 40.sp,
+                            height: 40.sp,
+                            decoration: BoxDecoration(
+                              color: AppColors.backgroundColor,
+                              borderRadius: BorderRadius.circular(8.r),
+                            ),
+                            child: Icon(
+                              Icons.restaurant,
+                              size: 20.sp,
+                              color: AppColors.primaryColor,
+                            ),
+                          ),
                     title: customText(
-                      categories[index].name,
+                      category.name,
                       color: AppColors.blackColor,
                       fontSize: 14.sp,
                       fontWeight: FontWeight.normal,
                     ),
+                    subtitle: category.description.isNotEmpty
+                        ? customText(
+                            category.description,
+                            color: AppColors.greyColor,
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.normal,
+                            maxLines: 1,
+                          )
+                        : null,
                     onTap: () {
-                      onCategorySelected(categories[index]);
+                      onCategorySelected(category);
                     },
                   );
                 },

@@ -2,7 +2,33 @@ import 'package:sharpvendor/core/utils/exports.dart';
 
 class SettingsController extends GetxController {
   final profileService = serviceLocator<ProfileService>();
+  final walletsService = serviceLocator<WalletsService>();
 
+  // Wallet Balance
+  WalletBalanceDataModel? walletBalance;
+  bool _isLoadingWallet = false;
+  get isLoadingWallet => _isLoadingWallet;
+
+  setLoadingWalletState(bool val) {
+    _isLoadingWallet = val;
+    update();
+  }
+
+  getWalletBalance() async {
+    setLoadingWalletState(true);
+    APIResponse response = await walletsService.getWalletBalance();
+    setLoadingWalletState(false);
+
+    if (response.status == "success") {
+      walletBalance = WalletBalanceDataModel.fromJson(response.data);
+      update();
+    } else {
+      if (getStorage.read("token") != null) {
+        showToast(
+            message: response.message, isError: response.status != "success");
+      }
+    }
+  }
 
   final ScrollController transactionsScrollController = ScrollController();
   bool fetchingTransactions = false;
@@ -98,7 +124,9 @@ class SettingsController extends GetxController {
   get isLoading => _isLoading;
   setLoadingState(bool val) {
     _isLoading = val;
-    update();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      update();
+    });
   }
 
   final getStorage = GetStorage();
@@ -176,6 +204,7 @@ class SettingsController extends GetxController {
       if (response.status == "success") {
         getProfile();
         toggleProfileEditState(false);
+        Get.back();
         showAnyBottomSheet(
             isControlled: false,
             child: const ProfileUpdateSuccessBottomSheet());
@@ -211,6 +240,7 @@ class SettingsController extends GetxController {
       APIResponse response = await profileService.updateProfile(data);
       if (response.status == "success") {
         getProfile();
+        Get.back();
         showAnyBottomSheet(
             isControlled: false,
             child: const ProfileUpdateSuccessBottomSheet());
@@ -265,6 +295,7 @@ class SettingsController extends GetxController {
         newPasswordController.clear();
         confirmNewPasswordController.clear();
         update();
+        Get.back();
       }
     }
   }
@@ -288,9 +319,12 @@ class SettingsController extends GetxController {
       "id": selectedNotification!.id,
     };
     APIResponse response = await profileService.getNotificationById(data);
-    selectedNotification = NotificationModel.fromJson(response.data[data]);
     if (response.status == "success") {
-      setSelectedNotification(NotificationModel.fromJson(response.data[data]));
+      selectedNotification = NotificationModel.fromJson(response.data);
+      update();
+    } else {
+      showToast(
+          message: response.message, isError: response.status != "success");
     }
   }
 

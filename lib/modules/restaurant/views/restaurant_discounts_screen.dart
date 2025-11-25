@@ -1,4 +1,5 @@
 import 'package:sharpvendor/core/models/discount_model.dart';
+import 'package:sharpvendor/core/utils/widgets/skeleton_loaders.dart';
 import 'package:sharpvendor/modules/restaurant/controllers/restaurant_discount_controller.dart';
 import '../../../core/utils/exports.dart';
 
@@ -39,19 +40,7 @@ class RestaurantDiscountsScreen extends StatelessWidget {
                 await controller.getRestaurantDiscounts();
               },
               child: controller.isLoadingDiscounts
-                  ? ListView(
-                      children: [
-                        ...List.generate(
-                          3,
-                          (index) => Column(
-                            children: [
-                              SkeletonLoaders.menuItemCard(count: 1),
-                              SizedBox(height: 16.h),
-                            ],
-                          ),
-                        ),
-                      ],
-                    )
+                  ? SkeletonLoaders.discountCard(count: 4)
                   : controller.discounts.isEmpty
                       ? ListView(
                           children: [

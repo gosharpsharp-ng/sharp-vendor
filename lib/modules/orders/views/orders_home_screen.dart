@@ -204,10 +204,10 @@ class OrdersHomeScreen extends GetView<OrdersController> {
 
   String _getStatusDisplayName(String status) {
     switch (status.toLowerCase()) {
-      case 'paid':
-        return 'Paid';
       case 'pending':
         return 'Pending';
+      case 'confirmed':
+        return 'Confirmed';
       case 'preparing':
         return 'Preparing';
       case 'ready':
@@ -223,16 +223,16 @@ class OrdersHomeScreen extends GetView<OrdersController> {
 
   IconData _getStatusIcon(String status) {
     switch (status.toLowerCase()) {
-      case 'paid':
-        return Icons.payment;
       case 'pending':
         return Icons.access_time;
+      case 'confirmed':
+        return Icons.check_circle_outline;
       case 'preparing':
         return Icons.restaurant;
       case 'ready':
-        return Icons.check_circle_outline;
+        return Icons.check_circle;
       case 'in_transit':
-        return Icons.local_shipping;
+        return Icons.motorcycle_sharp;
       case 'completed':
         return Icons.done_all;
       default:
@@ -242,12 +242,12 @@ class OrdersHomeScreen extends GetView<OrdersController> {
 
   String _getEmptyStateMessage(String status) {
     switch (status.toLowerCase()) {
-      case 'paid':
-        return 'Paid orders will appear here when payment is confirmed';
       case 'pending':
         return 'New orders will appear here when customers place them';
+      case 'confirmed':
+        return 'Confirmed orders will appear here after acceptance';
       case 'preparing':
-        return 'Orders you\'ve accepted will show here while being prepared';
+        return 'Orders being prepared will show here';
       case 'ready':
         return 'Completed orders ready for pickup/delivery will appear here';
       case 'in_transit':
@@ -385,9 +385,9 @@ class OrderCard extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                         SizedBox(height: 2.h),
-                        if (order.items.isNotEmpty)
+                        if (order.allItems.isNotEmpty)
                           customText(
-                            "${order.items.length} item${order.items.length > 1 ? 's' : ''} • ${order.items.map((e) => e.quantity).reduce((a, b) => a + b)} qty",
+                            "${order.allItems.length} item${order.allItems.length > 1 ? 's' : ''} • ${order.allItems.map((e) => e.quantity).reduce((a, b) => a + b)} qty",
                             color: AppColors.greyColor,
                             fontSize: 12.sp,
                             fontWeight: FontWeight.w500,
@@ -398,8 +398,40 @@ class OrderCard extends StatelessWidget {
                 ],
               ),
 
-              // Items preview
-              if (order.items.isNotEmpty) ...[
+              // Items preview - Show packages or items
+              if (order.packages.isNotEmpty) ...[
+                SizedBox(height: 12.h),
+                Container(
+                  padding: EdgeInsets.all(12.sp),
+                  decoration: BoxDecoration(
+                    color: AppColors.backgroundColor,
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.restaurant_menu,
+                        color: AppColors.greyColor,
+                        size: 16.sp,
+                      ),
+                      SizedBox(width: 8.w),
+                      Expanded(
+                        child: customText(
+                          order.packages.first.name +
+                              (order.packages.length > 1
+                                  ? " + ${order.packages.length - 1} more"
+                                  : ""),
+                          color: AppColors.blackColor,
+                          fontSize: 13.sp,
+                          fontWeight: FontWeight.w500,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ] else if (order.items.isNotEmpty) ...[
                 SizedBox(height: 12.h),
                 Container(
                   padding: EdgeInsets.all(12.sp),
@@ -490,10 +522,10 @@ class OrderCard extends StatelessWidget {
 
   IconData _getStatusIcon(String status) {
     switch (status.toLowerCase()) {
-      case 'paid':
-        return Icons.payment;
       case 'pending':
         return Icons.schedule;
+      case 'confirmed':
+        return Icons.check_circle_outline;
       case 'preparing':
         return Icons.restaurant;
       case 'ready':
@@ -511,10 +543,10 @@ class OrderCard extends StatelessWidget {
 
   Color _getStatusColor(String status) {
     switch (status.toLowerCase()) {
-      case 'paid':
-        return Colors.green;
       case 'pending':
         return Colors.orange;
+      case 'confirmed':
+        return Colors.lightGreen;
       case 'preparing':
         return Colors.blue;
       case 'ready':
@@ -532,10 +564,10 @@ class OrderCard extends StatelessWidget {
 
   String _getStatusDisplayText(String status) {
     switch (status.toLowerCase()) {
-      case 'paid':
-        return 'Paid';
       case 'pending':
         return 'Pending';
+      case 'confirmed':
+        return 'Confirmed';
       case 'preparing':
         return 'Preparing';
       case 'ready':

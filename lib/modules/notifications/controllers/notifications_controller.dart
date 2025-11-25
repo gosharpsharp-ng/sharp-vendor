@@ -5,7 +5,6 @@ class NotificationsController extends GetxController {
   NotificationModel? selectedNotification;
   setSelectedNotification(NotificationModel nt) {
     selectedNotification = nt;
-    getNotifications();
     update();
   }
 
@@ -16,9 +15,12 @@ class NotificationsController extends GetxController {
       "id": selectedNotification!.id,
     };
     APIResponse response = await profileService.getNotificationById(data);
-    selectedNotification = NotificationModel.fromJson(response.data[data]);
     if (response.status == "success") {
-      setSelectedNotification(NotificationModel.fromJson(response.data[data]));
+      selectedNotification = NotificationModel.fromJson(response.data);
+      update();
+    } else {
+      showToast(
+          message: response.message, isError: response.status != "success");
     }
   }
 

@@ -30,7 +30,6 @@ class DeliveriesController extends GetxController {
     if (isOnline) {
       try {
         await serviceManager.initializeServices();
-        showToast(message: "You're online! Ready to receive orders.", isError: false);
       } catch (e) {
         showToast(
           message: "Failed to go online: ${e.toString()}",
@@ -40,7 +39,6 @@ class DeliveriesController extends GetxController {
       }
     } else {
       await serviceManager.disposeServices();
-      showToast(message: "You're offline", isError: false);
     }
     update();
   }
