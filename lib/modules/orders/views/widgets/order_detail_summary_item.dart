@@ -143,10 +143,10 @@ class OrderDetailSummaryStatusItem extends StatelessWidget {
 
   Color _getStatusColor() {
     switch (status.toLowerCase()) {
-      case 'paid':
-        return AppColors.forestGreenColor;
       case 'pending':
         return AppColors.amberColor;
+      case 'confirmed':
+        return Colors.lightGreen;
       case 'preparing':
         return AppColors.blueColor;
       case 'ready':
@@ -165,18 +165,18 @@ class OrderDetailSummaryStatusItem extends StatelessWidget {
 
   IconData _getStatusIcon() {
     switch (status.toLowerCase()) {
-      case 'paid':
-        return Icons.payment;
       case 'pending':
         return Icons.schedule;
+      case 'confirmed':
+        return Icons.check_circle_outline;
       case 'preparing':
         return Icons.restaurant;
       case 'ready':
-        return Icons.check_circle_outline;
+        return Icons.check_circle;
       case 'in_transit':
         return Icons.local_shipping_outlined;
       case 'completed':
-        return Icons.check_circle;
+        return Icons.done_all;
       case 'cancelled':
         return Icons.block;
       case 'rejected':
@@ -268,6 +268,7 @@ class OrderDetailMenuItem extends StatelessWidget {
   final String price;
   final String? description;
   final String? plateSize;
+  final String? packagingPrice;
 
   const OrderDetailMenuItem({
     super.key,
@@ -277,6 +278,7 @@ class OrderDetailMenuItem extends StatelessWidget {
     required this.price,
     this.description,
     this.plateSize,
+    this.packagingPrice,
   });
 
   @override
@@ -362,6 +364,20 @@ class OrderDetailMenuItem extends StatelessWidget {
                       ),
                       customText(
                         "Size: $plateSize",
+                        color: AppColors.obscureTextColor,
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ],
+                    if (packagingPrice != null && packagingPrice!.isNotEmpty && packagingPrice != '₦0.00') ...[
+                      customText(
+                        " • ",
+                        color: AppColors.obscureTextColor,
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.normal,
+                      ),
+                      customText(
+                        "Packaging: $packagingPrice",
                         color: AppColors.obscureTextColor,
                         fontSize: 12.sp,
                         fontWeight: FontWeight.normal,

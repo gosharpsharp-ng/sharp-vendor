@@ -275,46 +275,42 @@ class AddRestaurantDiscountScreen extends StatelessWidget {
                           },
                         ),
 
-                        // Badge Text (Optional)
-                        CustomRoundedInputField(
-                          title: "Badge Text (Optional)",
-                          label: "e.g. 25% OFF",
-                          showLabel: true,
-                          hasTitle: true,
-                          isRequired: false,
-                          controller: controller.badgeTextController,
-                        ),
-
-                        // Active Toggle
+                        // Active Checkbox
                         SizedBox(height: 15.h),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                customText(
-                                  "Active",
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.blackColor,
+                        InkWell(
+                          onTap: () {
+                            controller.toggleActive(!controller.isActive);
+                          },
+                          child: Row(
+                            children: [
+                              Checkbox(
+                                value: controller.isActive,
+                                onChanged: (value) {
+                                  controller.toggleActive(value ?? false);
+                                },
+                                activeColor: AppColors.primaryColor,
+                              ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    customText(
+                                      "Active",
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.blackColor,
+                                    ),
+                                    SizedBox(height: 4.h),
+                                    customText(
+                                      "Discount is available for customers",
+                                      fontSize: 12.sp,
+                                      color: AppColors.greyColor,
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(height: 4.h),
-                                customText(
-                                  "Discount is available for customers",
-                                  fontSize: 12.sp,
-                                  color: AppColors.greyColor,
-                                ),
-                              ],
-                            ),
-                            Switch(
-                              value: controller.isActive,
-                              onChanged: (value) {
-                                controller.toggleActive(value);
-                              },
-                              activeColor: AppColors.primaryColor,
-                            ),
-                          ],
+                              ),
+                            ],
+                          ),
                         ),
 
                         SizedBox(height: 20.h),

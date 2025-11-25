@@ -477,7 +477,7 @@ String formatRideTime(String timestamp) {
 }
 
 String formatToCurrency(num number) {
-  NumberFormat format = NumberFormat.currency(locale: 'en_US', symbol: '₦');
+  NumberFormat format = NumberFormat.currency(locale: 'en_US', symbol: '₦', decimalDigits: 0);
   return format.format(number);
 }
 

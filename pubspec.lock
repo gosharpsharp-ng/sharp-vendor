@@ -1806,7 +1806,7 @@ packages:
     source: hosted
     version: "3.0.2"
   vibration:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: vibration
       sha256: "804ee8f9628f31ee71fbe6137a2bc6206a64e101ec22cd9dd6d3a7dc0272591b"

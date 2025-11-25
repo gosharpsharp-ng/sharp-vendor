@@ -30,6 +30,7 @@ class CampaignsController extends GetxController {
   final TextEditingController startDateController = TextEditingController();
   final TextEditingController endDateController = TextEditingController();
   final TextEditingController priorityController = TextEditingController();
+  final TextEditingController statusController = TextEditingController();
 
   final GlobalKey<FormState> createCampaignFormKey = GlobalKey<FormState>();
 
@@ -44,6 +45,8 @@ class CampaignsController extends GetxController {
   void onInit() {
     super.onInit();
     getCampaigns();
+    // Initialize status controller with default value
+    statusController.text = 'Draft';
   }
 
   @override
@@ -52,6 +55,7 @@ class CampaignsController extends GetxController {
     startDateController.dispose();
     endDateController.dispose();
     priorityController.dispose();
+    statusController.dispose();
     super.onClose();
   }
 
@@ -143,8 +147,8 @@ class CampaignsController extends GetxController {
 
       update();
 
-      // Navigate to success/details screen
-      Get.toNamed(Routes.CAMPAIGN_DETAILS_SCREEN);
+      // Navigate back to campaigns screen
+      Get.back();
     } else {
       showToast(
         message: response.message,
@@ -230,6 +234,7 @@ class CampaignsController extends GetxController {
   // Set status
   setStatus(String status) {
     selectedStatus = status;
+    statusController.text = status == 'draft' ? 'Draft' : 'Active';
     update();
   }
 
@@ -245,6 +250,7 @@ class CampaignsController extends GetxController {
     startDateController.clear();
     endDateController.clear();
     priorityController.clear();
+    statusController.text = 'Draft';
     selectedPaymentMethod = 'wallet';
     selectedStatus = 'draft';
     selectedPriority = 1;

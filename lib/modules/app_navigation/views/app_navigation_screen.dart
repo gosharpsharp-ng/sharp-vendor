@@ -4,6 +4,16 @@ class AppNavigationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     setSystemOverlayStyle(navigationColor: AppColors.whiteColor);
+
+    // Check if there's an initial index passed as argument
+    final args = Get.arguments as Map<String, dynamic>?;
+    if (args != null && args['initialIndex'] != null) {
+      final appNavController = Get.find<AppNavigationController>();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        appNavController.changeScreenIndex(args['initialIndex']);
+      });
+    }
+
     return GetBuilder<AppNavigationController>(
       builder: (appNavigationController) => WillPopScope(
         onWillPop: () async {

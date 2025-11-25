@@ -219,6 +219,16 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
                         ],
                       ),
 
+                      // Packaging Price Card (if available)
+                      if (menuItem.packagingPrice != null && menuItem.packagingPrice! > 0) ...[
+                        SizedBox(height: 12.h),
+                        _buildInfoCard(
+                          icon: Icons.shopping_bag_outlined,
+                          label: "Packaging Price",
+                          value: formatToCurrency(menuItem.packagingPrice!),
+                        ),
+                      ],
+
                       SizedBox(height: 24.h),
 
                       // Plate Size Section
@@ -674,6 +684,12 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
       ),
       child: Row(
         children: [
+          Checkbox(
+            value: value,
+            onChanged: (val) => onChanged(val ?? false),
+            activeColor: AppColors.primaryColor,
+          ),
+          SizedBox(width: 12.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -693,11 +709,6 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
                 ),
               ],
             ),
-          ),
-          Switch(
-            value: value,
-            onChanged: onChanged,
-            activeColor: AppColors.blackColor,
           ),
         ],
       ),

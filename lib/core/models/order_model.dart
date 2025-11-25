@@ -203,6 +203,7 @@ class OrderPackageItemModel {
   final MenuItemModel menu;
   final int quantity;
   final double price;
+  final double packagingPrice;
   final double total;
   final dynamic options;
   final List<dynamic> addons;
@@ -212,6 +213,7 @@ class OrderPackageItemModel {
     required this.menu,
     required this.quantity,
     required this.price,
+    required this.packagingPrice,
     required this.total,
     this.options,
     required this.addons,
@@ -226,6 +228,7 @@ class OrderPackageItemModel {
       menu: menuData != null ? MenuItemModel.fromJson(menuData) : MenuItemModel.fromJson({}),
       quantity: json['quantity'] ?? 1,
       price: double.tryParse(json['price']?.toString() ?? '0') ?? 0.0,
+      packagingPrice: double.tryParse(json['packaging_price']?.toString() ?? '0') ?? 0.0,
       total: double.tryParse(json['total']?.toString() ?? '0') ?? 0.0,
       options: json['options'],
       addons: json['addons'] as List<dynamic>? ?? [],
@@ -238,6 +241,7 @@ class OrderPackageItemModel {
       'menu': menu.toJson(),
       'quantity': quantity,
       'price': price.toString(),
+      'packaging_price': packagingPrice.toString(),
       'total': total.toString(),
       'options': options,
       'addons': addons,
@@ -256,6 +260,7 @@ class MenuItemModel {
   final int quantity;
   final bool isAvailable;
   final double price;
+  final double? packagingPrice;
   final int prepTimeMinutes;
   final int categoryId;
   final bool isPublished;
@@ -276,6 +281,7 @@ class MenuItemModel {
     required this.quantity,
     required this.isAvailable,
     required this.price,
+    this.packagingPrice,
     required this.prepTimeMinutes,
     required this.categoryId,
     required this.isPublished,
@@ -298,6 +304,7 @@ class MenuItemModel {
       quantity: json['quantity'] ?? 1,
       isAvailable: json['is_available'] == 1,
       price: double.tryParse(json['price']?.toString() ?? '0') ?? 0.0,
+      packagingPrice: json['packaging_price'] != null ? double.tryParse(json['packaging_price']?.toString() ?? '0') : null,
       prepTimeMinutes: json['prep_time_minutes'] ?? 0,
       categoryId: json['category_id'] ?? 0,
       isPublished: json['is_published'] == 1,
@@ -329,6 +336,7 @@ class MenuItemModel {
       'quantity': quantity,
       'is_available': isAvailable ? 1 : 0,
       'price': price.toString(),
+      'packaging_price': packagingPrice?.toString(),
       'prep_time_minutes': prepTimeMinutes,
       'category_id': categoryId,
       'is_published': isPublished ? 1 : 0,
@@ -441,7 +449,7 @@ class OrderModel {
       paymentMethod: json['payment_method'] != null && json['payment_method'] is Map
           ? PaymentMethodModel.fromJson(json['payment_method'])
           : null,
-      paymentReference: json['payment_reference'] ?? json['payment_method'] ?? '',
+      paymentReference: json['payment_reference']?.toString() ?? '',
       total: double.tryParse(json['total']?.toString() ?? '0') ?? 0.0,
       confirmedAt: json['confirmed_at'] != null
           ? DateTime.tryParse(json['confirmed_at'])
@@ -633,6 +641,7 @@ class OrderItemModel {
   final dynamic options;
   final int quantity;
   final double price;
+  final double packagingPrice;
   final double total;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -646,6 +655,7 @@ class OrderItemModel {
     this.options,
     required this.quantity,
     required this.price,
+    required this.packagingPrice,
     required this.total,
     required this.createdAt,
     required this.updatedAt,
@@ -661,6 +671,7 @@ class OrderItemModel {
       options: json['options'],
       quantity: json['quantity'] ?? 1,
       price: double.tryParse(json['price']?.toString() ?? '0') ?? 0.0,
+      packagingPrice: double.tryParse(json['packaging_price']?.toString() ?? '0') ?? 0.0,
       total: double.tryParse(json['total']?.toString() ?? '0') ?? 0.0,
       createdAt: DateTime.tryParse(json['created_at'] ?? '') ?? DateTime.now(),
       updatedAt: DateTime.tryParse(json['updated_at'] ?? '') ?? DateTime.now(),
@@ -677,6 +688,7 @@ class OrderItemModel {
       'options': options,
       'quantity': quantity,
       'price': price.toString(),
+      'packaging_price': packagingPrice.toString(),
       'total': total.toString(),
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
@@ -692,6 +704,7 @@ class OrderItemModel {
     dynamic options,
     int? quantity,
     double? price,
+    double? packagingPrice,
     double? total,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -705,6 +718,7 @@ class OrderItemModel {
       options: options ?? this.options,
       quantity: quantity ?? this.quantity,
       price: price ?? this.price,
+      packagingPrice: packagingPrice ?? this.packagingPrice,
       total: total ?? this.total,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,

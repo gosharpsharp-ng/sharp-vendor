@@ -50,8 +50,17 @@ class ProfileService extends CoreService {
     return await fetch("/restaurants/order/${data['id']}");
   }
 
-  Future<APIResponse> updateOrderStatus(dynamic data, int orderId) async {
-    return await generalPatch("restaurants/order/$orderId/status", data);
+  Future<APIResponse> updateOrderStatus(String action, String orderNumber, {String? reason}) async {
+    final Map<String, dynamic> data = {
+      "action": action,
+    };
+
+    // Add reason if provided (required for cancelled action)
+    if (reason != null) {
+      data["reason"] = reason;
+    }
+
+    return await send("/restaurants/order/$orderNumber/trigger", data);
   }
 
   // Transactions integration

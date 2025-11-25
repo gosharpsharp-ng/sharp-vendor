@@ -299,6 +299,7 @@ class SignUpController extends GetxController {
   TextEditingController phoneNumberController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController cPasswordController = TextEditingController();
+  TextEditingController cuisineTypeController = TextEditingController();
 
   signUp() async {
     if (signUpFormKey.currentState!.validate() &&
@@ -319,7 +320,7 @@ class SignUpController extends GetxController {
         "restaurant_email": restaurantEmailController.text,
         "restaurant_logo": restaurantLogo,
         "restaurant_banner": restaurantBanner,
-        "cuisine_type": "Italian",
+        "cuisine_type": cuisineTypeController.text,
         "restaurant_location": {
           "name": restaurantAddressController.text,
           "latitude": "${restaurantLocation?.latitude}",

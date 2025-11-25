@@ -390,6 +390,25 @@ class BusinessInformationEntryScreen extends GetView<SignUpController> {
                       },
                     ),
 
+                    // Cuisine Type Field
+                    CustomRoundedInputField(
+                      title: "Cuisine Type",
+                      label: "e.g. Italian, Nigerian, Chinese, Fast Food",
+                      showLabel: true,
+                      isRequired: true,
+                      hasTitle: true,
+                      controller: signUpController.cuisineTypeController,
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Cuisine type is required';
+                        }
+                        if (value.trim().length < 2) {
+                          return 'Cuisine type must be at least 2 characters';
+                        }
+                        return null;
+                      },
+                    ),
+
                     // Business Address Field
                     ClickableCustomRoundedInputField(
                       onPressed: () async {
