@@ -684,8 +684,12 @@ class AddCampaignScreen extends StatelessWidget {
                         // Wallet Charge Notice
                         GetBuilder<SettingsController>(
                           builder: (settingsController) {
-                            final walletBalance =
-                                settingsController.walletBalance;
+                            final walletBalance = settingsController
+                                    .userProfile
+                                    ?.restaurant
+                                    ?.wallet
+                                    ?.formattedBalance ??
+                                '₦0.00';
                             return Container(
                               padding: EdgeInsets.all(16.sp),
                               decoration: BoxDecoration(
@@ -740,15 +744,7 @@ class AddCampaignScreen extends StatelessWidget {
                                               color: AppColors.obscureTextColor,
                                             ),
                                             customText(
-                                              walletBalance != null
-                                                  ? formatToCurrency(
-                                                      double.parse(
-                                                        walletBalance
-                                                                .availableBalance ??
-                                                            "0.0",
-                                                      ),
-                                                    )
-                                                  : "Loading...",
+                                              walletBalance,
                                               fontSize: 14.sp,
                                               fontWeight: FontWeight.w700,
                                               color: AppColors.primaryColor,
