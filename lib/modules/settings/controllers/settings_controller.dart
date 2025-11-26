@@ -661,6 +661,60 @@ class SettingsController extends GetxController {
     update();
   }
 
+  // Rating Stats
+  RatingStatsModel? ratingStats;
+  bool _isFetchingRatingStats = false;
+  get isFetchingRatingStats => _isFetchingRatingStats;
+
+  DateTime? ratingStartDate;
+  DateTime? ratingEndDate;
+
+  setRatingDateRange(DateTime? start, DateTime? end) {
+    ratingStartDate = start;
+    ratingEndDate = end;
+    update();
+    getRatingStats();
+  }
+
+  clearRatingDateFilter() {
+    ratingStartDate = null;
+    ratingEndDate = null;
+    update();
+    getRatingStats();
+  }
+
+  getRatingStats() async {
+    _isFetchingRatingStats = true;
+    update();
+
+    String? startDate;
+    String? endDate;
+
+    if (ratingStartDate != null && ratingEndDate != null) {
+      startDate = "${ratingStartDate!.year}-${ratingStartDate!.month.toString().padLeft(2, '0')}-${ratingStartDate!.day.toString().padLeft(2, '0')}";
+      endDate = "${ratingEndDate!.year}-${ratingEndDate!.month.toString().padLeft(2, '0')}-${ratingEndDate!.day.toString().padLeft(2, '0')}";
+    }
+
+    APIResponse response = await profileService.getRatingStats(
+      startDate: startDate,
+      endDate: endDate,
+    );
+
+    _isFetchingRatingStats = false;
+
+    if (response.status == "success") {
+      ratingStats = RatingStatsModel.fromJson(response.data);
+    } else {
+      if (getStorage.read("token") != null) {
+        showToast(
+          message: response.message,
+          isError: response.status != "success",
+        );
+      }
+    }
+    update();
+  }
+
   @override
   void onInit() {
     super.onInit();

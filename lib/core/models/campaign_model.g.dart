@@ -89,3 +89,49 @@ Map<String, dynamic> _$CampaignResponseDataToJson(
   'cost_breakdown': instance.costBreakdown,
   'payment_processed': instance.paymentProcessed,
 };
+
+CampaignCostEstimate _$CampaignCostEstimateFromJson(
+  Map<String, dynamic> json,
+) => CampaignCostEstimate(
+  durationDays: (json['duration_days'] as num?)?.toInt(),
+  basePricePerDay: json['base_price_per_day'] as num?,
+  baseCost: json['base_cost'] as num?,
+  priority: json['priority'] as String?,
+  priorityMultiplier: json['priority_multiplier'] as num?,
+  priorityCost: json['priority_cost'] as num?,
+  finalCost: json['final_cost'] as num?,
+  breakdown: json['breakdown'] == null
+      ? null
+      : CampaignCostBreakdownDetail.fromJson(
+          json['breakdown'] as Map<String, dynamic>,
+        ),
+);
+
+Map<String, dynamic> _$CampaignCostEstimateToJson(
+  CampaignCostEstimate instance,
+) => <String, dynamic>{
+  'duration_days': instance.durationDays,
+  'base_price_per_day': instance.basePricePerDay,
+  'base_cost': instance.baseCost,
+  'priority': instance.priority,
+  'priority_multiplier': instance.priorityMultiplier,
+  'priority_cost': instance.priorityCost,
+  'final_cost': instance.finalCost,
+  'breakdown': instance.breakdown,
+};
+
+CampaignCostBreakdownDetail _$CampaignCostBreakdownDetailFromJson(
+  Map<String, dynamic> json,
+) => CampaignCostBreakdownDetail(
+  baseCost: json['Base Cost'] as String?,
+  priorityMultiplier: json['Priority Multiplier'] as String?,
+  totalCost: json['Total Cost'] as num?,
+);
+
+Map<String, dynamic> _$CampaignCostBreakdownDetailToJson(
+  CampaignCostBreakdownDetail instance,
+) => <String, dynamic>{
+  'Base Cost': instance.baseCost,
+  'Priority Multiplier': instance.priorityMultiplier,
+  'Total Cost': instance.totalCost,
+};
