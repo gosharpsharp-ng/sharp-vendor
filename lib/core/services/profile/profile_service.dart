@@ -73,4 +73,13 @@ class ProfileService extends CoreService {
   Future<APIResponse> getTransactionById(dynamic data) async {
     return await fetch("/restaurants/transactions/${data['id']}");
   }
+
+  // Rating stats
+  Future<APIResponse> getRatingStats({String? startDate, String? endDate}) async {
+    String url = "/restaurants/stats/ratings";
+    if (startDate != null && endDate != null) {
+      url += "?start_date=$startDate&end_date=$endDate";
+    }
+    return await fetch(url);
+  }
 }

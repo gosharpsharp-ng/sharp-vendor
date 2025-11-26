@@ -41,6 +41,11 @@ class CampaignsController extends GetxController {
   // Cost breakdown
   CostBreakdown? costBreakdown;
 
+  // Cost estimation
+  CampaignCostEstimate? costEstimate;
+  bool _isEstimatingCost = false;
+  get isEstimatingCost => _isEstimatingCost;
+
   @override
   void onInit() {
     super.onInit();
@@ -242,6 +247,57 @@ class CampaignsController extends GetxController {
   setPriority(int priority) {
     selectedPriority = priority;
     update();
+    // Trigger cost estimation when priority changes
+    _triggerCostEstimation();
+  }
+
+  // Estimate campaign cost
+  estimateCampaignCost() async {
+    // Only estimate if both dates are set
+    if (startDateController.text.isEmpty || endDateController.text.isEmpty) {
+      costEstimate = null;
+      update();
+      return;
+    }
+
+    _isEstimatingCost = true;
+    update();
+
+    // Extract date part only (YYYY-MM-DD) from the datetime string
+    String startDate = startDateController.text.split(' ')[0];
+    String endDate = endDateController.text.split(' ')[0];
+
+    APIResponse response = await campaignService.estimateCampaignCost(
+      startDate: startDate,
+      endDate: endDate,
+      priority: selectedPriority,
+    );
+
+    _isEstimatingCost = false;
+
+    if (response.status == "success") {
+      costEstimate = CampaignCostEstimate.fromJson(response.data);
+    } else {
+      costEstimate = null;
+    }
+    update();
+  }
+
+  // Trigger cost estimation when dates or priority change
+  _triggerCostEstimation() {
+    if (startDateController.text.isNotEmpty && endDateController.text.isNotEmpty) {
+      estimateCampaignCost();
+    }
+  }
+
+  // Called when start date is set
+  onStartDateChanged() {
+    _triggerCostEstimation();
+  }
+
+  // Called when end date is set
+  onEndDateChanged() {
+    _triggerCostEstimation();
   }
 
   // Clear campaign form
@@ -255,6 +311,7 @@ class CampaignsController extends GetxController {
     selectedStatus = 'draft';
     selectedPriority = 1;
     costBreakdown = null;
+    costEstimate = null;
     update();
   }
 }

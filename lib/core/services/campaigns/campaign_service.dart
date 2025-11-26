@@ -32,4 +32,28 @@ class CampaignService extends CoreService {
   Future<APIResponse> deleteCampaign(int campaignId) async {
     return await remove("/restaurants/campaigns/$campaignId", {});
   }
+
+  // Estimate campaign cost
+  Future<APIResponse> estimateCampaignCost({
+    required String startDate,
+    required String endDate,
+    required int priority,
+  }) async {
+    return await fetchByParams("/restaurants/campaigns/estimate-cost", {
+      "start_date": startDate,
+      "end_date": endDate,
+      "priority": priority,
+    });
+  }
+
+  // Get daily campaign charges
+  Future<APIResponse> getDailyCharges({
+    required String startDate,
+    required String endDate,
+  }) async {
+    return await fetchByParams("/restaurants/campaigns/daily-charges", {
+      "start_date": startDate,
+      "end_date": endDate,
+    });
+  }
 }

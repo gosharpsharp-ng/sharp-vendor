@@ -163,3 +163,6 @@ export 'package:sharpvendor/core/models/campaign_model.dart';
 export 'package:sharpvendor/core/services/campaigns/campaign_service.dart';
 export 'package:sharpvendor/modules/campaigns/controllers/campaigns_controller.dart';
 export 'package:sharpvendor/modules/campaigns/bindings/campaigns_bindings.dart';
+
+// Rating Stats
+export 'package:sharpvendor/core/models/rating_stats_model.dart';
