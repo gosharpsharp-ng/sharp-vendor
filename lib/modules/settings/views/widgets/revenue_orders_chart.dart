@@ -23,7 +23,7 @@ class RevenueOrdersChart extends StatelessWidget {
         borderRadius: BorderRadius.circular(12.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -35,24 +35,14 @@ class RevenueOrdersChart extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildLegendItem(
-                color: AppColors.primaryColor,
-                label: "Revenue",
-              ),
+              _buildLegendItem(color: AppColors.primaryColor, label: "Revenue"),
               SizedBox(width: 20.w),
-              _buildLegendItem(
-                color: AppColors.orangeColor,
-                label: "Orders",
-              ),
+              _buildLegendItem(color: AppColors.orangeColor, label: "Orders"),
             ],
           ),
           SizedBox(height: 16.h),
           // Chart
-          Expanded(
-            child: LineChart(
-              _buildLineChartData(),
-            ),
-          ),
+          Expanded(child: LineChart(_buildLineChartData())),
         ],
       ),
     );
@@ -64,17 +54,10 @@ class RevenueOrdersChart extends StatelessWidget {
         Container(
           width: 12.w,
           height: 12.h,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-          ),
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
         SizedBox(width: 6.w),
-        customText(
-          label,
-          fontSize: 12.sp,
-          color: AppColors.greyColor,
-        ),
+        customText(label, fontSize: 12.sp, color: AppColors.greyColor),
       ],
     );
   }
@@ -98,7 +81,7 @@ class RevenueOrdersChart extends StatelessWidget {
         horizontalInterval: safeMaxRevenue / 4,
         getDrawingHorizontalLine: (value) {
           return FlLine(
-            color: AppColors.greyColor.withOpacity(0.1),
+            color: AppColors.greyColor.withValues(alpha: 0.1),
             strokeWidth: 1,
           );
         },
@@ -108,9 +91,7 @@ class RevenueOrdersChart extends StatelessWidget {
         rightTitles: const AxisTitles(
           sideTitles: SideTitles(showTitles: false),
         ),
-        topTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
+        topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
@@ -150,11 +131,11 @@ class RevenueOrdersChart extends StatelessWidget {
         show: true,
         border: Border(
           bottom: BorderSide(
-            color: AppColors.greyColor.withOpacity(0.2),
+            color: AppColors.greyColor.withValues(alpha: 0.2),
             width: 1,
           ),
           left: BorderSide(
-            color: AppColors.greyColor.withOpacity(0.2),
+            color: AppColors.greyColor.withValues(alpha: 0.2),
             width: 1,
           ),
         ),
@@ -186,14 +167,15 @@ class RevenueOrdersChart extends StatelessWidget {
           ),
           belowBarData: BarAreaData(
             show: true,
-            color: AppColors.primaryColor.withOpacity(0.1),
+            color: AppColors.primaryColor.withValues(alpha: 0.1),
           ),
         ),
         // Orders line (scaled to fit on same chart)
         LineChartBarData(
           spots: ordersData.asMap().entries.map((entry) {
             // Scale orders to revenue range for visual comparison
-            final scaledValue = (entry.value.value / safeMaxOrders) * safeMaxRevenue;
+            final scaledValue =
+                (entry.value.value / safeMaxOrders) * safeMaxRevenue;
             return FlSpot(entry.key.toDouble(), scaledValue);
           }).toList(),
           isCurved: true,
@@ -217,7 +199,8 @@ class RevenueOrdersChart extends StatelessWidget {
       lineTouchData: LineTouchData(
         enabled: true,
         touchTooltipData: LineTouchTooltipData(
-          getTooltipColor: (touchedSpot) => AppColors.blackColor.withValues(alpha: 0.8),
+          getTooltipColor: (touchedSpot) =>
+              AppColors.blackColor.withValues(alpha: 0.8),
           tooltipBorderRadius: BorderRadius.circular(8),
           getTooltipItems: (List<LineBarSpot> touchedSpots) {
             return touchedSpots.map((LineBarSpot touchedSpot) {

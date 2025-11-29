@@ -95,7 +95,7 @@ class SettingsHomeScreen extends StatelessWidget {
                       gradient: LinearGradient(
                         colors: [
                           AppColors.primaryColor,
-                          AppColors.primaryColor.withOpacity(0.8),
+                          AppColors.primaryColor.withValues(alpha: 0.8),
                         ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
@@ -103,7 +103,7 @@ class SettingsHomeScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(16.r),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.primaryColor.withOpacity(0.3),
+                          color: AppColors.primaryColor.withValues(alpha: 0.3),
                           blurRadius: 12,
                           offset: Offset(0, 4),
                         ),
@@ -163,7 +163,9 @@ class SettingsHomeScreen extends StatelessWidget {
                                 settingsController.userProfile?.email ?? '',
                                 fontSize: 13.sp,
                                 fontWeight: FontWeight.w400,
-                                color: AppColors.whiteColor.withOpacity(0.9),
+                                color: AppColors.whiteColor.withValues(
+                                  alpha: 0.9,
+                                ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -176,7 +178,9 @@ class SettingsHomeScreen extends StatelessWidget {
                                     '',
                                 fontSize: 12.sp,
                                 fontWeight: FontWeight.w500,
-                                color: AppColors.whiteColor.withOpacity(0.8),
+                                color: AppColors.whiteColor.withValues(
+                                  alpha: 0.8,
+                                ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -193,7 +197,9 @@ class SettingsHomeScreen extends StatelessWidget {
                           child: Container(
                             padding: EdgeInsets.all(8.sp),
                             decoration: BoxDecoration(
-                              color: AppColors.whiteColor.withOpacity(0.2),
+                              color: AppColors.whiteColor.withValues(
+                                alpha: 0.2,
+                              ),
                               borderRadius: BorderRadius.circular(8.r),
                             ),
                             child: SvgPicture.asset(
@@ -277,14 +283,14 @@ class SettingsHomeScreen extends StatelessWidget {
                         icon: SvgAssets.discountIcon,
                         isLast: false,
                       ),
-                      SettingsItem(
-                        onPressed: () {
-                          Get.toNamed(Routes.ORDER_TRANSACTIONS_SCREEN);
-                        },
-                        title: "Order Transactions",
-                        icon: SvgAssets.ordersIcon,
-                        isLast: false,
-                      ),
+                      // SettingsItem(
+                      //   onPressed: () {
+                      //     Get.toNamed(Routes.ORDER_TRANSACTIONS_SCREEN);
+                      //   },
+                      //   title: "Order Transactions",
+                      //   icon: SvgAssets.ordersIcon,
+                      //   isLast: false,
+                      // ),
                       SettingsItem(
                         onPressed: () {
                           Get.toNamed(Routes.PAYOUT_HISTORY_SCREEN);

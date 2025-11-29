@@ -64,7 +64,7 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
                       height: 300.h,
                       width: 1.sw,
                       decoration: BoxDecoration(
-                        color: AppColors.greyColor.withOpacity(0.2),
+                        color: AppColors.greyColor.withValues(alpha: 0.2),
                       ),
                       child: menuItem.files.isEmpty
                           ? _buildPlaceholderImage()
@@ -136,7 +136,9 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
                               vertical: 6.h,
                             ),
                             decoration: BoxDecoration(
-                              color: AppColors.primaryColor.withOpacity(0.1),
+                              color: AppColors.primaryColor.withValues(
+                                alpha: 0.1,
+                              ),
                               borderRadius: BorderRadius.circular(8.r),
                             ),
                             child: customText(
@@ -158,7 +160,7 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
                           vertical: 4.h,
                         ),
                         decoration: BoxDecoration(
-                          color: AppColors.greyColor.withOpacity(0.15),
+                          color: AppColors.greyColor.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(6.r),
                         ),
                         child: customText(
@@ -220,7 +222,8 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
                       ),
 
                       // Packaging Price Card (if available)
-                      if (menuItem.packagingPrice != null && menuItem.packagingPrice! > 0) ...[
+                      if (menuItem.packagingPrice != null &&
+                          menuItem.packagingPrice! > 0) ...[
                         SizedBox(height: 12.h),
                         _buildInfoCard(
                           icon: Icons.shopping_bag_outlined,
@@ -262,7 +265,9 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
                                   border: Border.all(
                                     color: isSelected
                                         ? AppColors.primaryColor
-                                        : AppColors.greyColor.withOpacity(0.3),
+                                        : AppColors.greyColor.withValues(
+                                            alpha: 0.3,
+                                          ),
                                     width: 1.5,
                                   ),
                                   borderRadius: BorderRadius.circular(10.r),
@@ -336,7 +341,9 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
                                 vertical: 4.h,
                               ),
                               decoration: BoxDecoration(
-                                color: AppColors.primaryColor.withOpacity(0.1),
+                                color: AppColors.primaryColor.withValues(
+                                  alpha: 0.1,
+                                ),
                                 borderRadius: BorderRadius.circular(12.r),
                               ),
                               child: customText(
@@ -362,12 +369,14 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
                                 color: AppColors.whiteColor,
                                 borderRadius: BorderRadius.circular(12.r),
                                 border: Border.all(
-                                  color: AppColors.greyColor.withOpacity(0.2),
+                                  color: AppColors.greyColor.withValues(
+                                    alpha: 0.2,
+                                  ),
                                 ),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: AppColors.blackColor.withOpacity(
-                                      0.05,
+                                    color: AppColors.blackColor.withValues(
+                                      alpha: 0.05,
                                     ),
                                     blurRadius: 8,
                                     offset: const Offset(0, 2),
@@ -381,8 +390,8 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
                                     width: 60.w,
                                     height: 60.h,
                                     decoration: BoxDecoration(
-                                      color: AppColors.greyColor.withOpacity(
-                                        0.1,
+                                      color: AppColors.greyColor.withValues(
+                                        alpha: 0.1,
                                       ),
                                       borderRadius: BorderRadius.circular(8.r),
                                       image: addon.files.isNotEmpty
@@ -499,7 +508,7 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
     return Container(
       height: 300.h,
       width: 1.sw,
-      color: AppColors.greyColor.withOpacity(0.2),
+      color: AppColors.greyColor.withValues(alpha: 0.2),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -565,7 +574,7 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
                   border: Border.all(
                     color: isSelected
                         ? AppColors.primaryColor
-                        : AppColors.greyColor.withOpacity(0.3),
+                        : AppColors.greyColor.withValues(alpha: 0.3),
                   ),
                   borderRadius: BorderRadius.circular(8.r),
                 ),
@@ -637,7 +646,7 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
       decoration: BoxDecoration(
         color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: AppColors.greyColor.withOpacity(0.2)),
+        border: Border.all(color: AppColors.greyColor.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -645,7 +654,7 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
           Container(
             padding: EdgeInsets.all(8.sp),
             decoration: BoxDecoration(
-              color: AppColors.primaryColor.withOpacity(0.1),
+              color: AppColors.primaryColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8.r),
             ),
             child: Icon(icon, size: 15.sp, color: AppColors.primaryColor),
@@ -680,7 +689,7 @@ class MenuDetailsScreen extends GetView<FoodMenuController> {
       decoration: BoxDecoration(
         color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: AppColors.greyColor.withOpacity(0.2)),
+        border: Border.all(color: AppColors.greyColor.withValues(alpha: 0.2)),
       ),
       child: Row(
         children: [

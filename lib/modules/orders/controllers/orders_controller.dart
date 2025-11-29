@@ -792,8 +792,8 @@ class OrdersController extends GetxController {
                                           strokeWidth: 2,
                                           valueColor:
                                               AlwaysStoppedAnimation<Color>(
-                                            AppColors.whiteColor,
-                                          ),
+                                                AppColors.whiteColor,
+                                              ),
                                         ),
                                       )
                                     : customText(
@@ -882,8 +882,8 @@ class OrdersController extends GetxController {
                           ),
                           decoration: BoxDecoration(
                             color: isSelected
-                                ? AppColors.primaryColor.withOpacity(0.1)
-                                : AppColors.greyColor.withOpacity(0.1),
+                                ? AppColors.primaryColor.withValues(alpha: 0.1)
+                                : AppColors.greyColor.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(20.r),
                             border: Border.all(
                               color: isSelected

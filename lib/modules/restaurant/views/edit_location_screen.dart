@@ -56,7 +56,9 @@ class EditLocationScreen extends GetView<RestaurantDetailsController> {
                   maxLines: 3,
                   suffixWidget: IconButton(
                     onPressed: () async {
-                      final ItemLocation result = await Get.toNamed(Routes.SELECT_LOCATION_SCREEN);
+                      final ItemLocation result = await Get.toNamed(
+                        Routes.SELECT_LOCATION_SCREEN,
+                      );
                       restaurantController.setRestaurantLocation(result);
                     },
                     icon: SvgPicture.asset(
@@ -71,7 +73,8 @@ class EditLocationScreen extends GetView<RestaurantDetailsController> {
                   controller: restaurantController.restaurantAddressController,
                   onChanged: (value) {
                     // Allow user to manually edit the address name
-                    restaurantController.restaurantAddressController.text = value;
+                    restaurantController.restaurantAddressController.text =
+                        value;
                   },
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
@@ -92,10 +95,10 @@ class EditLocationScreen extends GetView<RestaurantDetailsController> {
                   Container(
                     padding: EdgeInsets.all(16.sp),
                     decoration: BoxDecoration(
-                      color: AppColors.primaryColor.withOpacity(0.05),
+                      color: AppColors.primaryColor.withValues(alpha: 0.05),
                       borderRadius: BorderRadius.circular(12.r),
                       border: Border.all(
-                        color: AppColors.primaryColor.withOpacity(0.2),
+                        color: AppColors.primaryColor.withValues(alpha: 0.2),
                       ),
                     ),
                     child: Row(
@@ -136,10 +139,10 @@ class EditLocationScreen extends GetView<RestaurantDetailsController> {
                 Container(
                   padding: EdgeInsets.all(16.sp),
                   decoration: BoxDecoration(
-                    color: AppColors.primaryColor.withOpacity(0.05),
+                    color: AppColors.primaryColor.withValues(alpha: 0.05),
                     borderRadius: BorderRadius.circular(12.r),
                     border: Border.all(
-                      color: AppColors.primaryColor.withOpacity(0.2),
+                      color: AppColors.primaryColor.withValues(alpha: 0.2),
                     ),
                   ),
                   child: Row(

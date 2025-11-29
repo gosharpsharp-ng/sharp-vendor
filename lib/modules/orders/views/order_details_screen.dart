@@ -81,7 +81,9 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                                   price: formatToCurrency(item.total),
                                   description: item.menu.description,
                                   plateSize: item.menu.plateSize,
-                                  packagingPrice: item.menu.packagingPrice != null && item.menu.packagingPrice! > 0
+                                  packagingPrice:
+                                      item.menu.packagingPrice != null &&
+                                          item.menu.packagingPrice! > 0
                                       ? '${item.quantity} × ${formatToCurrency(item.menu.packagingPrice!)}'
                                       : null,
                                 );
@@ -120,7 +122,9 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                             price: formatToCurrency(item.total),
                             description: item.description,
                             plateSize: item.plateSize,
-                            packagingPrice: item.menu?.packagingPrice != null && item.menu!.packagingPrice! > 0
+                            packagingPrice:
+                                item.menu?.packagingPrice != null &&
+                                    item.menu!.packagingPrice! > 0
                                 ? '${item.quantity} × ${formatToCurrency(item.menu!.packagingPrice!)}'
                                 : null,
                           );
@@ -180,7 +184,7 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                           vertical: 12.h,
                         ),
                         height: 1,
-                        color: AppColors.greyColor.withOpacity(0.3),
+                        color: AppColors.greyColor.withValues(alpha: 0.3),
                       ),
 
                       // Price Breakdown Items
@@ -209,7 +213,7 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                           vertical: 8.h,
                         ),
                         height: 1,
-                        color: AppColors.greyColor.withOpacity(0.2),
+                        color: AppColors.greyColor.withValues(alpha: 0.2),
                       ),
                       OrderDetailSummaryItem(
                         title: "Total",
@@ -249,7 +253,7 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                               //       vertical: 6.h,
                               //     ),
                               //     decoration: BoxDecoration(
-                              //       color: AppColors.primaryColor.withOpacity(
+                              //       color: AppColors.primaryColor.withValues(alpha:
                               //         0.1,
                               //       ),
                               //       borderRadius: BorderRadius.circular(8.r),
@@ -371,14 +375,18 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                                       color: Colors.red.shade50,
                                       borderRadius: BorderRadius.circular(12.r),
                                       border: Border.all(
-                                        color: Colors.red.withOpacity(0.3),
+                                        color: Colors.red.withValues(
+                                          alpha: 0.3,
+                                        ),
                                         width: 1.5,
                                       ),
                                     ),
                                     child: Material(
                                       color: Colors.transparent,
                                       child: InkWell(
-                                        borderRadius: BorderRadius.circular(12.r),
+                                        borderRadius: BorderRadius.circular(
+                                          12.r,
+                                        ),
                                         onTap: ordersController.isLoading
                                             ? null
                                             : () => _showRejectOrderDialog(
@@ -386,7 +394,8 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                                                 order,
                                               ),
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
                                             Icon(
                                               Icons.cancel_outlined,
@@ -416,7 +425,9 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                                       gradient: LinearGradient(
                                         colors: [
                                           AppColors.greenColor,
-                                          AppColors.greenColor.withOpacity(0.8),
+                                          AppColors.greenColor.withValues(
+                                            alpha: 0.8,
+                                          ),
                                         ],
                                       ),
                                       borderRadius: BorderRadius.circular(12.r),
@@ -424,35 +435,44 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                                     child: Material(
                                       color: Colors.transparent,
                                       child: InkWell(
-                                        borderRadius: BorderRadius.circular(12.r),
+                                        borderRadius: BorderRadius.circular(
+                                          12.r,
+                                        ),
                                         onTap: ordersController.isLoading
                                             ? null
-                                            : () => ordersController.acceptOrder(order.id),
+                                            : () => ordersController
+                                                  .acceptOrder(order.id),
                                         child: Center(
                                           child: ordersController.isLoading
                                               ? SizedBox(
                                                   width: 24.w,
                                                   height: 24.h,
-                                                  child: CircularProgressIndicator(
-                                                    color: AppColors.whiteColor,
-                                                    strokeWidth: 2,
-                                                  ),
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                        color: AppColors
+                                                            .whiteColor,
+                                                        strokeWidth: 2,
+                                                      ),
                                                 )
                                               : Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
                                                   children: [
                                                     Icon(
-                                                      Icons.check_circle_outline,
-                                                      color: AppColors.whiteColor,
+                                                      Icons
+                                                          .check_circle_outline,
+                                                      color:
+                                                          AppColors.whiteColor,
                                                       size: 20.sp,
                                                     ),
                                                     SizedBox(width: 12.w),
                                                     customText(
                                                       "Accept Order",
-                                                      color: AppColors.whiteColor,
+                                                      color:
+                                                          AppColors.whiteColor,
                                                       fontSize: 16.sp,
-                                                      fontWeight: FontWeight.w600,
+                                                      fontWeight:
+                                                          FontWeight.w600,
                                                     ),
                                                   ],
                                                 ),
@@ -478,7 +498,7 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                               gradient: LinearGradient(
                                 colors: [
                                   AppColors.primaryColor,
-                                  AppColors.primaryColor.withOpacity(0.8),
+                                  AppColors.primaryColor.withValues(alpha: 0.8),
                                 ],
                               ),
                               borderRadius: BorderRadius.circular(12.r),
@@ -490,9 +510,9 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                                 onTap: ordersController.isLoading
                                     ? null
                                     : () => ordersController.updateOrderStatus(
-                                          order.id,
-                                          'preparing',
-                                        ),
+                                        order.id,
+                                        'preparing',
+                                      ),
                                 child: Center(
                                   child: ordersController.isLoading
                                       ? SizedBox(
@@ -539,7 +559,7 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                               gradient: LinearGradient(
                                 colors: [
                                   Colors.blue,
-                                  Colors.blue.withOpacity(0.8),
+                                  Colors.blue.withValues(alpha: 0.8),
                                 ],
                               ),
                               borderRadius: BorderRadius.circular(12.r),
@@ -550,7 +570,9 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                                 borderRadius: BorderRadius.circular(12.r),
                                 onTap: ordersController.isLoading
                                     ? null
-                                    : () => ordersController.markOrderReady(order.id),
+                                    : () => ordersController.markOrderReady(
+                                        order.id,
+                                      ),
                                 child: Center(
                                   child: ordersController.isLoading
                                       ? SizedBox(
@@ -592,10 +614,10 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                       margin: EdgeInsets.symmetric(horizontal: 2.sp),
                       padding: EdgeInsets.all(16.sp),
                       decoration: BoxDecoration(
-                        color: AppColors.greenColor.withOpacity(0.1),
+                        color: AppColors.greenColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12.r),
                         border: Border.all(
-                          color: AppColors.greenColor.withOpacity(0.3),
+                          color: AppColors.greenColor.withValues(alpha: 0.3),
                           width: 1.5,
                         ),
                       ),
@@ -637,10 +659,10 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                       margin: EdgeInsets.symmetric(horizontal: 2.sp),
                       padding: EdgeInsets.all(16.sp),
                       decoration: BoxDecoration(
-                        color: AppColors.primaryColor.withOpacity(0.1),
+                        color: AppColors.primaryColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12.r),
                         border: Border.all(
-                          color: AppColors.primaryColor.withOpacity(0.3),
+                          color: AppColors.primaryColor.withValues(alpha: 0.3),
                           width: 1.5,
                         ),
                       ),
@@ -739,7 +761,7 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                   child: CustomButton(
                     onPressed: () => Get.back(),
                     title: "Cancel",
-                    backgroundColor: AppColors.greyColor.withOpacity(0.2),
+                    backgroundColor: AppColors.greyColor.withValues(alpha: 0.2),
                     fontColor: AppColors.blackColor,
                   ),
                 ),

@@ -94,7 +94,7 @@ class SuccessBottomSheet extends StatelessWidget {
             height: 4.h,
             margin: EdgeInsets.only(top: 12.h),
             decoration: BoxDecoration(
-              color: AppColors.greyColor.withOpacity(0.3),
+              color: AppColors.greyColor.withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(2.r),
             ),
           ),
@@ -196,7 +196,7 @@ class ErrorBottomSheet extends StatelessWidget {
             height: 4.h,
             margin: EdgeInsets.only(top: 12.h),
             decoration: BoxDecoration(
-              color: AppColors.greyColor.withOpacity(0.3),
+              color: AppColors.greyColor.withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(2.r),
             ),
           ),

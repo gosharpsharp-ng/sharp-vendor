@@ -50,7 +50,7 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
                       borderRadius: BorderRadius.circular(24.r),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.08),
+                          color: Colors.black.withValues(alpha: 0.08),
                           blurRadius: 24.r,
                           offset: Offset(0, 8.h),
                           spreadRadius: 0,
@@ -84,16 +84,18 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
                                 children: [
                                   // Cover Image
                                   if ((restaurant.bannerUrl != null &&
-                                      restaurant.bannerUrl!.isNotEmpty) ||
+                                          restaurant.bannerUrl!.isNotEmpty) ||
                                       (restaurant.banner != null &&
-                                      restaurant.banner!.isNotEmpty))
+                                          restaurant.banner!.isNotEmpty))
                                     ClipRRect(
                                       borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(24.r),
                                         topRight: Radius.circular(24.r),
                                       ),
                                       child: CachedNetworkImage(
-                                        imageUrl: restaurant.bannerUrl ?? restaurant.banner!,
+                                        imageUrl:
+                                            restaurant.bannerUrl ??
+                                            restaurant.banner!,
                                         width: double.infinity,
                                         height: 120.h,
                                         fit: BoxFit.cover,
@@ -111,7 +113,9 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
                                       child: Container(
                                         padding: EdgeInsets.all(8.w),
                                         decoration: BoxDecoration(
-                                          color: Colors.black.withOpacity(0.3),
+                                          color: Colors.black.withValues(
+                                            alpha: 0.3,
+                                          ),
                                           borderRadius: BorderRadius.circular(
                                             8.r,
                                           ),
@@ -144,7 +148,9 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
                                   ),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black.withOpacity(0.15),
+                                      color: Colors.black.withValues(
+                                        alpha: 0.15,
+                                      ),
                                       blurRadius: 16.r,
                                       offset: Offset(0, 4.h),
                                     ),
@@ -154,12 +160,16 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
                                   children: [
                                     // Profile Image
                                     (restaurant.logoUrl != null &&
-                                            restaurant.logoUrl!.isNotEmpty) ||
-                                        (restaurant.logo != null &&
-                                            restaurant.logo!.isNotEmpty)
+                                                restaurant
+                                                    .logoUrl!
+                                                    .isNotEmpty) ||
+                                            (restaurant.logo != null &&
+                                                restaurant.logo!.isNotEmpty)
                                         ? ClipOval(
                                             child: CachedNetworkImage(
-                                              imageUrl: restaurant.logoUrl ?? restaurant.logo!,
+                                              imageUrl:
+                                                  restaurant.logoUrl ??
+                                                  restaurant.logo!,
                                               fit: BoxFit.cover,
                                               width: 100.w,
                                               height: 100.w,
@@ -188,7 +198,9 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
                                                     decoration: BoxDecoration(
                                                       color: AppColors
                                                           .primaryColor
-                                                          .withOpacity(0.1),
+                                                          .withValues(
+                                                            alpha: 0.1,
+                                                          ),
                                                       shape: BoxShape.circle,
                                                     ),
                                                     child: Icon(
@@ -203,7 +215,7 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
                                         : Container(
                                             decoration: BoxDecoration(
                                               color: AppColors.primaryColor
-                                                  .withOpacity(0.1),
+                                                  .withValues(alpha: 0.1),
                                               shape: BoxShape.circle,
                                             ),
                                             child: Icon(
@@ -275,8 +287,8 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
                                       vertical: 8.h,
                                     ),
                                     decoration: BoxDecoration(
-                                      color: AppColors.primaryColor.withOpacity(
-                                        0.1,
+                                      color: AppColors.primaryColor.withValues(
+                                        alpha: 0.1,
                                       ),
                                       borderRadius: BorderRadius.circular(20.r),
                                     ),
@@ -319,7 +331,7 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
                                         decoration: BoxDecoration(
                                           color: restaurantController
                                               .getStatusColor()
-                                              .withOpacity(0.1),
+                                              .withValues(alpha: 0.1),
                                           borderRadius: BorderRadius.circular(
                                             16.r,
                                           ),
@@ -364,7 +376,7 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
                                           ),
                                           decoration: BoxDecoration(
                                             color: AppColors.greyColor
-                                                .withOpacity(0.1),
+                                                .withValues(alpha: 0.1),
                                             borderRadius: BorderRadius.circular(
                                               16.r,
                                             ),
@@ -510,7 +522,7 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
               width: 40.w,
               height: 4.h,
               decoration: BoxDecoration(
-                color: AppColors.greyColor.withOpacity(0.3),
+                color: AppColors.greyColor.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(2.r),
               ),
             ),
@@ -590,7 +602,7 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 16.r,
             offset: Offset(0, 4.h),
             spreadRadius: 0,
@@ -603,7 +615,7 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
           Container(
             padding: EdgeInsets.all(16.w),
             decoration: BoxDecoration(
-              color: AppColors.primaryColor.withOpacity(0.05),
+              color: AppColors.primaryColor.withValues(alpha: 0.05),
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(16.r),
                 topRight: Radius.circular(16.r),
@@ -634,7 +646,7 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
                   child: Container(
                     padding: EdgeInsets.all(8.w),
                     decoration: BoxDecoration(
-                      color: AppColors.primaryColor.withOpacity(0.1),
+                      color: AppColors.primaryColor.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8.r),
                     ),
                     child: SvgPicture.asset(
@@ -764,7 +776,7 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
               decoration: BoxDecoration(
-                color: AppColors.primaryColor.withOpacity(0.1),
+                color: AppColors.primaryColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(6.r),
               ),
               child: Row(

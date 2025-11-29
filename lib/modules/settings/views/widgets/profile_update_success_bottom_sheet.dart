@@ -1,14 +1,15 @@
-
 import 'package:sharpvendor/core/utils/exports.dart';
 
 class ProfileUpdateSuccessBottomSheet extends StatefulWidget {
   const ProfileUpdateSuccessBottomSheet({super.key});
 
   @override
-  State<ProfileUpdateSuccessBottomSheet> createState() => _ProfileUpdateSuccessBottomSheetState();
+  State<ProfileUpdateSuccessBottomSheet> createState() =>
+      _ProfileUpdateSuccessBottomSheetState();
 }
 
-class _ProfileUpdateSuccessBottomSheetState extends State<ProfileUpdateSuccessBottomSheet>
+class _ProfileUpdateSuccessBottomSheetState
+    extends State<ProfileUpdateSuccessBottomSheet>
     with TickerProviderStateMixin {
   late AnimationController _iconController;
   late AnimationController _contentController;
@@ -34,38 +35,22 @@ class _ProfileUpdateSuccessBottomSheetState extends State<ProfileUpdateSuccessBo
     );
 
     // Icon animations
-    _iconScaleAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _iconController,
-      curve: Curves.elasticOut,
-    ));
+    _iconScaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _iconController, curve: Curves.elasticOut),
+    );
 
-    _iconRotationAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _iconController,
-      curve: Curves.easeInOut,
-    ));
+    _iconRotationAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _iconController, curve: Curves.easeInOut),
+    );
 
     // Content animations
-    _contentSlideAnimation = Tween<double>(
-      begin: 50.0,
-      end: 0.0,
-    ).animate(CurvedAnimation(
-      parent: _contentController,
-      curve: Curves.easeOutCubic,
-    ));
+    _contentSlideAnimation = Tween<double>(begin: 50.0, end: 0.0).animate(
+      CurvedAnimation(parent: _contentController, curve: Curves.easeOutCubic),
+    );
 
-    _contentFadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _contentController,
-      curve: Curves.easeIn,
-    ));
+    _contentFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _contentController, curve: Curves.easeIn),
+    );
 
     // Start animations
     _iconController.forward();
@@ -92,12 +77,12 @@ class _ProfileUpdateSuccessBottomSheetState extends State<ProfileUpdateSuccessBo
           end: Alignment.bottomCenter,
           colors: [
             AppColors.whiteColor,
-            AppColors.backgroundColor.withOpacity(0.1),
+            AppColors.backgroundColor.withValues(alpha: 0.1),
           ],
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 20,
             offset: const Offset(0, -5),
           ),
@@ -112,7 +97,7 @@ class _ProfileUpdateSuccessBottomSheetState extends State<ProfileUpdateSuccessBo
             height: 4.h,
             margin: EdgeInsets.only(top: 12.h),
             decoration: BoxDecoration(
-              color: AppColors.greyColor.withOpacity(0.3),
+              color: AppColors.greyColor.withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(2.r),
             ),
           ),
@@ -136,13 +121,15 @@ class _ProfileUpdateSuccessBottomSheetState extends State<ProfileUpdateSuccessBo
                             gradient: LinearGradient(
                               colors: [
                                 AppColors.primaryColor,
-                                AppColors.primaryColor.withOpacity(0.8),
+                                AppColors.primaryColor.withValues(alpha: 0.8),
                               ],
                             ),
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                color: AppColors.primaryColor.withOpacity(0.3),
+                                color: AppColors.primaryColor.withValues(
+                                  alpha: 0.3,
+                                ),
                                 blurRadius: 20,
                                 spreadRadius: 5,
                               ),
@@ -182,7 +169,7 @@ class _ProfileUpdateSuccessBottomSheetState extends State<ProfileUpdateSuccessBo
                               shaderCallback: (bounds) => LinearGradient(
                                 colors: [
                                   AppColors.primaryColor,
-                                  AppColors.primaryColor.withOpacity(0.8),
+                                  AppColors.primaryColor.withValues(alpha: 0.8),
                                 ],
                               ).createShader(bounds),
                               child: customText(
@@ -203,7 +190,9 @@ class _ProfileUpdateSuccessBottomSheetState extends State<ProfileUpdateSuccessBo
                               child: customText(
                                 "Your profile has been updated successfully with the new information you provided.",
                                 overflow: TextOverflow.visible,
-                                color: AppColors.blackColor.withOpacity(0.7),
+                                color: AppColors.blackColor.withValues(
+                                  alpha: 0.7,
+                                ),
                                 textAlign: TextAlign.center,
                                 fontSize: 16.sp,
                                 fontWeight: FontWeight.w400,
@@ -226,12 +215,15 @@ class _ProfileUpdateSuccessBottomSheetState extends State<ProfileUpdateSuccessBo
                                       gradient: LinearGradient(
                                         colors: [
                                           AppColors.primaryColor,
-                                          AppColors.primaryColor.withOpacity(0.8),
+                                          AppColors.primaryColor.withValues(
+                                            alpha: 0.8,
+                                          ),
                                         ],
                                       ),
                                       boxShadow: [
                                         BoxShadow(
-                                          color: AppColors.primaryColor.withOpacity(0.3),
+                                          color: AppColors.primaryColor
+                                              .withValues(alpha: 0.3),
                                           blurRadius: 15,
                                           offset: const Offset(0, 5),
                                         ),
@@ -240,7 +232,9 @@ class _ProfileUpdateSuccessBottomSheetState extends State<ProfileUpdateSuccessBo
                                     child: Material(
                                       color: Colors.transparent,
                                       child: InkWell(
-                                        borderRadius: BorderRadius.circular(12.r),
+                                        borderRadius: BorderRadius.circular(
+                                          12.r,
+                                        ),
                                         onTap: () {
                                           // Add subtle haptic feedback
                                           HapticFeedback.lightImpact();
@@ -250,11 +244,14 @@ class _ProfileUpdateSuccessBottomSheetState extends State<ProfileUpdateSuccessBo
                                           width: 1.sw,
                                           height: 52.h,
                                           decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(12.r),
+                                            borderRadius: BorderRadius.circular(
+                                              12.r,
+                                            ),
                                           ),
                                           child: Center(
                                             child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
                                               children: [
                                                 customText(
                                                   "Continue",

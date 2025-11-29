@@ -59,7 +59,8 @@ class BusinessOperationsEntryScreen extends GetView<SignUpController> {
                     OpeningDayWidget(
                       day: "Monday",
                       isSelected: signUpController.selectedDays['monday']!,
-                      onTap: () => signUpController.toggleDaySelection('monday'),
+                      onTap: () =>
+                          signUpController.toggleDaySelection('monday'),
                     ),
                     if (signUpController.selectedDays['monday']!)
                       _buildTimeSelectionRow(signUpController, 'monday'),
@@ -68,7 +69,8 @@ class BusinessOperationsEntryScreen extends GetView<SignUpController> {
                     OpeningDayWidget(
                       day: "Tuesday",
                       isSelected: signUpController.selectedDays['tuesday']!,
-                      onTap: () => signUpController.toggleDaySelection('tuesday'),
+                      onTap: () =>
+                          signUpController.toggleDaySelection('tuesday'),
                     ),
                     if (signUpController.selectedDays['tuesday']!)
                       _buildTimeSelectionRow(signUpController, 'tuesday'),
@@ -77,7 +79,8 @@ class BusinessOperationsEntryScreen extends GetView<SignUpController> {
                     OpeningDayWidget(
                       day: "Wednesday",
                       isSelected: signUpController.selectedDays['wednesday']!,
-                      onTap: () => signUpController.toggleDaySelection('wednesday'),
+                      onTap: () =>
+                          signUpController.toggleDaySelection('wednesday'),
                     ),
                     if (signUpController.selectedDays['wednesday']!)
                       _buildTimeSelectionRow(signUpController, 'wednesday'),
@@ -86,7 +89,8 @@ class BusinessOperationsEntryScreen extends GetView<SignUpController> {
                     OpeningDayWidget(
                       day: "Thursday",
                       isSelected: signUpController.selectedDays['thursday']!,
-                      onTap: () => signUpController.toggleDaySelection('thursday'),
+                      onTap: () =>
+                          signUpController.toggleDaySelection('thursday'),
                     ),
                     if (signUpController.selectedDays['thursday']!)
                       _buildTimeSelectionRow(signUpController, 'thursday'),
@@ -95,7 +99,8 @@ class BusinessOperationsEntryScreen extends GetView<SignUpController> {
                     OpeningDayWidget(
                       day: "Friday",
                       isSelected: signUpController.selectedDays['friday']!,
-                      onTap: () => signUpController.toggleDaySelection('friday'),
+                      onTap: () =>
+                          signUpController.toggleDaySelection('friday'),
                     ),
                     if (signUpController.selectedDays['friday']!)
                       _buildTimeSelectionRow(signUpController, 'friday'),
@@ -104,7 +109,8 @@ class BusinessOperationsEntryScreen extends GetView<SignUpController> {
                     OpeningDayWidget(
                       day: "Saturday",
                       isSelected: signUpController.selectedDays['saturday']!,
-                      onTap: () => signUpController.toggleDaySelection('saturday'),
+                      onTap: () =>
+                          signUpController.toggleDaySelection('saturday'),
                     ),
                     if (signUpController.selectedDays['saturday']!)
                       _buildTimeSelectionRow(signUpController, 'saturday'),
@@ -113,7 +119,8 @@ class BusinessOperationsEntryScreen extends GetView<SignUpController> {
                     OpeningDayWidget(
                       day: "Sunday",
                       isSelected: signUpController.selectedDays['sunday']!,
-                      onTap: () => signUpController.toggleDaySelection('sunday'),
+                      onTap: () =>
+                          signUpController.toggleDaySelection('sunday'),
                     ),
                     if (signUpController.selectedDays['sunday']!)
                       _buildTimeSelectionRow(signUpController, 'sunday'),
@@ -134,19 +141,26 @@ class BusinessOperationsEntryScreen extends GetView<SignUpController> {
       margin: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 15.h),
       padding: EdgeInsets.all(12.sp),
       decoration: BoxDecoration(
-        color: AppColors.primaryColor.withOpacity(0.05),
+        color: AppColors.primaryColor.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(color: AppColors.primaryColor.withOpacity(0.2)),
+        border: Border.all(
+          color: AppColors.primaryColor.withValues(alpha: 0.2),
+        ),
       ),
       child: Row(
         children: [
           Expanded(
             child: ClickableCustomRoundedInputField(
               onPressed: () async {
-                await controller.selectTimeForDay(day: day, isOpeningTime: true);
+                await controller.selectTimeForDay(
+                  day: day,
+                  isOpeningTime: true,
+                );
               },
               title: "Opening Time",
-              label: controller.dayOperatingHours[day]?['openTime'] ?? "Select Time",
+              label:
+                  controller.dayOperatingHours[day]?['openTime'] ??
+                  "Select Time",
               showLabel: true,
               readOnly: true,
               isRequired: true,
@@ -156,7 +170,10 @@ class BusinessOperationsEntryScreen extends GetView<SignUpController> {
               ),
               suffixWidget: IconButton(
                 onPressed: () async {
-                  await controller.selectTimeForDay(day: day, isOpeningTime: true);
+                  await controller.selectTimeForDay(
+                    day: day,
+                    isOpeningTime: true,
+                  );
                 },
                 icon: SvgPicture.asset(
                   SvgAssets.timeIcon,
@@ -169,10 +186,15 @@ class BusinessOperationsEntryScreen extends GetView<SignUpController> {
           Expanded(
             child: ClickableCustomRoundedInputField(
               onPressed: () async {
-                await controller.selectTimeForDay(day: day, isOpeningTime: false);
+                await controller.selectTimeForDay(
+                  day: day,
+                  isOpeningTime: false,
+                );
               },
               title: "Closing Time",
-              label: controller.dayOperatingHours[day]?['closeTime'] ?? "Select Time",
+              label:
+                  controller.dayOperatingHours[day]?['closeTime'] ??
+                  "Select Time",
               showLabel: true,
               isRequired: true,
               hasTitle: true,
@@ -182,7 +204,10 @@ class BusinessOperationsEntryScreen extends GetView<SignUpController> {
               ),
               suffixWidget: IconButton(
                 onPressed: () async {
-                  await controller.selectTimeForDay(day: day, isOpeningTime: false);
+                  await controller.selectTimeForDay(
+                    day: day,
+                    isOpeningTime: false,
+                  );
                 },
                 icon: SvgPicture.asset(
                   SvgAssets.timeIcon,
@@ -222,7 +247,9 @@ class OpeningDayWidget extends StatelessWidget {
             width: isSelected ? 1.5 : 0.5,
           ),
           borderRadius: BorderRadius.circular(8.r),
-          color: isSelected ? AppColors.primaryColor.withOpacity(0.05) : AppColors.transparent,
+          color: isSelected
+              ? AppColors.primaryColor.withValues(alpha: 0.05)
+              : AppColors.transparent,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -235,10 +262,14 @@ class OpeningDayWidget extends StatelessWidget {
             ),
             Container(
               decoration: BoxDecoration(
-                color: isSelected ? AppColors.primaryColor : AppColors.transparent,
+                color: isSelected
+                    ? AppColors.primaryColor
+                    : AppColors.transparent,
                 border: Border.all(
                   width: 1,
-                  color: isSelected ? AppColors.primaryColor : AppColors.greyColor,
+                  color: isSelected
+                      ? AppColors.primaryColor
+                      : AppColors.greyColor,
                 ),
                 borderRadius: BorderRadius.circular(4.r),
               ),
@@ -246,10 +277,14 @@ class OpeningDayWidget extends StatelessWidget {
               width: 20.sp,
               child: Center(
                 child: isSelected
-                    ? Icon(Icons.check, size: 14.sp, color: AppColors.whiteColor)
+                    ? Icon(
+                        Icons.check,
+                        size: 14.sp,
+                        color: AppColors.whiteColor,
+                      )
                     : SizedBox.shrink(),
               ),
-            )
+            ),
           ],
         ),
       ),

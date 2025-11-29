@@ -20,9 +20,7 @@ class MenuDiscountsListScreen extends StatelessWidget {
         Get.back();
         showToast(message: "Menu information is missing", isError: true);
       });
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     return GetBuilder<DiscountController>(
@@ -36,7 +34,9 @@ class MenuDiscountsListScreen extends StatelessWidget {
         return Scaffold(
           appBar: defaultAppBar(
             bgColor: AppColors.backgroundColor,
-            title: menuItem != null ? "${menuItem.name} - Discounts" : "Discounts",
+            title: menuItem != null
+                ? "${menuItem.name} - Discounts"
+                : "Discounts",
             centerTitle: false,
           ),
           backgroundColor: AppColors.backgroundColor,
@@ -59,59 +59,70 @@ class MenuDiscountsListScreen extends StatelessWidget {
               child: controller.isLoadingDiscounts
                   ? SkeletonLoaders.discountCard(count: 4)
                   : controller.discounts.isEmpty
-                      ? ListView(
-                          children: [
-                            SizedBox(height: 150.h),
-                            Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.discount_outlined,
-                                    size: 100.sp,
-                                    color: AppColors.greyColor.withOpacity(0.5),
-                                  ),
-                                  SizedBox(height: 20.h),
-                                  customText(
-                                    "No discounts yet",
-                                    color: AppColors.blackColor,
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                  SizedBox(height: 8.h),
-                                  customText(
-                                    "Create your first discount for this menu item",
-                                    color: AppColors.greyColor,
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.normal,
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
+                  ? ListView(
+                      children: [
+                        SizedBox(height: 150.h),
+                        Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.discount_outlined,
+                                size: 100.sp,
+                                color: AppColors.greyColor.withValues(
+                                  alpha: 0.5,
+                                ),
                               ),
-                            ),
-                          ],
-                        )
-                      : ListView.separated(
-                          itemCount: controller.discounts.length,
-                          separatorBuilder: (context, index) => SizedBox(height: 16.h),
-                          itemBuilder: (context, index) {
-                            final discount = controller.discounts[index];
-                            return DiscountCard(
-                              discount: discount,
-                              onTap: () {
-                                // Navigate to details or edit screen
-                                controller.initializeEditForm(discount);
-                                Get.toNamed(
-                                  Routes.EDIT_DISCOUNT_SCREEN,
-                                  arguments: {'discount': discount, 'menuId': menuId},
-                                );
-                              },
-                              onDelete: () {
-                                _showDeleteDialog(context, controller, menuId, discount);
+                              SizedBox(height: 20.h),
+                              customText(
+                                "No discounts yet",
+                                color: AppColors.blackColor,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              SizedBox(height: 8.h),
+                              customText(
+                                "Create your first discount for this menu item",
+                                color: AppColors.greyColor,
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.normal,
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    )
+                  : ListView.separated(
+                      itemCount: controller.discounts.length,
+                      separatorBuilder: (context, index) =>
+                          SizedBox(height: 16.h),
+                      itemBuilder: (context, index) {
+                        final discount = controller.discounts[index];
+                        return DiscountCard(
+                          discount: discount,
+                          onTap: () {
+                            // Navigate to details or edit screen
+                            controller.initializeEditForm(discount);
+                            Get.toNamed(
+                              Routes.EDIT_DISCOUNT_SCREEN,
+                              arguments: {
+                                'discount': discount,
+                                'menuId': menuId,
                               },
                             );
                           },
-                        ),
+                          onDelete: () {
+                            _showDeleteDialog(
+                              context,
+                              controller,
+                              menuId,
+                              discount,
+                            );
+                          },
+                        );
+                      },
+                    ),
             ),
           ),
         );
@@ -195,7 +206,7 @@ class DiscountCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(12.r),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
@@ -234,8 +245,10 @@ class DiscountCard extends StatelessWidget {
                           ),
                           decoration: BoxDecoration(
                             color: discount.type == 'percentage'
-                                ? AppColors.primaryColor.withOpacity(0.1)
-                                : AppColors.secondaryColor.withOpacity(0.1),
+                                ? AppColors.primaryColor.withValues(alpha: 0.1)
+                                : AppColors.secondaryColor.withValues(
+                                    alpha: 0.1,
+                                  ),
                             borderRadius: BorderRadius.circular(6.r),
                           ),
                           child: customText(
@@ -267,7 +280,12 @@ class DiscountCard extends StatelessWidget {
                         value: 'delete',
                         child: Row(
                           children: [
-                            SvgPicture.asset(SvgAssets.deleteIcon, height: 18.sp, width: 18.sp, color: AppColors.redColor),
+                            SvgPicture.asset(
+                              SvgAssets.deleteIcon,
+                              height: 18.sp,
+                              width: 18.sp,
+                              color: AppColors.redColor,
+                            ),
                             SizedBox(width: 8.w),
                             customText(
                               'Delete',
@@ -282,7 +300,10 @@ class DiscountCard extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 12.h),
-              Divider(height: 1.h, color: AppColors.greyColor.withOpacity(0.2)),
+              Divider(
+                height: 1.h,
+                color: AppColors.greyColor.withValues(alpha: 0.2),
+              ),
               SizedBox(height: 12.h),
               Row(
                 children: [
@@ -316,34 +337,38 @@ class DiscountCard extends StatelessWidget {
                     discount.isCurrentlyActive
                         ? Icons.check_circle
                         : discount.isExpired
-                            ? Icons.cancel
-                            : Icons.schedule,
+                        ? Icons.cancel
+                        : Icons.schedule,
                     size: 14.sp,
                     color: discount.isCurrentlyActive
                         ? AppColors.greenColor
                         : discount.isExpired
-                            ? AppColors.redColor
-                            : AppColors.secondaryColor,
+                        ? AppColors.redColor
+                        : AppColors.secondaryColor,
                   ),
                   SizedBox(width: 6.w),
                   customText(
                     discount.isCurrentlyActive
                         ? "Active"
                         : discount.isExpired
-                            ? "Expired"
-                            : "Not Started",
+                        ? "Expired"
+                        : "Not Started",
                     fontSize: 13.sp,
                     color: discount.isCurrentlyActive
                         ? AppColors.greenColor
                         : discount.isExpired
-                            ? AppColors.redColor
-                            : AppColors.secondaryColor,
+                        ? AppColors.redColor
+                        : AppColors.secondaryColor,
                     fontWeight: FontWeight.w500,
                   ),
                   Spacer(),
-                  if (discount.badgeText != null && discount.badgeText!.isNotEmpty)
+                  if (discount.badgeText != null &&
+                      discount.badgeText!.isNotEmpty)
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 8.w,
+                        vertical: 4.h,
+                      ),
                       decoration: BoxDecoration(
                         color: AppColors.secondaryColor,
                         borderRadius: BorderRadius.circular(4.r),
@@ -361,7 +386,11 @@ class DiscountCard extends StatelessWidget {
                 SizedBox(height: 8.h),
                 Row(
                   children: [
-                    Icon(Icons.visibility_off, size: 14.sp, color: AppColors.redColor),
+                    Icon(
+                      Icons.visibility_off,
+                      size: 14.sp,
+                      color: AppColors.redColor,
+                    ),
                     SizedBox(width: 6.w),
                     customText(
                       "Inactive",

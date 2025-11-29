@@ -45,7 +45,7 @@ class NotificationDetailsScreen extends StatelessWidget {
                         vertical: 6.h,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.primaryColor.withOpacity(0.1),
+                        color: AppColors.primaryColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8.r),
                       ),
                       child: customText(
@@ -84,7 +84,7 @@ class NotificationDetailsScreen extends StatelessWidget {
                             gradient: LinearGradient(
                               colors: [
                                 AppColors.primaryColor,
-                                AppColors.primaryColor.withOpacity(0.8),
+                                AppColors.primaryColor.withValues(alpha: 0.8),
                               ],
                             ),
                             borderRadius: BorderRadius.circular(12.r),

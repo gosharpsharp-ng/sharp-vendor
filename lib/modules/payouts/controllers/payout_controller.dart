@@ -55,14 +55,18 @@ class PayoutController extends GetxController {
     super.onInit();
     _payoutService.init();
     payoutHistoryScrollController.addListener(_payoutHistoryScrollListener);
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
     getPayoutHistory();
     _loadBalanceFromDashboard();
   }
 
   @override
   void onClose() {
-    payoutHistoryScrollController.dispose();
-    amountController.dispose();
+    payoutHistoryScrollController.removeListener(_payoutHistoryScrollListener);
     super.onClose();
   }
 

@@ -268,7 +268,7 @@ class _CustomRoundedInputFieldState extends State<CustomRoundedInputField> {
                     widget.isSearch ? 12.r : 8.r,
                   ),
                   borderSide: BorderSide(
-                    color: AppColors.greyColor.withOpacity(0.2),
+                    color: AppColors.greyColor.withValues(alpha: 0.2),
                     width: 1.0,
                   ),
                 ),
@@ -578,7 +578,7 @@ class _ClickableCustomRoundedInputFieldState
                   borderSide: BorderSide(
                     color: widget.isSearch
                         ? widget.color
-                        : AppColors.greyColor.withOpacity(0.2),
+                        : AppColors.greyColor.withValues(alpha: 0.2),
                     width: 1.0,
                   ),
                 ),

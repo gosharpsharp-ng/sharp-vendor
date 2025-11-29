@@ -41,7 +41,9 @@ class PayoutDetailSummaryItem extends StatelessWidget {
                       ? GoogleFonts.montserrat().fontFamily!
                       : "Satoshi",
                   fontSize: 14.sp,
-                  fontWeight: title == "Amount" ? FontWeight.w600 : FontWeight.w500,
+                  fontWeight: title == "Amount"
+                      ? FontWeight.w600
+                      : FontWeight.w500,
                   overflow: TextOverflow.visible,
                 ),
               ],
@@ -64,7 +66,9 @@ class PayoutDetailSummaryItem extends StatelessWidget {
                     fontFamily: title == "Amount"
                         ? GoogleFonts.montserrat().fontFamily!
                         : "Satoshi",
-                    fontWeight: title == "Amount" ? FontWeight.w600 : FontWeight.w500,
+                    fontWeight: title == "Amount"
+                        ? FontWeight.w600
+                        : FontWeight.w500,
                     overflow: TextOverflow.visible,
                     textAlign: TextAlign.right,
                   ),
@@ -109,10 +113,10 @@ class PayoutDetailSummaryStatusItem extends StatelessWidget {
           ),
           Container(
             decoration: BoxDecoration(
-              color: _getStatusColor().withOpacity(0.1),
+              color: _getStatusColor().withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12.r),
               border: Border.all(
-                color: _getStatusColor().withOpacity(0.3),
+                color: _getStatusColor().withValues(alpha: 0.3),
                 width: 1,
               ),
             ),
@@ -120,11 +124,7 @@ class PayoutDetailSummaryStatusItem extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
-                  _getStatusIcon(),
-                  color: _getStatusColor(),
-                  size: 14.sp,
-                ),
+                Icon(_getStatusIcon(), color: _getStatusColor(), size: 14.sp),
                 SizedBox(width: 6.w),
                 customText(
                   value,

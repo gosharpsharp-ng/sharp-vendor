@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const Color primaryColor = Color(0XFF3B6F25);
+  static const Color primaryColor = Color(0XFF48872E);
   static const Color fadedPrimaryColor = Color(0XFFC6D9BE);
   static const Color textFieldBackgroundColor = Color(0XFFFAFAFA);
   static const Color lightRedColor = Color(0XFFFFEDE5);
@@ -14,7 +14,6 @@ class AppColors {
   static const Color blueColor = Color(0XFF394FDB);
   static const Color lightBlueColor = Color(0XFFEDF0FC);
   static const Color backgroundColor = Color(0XFFfbfbfd);
-  // static const Color backgroundColor = Color(0XFFffffff);
   static const Color deepAmberColor = Color(0XFFB58D00);
   static const Color obscureTextColor = Color(0XFF7D7D7D);
   static const Color blackColor = Color(0XFF343434);
@@ -24,8 +23,9 @@ class AppColors {
   static const Color redColor = Color(0XFFFF2C20);
   static const Color transparent = Colors.transparent;
 
-  static const lightYellowColor =
-      Color(0xFFFFF7E5); //    // For text on Confirmed
+  static const lightYellowColor = Color(
+    0xFFFFF7E5,
+  ); //    // For text on Confirmed
 
   static const lightGreenColor = Color(0xFFE5F5E5); // For Paid & Delivered
   static const greenColor = Color(0xFF4CAF50); // For text on Paid & Delivered

@@ -211,16 +211,29 @@ class DiscountController extends GetxController {
       final response = await discountService.createDiscount(currentMenuId!, payload);
 
       if (response.status == "success") {
-        showToast(message: response.message.isNotEmpty ? response.message : "Discount created successfully");
         clearForm();
         Get.back();
+        // Show success message after navigating back so it's visible on the previous screen
+        if (Get.context != null) {
+          ModernSnackBar.showSuccess(
+            Get.context!,
+            message: response.message.isNotEmpty ? response.message : "Discount created successfully",
+          );
+        }
         // Refresh the discounts list
         await getDiscountsForMenuItem(currentMenuId!);
       } else {
-        showToast(message: response.message.isNotEmpty ? response.message : "Failed to create discount", isError: true);
+        if (Get.context != null) {
+          ModernSnackBar.showError(
+            Get.context!,
+            message: response.message.isNotEmpty ? response.message : "Failed to create discount",
+          );
+        }
       }
     } catch (e) {
-      showToast(message: "Error creating discount", isError: true);
+      if (Get.context != null) {
+        ModernSnackBar.showError(Get.context!, message: "Error creating discount");
+      }
       customDebugPrint("Error in createDiscount: $e");
     } finally {
       setLoadingState(false);
@@ -258,16 +271,29 @@ class DiscountController extends GetxController {
       );
 
       if (response.status == "success") {
-        showToast(message: response.message.isNotEmpty ? response.message : "Discount updated successfully");
         clearForm();
         Get.back();
+        // Show success message after navigating back so it's visible on the previous screen
+        if (Get.context != null) {
+          ModernSnackBar.showSuccess(
+            Get.context!,
+            message: response.message.isNotEmpty ? response.message : "Discount updated successfully",
+          );
+        }
         // Refresh the discounts list
         await getDiscountsForMenuItem(currentMenuId!);
       } else {
-        showToast(message: response.message.isNotEmpty ? response.message : "Failed to update discount", isError: true);
+        if (Get.context != null) {
+          ModernSnackBar.showError(
+            Get.context!,
+            message: response.message.isNotEmpty ? response.message : "Failed to update discount",
+          );
+        }
       }
     } catch (e) {
-      showToast(message: "Error updating discount", isError: true);
+      if (Get.context != null) {
+        ModernSnackBar.showError(Get.context!, message: "Error updating discount");
+      }
       customDebugPrint("Error in updateDiscount: $e");
     } finally {
       setLoadingState(false);
@@ -282,15 +308,28 @@ class DiscountController extends GetxController {
       final response = await discountService.deleteDiscount(menuId, discountId);
 
       if (response.status == "success") {
-        showToast(message: response.message.isNotEmpty ? response.message : "Discount deleted successfully");
         Get.back();
+        // Show success message after navigating back so it's visible on the previous screen
+        if (Get.context != null) {
+          ModernSnackBar.showSuccess(
+            Get.context!,
+            message: response.message.isNotEmpty ? response.message : "Discount deleted successfully",
+          );
+        }
         // Refresh the discounts list
         await getDiscountsForMenuItem(menuId);
       } else {
-        showToast(message: response.message.isNotEmpty ? response.message : "Failed to delete discount", isError: true);
+        if (Get.context != null) {
+          ModernSnackBar.showError(
+            Get.context!,
+            message: response.message.isNotEmpty ? response.message : "Failed to delete discount",
+          );
+        }
       }
     } catch (e) {
-      showToast(message: "Error deleting discount", isError: true);
+      if (Get.context != null) {
+        ModernSnackBar.showError(Get.context!, message: "Error deleting discount");
+      }
       customDebugPrint("Error in deleteDiscount: $e");
     } finally {
       setLoadingState(false);

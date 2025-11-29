@@ -250,7 +250,7 @@ class EditIcon extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.primaryColor.withOpacity(0.2),
+          color: AppColors.primaryColor.withValues(alpha: 0.2),
           borderRadius: BorderRadius.circular(20.r),
         ),
         padding: EdgeInsets.symmetric(horizontal: 8.sp, vertical: 4.sp),
@@ -307,7 +307,7 @@ class SaveIcon extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.primaryColor.withOpacity(0.2),
+          color: AppColors.primaryColor.withValues(alpha: 0.2),
           borderRadius: BorderRadius.circular(20.r),
         ),
         padding: EdgeInsets.symmetric(horizontal: 8.sp, vertical: 4.sp),
@@ -477,7 +477,11 @@ String formatRideTime(String timestamp) {
 }
 
 String formatToCurrency(num number) {
-  NumberFormat format = NumberFormat.currency(locale: 'en_US', symbol: '₦', decimalDigits: 0);
+  NumberFormat format = NumberFormat.currency(
+    locale: 'en_US',
+    symbol: '₦',
+    decimalDigits: 0,
+  );
   return format.format(number);
 }
 
@@ -789,6 +793,20 @@ class PaymentWebViewController {
             await _checkPaymentStatus();
           },
           onUrlChange: (UrlChange? urlChange) {
+            if (urlChange?.url != null) {
+              final url = urlChange!.url!.toLowerCase();
+              debugPrint('Paystack URL changed to: $url');
+
+              // Check if URL contains success callback indicators
+              // Paystack typically redirects to callback_url with trxref or reference parameter
+              if ((url.contains('trxref=') || url.contains('reference=')) &&
+                  !url.contains('paystack.co')) {
+                // This is likely a callback URL redirect after successful payment
+                debugPrint(
+                  'Detected callback URL with transaction reference - checking status',
+                );
+              }
+            }
             // Additional check on URL change
             _checkPaymentStatus();
           },
@@ -811,8 +829,28 @@ class PaymentWebViewController {
     if (paymentCompleted) return;
 
     try {
-      // Method 1: Check page title
+      // Method 1: Check current URL for callback indicators
+      final currentUrl = await controller.currentUrl();
+      if (currentUrl != null) {
+        final urlLower = currentUrl.toLowerCase();
+        debugPrint('Checking payment status - URL: $urlLower');
+
+        // Check if URL contains success callback indicators
+        // Paystack typically redirects to callback_url with trxref or reference parameter
+        if ((urlLower.contains('trxref=') || urlLower.contains('reference=')) &&
+            !urlLower.contains('paystack.co')) {
+          // This is likely a callback URL redirect after successful payment
+          debugPrint(
+            'Detected callback URL with transaction reference - treating as success',
+          );
+          _handleSuccess();
+          return;
+        }
+      }
+
+      // Method 2: Check page title
       final title = await controller.getTitle();
+      debugPrint('Checking payment status - Title: $title');
 
       if (title != null) {
         final titleLower = title.toLowerCase();
@@ -820,6 +858,7 @@ class PaymentWebViewController {
         // Check for success indicators in title
         if (titleLower.contains('success') ||
             titleLower.contains('successful') ||
+            titleLower.contains('approved') ||
             titleLower.contains('complete')) {
           _handleSuccess();
           return;
@@ -832,33 +871,63 @@ class PaymentWebViewController {
           _handleFailure();
           return;
         }
+
+        // Check for cancellation indicators in title
+        if (titleLower.contains('cancel')) {
+          _handleFailure();
+          return;
+        }
       }
 
-      // Method 2: Check page content via JavaScript
+      // Method 3: Check page content via JavaScript
       final result = await controller.runJavaScriptReturningResult('''
         (function() {
           const bodyText = document.body.innerText.toLowerCase();
+
+          // Success patterns
           if (bodyText.includes('payment successful') ||
               bodyText.includes('transaction successful') ||
               bodyText.includes('payment complete') ||
-              bodyText.includes('transaction complete')) {
+              bodyText.includes('transaction complete') ||
+              bodyText.includes('was successful') ||
+              bodyText.includes('has been successful') ||
+              bodyText.includes('approved') ||
+              bodyText.includes('payment received') ||
+              bodyText.includes('thank you for your payment') ||
+              bodyText.includes('your payment of')) {
             return 'success';
           }
+
+          // Cancellation patterns
+          if (bodyText.includes('payment cancelled') ||
+              bodyText.includes('payment canceled') ||
+              bodyText.includes('transaction cancelled') ||
+              bodyText.includes('transaction canceled') ||
+              bodyText.includes('cancel this payment') ||
+              bodyText.includes('payment was cancelled')) {
+            return 'cancelled';
+          }
+
+          // Failure patterns
           if (bodyText.includes('payment failed') ||
               bodyText.includes('transaction failed') ||
               bodyText.includes('payment declined') ||
+              bodyText.includes('transaction declined') ||
+              bodyText.includes('could not be processed') ||
               bodyText.includes('transaction declined')) {
             return 'failed';
           }
+
           return 'unknown';
         })();
       ''');
 
       final status = result.toString().replaceAll('"', '');
+      debugPrint('JavaScript content check result: $status');
 
       if (status == 'success') {
         _handleSuccess();
-      } else if (status == 'failed') {
+      } else if (status == 'failed' || status == 'cancelled') {
         _handleFailure();
       }
     } catch (e) {

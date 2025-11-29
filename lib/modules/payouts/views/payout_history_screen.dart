@@ -38,7 +38,7 @@ class PayoutHistoryScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12.r),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.greyColor.withOpacity(0.1),
+                          color: AppColors.greyColor.withValues(alpha: 0.1),
                           blurRadius: 8,
                           offset: const Offset(0, 2),
                         ),
@@ -110,7 +110,7 @@ class PayoutHistoryScreen extends StatelessWidget {
                             Icon(
                               Icons.account_balance_wallet_outlined,
                               size: 64.sp,
-                              color: AppColors.greyColor.withOpacity(0.5),
+                              color: AppColors.greyColor.withValues(alpha: 0.5),
                             ),
                             SizedBox(height: 16.h),
                             customText(

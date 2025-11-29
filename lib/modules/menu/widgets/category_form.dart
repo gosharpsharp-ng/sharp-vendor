@@ -13,9 +13,7 @@ class CategoryForm extends GetView<FoodMenuController> {
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
           decoration: BoxDecoration(
             color: AppColors.whiteColor,
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(25.r),
-            ),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25.r)),
           ),
           child: Form(
             key: menuController.categoryFormKey,
@@ -28,7 +26,9 @@ class CategoryForm extends GetView<FoodMenuController> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     customText(
-                      menuController.isEditMode ? "Edit Category" : "Enter New Category",
+                      menuController.isEditMode
+                          ? "Edit Category"
+                          : "Enter New Category",
                       color: AppColors.blackColor,
                       fontSize: 18.sp,
                       fontWeight: FontWeight.w600,
@@ -62,8 +62,9 @@ class CategoryForm extends GetView<FoodMenuController> {
                     }
                     // Check if category already exists (for add mode)
                     if (!menuController.isEditMode) {
-                      bool categoryExists = menuController.categoryModels
-                          .any((cat) => cat.name.toLowerCase() == value.toLowerCase());
+                      bool categoryExists = menuController.categoryModels.any(
+                        (cat) => cat.name.toLowerCase() == value.toLowerCase(),
+                      );
                       if (categoryExists) {
                         return 'Category already exists';
                       }
@@ -82,7 +83,9 @@ class CategoryForm extends GetView<FoodMenuController> {
                         child: CustomButton(
                           onPressed: () => Get.back(),
                           title: "Back",
-                          backgroundColor: AppColors.greyColor.withOpacity(0.2),
+                          backgroundColor: AppColors.greyColor.withValues(
+                            alpha: 0.2,
+                          ),
                           fontColor: AppColors.blackColor,
                         ),
                       ),
@@ -91,12 +94,15 @@ class CategoryForm extends GetView<FoodMenuController> {
                         child: CustomButton(
                           onPressed: () {
                             Get.back(); // Close current modal first
-                            Future.delayed(const Duration(milliseconds: 300), () {
-                              menuController.showDeleteConfirmationDialog(
-                                context,
-                                menuController.selectedCategoryModel!,
-                              );
-                            });
+                            Future.delayed(
+                              const Duration(milliseconds: 300),
+                              () {
+                                menuController.showDeleteConfirmationDialog(
+                                  context,
+                                  menuController.selectedCategoryModel!,
+                                );
+                              },
+                            );
                           },
                           title: "Delete",
                           backgroundColor: Colors.red,
@@ -208,9 +214,7 @@ class EditCategoryModal extends GetView<FoodMenuController> {
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
           decoration: BoxDecoration(
             color: AppColors.whiteColor,
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(25.r),
-            ),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25.r)),
           ),
           child: Form(
             key: menuController.categoryFormKey,
@@ -268,7 +272,9 @@ class EditCategoryModal extends GetView<FoodMenuController> {
                       child: CustomButton(
                         onPressed: () => Get.back(),
                         title: "Back",
-                        backgroundColor: AppColors.greyColor.withOpacity(0.1),
+                        backgroundColor: AppColors.greyColor.withValues(
+                          alpha: 0.1,
+                        ),
                         fontColor: AppColors.blackColor,
                       ),
                     ),

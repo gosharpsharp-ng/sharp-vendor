@@ -49,7 +49,7 @@ class CategoryManagementScreen extends GetView<FoodMenuController> {
                       color: AppColors.whiteColor,
                       borderRadius: BorderRadius.circular(8.r),
                       border: Border.all(
-                        color: AppColors.greyColor.withOpacity(0.3),
+                        color: AppColors.greyColor.withValues(alpha: 0.3),
                       ),
                     ),
                     child: Row(
@@ -94,108 +94,113 @@ class CategoryManagementScreen extends GetView<FoodMenuController> {
                 Expanded(
                   child: menuController.isLoadingCategories
                       ? const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.primaryColor,
-                    ),
-                  )
+                          child: CircularProgressIndicator(
+                            color: AppColors.primaryColor,
+                          ),
+                        )
                       : menuController.filteredCategories.isEmpty
                       ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(
-                          SvgAssets.menuIcon,
-                          height: 80.h,
-                          color: AppColors.greyColor,
-                        ),
-                        SizedBox(height: 16.h),
-                        customText(
-                          "No categories found",
-                          color: AppColors.greyColor,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        SizedBox(height: 8.h),
-                        customText(
-                          "Add your first category to get started",
-                          color: AppColors.greyColor,
-                          fontSize: 14.sp,
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  )
-                      : ListView.separated(
-                    itemCount: menuController.filteredCategories.length,
-                    separatorBuilder: (context, index) => SizedBox(height: 12.h),
-                    itemBuilder: (context, index) {
-                      final category = menuController.filteredCategories[index];
-                      return Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 16.w,
-                          vertical: 16.h,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColors.whiteColor,
-                          borderRadius: BorderRadius.circular(8.r),
-                          border: Border.all(
-                            color: AppColors.greyColor.withOpacity(0.3),
-                          ),
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: customText(
-                                category.name,
-                                color: AppColors.blackColor,
-                                fontSize: 14.sp,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset(
+                                SvgAssets.menuIcon,
+                                height: 80.h,
+                                color: AppColors.greyColor,
+                              ),
+                              SizedBox(height: 16.h),
+                              customText(
+                                "No categories found",
+                                color: AppColors.greyColor,
+                                fontSize: 16.sp,
                                 fontWeight: FontWeight.w500,
                               ),
-                            ),
-                            Row(
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    menuController.showEditCategoryModal(
-                                      context,
-                                      category,
-                                    );
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.all(8.sp),
-                                    child: SvgPicture.asset(
-                                      SvgAssets.editIcon,
-                                      color: AppColors.primaryColor,
-                                      height: 18.sp,
-                                      width: 18.sp,
-                                    ),
+                              SizedBox(height: 8.h),
+                              customText(
+                                "Add your first category to get started",
+                                color: AppColors.greyColor,
+                                fontSize: 14.sp,
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        )
+                      : ListView.separated(
+                          itemCount: menuController.filteredCategories.length,
+                          separatorBuilder: (context, index) =>
+                              SizedBox(height: 12.h),
+                          itemBuilder: (context, index) {
+                            final category =
+                                menuController.filteredCategories[index];
+                            return Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 16.w,
+                                vertical: 16.h,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.whiteColor,
+                                borderRadius: BorderRadius.circular(8.r),
+                                border: Border.all(
+                                  color: AppColors.greyColor.withValues(
+                                    alpha: 0.3,
                                   ),
                                 ),
-                                SizedBox(width: 8.w),
-                                InkWell(
-                                  onTap: () {
-                                    menuController.showDeleteConfirmationDialog(
-                                      context,
-                                      category,
-                                    );
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.all(8.sp),
-                                    child: SvgPicture.asset(
-                                      SvgAssets.deleteIcon,
-                                      color: Colors.red,
-                                      height: 18.sp,
-                                      width: 18.sp,
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: customText(
+                                      category.name,
+                                      color: AppColors.blackColor,
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.w500,
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
+                                  Row(
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          menuController.showEditCategoryModal(
+                                            context,
+                                            category,
+                                          );
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.all(8.sp),
+                                          child: SvgPicture.asset(
+                                            SvgAssets.editIcon,
+                                            color: AppColors.primaryColor,
+                                            height: 18.sp,
+                                            width: 18.sp,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 8.w),
+                                      InkWell(
+                                        onTap: () {
+                                          menuController
+                                              .showDeleteConfirmationDialog(
+                                                context,
+                                                category,
+                                              );
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.all(8.sp),
+                                          child: SvgPicture.asset(
+                                            SvgAssets.deleteIcon,
+                                            color: Colors.red,
+                                            height: 18.sp,
+                                            width: 18.sp,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
                 ),
               ],
             ),
@@ -227,7 +232,9 @@ class CategoryFormModal extends GetView<FoodMenuController> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     customText(
-                      menuController.isEditMode ? "Edit Category" : "Enter New Category",
+                      menuController.isEditMode
+                          ? "Edit Category"
+                          : "Enter New Category",
                       color: AppColors.blackColor,
                       fontSize: 18.sp,
                       fontWeight: FontWeight.w600,
@@ -273,7 +280,9 @@ class CategoryFormModal extends GetView<FoodMenuController> {
                         child: CustomButton(
                           onPressed: () => Get.back(),
                           title: "Back",
-                          backgroundColor: AppColors.greyColor.withOpacity(0.2),
+                          backgroundColor: AppColors.greyColor.withValues(
+                            alpha: 0.2,
+                          ),
                           fontColor: AppColors.blackColor,
                         ),
                       ),

@@ -55,7 +55,11 @@ class DashboardController extends GetxController {
     // Initialize dependencies
     _analyticsService = Get.find<AnalyticsService>();
     _settingsController = Get.find<SettingsController>();
+  }
 
+  @override
+  void onReady() {
+    super.onReady();
     loadDashboardData();
   }
 
@@ -114,6 +118,7 @@ class DashboardController extends GetxController {
   // Refresh dashboard data
   Future<void> refreshDashboard() async {
     await loadDashboardData();
+    _settingsController.getProfile();
   }
 
   // Private helper methods

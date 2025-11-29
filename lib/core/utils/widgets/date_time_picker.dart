@@ -51,7 +51,6 @@ class _DayTimePickerState extends State<DayTimePicker> {
           width: double.infinity,
           margin: EdgeInsets.only(bottom: 7.h),
           child: Row(
-
             children: [
               Transform.scale(
                 scale: 0.5,
@@ -63,7 +62,7 @@ class _DayTimePickerState extends State<DayTimePicker> {
                   },
                   activeColor: AppColors.primaryColor,
                   inactiveThumbColor: AppColors.obscureTextColor,
-                  inactiveTrackColor: Colors.grey.withOpacity(0.5),
+                  inactiveTrackColor: Colors.grey.withValues(alpha: 0.5),
                 ),
               ),
               Expanded(
@@ -75,7 +74,9 @@ class _DayTimePickerState extends State<DayTimePicker> {
                       colorFilter: isPickerDisabled
                           ? const ColorFilter.mode(Colors.grey, BlendMode.srcIn)
                           : const ColorFilter.mode(
-                          Colors.transparent, BlendMode.color),
+                              Colors.transparent,
+                              BlendMode.color,
+                            ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [

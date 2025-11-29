@@ -10,8 +10,7 @@ class AddonSelectionBottomSheet extends StatefulWidget {
       _AddonSelectionBottomSheetState();
 }
 
-class _AddonSelectionBottomSheetState
-    extends State<AddonSelectionBottomSheet> {
+class _AddonSelectionBottomSheetState extends State<AddonSelectionBottomSheet> {
   final TextEditingController searchController = TextEditingController();
   List<MenuItemModel> filteredMenuItems = [];
 
@@ -27,9 +26,11 @@ class _AddonSelectionBottomSheetState
           filteredMenuItems = controller.menuItems;
         } else {
           filteredMenuItems = controller.menuItems
-              .where((item) => item.name
-                  .toLowerCase()
-                  .contains(searchController.text.toLowerCase()))
+              .where(
+                (item) => item.name.toLowerCase().contains(
+                  searchController.text.toLowerCase(),
+                ),
+              )
               .toList();
         }
       });
@@ -82,10 +83,12 @@ class _AddonSelectionBottomSheetState
               // Selected addons count
               if (controller.selectedAddons.isNotEmpty)
                 Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 12.w,
+                    vertical: 8.h,
+                  ),
                   decoration: BoxDecoration(
-                    color: AppColors.primaryColor.withOpacity(0.1),
+                    color: AppColors.primaryColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8.r),
                   ),
                   child: customText(
@@ -130,7 +133,8 @@ class _AddonSelectionBottomSheetState
                         itemBuilder: (context, index) {
                           final item = filteredMenuItems[index];
                           final isSelected = controller.isAddonSelected(item);
-                          final isCurrentItem = controller.currentMenuItem?.id == item.id;
+                          final isCurrentItem =
+                              controller.currentMenuItem?.id == item.id;
 
                           // Don't show the current menu item being edited
                           if (isCurrentItem) {
@@ -143,7 +147,9 @@ class _AddonSelectionBottomSheetState
                               border: Border.all(
                                 color: isSelected
                                     ? AppColors.primaryColor
-                                    : AppColors.greyColor.withOpacity(0.3),
+                                    : AppColors.greyColor.withValues(
+                                        alpha: 0.3,
+                                      ),
                                 width: isSelected ? 2 : 1,
                               ),
                               borderRadius: BorderRadius.circular(8.r),
@@ -157,11 +163,15 @@ class _AddonSelectionBottomSheetState
                                 width: 50.w,
                                 height: 50.h,
                                 decoration: BoxDecoration(
-                                  color: AppColors.greyColor.withOpacity(0.2),
+                                  color: AppColors.greyColor.withValues(
+                                    alpha: 0.2,
+                                  ),
                                   borderRadius: BorderRadius.circular(8.r),
                                   image: item.files.isNotEmpty
                                       ? DecorationImage(
-                                          image: NetworkImage(item.files[0].url),
+                                          image: NetworkImage(
+                                            item.files[0].url,
+                                          ),
                                           fit: BoxFit.cover,
                                         )
                                       : null,
