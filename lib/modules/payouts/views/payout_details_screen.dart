@@ -73,12 +73,6 @@ class PayoutDetailsScreen extends StatelessWidget {
                           value:
                               "${formatDate(payout.processedAt!)} ${formatTime(payout.processedAt!)}",
                         ),
-                      if (payout.note != null && payout.note!.isNotEmpty)
-                        PayoutDetailSummaryItem(
-                          title: "Note",
-                          value: payout.note!,
-                          isVertical: true,
-                        ),
                     ],
                   ),
 

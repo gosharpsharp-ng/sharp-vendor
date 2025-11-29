@@ -55,7 +55,7 @@ class BusinessSettingsScreen extends GetView<RestaurantDetailsController> {
                       color: AppColors.whiteColor,
                       borderRadius: BorderRadius.circular(12.r),
                       border: Border.all(
-                        color: AppColors.greyColor.withOpacity(0.2),
+                        color: AppColors.greyColor.withValues(alpha: 0.2),
                       ),
                     ),
                     child: Column(
@@ -82,9 +82,12 @@ class BusinessSettingsScreen extends GetView<RestaurantDetailsController> {
                           title: "Commission Rate (%)",
                           hasTitle: true,
                           isRequired: true,
-                          controller: restaurantController.commissionRateController,
+                          controller:
+                              restaurantController.commissionRateController,
                           label: "Enter commission rate",
-                          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
                           validator: (value) {
                             if (value == null || value.trim().isEmpty) {
                               return "Commission rate is required";
@@ -103,7 +106,9 @@ class BusinessSettingsScreen extends GetView<RestaurantDetailsController> {
                         Container(
                           padding: EdgeInsets.all(12.sp),
                           decoration: BoxDecoration(
-                            color: AppColors.primaryColor.withOpacity(0.05),
+                            color: AppColors.primaryColor.withValues(
+                              alpha: 0.05,
+                            ),
                             borderRadius: BorderRadius.circular(8.r),
                           ),
                           child: Row(
@@ -138,7 +143,7 @@ class BusinessSettingsScreen extends GetView<RestaurantDetailsController> {
                       color: AppColors.whiteColor,
                       borderRadius: BorderRadius.circular(12.r),
                       border: Border.all(
-                        color: AppColors.greyColor.withOpacity(0.2),
+                        color: AppColors.greyColor.withValues(alpha: 0.2),
                       ),
                     ),
                     child: Column(
@@ -164,10 +169,13 @@ class BusinessSettingsScreen extends GetView<RestaurantDetailsController> {
                         CustomRoundedInputField(
                           title: "Business Registration Number",
                           hasTitle: true,
-                          controller: restaurantController.businessRegNumberController,
+                          controller:
+                              restaurantController.businessRegNumberController,
                           label: "Enter business registration number",
                           validator: (value) {
-                            if (value != null && value.trim().isNotEmpty && value.trim().length < 5) {
+                            if (value != null &&
+                                value.trim().isNotEmpty &&
+                                value.trim().length < 5) {
                               return "Registration number must be at least 5 characters";
                             }
                             return null;
@@ -180,7 +188,9 @@ class BusinessSettingsScreen extends GetView<RestaurantDetailsController> {
                           controller: restaurantController.taxIdController,
                           label: "Enter tax identification number",
                           validator: (value) {
-                            if (value != null && value.trim().isNotEmpty && value.trim().length < 5) {
+                            if (value != null &&
+                                value.trim().isNotEmpty &&
+                                value.trim().length < 5) {
                               return "Tax ID must be at least 5 characters";
                             }
                             return null;
@@ -190,7 +200,9 @@ class BusinessSettingsScreen extends GetView<RestaurantDetailsController> {
                         Container(
                           padding: EdgeInsets.all(12.sp),
                           decoration: BoxDecoration(
-                            color: AppColors.primaryColor.withOpacity(0.05),
+                            color: AppColors.primaryColor.withValues(
+                              alpha: 0.05,
+                            ),
                             borderRadius: BorderRadius.circular(8.r),
                           ),
                           child: Row(
@@ -225,7 +237,7 @@ class BusinessSettingsScreen extends GetView<RestaurantDetailsController> {
                       color: AppColors.whiteColor,
                       borderRadius: BorderRadius.circular(12.r),
                       border: Border.all(
-                        color: AppColors.greyColor.withOpacity(0.2),
+                        color: AppColors.greyColor.withValues(alpha: 0.2),
                       ),
                     ),
                     child: Column(
@@ -258,16 +270,25 @@ class BusinessSettingsScreen extends GetView<RestaurantDetailsController> {
                               fontWeight: FontWeight.w400,
                             ),
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 12.w,
+                                vertical: 6.h,
+                              ),
                               decoration: BoxDecoration(
-                                color: restaurantController.getStatusColor().withOpacity(0.1),
+                                color: restaurantController
+                                    .getStatusColor()
+                                    .withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(12.r),
                                 border: Border.all(
-                                  color: restaurantController.getStatusColor().withOpacity(0.3),
+                                  color: restaurantController
+                                      .getStatusColor()
+                                      .withValues(alpha: 0.3),
                                 ),
                               ),
                               child: customText(
-                                restaurantController.restaurant?.status.toUpperCase() ?? "UNKNOWN",
+                                restaurantController.restaurant?.status
+                                        .toUpperCase() ??
+                                    "UNKNOWN",
                                 color: restaurantController.getStatusColor(),
                                 fontSize: 12.sp,
                                 fontWeight: FontWeight.w600,
@@ -286,21 +307,39 @@ class BusinessSettingsScreen extends GetView<RestaurantDetailsController> {
                               fontWeight: FontWeight.w400,
                             ),
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 12.w,
+                                vertical: 6.h,
+                              ),
                               decoration: BoxDecoration(
-                                color: restaurantController.restaurant?.isActive ?? false
-                                    ? AppColors.greenColor.withOpacity(0.1)
-                                    : Colors.red.withOpacity(0.1),
+                                color:
+                                    restaurantController.restaurant?.isActive ??
+                                        false
+                                    ? AppColors.greenColor.withValues(
+                                        alpha: 0.1,
+                                      )
+                                    : Colors.red.withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(12.r),
                                 border: Border.all(
-                                  color: restaurantController.restaurant?.isActive ?? false
-                                      ? AppColors.greenColor.withOpacity(0.3)
-                                      : Colors.red.withOpacity(0.3),
+                                  color:
+                                      restaurantController
+                                              .restaurant
+                                              ?.isActive ??
+                                          false
+                                      ? AppColors.greenColor.withValues(
+                                          alpha: 0.3,
+                                        )
+                                      : Colors.red.withValues(alpha: 0.3),
                                 ),
                               ),
                               child: customText(
-                                restaurantController.restaurant?.isActive ?? false ? "ACTIVE" : "INACTIVE",
-                                color: restaurantController.restaurant?.isActive ?? false
+                                restaurantController.restaurant?.isActive ??
+                                        false
+                                    ? "ACTIVE"
+                                    : "INACTIVE",
+                                color:
+                                    restaurantController.restaurant?.isActive ??
+                                        false
                                     ? AppColors.greenColor
                                     : Colors.red,
                                 fontSize: 12.sp,
@@ -319,10 +358,10 @@ class BusinessSettingsScreen extends GetView<RestaurantDetailsController> {
                   Container(
                     padding: EdgeInsets.all(16.sp),
                     decoration: BoxDecoration(
-                      color: Colors.orange.withOpacity(0.05),
+                      color: Colors.orange.withValues(alpha: 0.05),
                       borderRadius: BorderRadius.circular(12.r),
                       border: Border.all(
-                        color: Colors.orange.withOpacity(0.2),
+                        color: Colors.orange.withValues(alpha: 0.2),
                       ),
                     ),
                     child: Row(

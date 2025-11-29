@@ -19,8 +19,8 @@ class _FaqItemState extends State<FaqItem> {
       margin: EdgeInsets.only(bottom: 15.h),
       decoration: BoxDecoration(
         color: _isExpanded
-            ? AppColors.primaryColor.withOpacity(
-                0.1,
+            ? AppColors.primaryColor.withValues(
+                alpha: 0.1,
               ) // Expanded background color
             : AppColors.backgroundColor,
         border: Border.all(
@@ -65,7 +65,7 @@ class _FaqItemState extends State<FaqItem> {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 12.w),
                   child: Divider(
-                    color: AppColors.primaryColor.withOpacity(0.4),
+                    color: AppColors.primaryColor.withValues(alpha: 0.4),
                   ),
                 ),
                 Container(

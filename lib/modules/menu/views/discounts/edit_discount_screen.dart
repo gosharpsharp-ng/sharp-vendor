@@ -108,7 +108,9 @@ class EditDiscountScreen extends StatelessWidget {
                                         activeColor: AppColors.primaryColor,
                                       ),
                                       onTap: () {
-                                        controller.setDiscountType('percentage');
+                                        controller.setDiscountType(
+                                          'percentage',
+                                        );
                                         Get.back();
                                       },
                                     ),
@@ -167,7 +169,8 @@ class EditDiscountScreen extends StatelessWidget {
                             if (numValue == null || numValue <= 0) {
                               return 'Please enter a valid number greater than 0';
                             }
-                            if (controller.selectedType == 'percentage' && numValue > 100) {
+                            if (controller.selectedType == 'percentage' &&
+                                numValue > 100) {
                               return 'Percentage cannot exceed 100';
                             }
                             return null;
@@ -184,7 +187,10 @@ class EditDiscountScreen extends StatelessWidget {
                           readOnly: true,
                           controller: controller.startDateController,
                           suffixWidget: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12.w,
+                              vertical: 8.h,
+                            ),
                             child: SvgPicture.asset(
                               SvgAssets.calendarIcon,
                               height: 20.sp,
@@ -204,9 +210,13 @@ class EditDiscountScreen extends StatelessWidget {
                           onPressed: () async {
                             final DateTime? picked = await showDatePicker(
                               context: context,
-                              initialDate: controller.selectedStartDate ?? DateTime.now(),
+                              initialDate:
+                                  controller.selectedStartDate ??
+                                  DateTime.now(),
                               firstDate: DateTime.now(),
-                              lastDate: DateTime.now().add(const Duration(days: 365)),
+                              lastDate: DateTime.now().add(
+                                const Duration(days: 365),
+                              ),
                               builder: (context, child) {
                                 return Theme(
                                   data: Theme.of(context).copyWith(
@@ -236,7 +246,10 @@ class EditDiscountScreen extends StatelessWidget {
                           readOnly: true,
                           controller: controller.endDateController,
                           suffixWidget: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12.w,
+                              vertical: 8.h,
+                            ),
                             child: SvgPicture.asset(
                               SvgAssets.calendarIcon,
                               height: 20.sp,
@@ -256,11 +269,17 @@ class EditDiscountScreen extends StatelessWidget {
                           onPressed: () async {
                             final DateTime? picked = await showDatePicker(
                               context: context,
-                              initialDate: controller.selectedEndDate ??
-                                  (controller.selectedStartDate ?? DateTime.now())
+                              initialDate:
+                                  controller.selectedEndDate ??
+                                  (controller.selectedStartDate ??
+                                          DateTime.now())
                                       .add(const Duration(days: 7)),
-                              firstDate: controller.selectedStartDate ?? DateTime.now(),
-                              lastDate: DateTime.now().add(const Duration(days: 365)),
+                              firstDate:
+                                  controller.selectedStartDate ??
+                                  DateTime.now(),
+                              lastDate: DateTime.now().add(
+                                const Duration(days: 365),
+                              ),
                               builder: (context, child) {
                                 return Theme(
                                   data: Theme.of(context).copyWith(
@@ -280,78 +299,80 @@ class EditDiscountScreen extends StatelessWidget {
                           },
                         ),
 
-                        // Badge Text (Optional)
-                        CustomRoundedInputField(
-                          title: "Badge Text (Optional)",
-                          label: "e.g. 25% OFF",
-                          showLabel: true,
-                          hasTitle: true,
-                          isRequired: false,
-                          controller: controller.badgeTextController,
-                        ),
-
-                        // Active Toggle
+                        // Active Checkbox
                         SizedBox(height: 15.h),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                customText(
-                                  "Active",
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.blackColor,
+                        InkWell(
+                          onTap: () {
+                            controller.toggleActive(!controller.isActive);
+                          },
+                          child: Row(
+                            children: [
+                              Checkbox(
+                                value: controller.isActive,
+                                onChanged: (value) {
+                                  controller.toggleActive(value ?? false);
+                                },
+                                activeColor: AppColors.primaryColor,
+                              ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    customText(
+                                      "Active",
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.blackColor,
+                                    ),
+                                    SizedBox(height: 4.h),
+                                    customText(
+                                      "Discount is available for customers",
+                                      fontSize: 12.sp,
+                                      color: AppColors.greyColor,
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(height: 4.h),
-                                customText(
-                                  "Discount is available for customers",
-                                  fontSize: 12.sp,
-                                  color: AppColors.greyColor,
-                                ),
-                              ],
-                            ),
-                            Switch(
-                              value: controller.isActive,
-                              onChanged: (value) {
-                                controller.toggleActive(value);
-                              },
-                              activeColor: AppColors.primaryColor,
-                            ),
-                          ],
+                              ),
+                            ],
+                          ),
                         ),
                         SizedBox(height: 15.h),
 
-                        // Show on Listing Toggle
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                customText(
-                                  "Show on Listing",
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.blackColor,
+                        // Show on Listing Checkbox
+                        InkWell(
+                          onTap: () {
+                            controller.toggleShowOnListing(!controller.showOnListing);
+                          },
+                          child: Row(
+                            children: [
+                              Checkbox(
+                                value: controller.showOnListing,
+                                onChanged: (value) {
+                                  controller.toggleShowOnListing(value ?? false);
+                                },
+                                activeColor: AppColors.primaryColor,
+                              ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    customText(
+                                      "Show on Listing",
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.blackColor,
+                                    ),
+                                    SizedBox(height: 4.h),
+                                    customText(
+                                      "Display badge on menu listings",
+                                      fontSize: 12.sp,
+                                      color: AppColors.greyColor,
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(height: 4.h),
-                                customText(
-                                  "Display badge on menu listings",
-                                  fontSize: 12.sp,
-                                  color: AppColors.greyColor,
-                                ),
-                              ],
-                            ),
-                            Switch(
-                              value: controller.showOnListing,
-                              onChanged: (value) {
-                                controller.toggleShowOnListing(value);
-                              },
-                              activeColor: AppColors.primaryColor,
-                            ),
-                          ],
+                              ),
+                            ],
+                          ),
                         ),
 
                         SizedBox(height: 20.h),
@@ -367,7 +388,7 @@ class EditDiscountScreen extends StatelessWidget {
                 color: AppColors.whiteColor,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 10,
                     offset: const Offset(0, -2),
                   ),

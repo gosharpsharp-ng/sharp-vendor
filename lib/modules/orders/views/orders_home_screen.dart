@@ -60,7 +60,7 @@ class OrdersHomeScreen extends GetView<OrdersController> {
                             border: Border.all(
                               color: isSelected
                                   ? AppColors.primaryColor
-                                  : AppColors.greyColor.withOpacity(0.3),
+                                  : AppColors.greyColor.withValues(alpha: 0.3),
                             ),
                           ),
                           child: Row(
@@ -172,7 +172,7 @@ class OrdersHomeScreen extends GetView<OrdersController> {
             width: 80.w,
             height: 80.h,
             decoration: BoxDecoration(
-              color: AppColors.greyColor.withOpacity(0.1),
+              color: AppColors.greyColor.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(
@@ -282,7 +282,7 @@ class OrderCard extends StatelessWidget {
             color: AppColors.whiteColor,
             borderRadius: BorderRadius.circular(16.r),
             border: Border.all(
-              color: _getStatusColor(order.status).withOpacity(0.15),
+              color: _getStatusColor(order.status).withValues(alpha: 0.15),
               width: 0.8,
             ),
           ),
@@ -359,7 +359,9 @@ class OrderCard extends StatelessWidget {
                     width: 40.w,
                     height: 40.h,
                     decoration: BoxDecoration(
-                      color: _getStatusColor(order.status).withOpacity(0.1),
+                      color: _getStatusColor(
+                        order.status,
+                      ).withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12.r),
                     ),
                     child: Center(

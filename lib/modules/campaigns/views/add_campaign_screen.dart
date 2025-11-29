@@ -92,13 +92,13 @@ class AddCampaignScreen extends StatelessWidget {
         padding: EdgeInsets.all(16.sp),
         decoration: BoxDecoration(
           color: isSelected
-              ? AppColors.primaryColor.withOpacity(0.1)
+              ? AppColors.primaryColor.withValues(alpha: 0.1)
               : AppColors.backgroundColor,
           borderRadius: BorderRadius.circular(12.r),
           border: Border.all(
             color: isSelected
                 ? AppColors.primaryColor
-                : AppColors.greyColor.withOpacity(0.3),
+                : AppColors.greyColor.withValues(alpha: 0.3),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -110,7 +110,7 @@ class AddCampaignScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: isSelected
                     ? AppColors.primaryColor
-                    : AppColors.greyColor.withOpacity(0.2),
+                    : AppColors.greyColor.withValues(alpha: 0.2),
                 shape: BoxShape.circle,
               ),
               child: Center(
@@ -215,13 +215,13 @@ class AddCampaignScreen extends StatelessWidget {
         padding: EdgeInsets.all(16.sp),
         decoration: BoxDecoration(
           color: isSelected
-              ? AppColors.primaryColor.withOpacity(0.1)
+              ? AppColors.primaryColor.withValues(alpha: 0.1)
               : AppColors.backgroundColor,
           borderRadius: BorderRadius.circular(12.r),
           border: Border.all(
             color: isSelected
                 ? AppColors.primaryColor
-                : AppColors.greyColor.withOpacity(0.3),
+                : AppColors.greyColor.withValues(alpha: 0.3),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -570,10 +570,14 @@ class AddCampaignScreen extends StatelessWidget {
                           Container(
                             padding: EdgeInsets.all(16.sp),
                             decoration: BoxDecoration(
-                              color: AppColors.greenColor.withOpacity(0.1),
+                              color: AppColors.greenColor.withValues(
+                                alpha: 0.1,
+                              ),
                               borderRadius: BorderRadius.circular(12.r),
                               border: Border.all(
-                                color: AppColors.greenColor.withOpacity(0.3),
+                                color: AppColors.greenColor.withValues(
+                                  alpha: 0.3,
+                                ),
                               ),
                             ),
                             child: campaignsController.isEstimatingCost
@@ -645,8 +649,8 @@ class AddCampaignScreen extends StatelessWidget {
                                       ),
                                       Divider(
                                         height: 24.h,
-                                        color: AppColors.greenColor.withOpacity(
-                                          0.3,
+                                        color: AppColors.greenColor.withValues(
+                                          alpha: 0.3,
                                         ),
                                       ),
                                       Row(
@@ -684,7 +688,8 @@ class AddCampaignScreen extends StatelessWidget {
                         // Wallet Charge Notice
                         GetBuilder<SettingsController>(
                           builder: (settingsController) {
-                            final walletBalance = settingsController
+                            final walletBalance =
+                                settingsController
                                     .userProfile
                                     ?.restaurant
                                     ?.wallet
@@ -693,11 +698,13 @@ class AddCampaignScreen extends StatelessWidget {
                             return Container(
                               padding: EdgeInsets.all(16.sp),
                               decoration: BoxDecoration(
-                                color: AppColors.primaryColor.withOpacity(0.1),
+                                color: AppColors.primaryColor.withValues(
+                                  alpha: 0.1,
+                                ),
                                 borderRadius: BorderRadius.circular(12.r),
                                 border: Border.all(
-                                  color: AppColors.primaryColor.withOpacity(
-                                    0.3,
+                                  color: AppColors.primaryColor.withValues(
+                                    alpha: 0.3,
                                   ),
                                 ),
                               ),
@@ -706,8 +713,8 @@ class AddCampaignScreen extends StatelessWidget {
                                   Container(
                                     padding: EdgeInsets.all(10.sp),
                                     decoration: BoxDecoration(
-                                      color: AppColors.primaryColor.withOpacity(
-                                        0.2,
+                                      color: AppColors.primaryColor.withValues(
+                                        alpha: 0.2,
                                       ),
                                       shape: BoxShape.circle,
                                     ),
@@ -733,6 +740,7 @@ class AddCampaignScreen extends StatelessWidget {
                                         customText(
                                           "Campaign cost will be charged from your wallet balance",
                                           fontSize: 12.sp,
+                                          overflow: TextOverflow.visible,
                                           color: AppColors.obscureTextColor,
                                         ),
                                         SizedBox(height: 8.h),

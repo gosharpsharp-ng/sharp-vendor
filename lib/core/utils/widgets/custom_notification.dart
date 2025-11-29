@@ -31,7 +31,10 @@ class CustomNotification {
   }
 
   static Widget _buildNotificationCard(
-      String message, NotificationType type, String? title) {
+    String message,
+    NotificationType type,
+    String? title,
+  ) {
     final config = _getNotificationConfig(type);
 
     return Container(
@@ -44,7 +47,7 @@ class CustomNotification {
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: config.shadowColor.withOpacity(0.3),
+            color: config.shadowColor.withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
             spreadRadius: 0,
@@ -131,14 +134,14 @@ class CustomNotification {
         return _NotificationConfig(
           gradientColors: [
             AppColors.lightGreenColor,
-            AppColors.lightGreenColor.withOpacity(0.95),
+            AppColors.lightGreenColor.withValues(alpha: 0.95),
           ],
           iconPath: SvgAssets.successIcon,
           iconColor: AppColors.greenColor,
-          iconBackgroundColor: AppColors.greenColor.withOpacity(0.2),
+          iconBackgroundColor: AppColors.greenColor.withValues(alpha: 0.2),
           titleColor: AppColors.greenColor,
-          messageColor: AppColors.greenColor.withOpacity(0.9),
-          closeIconColor: AppColors.greenColor.withOpacity(0.7),
+          messageColor: AppColors.greenColor.withValues(alpha: 0.9),
+          closeIconColor: AppColors.greenColor.withValues(alpha: 0.7),
           shadowColor: AppColors.greenColor,
           defaultTitle: "Success!",
         );
@@ -147,14 +150,14 @@ class CustomNotification {
         return _NotificationConfig(
           gradientColors: [
             AppColors.lightRedColor,
-            AppColors.lightRedColor.withOpacity(0.95),
+            AppColors.lightRedColor.withValues(alpha: 0.95),
           ],
           iconPath: SvgAssets.errorIcon,
           iconColor: AppColors.redColor,
-          iconBackgroundColor: AppColors.redColor.withOpacity(0.2),
+          iconBackgroundColor: AppColors.redColor.withValues(alpha: 0.2),
           titleColor: AppColors.redColor,
-          messageColor: AppColors.redColor.withOpacity(0.9),
-          closeIconColor: AppColors.redColor.withOpacity(0.7),
+          messageColor: AppColors.redColor.withValues(alpha: 0.9),
+          closeIconColor: AppColors.redColor.withValues(alpha: 0.7),
           shadowColor: AppColors.redColor,
           defaultTitle: "Error!",
         );
@@ -163,14 +166,14 @@ class CustomNotification {
         return _NotificationConfig(
           gradientColors: [
             AppColors.lightAmberColor,
-            AppColors.lightAmberColor.withOpacity(0.95),
+            AppColors.lightAmberColor.withValues(alpha: 0.95),
           ],
           iconPath: SvgAssets.errorIcon, // Using error icon for warning
           iconColor: AppColors.amberColor,
-          iconBackgroundColor: AppColors.amberColor.withOpacity(0.2),
+          iconBackgroundColor: AppColors.amberColor.withValues(alpha: 0.2),
           titleColor: AppColors.amberColor,
-          messageColor: AppColors.amberColor.withOpacity(0.9),
-          closeIconColor: AppColors.amberColor.withOpacity(0.7),
+          messageColor: AppColors.amberColor.withValues(alpha: 0.9),
+          closeIconColor: AppColors.amberColor.withValues(alpha: 0.7),
           shadowColor: AppColors.amberColor,
           defaultTitle: "Warning!",
         );
@@ -179,14 +182,14 @@ class CustomNotification {
         return _NotificationConfig(
           gradientColors: [
             AppColors.lightBlueColor,
-            AppColors.lightBlueColor.withOpacity(0.95),
+            AppColors.lightBlueColor.withValues(alpha: 0.95),
           ],
           iconPath: SvgAssets.successIcon, // Using success icon for info
           iconColor: AppColors.blueColor,
-          iconBackgroundColor: AppColors.blueColor.withOpacity(0.2),
+          iconBackgroundColor: AppColors.blueColor.withValues(alpha: 0.2),
           titleColor: AppColors.blueColor,
-          messageColor: AppColors.blueColor.withOpacity(0.9),
-          closeIconColor: AppColors.blueColor.withOpacity(0.7),
+          messageColor: AppColors.blueColor.withValues(alpha: 0.9),
+          closeIconColor: AppColors.blueColor.withValues(alpha: 0.7),
           shadowColor: AppColors.blueColor,
           defaultTitle: "Info",
         );

@@ -43,9 +43,7 @@ class BankSelectionBottomSheet extends StatelessWidget {
     // Fallback if no controller found
     return Container(
       height: 440.h,
-      child: Center(
-        child: customText("Unable to load bank list"),
-      ),
+      child: Center(child: customText("Unable to load bank list")),
     );
   }
 
@@ -58,7 +56,12 @@ class BankSelectionBottomSheet extends StatelessWidget {
     required VoidCallback onReload,
   }) {
     return Container(
-      padding: EdgeInsets.only(top: 20.sp, bottom: 12.sp, left: 14.sp, right: 14.sp),
+      padding: EdgeInsets.only(
+        top: 20.sp,
+        bottom: 12.sp,
+        left: 14.sp,
+        right: 14.sp,
+      ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(10.0.sp),
@@ -74,10 +77,7 @@ class BankSelectionBottomSheet extends StatelessWidget {
             cursorColor: AppColors.blackColor,
             label: "Search",
             controller: searchController,
-            prefixWidget: const Icon(
-              Icons.search,
-              color: AppColors.blackColor,
-            ),
+            prefixWidget: const Icon(Icons.search, color: AppColors.blackColor),
             onChanged: (val) {
               onSearch(val.toString());
             },
@@ -86,66 +86,73 @@ class BankSelectionBottomSheet extends StatelessWidget {
 
           // Bank list
           Expanded(
-            child: Builder(builder: (context) {
-              // Show skeleton loader when loading
-              if (isLoading) {
-                return _buildSkeletonLoader();
-              }
+            child: Builder(
+              builder: (context) {
+                // Show skeleton loader when loading
+                if (isLoading) {
+                  return _buildSkeletonLoader();
+                }
 
-              // Show empty/error state
-              if (banks.isEmpty) {
-                return _buildEmptyState(onReload: onReload);
-              }
+                // Show empty/error state
+                if (banks.isEmpty) {
+                  return _buildEmptyState(onReload: onReload);
+                }
 
-              // Show bank list
-              return SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: banks.map((bank) {
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        onBankSelected(bank);
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 5.sp),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 40.sp,
-                              height: 40.sp,
-                              decoration: BoxDecoration(
-                                color: AppColors.primaryColor.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(8.r),
+                // Show bank list
+                return SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: banks.map((bank) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          onBankSelected(bank);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 12.h,
+                            horizontal: 5.sp,
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 40.sp,
+                                height: 40.sp,
+                                decoration: BoxDecoration(
+                                  color: AppColors.primaryColor.withValues(
+                                    alpha: 0.1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8.r),
+                                ),
+                                child: Icon(
+                                  Icons.account_balance,
+                                  color: AppColors.primaryColor,
+                                  size: 20.sp,
+                                ),
                               ),
-                              child: Icon(
-                                Icons.account_balance,
-                                color: AppColors.primaryColor,
+                              SizedBox(width: 12.w),
+                              Expanded(
+                                child: customText(
+                                  bank.name,
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.blackColor,
+                                ),
+                              ),
+                              Icon(
+                                Icons.chevron_right,
+                                color: AppColors.greyColor,
                                 size: 20.sp,
                               ),
-                            ),
-                            SizedBox(width: 12.w),
-                            Expanded(
-                              child: customText(
-                                bank.name,
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.blackColor,
-                              ),
-                            ),
-                            Icon(
-                              Icons.chevron_right,
-                              color: AppColors.greyColor,
-                              size: 20.sp,
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              );
-            }),
+                      );
+                    }).toList(),
+                  ),
+                );
+              },
+            ),
           ),
         ],
       ),
@@ -171,12 +178,7 @@ class BankSelectionBottomSheet extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: 12.w),
-                Expanded(
-                  child: Bone.text(
-                    words: 2,
-                    fontSize: 16.sp,
-                  ),
-                ),
+                Expanded(child: Bone.text(words: 2, fontSize: 16.sp)),
                 Icon(
                   Icons.chevron_right,
                   color: AppColors.greyColor,
@@ -199,7 +201,7 @@ class BankSelectionBottomSheet extends StatelessWidget {
             width: 80.sp,
             height: 80.sp,
             decoration: BoxDecoration(
-              color: AppColors.greyColor.withOpacity(0.1),
+              color: AppColors.greyColor.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(
@@ -224,11 +226,7 @@ class BankSelectionBottomSheet extends StatelessWidget {
           SizedBox(height: 24.h),
           ElevatedButton.icon(
             onPressed: onReload,
-            icon: Icon(
-              Icons.refresh,
-              color: AppColors.whiteColor,
-              size: 18.sp,
-            ),
+            icon: Icon(Icons.refresh, color: AppColors.whiteColor, size: 18.sp),
             label: customText(
               "Retry",
               fontSize: 14.sp,

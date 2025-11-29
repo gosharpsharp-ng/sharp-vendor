@@ -2,120 +2,121 @@ import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-
 /// Collection of reusable skeleton loader components
 class SkeletonLoaders {
-
   /// Restaurant card skeleton loader
   static Widget restaurantCard({int count = 3}) {
     return Skeletonizer(
       enabled: true,
       child: Column(
-        children: List.generate(count, (index) => Container(
-          margin: EdgeInsets.symmetric(horizontal: 5.w, vertical: 5.h),
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8.r),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 8,
-                offset: Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Restaurant image skeleton
-              Container(
-                height: 180.h,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(8.r),
+        children: List.generate(
+          count,
+          (index) => Container(
+            margin: EdgeInsets.symmetric(horizontal: 5.w, vertical: 5.h),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8.r),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 8,
+                  offset: Offset(0, 2),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(8.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Restaurant name
-                    Container(
-                      height: 16.h,
-                      width: 200.w,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(4.r),
-                      ),
-                    ),
-                    SizedBox(height: 3.h),
-                    // Restaurant cuisine type
-                    Container(
-                      height: 12.h,
-                      width: 150.w,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(4.r),
-                      ),
-                    ),
-                    SizedBox(height: 5.h),
-                    // Status and rating row
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              height: 12.h,
-                              width: 50.w,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[300],
-                                borderRadius: BorderRadius.circular(4.r),
-                              ),
-                            ),
-                            SizedBox(width: 6.w),
-                            Container(
-                              height: 12.h,
-                              width: 70.w,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[300],
-                                borderRadius: BorderRadius.circular(4.r),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Container(
-                              width: 12.w,
-                              height: 12.w,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[300],
-                                shape: BoxShape.circle,
-                              ),
-                            ),
-                            SizedBox(width: 2.w),
-                            Container(
-                              height: 12.h,
-                              width: 25.w,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[300],
-                                borderRadius: BorderRadius.circular(4.r),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Restaurant image skeleton
+                Container(
+                  height: 180.h,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: EdgeInsets.all(8.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Restaurant name
+                      Container(
+                        height: 16.h,
+                        width: 200.w,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(4.r),
+                        ),
+                      ),
+                      SizedBox(height: 3.h),
+                      // Restaurant cuisine type
+                      Container(
+                        height: 12.h,
+                        width: 150.w,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(4.r),
+                        ),
+                      ),
+                      SizedBox(height: 5.h),
+                      // Status and rating row
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                height: 12.h,
+                                width: 50.w,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  borderRadius: BorderRadius.circular(4.r),
+                                ),
+                              ),
+                              SizedBox(width: 6.w),
+                              Container(
+                                height: 12.h,
+                                width: 70.w,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  borderRadius: BorderRadius.circular(4.r),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Container(
+                                width: 12.w,
+                                height: 12.w,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                              SizedBox(width: 2.w),
+                              Container(
+                                height: 12.h,
+                                width: 25.w,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  borderRadius: BorderRadius.circular(4.r),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
-        )),
+        ),
       ),
     );
   }
@@ -125,95 +126,98 @@ class SkeletonLoaders {
     return Skeletonizer(
       enabled: true,
       child: Column(
-        children: List.generate(count, (index) => Container(
-          margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 6.h),
-          padding: EdgeInsets.all(12.w),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12.r),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 8,
-                offset: Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Row(
-            children: [
-              // Food image skeleton
-              Container(
-                width: 80.w,
-                height: 80.w,
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(8.r),
+        children: List.generate(
+          count,
+          (index) => Container(
+            margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 6.h),
+            padding: EdgeInsets.all(12.w),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12.r),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 8,
+                  offset: Offset(0, 2),
                 ),
-              ),
-              SizedBox(width: 12.w),
-              // Food details
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              ],
+            ),
+            child: Row(
+              children: [
+                // Food image skeleton
+                Container(
+                  width: 80.w,
+                  height: 80.w,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
+                ),
+                SizedBox(width: 12.w),
+                // Food details
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Food name
+                      Container(
+                        height: 18.h,
+                        width: 160.w,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(4.r),
+                        ),
+                      ),
+                      SizedBox(height: 8.h),
+                      // Price info
+                      Container(
+                        height: 14.h,
+                        width: 80.w,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(4.r),
+                        ),
+                      ),
+                      SizedBox(height: 6.h),
+                      // Total price
+                      Container(
+                        height: 16.h,
+                        width: 100.w,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(4.r),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(width: 8.w),
+                // Quantity controls skeleton
+                Column(
                   children: [
-                    // Food name
                     Container(
-                      height: 18.h,
-                      width: 160.w,
+                      width: 70.w,
+                      height: 28.h,
                       decoration: BoxDecoration(
                         color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(4.r),
+                        borderRadius: BorderRadius.circular(6.r),
                       ),
                     ),
                     SizedBox(height: 8.h),
-                    // Price info
                     Container(
-                      height: 14.h,
-                      width: 80.w,
+                      width: 24.w,
+                      height: 24.h,
                       decoration: BoxDecoration(
                         color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(4.r),
-                      ),
-                    ),
-                    SizedBox(height: 6.h),
-                    // Total price
-                    Container(
-                      height: 16.h,
-                      width: 100.w,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(4.r),
+                        shape: BoxShape.circle,
                       ),
                     ),
                   ],
                 ),
-              ),
-              SizedBox(width: 8.w),
-              // Quantity controls skeleton
-              Column(
-                children: [
-                  Container(
-                    width: 70.w,
-                    height: 28.h,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(6.r),
-                    ),
-                  ),
-                  SizedBox(height: 8.h),
-                  Container(
-                    width: 24.w,
-                    height: 24.h,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
-        )),
+        ),
       ),
     );
   }
@@ -223,100 +227,103 @@ class SkeletonLoaders {
     return Skeletonizer(
       enabled: true,
       child: Column(
-        children: List.generate(count, (index) => Container(
-          margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-          padding: EdgeInsets.all(16.w),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12.r),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 8,
-                offset: Offset(0, 2),
-              ),
-            ],
+        children: List.generate(
+          count,
+          (index) => Container(
+            margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+            padding: EdgeInsets.all(16.w),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12.r),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 8,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Order header
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      height: 16.h,
+                      width: 100.w,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(4.r),
+                      ),
+                    ),
+                    Container(
+                      height: 20.h,
+                      width: 80.w,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(10.r),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 12.h),
+                // Restaurant name
+                Container(
+                  height: 18.h,
+                  width: 0.6.sw,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(4.r),
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                // Order items
+                Container(
+                  height: 14.h,
+                  width: 0.7.sw,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(4.r),
+                  ),
+                ),
+                SizedBox(height: 4.h),
+                Container(
+                  height: 14.h,
+                  width: 0.4.sw,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(4.r),
+                  ),
+                ),
+                SizedBox(height: 12.h),
+                // Order footer
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      height: 14.h,
+                      width: 100.w,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(4.r),
+                      ),
+                    ),
+                    Container(
+                      height: 16.h,
+                      width: 80.w,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(4.r),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Order header
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    height: 16.h,
-                    width: 100.w,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(4.r),
-                    ),
-                  ),
-                  Container(
-                    height: 20.h,
-                    width: 80.w,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(10.r),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 12.h),
-              // Restaurant name
-              Container(
-                height: 18.h,
-                width: 0.6.sw,
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(4.r),
-                ),
-              ),
-              SizedBox(height: 8.h),
-              // Order items
-              Container(
-                height: 14.h,
-                width: 0.7.sw,
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(4.r),
-                ),
-              ),
-              SizedBox(height: 4.h),
-              Container(
-                height: 14.h,
-                width: 0.4.sw,
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(4.r),
-                ),
-              ),
-              SizedBox(height: 12.h),
-              // Order footer
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    height: 14.h,
-                    width: 100.w,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(4.r),
-                    ),
-                  ),
-                  Container(
-                    height: 16.h,
-                    width: 80.w,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(4.r),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        )),
+        ),
       ),
     );
   }
@@ -326,78 +333,81 @@ class SkeletonLoaders {
     return Skeletonizer(
       enabled: true,
       child: Column(
-        children: List.generate(count, (index) => Container(
-          margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
-          padding: EdgeInsets.all(12.w),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12.r),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 10,
-                offset: Offset(0, 2),
-              ),
-            ],
+        children: List.generate(
+          count,
+          (index) => Container(
+            margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
+            padding: EdgeInsets.all(12.w),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12.r),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 10,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                // Food image
+                Container(
+                  width: 60.w,
+                  height: 60.w,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.r),
+                    color: Colors.grey[300],
+                  ),
+                ),
+                SizedBox(width: 15.w),
+                // Food details
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 16.h,
+                        width: 0.5.sw,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(4.r),
+                        ),
+                      ),
+                      SizedBox(height: 4.h),
+                      Container(
+                        height: 12.h,
+                        width: 60.w,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(4.r),
+                        ),
+                      ),
+                      SizedBox(height: 8.h),
+                      Container(
+                        height: 14.h,
+                        width: 80.w,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(4.r),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // Add to cart button
+                Container(
+                  width: 80.w,
+                  height: 30.h,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(6.r),
+                  ),
+                ),
+              ],
+            ),
           ),
-          child: Row(
-            children: [
-              // Food image
-              Container(
-                width: 60.w,
-                height: 60.w,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.r),
-                  color: Colors.grey[300],
-                ),
-              ),
-              SizedBox(width: 15.w),
-              // Food details
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      height: 16.h,
-                      width: 0.5.sw,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(4.r),
-                      ),
-                    ),
-                    SizedBox(height: 4.h),
-                    Container(
-                      height: 12.h,
-                      width: 60.w,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(4.r),
-                      ),
-                    ),
-                    SizedBox(height: 8.h),
-                    Container(
-                      height: 14.h,
-                      width: 80.w,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(4.r),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              // Add to cart button
-              Container(
-                width: 80.w,
-                height: 30.h,
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(6.r),
-                ),
-              ),
-            ],
-          ),
-        )),
+        ),
       ),
     );
   }
@@ -423,7 +433,7 @@ class SkeletonLoaders {
             borderRadius: BorderRadius.circular(12.r),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 8,
                 offset: Offset(0, 2),
               ),
@@ -437,7 +447,9 @@ class SkeletonLoaders {
                   width: double.infinity,
                   decoration: BoxDecoration(
                     color: Colors.grey[300],
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(12.r),
+                    ),
                   ),
                 ),
               ),
@@ -478,51 +490,54 @@ class SkeletonLoaders {
     return Skeletonizer(
       enabled: true,
       child: Column(
-        children: List.generate(count, (index) => Container(
-          margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
-          padding: EdgeInsets.all(16.w),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8.r),
-          ),
-          child: Row(
-            children: [
-              Container(
-                width: 40.w,
-                height: 40.w,
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  shape: BoxShape.circle,
+        children: List.generate(
+          count,
+          (index) => Container(
+            margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
+            padding: EdgeInsets.all(16.w),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8.r),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 40.w,
+                  height: 40.w,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    shape: BoxShape.circle,
+                  ),
                 ),
-              ),
-              SizedBox(width: 12.w),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      height: 16.h,
-                      width: 0.6.sw,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(4.r),
+                SizedBox(width: 12.w),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 16.h,
+                        width: 0.6.sw,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(4.r),
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 4.h),
-                    Container(
-                      height: 12.h,
-                      width: 0.4.sw,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(4.r),
+                      SizedBox(height: 4.h),
+                      Container(
+                        height: 12.h,
+                        width: 0.4.sw,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(4.r),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        )),
+        ),
       ),
     );
   }
@@ -532,164 +547,167 @@ class SkeletonLoaders {
     return Skeletonizer(
       enabled: true,
       child: Column(
-        children: List.generate(count, (index) => Container(
-          margin: EdgeInsets.only(bottom: 16.h),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12.r),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 10,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Image Section Skeleton
-              Container(
-                height: 150.h,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(12.r),
-                    topRight: Radius.circular(12.r),
-                  ),
-                  color: Colors.grey[300],
+        children: List.generate(
+          count,
+          (index) => Container(
+            margin: EdgeInsets.only(bottom: 16.h),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12.r),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 2),
                 ),
-              ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Image Section Skeleton
+                Container(
+                  height: 150.h,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(12.r),
+                      topRight: Radius.circular(12.r),
+                    ),
+                    color: Colors.grey[300],
+                  ),
+                ),
 
-              // Content Section Skeleton
-              Padding(
-                padding: EdgeInsets.all(16.sp),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Title and Category Row
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          child: Container(
-                            height: 16.h,
-                            width: 160.w,
+                // Content Section Skeleton
+                Padding(
+                  padding: EdgeInsets.all(16.sp),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Title and Category Row
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            child: Container(
+                              height: 16.h,
+                              width: 160.w,
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(4.r),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            height: 20.h,
+                            width: 80.w,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(12.r),
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      SizedBox(height: 8.h),
+
+                      // Price and Duration Row
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            height: 14.h,
+                            width: 100.w,
                             decoration: BoxDecoration(
                               color: Colors.grey[300],
                               borderRadius: BorderRadius.circular(4.r),
                             ),
                           ),
-                        ),
-                        Container(
-                          height: 20.h,
-                          width: 80.w,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(12.r),
+                          Container(
+                            height: 12.h,
+                            width: 60.w,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(4.r),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
 
-                    SizedBox(height: 8.h),
+                      SizedBox(height: 12.h),
 
-                    // Price and Duration Row
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          height: 14.h,
-                          width: 100.w,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(4.r),
+                      // Availability and Actions Row
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            flex: 2,
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 8.w,
+                                  height: 8.h,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[300],
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                                SizedBox(width: 6.w),
+                                Flexible(
+                                  child: Container(
+                                    height: 12.h,
+                                    width: 60.w,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[300],
+                                      borderRadius: BorderRadius.circular(4.r),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 10.w),
+                                Flexible(
+                                  child: Container(
+                                    height: 12.h,
+                                    width: 40.w,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[300],
+                                      borderRadius: BorderRadius.circular(4.r),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        Container(
-                          height: 12.h,
-                          width: 60.w,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(4.r),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    SizedBox(height: 12.h),
-
-                    // Availability and Actions Row
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          flex: 2,
-                          child: Row(
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               Container(
-                                width: 8.w,
-                                height: 8.h,
+                                width: 28.sp,
+                                height: 28.sp,
                                 decoration: BoxDecoration(
                                   color: Colors.grey[300],
-                                  shape: BoxShape.circle,
+                                  borderRadius: BorderRadius.circular(6.r),
                                 ),
                               ),
-                              SizedBox(width: 6.w),
-                              Flexible(
-                                child: Container(
-                                  height: 12.h,
-                                  width: 60.w,
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[300],
-                                    borderRadius: BorderRadius.circular(4.r),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 10.w),
-                              Flexible(
-                                child: Container(
-                                  height: 12.h,
-                                  width: 40.w,
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[300],
-                                    borderRadius: BorderRadius.circular(4.r),
-                                  ),
+                              SizedBox(width: 8.w),
+                              Container(
+                                width: 28.sp,
+                                height: 28.sp,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  borderRadius: BorderRadius.circular(6.r),
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              width: 28.sp,
-                              height: 28.sp,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[300],
-                                borderRadius: BorderRadius.circular(6.r),
-                              ),
-                            ),
-                            SizedBox(width: 8.w),
-                            Container(
-                              width: 28.sp,
-                              height: 28.sp,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[300],
-                                borderRadius: BorderRadius.circular(6.r),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        )),
+        ),
       ),
     );
   }
@@ -707,7 +725,10 @@ class SkeletonLoaders {
               children: [
                 Expanded(
                   child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 15.sp, horizontal: 10.sp),
+                    padding: EdgeInsets.symmetric(
+                      vertical: 15.sp,
+                      horizontal: 10.sp,
+                    ),
                     margin: EdgeInsets.symmetric(vertical: 5.h),
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -740,7 +761,10 @@ class SkeletonLoaders {
                 SizedBox(width: 10.w),
                 Expanded(
                   child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 15.sp, horizontal: 10.sp),
+                    padding: EdgeInsets.symmetric(
+                      vertical: 15.sp,
+                      horizontal: 10.sp,
+                    ),
                     margin: EdgeInsets.symmetric(vertical: 5.h),
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -778,7 +802,10 @@ class SkeletonLoaders {
               children: [
                 Expanded(
                   child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 15.sp, horizontal: 10.sp),
+                    padding: EdgeInsets.symmetric(
+                      vertical: 15.sp,
+                      horizontal: 10.sp,
+                    ),
                     margin: EdgeInsets.symmetric(vertical: 5.h),
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -811,7 +838,10 @@ class SkeletonLoaders {
                 SizedBox(width: 10.w),
                 Expanded(
                   child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 15.sp, horizontal: 10.sp),
+                    padding: EdgeInsets.symmetric(
+                      vertical: 15.sp,
+                      horizontal: 10.sp,
+                    ),
                     margin: EdgeInsets.symmetric(vertical: 5.h),
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -849,7 +879,10 @@ class SkeletonLoaders {
               children: [
                 Expanded(
                   child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 15.sp, horizontal: 10.sp),
+                    padding: EdgeInsets.symmetric(
+                      vertical: 15.sp,
+                      horizontal: 10.sp,
+                    ),
                     margin: EdgeInsets.symmetric(vertical: 5.h),
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -882,7 +915,10 @@ class SkeletonLoaders {
                 SizedBox(width: 10.w),
                 Expanded(
                   child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 15.sp, horizontal: 10.sp),
+                    padding: EdgeInsets.symmetric(
+                      vertical: 15.sp,
+                      horizontal: 10.sp,
+                    ),
                     margin: EdgeInsets.symmetric(vertical: 5.h),
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -1037,106 +1073,112 @@ class SkeletonLoaders {
           children: [
             // Category chips skeleton
             Wrap(
-              children: List.generate(4, (index) => Container(
-                margin: EdgeInsets.only(right: 8.w, bottom: 8.h),
-                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(20.r),
+              children: List.generate(
+                4,
+                (index) => Container(
+                  margin: EdgeInsets.only(right: 8.w, bottom: 8.h),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16.w,
+                    vertical: 8.h,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(20.r),
+                  ),
+                  child: Container(
+                    height: 14.h,
+                    width: [60.w, 80.w, 70.w, 90.w][index],
+                  ),
                 ),
-                child: Container(
-                  height: 14.h,
-                  width: [60.w, 80.w, 70.w, 90.w][index],
-                ),
-              )),
+              ),
             ),
 
             SizedBox(height: 10.h),
 
             // FAQ items skeleton
             Column(
-              children: List.generate(6, (index) => Container(
-                margin: EdgeInsets.only(bottom: 15.h),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                    color: Colors.grey[300]!,
-                    width: 0.8,
+              children: List.generate(
+                6,
+                (index) => Container(
+                  margin: EdgeInsets.only(bottom: 15.h),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: Colors.grey[300]!, width: 0.8),
+                    borderRadius: BorderRadius.circular(12.r),
                   ),
-                  borderRadius: BorderRadius.circular(12.r),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(16.sp),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Question skeleton
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Container(
-                              height: 15.sp,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[300],
-                                borderRadius: BorderRadius.circular(4.r),
+                  child: Padding(
+                    padding: EdgeInsets.all(16.sp),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Question skeleton
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Container(
+                                height: 15.sp,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  borderRadius: BorderRadius.circular(4.r),
+                                ),
                               ),
                             ),
-                          ),
-                          SizedBox(width: 8.w),
+                            SizedBox(width: 8.w),
+                            Container(
+                              width: 20.sp,
+                              height: 20.sp,
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(2.r),
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        // Sometimes show expanded content skeleton
+                        if (index == 0 || index == 2) ...[
+                          SizedBox(height: 12.h),
                           Container(
-                            width: 20.sp,
-                            height: 20.sp,
+                            height: 1.h,
+                            width: double.infinity,
+                            color: Colors.grey[300],
+                          ),
+                          SizedBox(height: 12.h),
+                          // Answer skeleton lines
+                          Container(
+                            height: 14.sp,
+                            width: double.infinity,
                             decoration: BoxDecoration(
                               color: Colors.grey[300],
-                              borderRadius: BorderRadius.circular(2.r),
+                              borderRadius: BorderRadius.circular(4.r),
+                            ),
+                          ),
+                          SizedBox(height: 6.h),
+                          Container(
+                            height: 14.sp,
+                            width: 0.8.sw,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(4.r),
+                            ),
+                          ),
+                          SizedBox(height: 6.h),
+                          Container(
+                            height: 14.sp,
+                            width: 0.6.sw,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(4.r),
                             ),
                           ),
                         ],
-                      ),
-
-                      // Sometimes show expanded content skeleton
-                      if (index == 0 || index == 2) ...[
-                        SizedBox(height: 12.h),
-                        Container(
-                          height: 1.h,
-                          width: double.infinity,
-                          color: Colors.grey[300],
-                        ),
-                        SizedBox(height: 12.h),
-                        // Answer skeleton lines
-                        Container(
-                          height: 14.sp,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(4.r),
-                          ),
-                        ),
-                        SizedBox(height: 6.h),
-                        Container(
-                          height: 14.sp,
-                          width: 0.8.sw,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(4.r),
-                          ),
-                        ),
-                        SizedBox(height: 6.h),
-                        Container(
-                          height: 14.sp,
-                          width: 0.6.sw,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(4.r),
-                          ),
-                        ),
                       ],
-                    ],
+                    ),
                   ),
                 ),
-              )),
+              ),
             ),
           ],
         ),
@@ -1151,110 +1193,113 @@ class SkeletonLoaders {
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 8.sp, vertical: 12.sp),
         child: Column(
-          children: List.generate(count, (index) => Container(
-            width: 1.sw,
-            padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 5.w),
-            margin: EdgeInsets.symmetric(vertical: 2.h, horizontal: 2.w),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(0.r),
-              border: Border(
-                bottom: BorderSide(
-                  color: index == count - 1
-                      ? Colors.transparent
-                      : Colors.grey[300]!,
-                  width: 0.09,
+          children: List.generate(
+            count,
+            (index) => Container(
+              width: 1.sw,
+              padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 5.w),
+              margin: EdgeInsets.symmetric(vertical: 2.h, horizontal: 2.w),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(0.r),
+                border: Border(
+                  bottom: BorderSide(
+                    color: index == count - 1
+                        ? Colors.transparent
+                        : Colors.grey[300]!,
+                    width: 0.09,
+                  ),
                 ),
               ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Notification icon skeleton
-                Container(
-                  padding: EdgeInsets.all(8.sp),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    shape: BoxShape.circle,
-                  ),
-                  child: Container(
-                    width: 20.sp,
-                    height: 20.sp,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Notification icon skeleton
+                  Container(
+                    padding: EdgeInsets.all(8.sp),
                     decoration: BoxDecoration(
-                      color: Colors.grey[400],
-                      borderRadius: BorderRadius.circular(2.r),
+                      color: Colors.grey[300],
+                      shape: BoxShape.circle,
+                    ),
+                    child: Container(
+                      width: 20.sp,
+                      height: 20.sp,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[400],
+                        borderRadius: BorderRadius.circular(2.r),
+                      ),
                     ),
                   ),
-                ),
 
-                // Notification content skeleton
-                Expanded(
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 8.w),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Title row skeleton
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              height: 12.sp,
-                              width: [100.w, 120.w, 80.w, 140.w][index % 4],
-                              decoration: BoxDecoration(
-                                color: Colors.grey[300],
-                                borderRadius: BorderRadius.circular(4.r),
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        SizedBox(height: 5.h),
-
-                        // Date/time skeleton
-                        Container(
-                          height: 12.sp,
-                          width: 150.w,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(4.r),
-                          ),
-                        ),
-
-                        SizedBox(height: 5.h),
-
-                        // Message skeleton (multiple lines for variety)
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: 12.sp,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[300],
-                                borderRadius: BorderRadius.circular(4.r),
-                              ),
-                            ),
-                            if (index % 3 == 0) ...[
-                              SizedBox(height: 4.h),
+                  // Notification content skeleton
+                  Expanded(
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 8.w),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Title row skeleton
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
                               Container(
                                 height: 12.sp,
-                                width: 0.7.sw,
+                                width: [100.w, 120.w, 80.w, 140.w][index % 4],
                                 decoration: BoxDecoration(
                                   color: Colors.grey[300],
                                   borderRadius: BorderRadius.circular(4.r),
                                 ),
                               ),
                             ],
-                          ],
-                        ),
-                      ],
+                          ),
+
+                          SizedBox(height: 5.h),
+
+                          // Date/time skeleton
+                          Container(
+                            height: 12.sp,
+                            width: 150.w,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(4.r),
+                            ),
+                          ),
+
+                          SizedBox(height: 5.h),
+
+                          // Message skeleton (multiple lines for variety)
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: 12.sp,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  borderRadius: BorderRadius.circular(4.r),
+                                ),
+                              ),
+                              if (index % 3 == 0) ...[
+                                SizedBox(height: 4.h),
+                                Container(
+                                  height: 12.sp,
+                                  width: 0.7.sw,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[300],
+                                    borderRadius: BorderRadius.circular(4.r),
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          )),
+          ),
         ),
       ),
     );
@@ -1265,118 +1310,121 @@ class SkeletonLoaders {
     return Skeletonizer(
       enabled: true,
       child: Column(
-        children: List.generate(count, (index) => Container(
-          width: 1.sw,
-          padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 16.w),
-          margin: EdgeInsets.symmetric(vertical: 4.h, horizontal: 2.w),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12.r),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Row(
-            children: [
-              // Payout Icon skeleton
-              Container(
-                width: 48.w,
-                height: 48.h,
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(12.r),
+        children: List.generate(
+          count,
+          (index) => Container(
+            width: 1.sw,
+            padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 16.w),
+            margin: EdgeInsets.symmetric(vertical: 4.h, horizontal: 2.w),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12.r),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
                 ),
-              ),
-
-              SizedBox(width: 12.w),
-
-              // Payout Details skeleton
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Reference and Amount row
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          height: 15.sp,
-                          width: 120.w,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(4.r),
-                          ),
-                        ),
-                        Container(
-                          height: 16.sp,
-                          width: 100.w,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(4.r),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    SizedBox(height: 6.h),
-
-                    // Payment method and date row
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          height: 12.sp,
-                          width: 80.w,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(4.r),
-                          ),
-                        ),
-                        Container(
-                          height: 12.sp,
-                          width: 90.w,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(4.r),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    SizedBox(height: 8.h),
-
-                    // Status badge and arrow
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          height: 24.h,
-                          width: 70.w,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(12.r),
-                          ),
-                        ),
-                        Container(
-                          width: 14.sp,
-                          height: 14.sp,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(2.r),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+              ],
+            ),
+            child: Row(
+              children: [
+                // Payout Icon skeleton
+                Container(
+                  width: 48.w,
+                  height: 48.h,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
                 ),
-              ),
-            ],
+
+                SizedBox(width: 12.w),
+
+                // Payout Details skeleton
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Reference and Amount row
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            height: 15.sp,
+                            width: 120.w,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(4.r),
+                            ),
+                          ),
+                          Container(
+                            height: 16.sp,
+                            width: 100.w,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(4.r),
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      SizedBox(height: 6.h),
+
+                      // Payment method and date row
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            height: 12.sp,
+                            width: 80.w,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(4.r),
+                            ),
+                          ),
+                          Container(
+                            height: 12.sp,
+                            width: 90.w,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(4.r),
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      SizedBox(height: 8.h),
+
+                      // Status badge and arrow
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            height: 24.h,
+                            width: 70.w,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(12.r),
+                            ),
+                          ),
+                          Container(
+                            width: 14.sp,
+                            height: 14.sp,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(2.r),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
-        )),
+        ),
       ),
     );
   }
@@ -1386,112 +1434,112 @@ class SkeletonLoaders {
     return Skeletonizer(
       enabled: true,
       child: Column(
-        children: List.generate(count, (index) => Container(
-          margin: EdgeInsets.only(bottom: 12.h),
-          padding: EdgeInsets.all(16.sp),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12.r),
-            border: Border.all(
-              color: Colors.grey[300]!,
-              width: 1,
+        children: List.generate(
+          count,
+          (index) => Container(
+            margin: EdgeInsets.only(bottom: 12.h),
+            padding: EdgeInsets.all(16.sp),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12.r),
+              border: Border.all(color: Colors.grey[300]!, width: 1),
             ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Campaign name and status badge row
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Container(
-                      height: 16.h,
-                      width: 160.w,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Campaign name and status badge row
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Container(
+                        height: 16.h,
+                        width: 160.w,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(4.r),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 8.w),
+                    Container(
+                      height: 24.h,
+                      width: 70.w,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(20.r),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 12.h),
+                // Date row
+                Row(
+                  children: [
+                    Container(
+                      width: 16.sp,
+                      height: 16.sp,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(2.r),
+                      ),
+                    ),
+                    SizedBox(width: 6.w),
+                    Container(
+                      height: 13.h,
+                      width: 180.w,
                       decoration: BoxDecoration(
                         color: Colors.grey[300],
                         borderRadius: BorderRadius.circular(4.r),
                       ),
                     ),
-                  ),
-                  SizedBox(width: 8.w),
-                  Container(
-                    height: 24.h,
-                    width: 70.w,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(20.r),
+                  ],
+                ),
+                SizedBox(height: 8.h),
+                // Priority and cost row
+                Row(
+                  children: [
+                    Container(
+                      width: 16.sp,
+                      height: 16.sp,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(2.r),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 12.h),
-              // Date row
-              Row(
-                children: [
-                  Container(
-                    width: 16.sp,
-                    height: 16.sp,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(2.r),
+                    SizedBox(width: 6.w),
+                    Container(
+                      height: 13.h,
+                      width: 70.w,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(4.r),
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 6.w),
-                  Container(
-                    height: 13.h,
-                    width: 180.w,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(4.r),
+                    SizedBox(width: 16.w),
+                    Container(
+                      width: 16.sp,
+                      height: 16.sp,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(2.r),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 8.h),
-              // Priority and cost row
-              Row(
-                children: [
-                  Container(
-                    width: 16.sp,
-                    height: 16.sp,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(2.r),
+                    SizedBox(width: 6.w),
+                    Container(
+                      height: 13.h,
+                      width: 80.w,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(4.r),
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 6.w),
-                  Container(
-                    height: 13.h,
-                    width: 70.w,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(4.r),
-                    ),
-                  ),
-                  SizedBox(width: 16.w),
-                  Container(
-                    width: 16.sp,
-                    height: 16.sp,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(2.r),
-                    ),
-                  ),
-                  SizedBox(width: 6.w),
-                  Container(
-                    height: 13.h,
-                    width: 80.w,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(4.r),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
-        )),
+        ),
       ),
     );
   }
@@ -1501,117 +1549,117 @@ class SkeletonLoaders {
     return Skeletonizer(
       enabled: true,
       child: Column(
-        children: List.generate(count, (index) => Container(
-          margin: EdgeInsets.only(bottom: 12.h),
-          padding: EdgeInsets.all(16.sp),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12.r),
-            border: Border.all(
-              color: Colors.grey[300]!,
-              width: 1,
+        children: List.generate(
+          count,
+          (index) => Container(
+            margin: EdgeInsets.only(bottom: 12.h),
+            padding: EdgeInsets.all(16.sp),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12.r),
+              border: Border.all(color: Colors.grey[300]!, width: 1),
             ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Discount name and type badge row
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Container(
-                      height: 16.h,
-                      width: 140.w,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Discount name and type badge row
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Container(
+                        height: 16.h,
+                        width: 140.w,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(4.r),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 8.w),
+                    Container(
+                      height: 24.h,
+                      width: 80.w,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(20.r),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 12.h),
+                // Value row
+                Row(
+                  children: [
+                    Container(
+                      width: 16.sp,
+                      height: 16.sp,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(2.r),
+                      ),
+                    ),
+                    SizedBox(width: 6.w),
+                    Container(
+                      height: 14.h,
+                      width: 100.w,
                       decoration: BoxDecoration(
                         color: Colors.grey[300],
                         borderRadius: BorderRadius.circular(4.r),
                       ),
                     ),
-                  ),
-                  SizedBox(width: 8.w),
-                  Container(
-                    height: 24.h,
-                    width: 80.w,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(20.r),
+                  ],
+                ),
+                SizedBox(height: 8.h),
+                // Date range row
+                Row(
+                  children: [
+                    Container(
+                      width: 16.sp,
+                      height: 16.sp,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(2.r),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 12.h),
-              // Value row
-              Row(
-                children: [
-                  Container(
-                    width: 16.sp,
-                    height: 16.sp,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(2.r),
+                    SizedBox(width: 6.w),
+                    Container(
+                      height: 13.h,
+                      width: 200.w,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(4.r),
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 6.w),
-                  Container(
-                    height: 14.h,
-                    width: 100.w,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(4.r),
+                  ],
+                ),
+                SizedBox(height: 8.h),
+                // Status row
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      height: 22.h,
+                      width: 60.w,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 8.h),
-              // Date range row
-              Row(
-                children: [
-                  Container(
-                    width: 16.sp,
-                    height: 16.sp,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(2.r),
+                    Container(
+                      width: 24.sp,
+                      height: 24.sp,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(4.r),
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 6.w),
-                  Container(
-                    height: 13.h,
-                    width: 200.w,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(4.r),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 8.h),
-              // Status row
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    height: 22.h,
-                    width: 60.w,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(12.r),
-                    ),
-                  ),
-                  Container(
-                    width: 24.sp,
-                    height: 24.sp,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(4.r),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
-        )),
+        ),
       ),
     );
   }

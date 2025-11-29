@@ -95,7 +95,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                     ),
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: AppColors.greyColor.withOpacity(0.3),
+                        color: AppColors.greyColor.withValues(alpha: 0.3),
                       ),
                       borderRadius: BorderRadius.circular(12.r),
                     ),
@@ -165,7 +165,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                     ),
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: AppColors.greyColor.withOpacity(0.3),
+                        color: AppColors.greyColor.withValues(alpha: 0.3),
                       ),
                       borderRadius: BorderRadius.circular(12.r),
                     ),
@@ -319,7 +319,9 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                               vertical: 8.h,
                             ),
                             decoration: BoxDecoration(
-                              color: AppColors.primaryColor.withOpacity(0.1),
+                              color: AppColors.primaryColor.withValues(
+                                alpha: 0.1,
+                              ),
                               borderRadius: BorderRadius.circular(8.r),
                             ),
                             child: Row(
@@ -359,7 +361,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                             gradient: LinearGradient(
                               colors: [
                                 AppColors.primaryColor,
-                                AppColors.primaryColor.withOpacity(0.8),
+                                AppColors.primaryColor.withValues(alpha: 0.8),
                               ],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
@@ -371,7 +373,9 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                               customText(
                                 "Average Rating",
                                 fontSize: 14.sp,
-                                color: AppColors.whiteColor.withOpacity(0.9),
+                                color: AppColors.whiteColor.withValues(
+                                  alpha: 0.9,
+                                ),
                                 fontWeight: FontWeight.w500,
                               ),
                               SizedBox(height: 12.h),
@@ -390,8 +394,8 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                                     child: customText(
                                       "/5",
                                       fontSize: 20.sp,
-                                      color: AppColors.whiteColor.withOpacity(
-                                        0.7,
+                                      color: AppColors.whiteColor.withValues(
+                                        alpha: 0.7,
                                       ),
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -411,7 +415,9 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                               customText(
                                 "${stats?.totalRatings ?? 0} ratings",
                                 fontSize: 14.sp,
-                                color: AppColors.whiteColor.withOpacity(0.8),
+                                color: AppColors.whiteColor.withValues(
+                                  alpha: 0.8,
+                                ),
                               ),
                             ],
                           ),
@@ -510,8 +516,8 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                               Container(
                                 padding: EdgeInsets.all(12.sp),
                                 decoration: BoxDecoration(
-                                  color: AppColors.primaryColor.withOpacity(
-                                    0.1,
+                                  color: AppColors.primaryColor.withValues(
+                                    alpha: 0.1,
                                   ),
                                   borderRadius: BorderRadius.circular(12.r),
                                 ),
@@ -571,7 +577,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
           Container(
             padding: EdgeInsets.all(8.sp),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
+              color: color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8.r),
             ),
             child: Icon(icon, color: color, size: 20.sp),
@@ -611,7 +617,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
             borderRadius: BorderRadius.circular(4.r),
             child: LinearProgressIndicator(
               value: percentage,
-              backgroundColor: AppColors.greyColor.withOpacity(0.2),
+              backgroundColor: AppColors.greyColor.withValues(alpha: 0.2),
               valueColor: AlwaysStoppedAnimation<Color>(Colors.amber),
               minHeight: 8.h,
             ),

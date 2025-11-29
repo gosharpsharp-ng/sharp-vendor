@@ -115,7 +115,7 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
                   Icon(
                     Icons.campaign_outlined,
                     size: 64.sp,
-                    color: AppColors.obscureTextColor.withOpacity(0.5),
+                    color: AppColors.obscureTextColor.withValues(alpha: 0.5),
                   ),
                   SizedBox(height: 16.h),
                   customText(
@@ -131,7 +131,10 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
 
         final isActive = campaign.status?.toLowerCase() == 'active';
         final isPaused = campaign.status?.toLowerCase() == 'paused';
-        final isCancelled = ['cancelled', 'canceled'].contains(campaign.status?.toLowerCase());
+        final isCancelled = [
+          'cancelled',
+          'canceled',
+        ].contains(campaign.status?.toLowerCase());
         final isCompleted = campaign.status?.toLowerCase() == 'completed';
 
         return Scaffold(
@@ -186,8 +189,7 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
                 if (!isCancelled && !isCompleted)
                   _buildCountdownWidget(campaign),
 
-                if (!isCancelled && !isCompleted)
-                  SizedBox(height: 16.h),
+                if (!isCancelled && !isCompleted) SizedBox(height: 16.h),
 
                 // Schedule
                 Container(
@@ -240,14 +242,27 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
                         color: AppColors.blackColor,
                       ),
                       SizedBox(height: 16.h),
-                      _buildDetailRow("Priority", "Level ${campaign.priority ?? 1}"),
+                      _buildDetailRow(
+                        "Priority",
+                        "Level ${campaign.priority ?? 1}",
+                      ),
                       SizedBox(height: 12.h),
-                      _buildDetailRow("Payment Method", _formatPaymentMethod(campaign.paymentMethodCode)),
+                      _buildDetailRow(
+                        "Payment Method",
+                        _formatPaymentMethod(campaign.paymentMethodCode),
+                      ),
                       SizedBox(height: 12.h),
-                      _buildDetailRow("Payment Status", campaign.paymentStatus?.toUpperCase() ?? "PENDING"),
+                      _buildDetailRow(
+                        "Payment Status",
+                        campaign.paymentStatus?.toUpperCase() ?? "PENDING",
+                      ),
                       if (campaign.totalCost != null) ...[
                         SizedBox(height: 12.h),
-                        _buildDetailRow("Total Cost", "₦${campaign.totalCost}", isBold: true),
+                        _buildDetailRow(
+                          "Total Cost",
+                          "₦${campaign.totalCost}",
+                          isBold: true,
+                        ),
                       ],
                     ],
                   ),
@@ -263,7 +278,8 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
                         _showConfirmationDialog(
                           context,
                           title: "Pause Campaign",
-                          message: "Are you sure you want to pause this campaign?",
+                          message:
+                              "Are you sure you want to pause this campaign?",
                           onConfirm: () async {
                             await campaignsController.updateCampaignStatus(
                               campaign.id!,
@@ -285,7 +301,8 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
                         _showConfirmationDialog(
                           context,
                           title: "Resume Campaign",
-                          message: "Are you sure you want to resume this campaign?",
+                          message:
+                              "Are you sure you want to resume this campaign?",
                           onConfirm: () async {
                             await campaignsController.updateCampaignStatus(
                               campaign.id!,
@@ -310,7 +327,8 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
                         _showConfirmationDialog(
                           context,
                           title: "Cancel Campaign",
-                          message: "Are you sure you want to cancel this campaign? This action cannot be undone.",
+                          message:
+                              "Are you sure you want to cancel this campaign? This action cannot be undone.",
                           onConfirm: () async {
                             await campaignsController.updateCampaignStatus(
                               campaign.id!,
@@ -370,11 +388,7 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          customText(
-            title,
-            fontSize: 13.sp,
-            color: AppColors.obscureTextColor,
-          ),
+          customText(title, fontSize: 13.sp, color: AppColors.obscureTextColor),
           SizedBox(height: 8.h),
           customText(
             countdownText,
@@ -388,7 +402,7 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
               borderRadius: BorderRadius.circular(4.r),
               child: LinearProgressIndicator(
                 value: _getProgress(campaign),
-                backgroundColor: AppColors.greyColor.withOpacity(0.2),
+                backgroundColor: AppColors.greyColor.withValues(alpha: 0.2),
                 valueColor: AlwaysStoppedAnimation<Color>(accentColor),
                 minHeight: 6.h,
               ),
@@ -433,11 +447,7 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
               color: AppColors.obscureTextColor,
             ),
             SizedBox(height: 2.h),
-            customText(
-              value,
-              fontSize: 14.sp,
-              color: AppColors.blackColor,
-            ),
+            customText(value, fontSize: 14.sp, color: AppColors.blackColor),
           ],
         ),
       ],
@@ -448,11 +458,7 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        customText(
-          label,
-          fontSize: 14.sp,
-          color: AppColors.obscureTextColor,
-        ),
+        customText(label, fontSize: 14.sp, color: AppColors.obscureTextColor),
         customText(
           value,
           fontSize: 14.sp,
@@ -470,29 +476,29 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
 
     switch (status.toLowerCase()) {
       case 'active':
-        bgColor = AppColors.greenColor.withOpacity(0.1);
+        bgColor = AppColors.greenColor.withValues(alpha: 0.1);
         textColor = AppColors.greenColor;
         displayText = 'Active';
         break;
       case 'paused':
-        bgColor = Colors.orange.withOpacity(0.1);
+        bgColor = Colors.orange.withValues(alpha: 0.1);
         textColor = Colors.orange;
         displayText = 'Paused';
         break;
       case 'completed':
-        bgColor = Colors.blue.withOpacity(0.1);
+        bgColor = Colors.blue.withValues(alpha: 0.1);
         textColor = Colors.blue;
         displayText = 'Completed';
         break;
       case 'cancelled':
       case 'canceled':
-        bgColor = Colors.red.withOpacity(0.1);
+        bgColor = Colors.red.withValues(alpha: 0.1);
         textColor = Colors.red;
         displayText = 'Cancelled';
         break;
       case 'draft':
       default:
-        bgColor = AppColors.greyColor.withOpacity(0.1);
+        bgColor = AppColors.greyColor.withValues(alpha: 0.1);
         textColor = AppColors.obscureTextColor;
         displayText = 'Draft';
         break;
@@ -570,7 +576,9 @@ class _CampaignDetailsScreenState extends State<CampaignDetailsScreen> {
                 "Yes",
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w600,
-                color: isDestructive ? AppColors.redColor : AppColors.primaryColor,
+                color: isDestructive
+                    ? AppColors.redColor
+                    : AppColors.primaryColor,
               ),
             ),
           ],

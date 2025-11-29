@@ -392,7 +392,9 @@ class AddMenuScreen extends GetView<FoodMenuController> {
                                 border: Border.all(
                                   color: isSelected
                                       ? AppColors.primaryColor
-                                      : AppColors.greyColor.withOpacity(0.3),
+                                      : AppColors.greyColor.withValues(
+                                          alpha: 0.3,
+                                        ),
                                 ),
                               ),
                               child: Center(
@@ -609,10 +611,14 @@ class AddMenuScreen extends GetView<FoodMenuController> {
                               vertical: 6.h,
                             ),
                             decoration: BoxDecoration(
-                              color: AppColors.primaryColor.withOpacity(0.1),
+                              color: AppColors.primaryColor.withValues(
+                                alpha: 0.1,
+                              ),
                               borderRadius: BorderRadius.circular(16.r),
                               border: Border.all(
-                                color: AppColors.primaryColor.withOpacity(0.3),
+                                color: AppColors.primaryColor.withValues(
+                                  alpha: 0.3,
+                                ),
                               ),
                             ),
                             child: Row(

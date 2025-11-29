@@ -55,7 +55,7 @@ class EditBasicInfoScreen extends GetView<RestaurantDetailsController> {
                       color: AppColors.whiteColor,
                       borderRadius: BorderRadius.circular(16.r),
                       border: Border.all(
-                        color: AppColors.greyColor.withOpacity(0.2),
+                        color: AppColors.greyColor.withValues(alpha: 0.2),
                       ),
                     ),
                     child: Column(
@@ -86,7 +86,9 @@ class EditBasicInfoScreen extends GetView<RestaurantDetailsController> {
                               color: AppColors.backgroundColor,
                               borderRadius: BorderRadius.circular(12.r),
                               border: Border.all(
-                                color: AppColors.primaryColor.withOpacity(0.3),
+                                color: AppColors.primaryColor.withValues(
+                                  alpha: 0.3,
+                                ),
                                 style: BorderStyle.solid,
                               ),
                             ),
@@ -154,8 +156,8 @@ class EditBasicInfoScreen extends GetView<RestaurantDetailsController> {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  color: AppColors.primaryColor.withOpacity(
-                                    0.3,
+                                  color: AppColors.primaryColor.withValues(
+                                    alpha: 0.3,
                                   ),
                                   width: 2.w,
                                 ),
@@ -240,7 +242,9 @@ class EditBasicInfoScreen extends GetView<RestaurantDetailsController> {
                         Container(
                           padding: EdgeInsets.all(12.sp),
                           decoration: BoxDecoration(
-                            color: AppColors.primaryColor.withOpacity(0.05),
+                            color: AppColors.primaryColor.withValues(
+                              alpha: 0.05,
+                            ),
                             borderRadius: BorderRadius.circular(8.r),
                           ),
                           child: Column(
@@ -379,10 +383,10 @@ class EditBasicInfoScreen extends GetView<RestaurantDetailsController> {
                   Container(
                     padding: EdgeInsets.all(16.sp),
                     decoration: BoxDecoration(
-                      color: AppColors.primaryColor.withOpacity(0.05),
+                      color: AppColors.primaryColor.withValues(alpha: 0.05),
                       borderRadius: BorderRadius.circular(12.r),
                       border: Border.all(
-                        color: AppColors.primaryColor.withOpacity(0.2),
+                        color: AppColors.primaryColor.withValues(alpha: 0.2),
                       ),
                     ),
                     child: Row(

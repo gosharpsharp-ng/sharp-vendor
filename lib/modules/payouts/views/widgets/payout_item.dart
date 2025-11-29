@@ -21,7 +21,7 @@ class PayoutItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(12.r),
         boxShadow: [
           BoxShadow(
-            color: AppColors.greyColor.withOpacity(0.1),
+            color: AppColors.greyColor.withValues(alpha: 0.1),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -38,7 +38,7 @@ class PayoutItem extends StatelessWidget {
               width: 48.w,
               height: 48.h,
               decoration: BoxDecoration(
-                color: _getStatusColor().withOpacity(0.1),
+                color: _getStatusColor().withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12.r),
               ),
               child: Icon(
@@ -108,12 +108,15 @@ class PayoutItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 8.w,
+                          vertical: 4.h,
+                        ),
                         decoration: BoxDecoration(
-                          color: _getStatusColor().withOpacity(0.1),
+                          color: _getStatusColor().withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(12.r),
                           border: Border.all(
-                            color: _getStatusColor().withOpacity(0.3),
+                            color: _getStatusColor().withValues(alpha: 0.3),
                             width: 1,
                           ),
                         ),
@@ -126,7 +129,7 @@ class PayoutItem extends StatelessWidget {
                       ),
                       Icon(
                         Icons.arrow_forward_ios,
-                        color: AppColors.greyColor.withOpacity(0.6),
+                        color: AppColors.greyColor.withValues(alpha: 0.6),
                         size: 14.sp,
                       ),
                     ],

@@ -1,16 +1,15 @@
-
-
 import '../../../../core/utils/exports.dart';
 
 class FaqCategoryChip extends StatelessWidget {
   final String value;
   final bool isSelected;
   final Function onSelected;
-  const FaqCategoryChip(
-      {super.key,
-      required this.value,
-      this.isSelected = false,
-      required this.onSelected});
+  const FaqCategoryChip({
+    super.key,
+    required this.value,
+    this.isSelected = false,
+    required this.onSelected,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +24,13 @@ class FaqCategoryChip extends StatelessWidget {
         margin: EdgeInsets.symmetric(horizontal: 6.w, vertical: 5.h),
         decoration: BoxDecoration(
           color: isSelected
-              ? AppColors.primaryColor.withOpacity(0.1)
+              ? AppColors.primaryColor.withValues(alpha: 0.1)
               : AppColors.whiteColor,
           borderRadius: BorderRadius.circular(20.r),
           border: Border.all(
-              color: AppColors.primaryColor.withOpacity(0.3), width: 1.sp),
+            color: AppColors.primaryColor.withValues(alpha: 0.3),
+            width: 1.sp,
+          ),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -38,8 +39,8 @@ class FaqCategoryChip extends StatelessWidget {
             Center(
               child: customText(
                 value,
-                color: AppColors.blackColor.withOpacity(0.7),
-                fontWeight: isSelected?FontWeight.w500:FontWeight.w600,
+                color: AppColors.blackColor.withValues(alpha: 0.7),
+                fontWeight: isSelected ? FontWeight.w500 : FontWeight.w600,
                 fontSize: 13.sp,
               ),
             ),

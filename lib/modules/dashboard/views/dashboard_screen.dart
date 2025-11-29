@@ -63,7 +63,9 @@ class DashboardScreen extends StatelessWidget {
                               children: [
                                 Visibility(
                                   visible:
-                                      settingsController.userProfile?.avatar !=
+                                      settingsController
+                                          .userProfile
+                                          ?.avatarUrl !=
                                       null,
                                   replacement: CircleAvatar(
                                     radius: 22.r,
@@ -76,7 +78,9 @@ class DashboardScreen extends StatelessWidget {
                                   ),
                                   child: CircleAvatar(
                                     backgroundImage: CachedNetworkImageProvider(
-                                      settingsController.userProfile?.avatar ??
+                                      settingsController
+                                              .userProfile
+                                              ?.avatarUrl ??
                                           '',
                                     ),
                                     radius: 22.r,
@@ -183,7 +187,9 @@ class DashboardScreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(12.r),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black.withOpacity(0.1),
+                                      color: Colors.black.withValues(
+                                        alpha: 0.1,
+                                      ),
                                       blurRadius: 10,
                                       offset: const Offset(0, 4),
                                     ),
@@ -206,7 +212,8 @@ class DashboardScreen extends StatelessWidget {
                                     ),
                                     SizedBox(height: 8.h),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         customText(
                                           ordersController.isOnline
@@ -220,7 +227,8 @@ class DashboardScreen extends StatelessWidget {
                                           activeColor: AppColors.greenColor,
                                           value: ordersController.isOnline,
                                           onChanged: (value) {
-                                            ordersController.toggleOnlineStatus();
+                                            ordersController
+                                                .toggleOnlineStatus();
                                           },
                                         ),
                                       ],
@@ -280,6 +288,16 @@ class DashboardScreen extends StatelessWidget {
                             ),
                           ),
                           SizedBox(height: 20.h),
+                          Container(
+                            width: 1.sw,
+                            child: customText(
+                              "Basic summary",
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18.sp,
+                              color: AppColors.blackColor,
+                            ),
+                          ),
+                          SizedBox(height: 10.h),
                           Row(
                             children: [
                               Expanded(
@@ -307,19 +325,10 @@ class DashboardScreen extends StatelessWidget {
                             ],
                           ),
                           SizedBox(height: 35.h),
-                          Container(
-                            width: 1.sw,
-                            child: customText(
-                              "This week's summary",
-                              fontWeight: FontWeight.w500,
-                              fontSize: 18.sp,
-                              color: AppColors.blackColor,
-                            ),
-                          ),
-                          SizedBox(height: 10.h),
-                          AreaChartWidget(
-                            chartData: dashboardController.dashboardChartData,
-                          ),
+
+                          // AreaChartWidget(
+                          //   chartData: dashboardController.dashboardChartData,
+                          // ),
                           SizedBox(height: 15.h),
                         ],
                       ),

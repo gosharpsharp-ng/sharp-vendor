@@ -42,15 +42,11 @@ class CampaignsHomeScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: 10.h),
-                  const SectionHeader(
-                    title: "All Campaigns",
-                  ),
+                  const SectionHeader(title: "All Campaigns"),
                   SizedBox(height: 10.h),
                   // Show skeleton loader when fetching
                   if (campaignsController.isFetchingCampaigns)
-                    Expanded(
-                      child: SkeletonLoaders.campaignCard(count: 4),
-                    )
+                    Expanded(child: SkeletonLoaders.campaignCard(count: 4))
                   else if (campaignsController.allCampaigns.isEmpty)
                     Container(
                       width: 1.sw,
@@ -61,7 +57,9 @@ class CampaignsHomeScreen extends StatelessWidget {
                           Icon(
                             Icons.campaign_outlined,
                             size: 64.sp,
-                            color: AppColors.obscureTextColor.withOpacity(0.5),
+                            color: AppColors.obscureTextColor.withValues(
+                              alpha: 0.5,
+                            ),
                           ),
                           SizedBox(height: 16.h),
                           customText(
@@ -123,7 +121,7 @@ class CampaignsHomeScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(16.r),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: Colors.black.withValues(alpha: 0.04),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -145,7 +143,7 @@ class CampaignsHomeScreen extends StatelessWidget {
                       Container(
                         padding: EdgeInsets.all(10.sp),
                         decoration: BoxDecoration(
-                          color: statusColor.withOpacity(0.1),
+                          color: statusColor.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(12.r),
                         ),
                         child: Icon(
@@ -167,7 +165,10 @@ class CampaignsHomeScreen extends StatelessWidget {
                             ),
                             SizedBox(height: 4.h),
                             customText(
-                              _formatDateRange(campaign.startDate, campaign.endDate),
+                              _formatDateRange(
+                                campaign.startDate,
+                                campaign.endDate,
+                              ),
                               fontSize: 13.sp,
                               color: AppColors.obscureTextColor,
                             ),
@@ -202,7 +203,9 @@ class CampaignsHomeScreen extends StatelessWidget {
                       Icon(
                         Icons.arrow_forward_ios_rounded,
                         size: 14.sp,
-                        color: AppColors.obscureTextColor.withOpacity(0.5),
+                        color: AppColors.obscureTextColor.withValues(
+                          alpha: 0.5,
+                        ),
                       ),
                     ],
                   ),
@@ -227,7 +230,7 @@ class CampaignsHomeScreen extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8.r),
       ),
       child: Row(
@@ -275,7 +278,7 @@ class CampaignsHomeScreen extends StatelessWidget {
       return Container(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
         decoration: BoxDecoration(
-          color: AppColors.primaryColor.withOpacity(0.05),
+          color: AppColors.primaryColor.withValues(alpha: 0.05),
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(16.r),
             bottomRight: Radius.circular(16.r),
@@ -283,15 +286,21 @@ class CampaignsHomeScreen extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(Icons.timer_outlined, size: 14.sp, color: AppColors.primaryColor),
+            Icon(
+              Icons.timer_outlined,
+              size: 14.sp,
+              color: AppColors.primaryColor,
+            ),
             SizedBox(width: 6.w),
             Expanded(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(4.r),
                 child: LinearProgressIndicator(
                   value: progress,
-                  backgroundColor: AppColors.greyColor.withOpacity(0.2),
-                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryColor),
+                  backgroundColor: AppColors.greyColor.withValues(alpha: 0.2),
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    AppColors.primaryColor,
+                  ),
                   minHeight: 4.h,
                 ),
               ),
@@ -335,29 +344,29 @@ class CampaignsHomeScreen extends StatelessWidget {
 
     switch (status.toLowerCase()) {
       case 'active':
-        bgColor = AppColors.primaryColor.withOpacity(0.1);
+        bgColor = AppColors.primaryColor.withValues(alpha: 0.1);
         textColor = AppColors.primaryColor;
         displayText = 'Active';
         break;
       case 'paused':
-        bgColor = Colors.orange.withOpacity(0.1);
+        bgColor = Colors.orange.withValues(alpha: 0.1);
         textColor = Colors.orange;
         displayText = 'Paused';
         break;
       case 'completed':
-        bgColor = Colors.green.withOpacity(0.1);
+        bgColor = Colors.green.withValues(alpha: 0.1);
         textColor = Colors.green;
         displayText = 'Completed';
         break;
       case 'cancelled':
       case 'canceled':
-        bgColor = Colors.red.withOpacity(0.1);
+        bgColor = Colors.red.withValues(alpha: 0.1);
         textColor = Colors.red;
         displayText = 'Cancelled';
         break;
       case 'draft':
       default:
-        bgColor = AppColors.greyColor.withOpacity(0.1);
+        bgColor = AppColors.greyColor.withValues(alpha: 0.1);
         textColor = AppColors.obscureTextColor;
         displayText = 'Draft';
         break;

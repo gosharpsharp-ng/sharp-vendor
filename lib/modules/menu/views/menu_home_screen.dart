@@ -180,7 +180,7 @@ class MenuItemCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(12.r),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
@@ -198,7 +198,7 @@ class MenuItemCard extends StatelessWidget {
                   topLeft: Radius.circular(12.r),
                   topRight: Radius.circular(12.r),
                 ),
-                color: AppColors.greyColor.withOpacity(0.2),
+                color: AppColors.greyColor.withValues(alpha: 0.2),
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.only(
@@ -245,7 +245,7 @@ class MenuItemCard extends StatelessWidget {
                           vertical: 4.h,
                         ),
                         decoration: BoxDecoration(
-                          color: AppColors.primaryColor.withOpacity(0.1),
+                          color: AppColors.primaryColor.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(12.r),
                         ),
                         child: customText(
@@ -334,7 +334,9 @@ class MenuItemCard extends StatelessWidget {
                             child: Container(
                               padding: EdgeInsets.all(6.sp),
                               decoration: BoxDecoration(
-                                color: AppColors.primaryColor.withOpacity(0.1),
+                                color: AppColors.primaryColor.withValues(
+                                  alpha: 0.1,
+                                ),
                                 borderRadius: BorderRadius.circular(6.r),
                               ),
                               child: SvgPicture.asset(
@@ -351,7 +353,7 @@ class MenuItemCard extends StatelessWidget {
                             child: Container(
                               padding: EdgeInsets.all(6.sp),
                               decoration: BoxDecoration(
-                                color: Colors.red.withOpacity(0.1),
+                                color: Colors.red.withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(6.r),
                               ),
                               child: SvgPicture.asset(
@@ -377,7 +379,7 @@ class MenuItemCard extends StatelessWidget {
 
   Widget _buildPlaceholderImage() {
     return Container(
-      color: AppColors.greyColor.withOpacity(0.2),
+      color: AppColors.greyColor.withValues(alpha: 0.2),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

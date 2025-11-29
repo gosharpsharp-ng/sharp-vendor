@@ -43,7 +43,7 @@ class WalletsHomeScreen extends StatelessWidget {
                         gradient: LinearGradient(
                           colors: [
                             AppColors.primaryColor,
-                            AppColors.primaryColor.withOpacity(0.8),
+                            AppColors.primaryColor.withValues(alpha: 0.8),
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
@@ -51,7 +51,9 @@ class WalletsHomeScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(16.r),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.primaryColor.withOpacity(0.3),
+                            color: AppColors.primaryColor.withValues(
+                              alpha: 0.3,
+                            ),
                             blurRadius: 10,
                             offset: const Offset(0, 4),
                           ),
@@ -62,7 +64,7 @@ class WalletsHomeScreen extends StatelessWidget {
                         children: [
                           customText(
                             "Available Balance",
-                            color: AppColors.whiteColor.withOpacity(0.9),
+                            color: AppColors.whiteColor.withValues(alpha: 0.9),
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w400,
                           ),
@@ -79,7 +81,8 @@ class WalletsHomeScreen extends StatelessWidget {
                               : customText(
                                   formatToCurrency(
                                     double.parse(
-                                      settingsController.walletBalance
+                                      settingsController
+                                              .walletBalance
                                               ?.availableBalance ??
                                           "0",
                                     ),
@@ -98,7 +101,9 @@ class WalletsHomeScreen extends StatelessWidget {
                                 children: [
                                   customText(
                                     "Pending",
-                                    color: AppColors.whiteColor.withOpacity(0.8),
+                                    color: AppColors.whiteColor.withValues(
+                                      alpha: 0.8,
+                                    ),
                                     fontSize: 12.sp,
                                     fontWeight: FontWeight.w400,
                                   ),
@@ -107,7 +112,8 @@ class WalletsHomeScreen extends StatelessWidget {
                                     formatToCurrency(
                                       double.parse(
                                         settingsController
-                                                .walletBalance?.pendingBalance ??
+                                                .walletBalance
+                                                ?.pendingBalance ??
                                             "0",
                                       ),
                                     ),
@@ -122,7 +128,9 @@ class WalletsHomeScreen extends StatelessWidget {
                                 children: [
                                   customText(
                                     "Bonus",
-                                    color: AppColors.whiteColor.withOpacity(0.8),
+                                    color: AppColors.whiteColor.withValues(
+                                      alpha: 0.8,
+                                    ),
                                     fontSize: 12.sp,
                                     fontWeight: FontWeight.w400,
                                   ),
@@ -131,7 +139,8 @@ class WalletsHomeScreen extends StatelessWidget {
                                     formatToCurrency(
                                       double.parse(
                                         settingsController
-                                                .walletBalance?.bonusBalance ??
+                                                .walletBalance
+                                                ?.bonusBalance ??
                                             "0",
                                       ),
                                     ),
@@ -172,7 +181,7 @@ class WalletsHomeScreen extends StatelessWidget {
                           color: AppColors.whiteColor,
                           borderRadius: BorderRadius.circular(12.r),
                           border: Border.all(
-                            color: AppColors.greyColor.withOpacity(0.2),
+                            color: AppColors.greyColor.withValues(alpha: 0.2),
                           ),
                         ),
                         child: Row(
@@ -180,7 +189,9 @@ class WalletsHomeScreen extends StatelessWidget {
                             Container(
                               padding: EdgeInsets.all(10.sp),
                               decoration: BoxDecoration(
-                                color: AppColors.primaryColor.withOpacity(0.1),
+                                color: AppColors.primaryColor.withValues(
+                                  alpha: 0.1,
+                                ),
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
                               child: Icon(
@@ -234,7 +245,7 @@ class WalletsHomeScreen extends StatelessWidget {
                           color: AppColors.whiteColor,
                           borderRadius: BorderRadius.circular(12.r),
                           border: Border.all(
-                            color: AppColors.greyColor.withOpacity(0.2),
+                            color: AppColors.greyColor.withValues(alpha: 0.2),
                           ),
                         ),
                         child: Row(
@@ -242,7 +253,9 @@ class WalletsHomeScreen extends StatelessWidget {
                             Container(
                               padding: EdgeInsets.all(10.sp),
                               decoration: BoxDecoration(
-                                color: AppColors.greenColor.withOpacity(0.1),
+                                color: AppColors.greenColor.withValues(
+                                  alpha: 0.1,
+                                ),
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
                               child: Icon(
@@ -289,7 +302,7 @@ class WalletsHomeScreen extends StatelessWidget {
                     Container(
                       padding: EdgeInsets.all(16.sp),
                       decoration: BoxDecoration(
-                        color: AppColors.primaryColor.withOpacity(0.05),
+                        color: AppColors.primaryColor.withValues(alpha: 0.05),
                         borderRadius: BorderRadius.circular(12.r),
                       ),
                       child: Row(
@@ -306,7 +319,9 @@ class WalletsHomeScreen extends StatelessWidget {
                               "Your GoWallet can be used to receive payments from orders. You can request payouts to your bank account from the Payouts section.",
                               fontSize: 13.sp,
                               fontWeight: FontWeight.w400,
-                              color: AppColors.blackColor.withOpacity(0.7),
+                              color: AppColors.blackColor.withValues(
+                                alpha: 0.7,
+                              ),
                               height: 1.4,
                             ),
                           ),

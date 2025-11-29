@@ -41,7 +41,9 @@ class OrderDetailSummaryItem extends StatelessWidget {
                       ? GoogleFonts.montserrat().fontFamily!
                       : "Satoshi",
                   fontSize: 14.sp,
-                  fontWeight: title == "Amount" || title == "Total" ? FontWeight.w600 : FontWeight.w500,
+                  fontWeight: title == "Amount" || title == "Total"
+                      ? FontWeight.w600
+                      : FontWeight.w500,
                   overflow: TextOverflow.visible,
                 ),
               ],
@@ -64,7 +66,9 @@ class OrderDetailSummaryItem extends StatelessWidget {
                     fontFamily: title == "Amount" || title == "Total"
                         ? GoogleFonts.montserrat().fontFamily!
                         : "Satoshi",
-                    fontWeight: title == "Amount" || title == "Total" ? FontWeight.w600 : FontWeight.w500,
+                    fontWeight: title == "Amount" || title == "Total"
+                        ? FontWeight.w600
+                        : FontWeight.w500,
                     overflow: TextOverflow.visible,
                     textAlign: TextAlign.right,
                   ),
@@ -109,10 +113,10 @@ class OrderDetailSummaryStatusItem extends StatelessWidget {
           ),
           Container(
             decoration: BoxDecoration(
-              color: _getStatusColor().withOpacity(0.1),
+              color: _getStatusColor().withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12.r),
               border: Border.all(
-                color: _getStatusColor().withOpacity(0.3),
+                color: _getStatusColor().withValues(alpha: 0.3),
                 width: 1,
               ),
             ),
@@ -120,11 +124,7 @@ class OrderDetailSummaryStatusItem extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
-                  _getStatusIcon(),
-                  color: _getStatusColor(),
-                  size: 14.sp,
-                ),
+                Icon(_getStatusIcon(), color: _getStatusColor(), size: 14.sp),
                 SizedBox(width: 6.w),
                 customText(
                   value,
@@ -207,9 +207,9 @@ class OrderDetailPackageItem extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.r),
-        color: AppColors.primaryColor.withOpacity(0.05),
+        color: AppColors.primaryColor.withValues(alpha: 0.05),
         border: Border.all(
-          color: AppColors.primaryColor.withOpacity(0.2),
+          color: AppColors.primaryColor.withValues(alpha: 0.2),
           width: 1,
         ),
       ),
@@ -218,7 +218,7 @@ class OrderDetailPackageItem extends StatelessWidget {
           Container(
             padding: EdgeInsets.all(8.sp),
             decoration: BoxDecoration(
-              color: AppColors.primaryColor.withOpacity(0.1),
+              color: AppColors.primaryColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8.r),
             ),
             child: Icon(
@@ -313,7 +313,7 @@ class OrderDetailMenuItem extends StatelessWidget {
               height: 50.h,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8.r),
-                color: AppColors.greyColor.withOpacity(0.1),
+                color: AppColors.greyColor.withValues(alpha: 0.1),
               ),
               child: Icon(
                 Icons.fastfood,
@@ -369,7 +369,9 @@ class OrderDetailMenuItem extends StatelessWidget {
                         fontWeight: FontWeight.normal,
                       ),
                     ],
-                    if (packagingPrice != null && packagingPrice!.isNotEmpty && packagingPrice != '₦0.00') ...[
+                    if (packagingPrice != null &&
+                        packagingPrice!.isNotEmpty &&
+                        packagingPrice != '₦0.00') ...[
                       customText(
                         " • ",
                         color: AppColors.obscureTextColor,

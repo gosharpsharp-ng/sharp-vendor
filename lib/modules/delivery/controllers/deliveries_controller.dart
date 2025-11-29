@@ -23,7 +23,8 @@ class DeliveriesController extends GetxController {
 
   // Online/Offline status for restaurant
   bool isOnline = false;
-  final DeliveryNotificationServiceManager serviceManager = DeliveryNotificationServiceManager.instance;
+  final DeliveryNotificationServiceManager serviceManager =
+      DeliveryNotificationServiceManager.instance;
 
   Future<void> toggleOnlineStatus() async {
     isOnline = !isOnline;
@@ -76,7 +77,9 @@ class DeliveriesController extends GetxController {
       };
       // Call the API
       APIResponse response = await deliveryService.rateDelivery(
-          data: data, deliveryId: selectedDelivery!.id);
+        data: data,
+        deliveryId: selectedDelivery!.id,
+      );
       // Handle response
       showToast(
         message: response.message,
@@ -100,13 +103,9 @@ class DeliveriesController extends GetxController {
     if (deliveryDisputeFormKey.currentState!.validate()) {
       submittingDispute = true;
       update();
-      final dynamic data = {
-        "comment": disputeMessageController.text,
-      };
+      final dynamic data = {"comment": disputeMessageController.text};
       // Call the API
-      APIResponse response = await deliveryService.raiseDispute(
-        data: data,
-      );
+      APIResponse response = await deliveryService.raiseDispute(data: data);
       // Handle response
       showToast(
         message: response.message,
@@ -160,15 +159,16 @@ class DeliveriesController extends GetxController {
       if (response.status == "success") {
         selectedDelivery = DeliveryModel.fromJson(response.data);
         if ([].contains(selectedDelivery?.status)) {
-          drawPolyLineFromOriginToDestination(context,
-              originLatitude: selectedDelivery!.originLocation.latitude,
-              originLongitude: selectedDelivery!.originLocation.longitude,
-              originAddress: selectedDelivery!.originLocation.name,
-              destinationLatitude:
-                  selectedDelivery!.destinationLocation.latitude,
-              destinationLongitude:
-                  selectedDelivery!.destinationLocation.longitude,
-              destinationAddress: selectedDelivery!.destinationLocation.name);
+          drawPolyLineFromOriginToDestination(
+            context,
+            originLatitude: selectedDelivery!.originLocation.latitude,
+            originLongitude: selectedDelivery!.originLocation.longitude,
+            originAddress: selectedDelivery!.originLocation.name,
+            destinationLatitude: selectedDelivery!.destinationLocation.latitude,
+            destinationLongitude:
+                selectedDelivery!.destinationLocation.longitude,
+            destinationAddress: selectedDelivery!.destinationLocation.name,
+          );
           Get.toNamed(Routes.DELIVERY_TRACKING_SCREEN);
           trackingIdController.clear();
           update();
@@ -185,8 +185,11 @@ class DeliveriesController extends GetxController {
   BitmapDescriptor? bikeMarkerIcon;
   getBikeIcon() async {
     var icon = await BitmapDescriptor.asset(
-        const ImageConfiguration(), PngAssets.motorCycleIcon,
-        width: 35.sp, height: 35.sp);
+      const ImageConfiguration(),
+      PngAssets.motorCycleIcon,
+      width: 35.sp,
+      height: 35.sp,
+    );
     bikeMarkerIcon = icon;
     update();
   }
@@ -291,7 +294,8 @@ class DeliveriesController extends GetxController {
 
   fetchDeliveries({bool isLoadMore = false}) async {
     if (fetchingDeliveries ||
-        (isLoadMore && allDeliveries.length >= totalDeliveries)) return;
+        (isLoadMore && allDeliveries.length >= totalDeliveries))
+      return;
 
     fetchingDeliveries = true;
     update();
@@ -325,7 +329,9 @@ class DeliveriesController extends GetxController {
     } else {
       if (getStorage.read("token") != null) {
         showToast(
-            message: response.message, isError: response.status != "success");
+          message: response.message,
+          isError: response.status != "success",
+        );
       }
     }
   }
@@ -334,8 +340,9 @@ class DeliveriesController extends GetxController {
     fetchingDeliveries = true;
     update();
 
-    APIResponse response =
-        await deliveryService.getDelivery({'id': selectedDelivery!.id});
+    APIResponse response = await deliveryService.getDelivery({
+      'id': selectedDelivery!.id,
+    });
     fetchingDeliveries = false;
     update();
     if (response.status == "success") {
@@ -372,21 +379,29 @@ class DeliveriesController extends GetxController {
   GoogleMapController? newGoogleMapController;
   List<LatLng> pLineCoordinatedList = [];
   Set<Polyline> polyLineSet = {};
-  Future<void> drawPolyLineFromOriginToDestination(BuildContext context,
-      {required String originLatitude,
-      required String originLongitude,
-      required String destinationLatitude,
-      required String destinationLongitude,
-      required String originAddress,
-      required String destinationAddress}) async {
+  Future<void> drawPolyLineFromOriginToDestination(
+    BuildContext context, {
+    required String originLatitude,
+    required String originLongitude,
+    required String destinationLatitude,
+    required String destinationLongitude,
+    required String originAddress,
+    required String destinationAddress,
+  }) async {
     await googleMapController.future;
-    var originLatLng =
-        LatLng(double.parse(originLatitude), double.parse(originLongitude));
+    var originLatLng = LatLng(
+      double.parse(originLatitude),
+      double.parse(originLongitude),
+    );
     var destinationLatLng = LatLng(
-        double.parse(destinationLatitude), double.parse(destinationLongitude));
+      double.parse(destinationLatitude),
+      double.parse(destinationLongitude),
+    );
 
     var directionDetailsInfo = await obtainOriginToDestinationDirectionDetails(
-        originLatLng, destinationLatLng);
+      originLatLng,
+      destinationLatLng,
+    );
 
     rideDirectionDetailsInfo = directionDetailsInfo;
     distanceToDestination = rideDirectionDetailsInfo!.distance_text;
@@ -395,50 +410,57 @@ class DeliveriesController extends GetxController {
     // Navigator.pop(context);
     PolylinePoints pPoints = PolylinePoints(apiKey: Secret.apiKey);
     List<PointLatLng> decodePolyLinePointsResultList =
-    PolylinePoints.decodePolyline(directionDetailsInfo.e_points!);
+        PolylinePoints.decodePolyline(directionDetailsInfo.e_points!);
     pLineCoordinatedList.clear();
     if (decodePolyLinePointsResultList.isNotEmpty) {
       decodePolyLinePointsResultList.forEach((PointLatLng pointLatLng) {
-        pLineCoordinatedList
-            .add(LatLng(pointLatLng.latitude, pointLatLng.longitude));
+        pLineCoordinatedList.add(
+          LatLng(pointLatLng.latitude, pointLatLng.longitude),
+        );
       });
       update();
     }
     polyLineSet.clear();
     Polyline polyline = Polyline(
-        polylineId: const PolylineId("PolyLineId"),
-        jointType: JointType.round,
-        color: AppColors.primaryColor,
-        points: pLineCoordinatedList,
-        startCap: Cap.roundCap,
-        endCap: Cap.roundCap,
-        geodesic: true,
-        width: 5);
+      polylineId: const PolylineId("PolyLineId"),
+      jointType: JointType.round,
+      color: AppColors.primaryColor,
+      points: pLineCoordinatedList,
+      startCap: Cap.roundCap,
+      endCap: Cap.roundCap,
+      geodesic: true,
+      width: 5,
+    );
 
     polyLineSet.add(polyline);
     update();
     LatLngBounds latLngBounds;
     if (originLatLng.latitude > destinationLatLng.latitude &&
         originLatLng.longitude > destinationLatLng.longitude) {
-      latLngBounds =
-          LatLngBounds(southwest: destinationLatLng, northeast: originLatLng);
+      latLngBounds = LatLngBounds(
+        southwest: destinationLatLng,
+        northeast: originLatLng,
+      );
     } else if (originLatLng.longitude > destinationLatLng.longitude) {
       latLngBounds = LatLngBounds(
-          southwest: LatLng(originLatLng.latitude, destinationLatLng.longitude),
-          northeast:
-              LatLng(destinationLatLng.latitude, originLatLng.longitude));
+        southwest: LatLng(originLatLng.latitude, destinationLatLng.longitude),
+        northeast: LatLng(destinationLatLng.latitude, originLatLng.longitude),
+      );
     } else if (originLatLng.latitude > destinationLatLng.latitude) {
       latLngBounds = LatLngBounds(
-          southwest: LatLng(destinationLatLng.latitude, originLatLng.longitude),
-          northeast:
-              LatLng(originLatLng.latitude, destinationLatLng.longitude));
+        southwest: LatLng(destinationLatLng.latitude, originLatLng.longitude),
+        northeast: LatLng(originLatLng.latitude, destinationLatLng.longitude),
+      );
     } else {
-      latLngBounds =
-          LatLngBounds(southwest: originLatLng, northeast: destinationLatLng);
+      latLngBounds = LatLngBounds(
+        southwest: originLatLng,
+        northeast: destinationLatLng,
+      );
     }
     if (newGoogleMapController != null) {
-      newGoogleMapController!
-          .animateCamera(CameraUpdate.newLatLngBounds(latLngBounds, 65));
+      newGoogleMapController!.animateCamera(
+        CameraUpdate.newLatLngBounds(latLngBounds, 65),
+      );
     } else {
       print("================================================");
       print("GoogleMapController is not initialized yet.");
@@ -452,8 +474,10 @@ class DeliveriesController extends GetxController {
     );
     Marker destinationMarker = Marker(
       markerId: const MarkerId('destinationID'),
-      infoWindow:
-          InfoWindow(title: destinationAddress ?? "", snippet: "Destination"),
+      infoWindow: InfoWindow(
+        title: destinationAddress ?? "",
+        snippet: "Destination",
+      ),
       position: destinationLatLng,
       icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
     );
@@ -464,31 +488,37 @@ class DeliveriesController extends GetxController {
     update();
   }
 
-  Future<void> drawPolylineFromRiderToDestination(BuildContext context,
-      {required LatLng destinationPosition,
-      required LatLng currentRiderLocation,
-      required double riderDegrees}) async {
+  Future<void> drawPolylineFromRiderToDestination(
+    BuildContext context, {
+    required LatLng destinationPosition,
+    required LatLng currentRiderLocation,
+    required double riderDegrees,
+  }) async {
     // Get the user's current location
     LatLng riderLatLng = currentRiderLocation;
     await googleMapController.future;
     // Fetch direction details
     var directionDetailsInfo = await obtainOriginToDestinationDirectionDetails(
-        riderLatLng, destinationPosition);
+      riderLatLng,
+      destinationPosition,
+    );
 
     rideDirectionDetailsInfo = directionDetailsInfo;
     distanceToDestination = rideDirectionDetailsInfo!.distance_text;
     durationToDestination = rideDirectionDetailsInfo!.duration_text;
 
     // Decode the polyline points
-    PolylinePoints polylinePoints = PolylinePoints(apiKey:Secret.apiKey);
-    List<PointLatLng> decodedPolylinePoints =
-    PolylinePoints.decodePolyline(directionDetailsInfo.e_points ?? "");
+    PolylinePoints polylinePoints = PolylinePoints(apiKey: Secret.apiKey);
+    List<PointLatLng> decodedPolylinePoints = PolylinePoints.decodePolyline(
+      directionDetailsInfo.e_points ?? "",
+    );
 
     pLineCoordinatedList.clear();
     if (decodedPolylinePoints.isNotEmpty) {
       decodedPolylinePoints.forEach((PointLatLng pointLatLng) {
-        pLineCoordinatedList
-            .add(LatLng(pointLatLng.latitude, pointLatLng.longitude));
+        pLineCoordinatedList.add(
+          LatLng(pointLatLng.latitude, pointLatLng.longitude),
+        );
       });
       update();
     }
@@ -513,31 +543,30 @@ class DeliveriesController extends GetxController {
     LatLngBounds latLngBounds;
     if (riderLatLng.latitude > destinationPosition.latitude &&
         riderLatLng.longitude > destinationPosition.longitude) {
-      latLngBounds =
-          LatLngBounds(southwest: destinationPosition, northeast: riderLatLng);
+      latLngBounds = LatLngBounds(
+        southwest: destinationPosition,
+        northeast: riderLatLng,
+      );
     } else if (riderLatLng.longitude > destinationPosition.longitude) {
       latLngBounds = LatLngBounds(
-          southwest:
-              LatLng(riderLatLng.latitude, destinationPosition.longitude),
-          northeast:
-              LatLng(destinationPosition.latitude, riderLatLng.longitude));
+        southwest: LatLng(riderLatLng.latitude, destinationPosition.longitude),
+        northeast: LatLng(destinationPosition.latitude, riderLatLng.longitude),
+      );
     } else if (riderLatLng.latitude > destinationPosition.latitude) {
       latLngBounds = LatLngBounds(
-          southwest:
-              LatLng(destinationPosition.latitude, riderLatLng.longitude),
-          northeast:
-              LatLng(riderLatLng.latitude, destinationPosition.longitude));
+        southwest: LatLng(destinationPosition.latitude, riderLatLng.longitude),
+        northeast: LatLng(riderLatLng.latitude, destinationPosition.longitude),
+      );
     } else {
-      latLngBounds =
-          LatLngBounds(southwest: riderLatLng, northeast: destinationPosition);
+      latLngBounds = LatLngBounds(
+        southwest: riderLatLng,
+        northeast: destinationPosition,
+      );
     }
 
     if (newGoogleMapController != null) {
       newGoogleMapController!.animateCamera(
-        CameraUpdate.newLatLngBounds(
-          latLngBounds,
-          65,
-        ),
+        CameraUpdate.newLatLngBounds(latLngBounds, 65),
       );
     } else {
       print("GoogleMapController is not initialized yet.");
@@ -549,10 +578,7 @@ class DeliveriesController extends GetxController {
       markerId: const MarkerId("Rider"),
       rotation: riderDegrees,
       infoWindow: const InfoWindow(title: "Rider", snippet: "Rider's location"),
-      position: LatLng(
-        riderLatLng.latitude,
-        riderLatLng.longitude,
-      ),
+      position: LatLng(riderLatLng.latitude, riderLatLng.longitude),
       icon: bikeMarkerIcon ?? BitmapDescriptor.defaultMarker,
     );
     Marker? destinationMarker;
@@ -560,22 +586,26 @@ class DeliveriesController extends GetxController {
       destinationMarker = Marker(
         markerId: const MarkerId('senderID'),
         infoWindow: InfoWindow(
-            title: selectedDelivery?.originLocation.name ?? "",
-            snippet: "Sender"),
+          title: selectedDelivery?.originLocation.name ?? "",
+          snippet: "Sender",
+        ),
         position: LatLng(
-            double.parse(selectedDelivery!.originLocation.latitude),
-            double.parse(selectedDelivery!.originLocation.longitude)),
+          double.parse(selectedDelivery!.originLocation.latitude),
+          double.parse(selectedDelivery!.originLocation.longitude),
+        ),
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
       );
     } else if (['picked'].contains(selectedDelivery!.status)) {
       destinationMarker = Marker(
         markerId: const MarkerId('receiverID'),
         infoWindow: InfoWindow(
-            title: selectedDelivery?.destinationLocation.name ?? "",
-            snippet: "Receiver"),
+          title: selectedDelivery?.destinationLocation.name ?? "",
+          snippet: "Receiver",
+        ),
         position: LatLng(
-            double.parse(selectedDelivery!.destinationLocation.latitude),
-            double.parse(selectedDelivery!.destinationLocation.longitude)),
+          double.parse(selectedDelivery!.destinationLocation.latitude),
+          double.parse(selectedDelivery!.destinationLocation.longitude),
+        ),
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
       );
     }
@@ -666,14 +696,17 @@ class DeliveriesController extends GetxController {
       update();
       if (itemDetailsFormKey.currentState!.validate()) {
         deliveryItems.clear();
-        deliveryItems.add(DeliveryItemData(
+        deliveryItems.add(
+          DeliveryItemData(
             name: deliveryItemNameController.text,
             description: deliveryItemDescriptionController.text,
             category: deliveryItemCategoryController.text,
             weight: 1.5,
             height: 0.3,
             quantity: int.parse(deliveryItemQuantityController.text),
-            image: parcelImage!));
+            image: parcelImage!,
+          ),
+        );
         update();
       }
     } else {
@@ -736,7 +769,9 @@ class DeliveriesController extends GetxController {
         Get.toNamed(Routes.DELIVERY_SUMMARY_SCREEN);
       } else {
         showToast(
-            message: "Please fill all the required fields", isError: true);
+          message: "Please fill all the required fields",
+          isError: true,
+        );
       }
       return;
     }
@@ -754,12 +789,15 @@ class DeliveriesController extends GetxController {
   int? selectedDeliveryItemIndex;
   editDeliveryItem() {
     deliveryItemNameController.setText(selectedDeliveryItemForItem?.name ?? "");
-    deliveryItemDescriptionController
-        .setText(selectedDeliveryItemForItem?.description ?? "");
-    deliveryItemCategoryController
-        .setText(selectedDeliveryItemForItem?.category ?? "");
-    deliveryItemQuantityController
-        .setText((selectedDeliveryItemForItem?.quantity ?? 0).toString());
+    deliveryItemDescriptionController.setText(
+      selectedDeliveryItemForItem?.description ?? "",
+    );
+    deliveryItemCategoryController.setText(
+      selectedDeliveryItemForItem?.category ?? "",
+    );
+    deliveryItemQuantityController.setText(
+      (selectedDeliveryItemForItem?.quantity ?? 0).toString(),
+    );
     parcelImage = selectedDeliveryItemForItem!.image;
     update();
   }
@@ -810,10 +848,15 @@ class DeliveriesController extends GetxController {
     gettingDistance = true;
     update();
     distanceDetails = await obtainOriginToDestinationDirectionDetails(
-        LatLng(deliverySenderLocation!.latitude,
-            deliverySenderLocation!.longitude),
-        LatLng(deliveryReceiverLocation!.latitude,
-            deliveryReceiverLocation!.longitude));
+      LatLng(
+        deliverySenderLocation!.latitude,
+        deliverySenderLocation!.longitude,
+      ),
+      LatLng(
+        deliveryReceiverLocation!.latitude,
+        deliveryReceiverLocation!.longitude,
+      ),
+    );
     gettingDistance = false;
     update();
     if (distanceDetails != null) {
@@ -854,34 +897,34 @@ class DeliveriesController extends GetxController {
     // Call the API
     APIResponse response = await deliveryService.createDelivery(data);
     // Handle response
-    showToast(
-      message: response.message,
-      isError: response.status != "success",
-    );
+    showToast(message: response.message, isError: response.status != "success");
     submittingDelivery = false;
     update();
     if (response.status == "success") {
-      selectedDeliveryResponseModel =
-          DeliveryResponseModel.fromJson(response.data);
+      selectedDeliveryResponseModel = DeliveryResponseModel.fromJson(
+        response.data,
+      );
       selectedDelivery = DeliveryModel.fromJson(response.data);
 
       update();
       fetchDeliveries();
       clearFields();
       setSelectedPaymentMethod(
-          selectedDeliveryResponseModel!.paymentMethods[0]);
-      drawPolyLineFromOriginToDestination(context,
-          originLatitude:
-              selectedDeliveryResponseModel!.originLocation.latitude,
-          originLongitude:
-              selectedDeliveryResponseModel!.originLocation.longitude,
-          originAddress: selectedDeliveryResponseModel!.originLocation.name,
-          destinationLatitude:
-              selectedDeliveryResponseModel!.destinationLocation.latitude,
-          destinationLongitude:
-              selectedDeliveryResponseModel!.destinationLocation.longitude,
-          destinationAddress:
-              selectedDeliveryResponseModel!.destinationLocation.name);
+        selectedDeliveryResponseModel!.paymentMethods[0],
+      );
+      drawPolyLineFromOriginToDestination(
+        context,
+        originLatitude: selectedDeliveryResponseModel!.originLocation.latitude,
+        originLongitude:
+            selectedDeliveryResponseModel!.originLocation.longitude,
+        originAddress: selectedDeliveryResponseModel!.originLocation.name,
+        destinationLatitude:
+            selectedDeliveryResponseModel!.destinationLocation.latitude,
+        destinationLongitude:
+            selectedDeliveryResponseModel!.destinationLocation.longitude,
+        destinationAddress:
+            selectedDeliveryResponseModel!.destinationLocation.name,
+      );
       Get.offNamed(Routes.RIDE_SELECTION_SCREEN);
     }
   }
@@ -912,18 +955,21 @@ class DeliveriesController extends GetxController {
         if (response.status == "success") {
           selectedDelivery = DeliveryModel.fromJson(response.data);
           update();
-          drawPolyLineFromOriginToDestination(context,
-              originLatitude: selectedDelivery!.originLocation.latitude,
-              originLongitude: selectedDelivery!.originLocation.longitude,
-              originAddress: selectedDelivery!.originLocation.name,
-              destinationLatitude:
-                  selectedDelivery!.destinationLocation.latitude,
-              destinationLongitude:
-                  selectedDelivery!.destinationLocation.longitude,
-              destinationAddress: selectedDelivery!.destinationLocation.name);
+          drawPolyLineFromOriginToDestination(
+            context,
+            originLatitude: selectedDelivery!.originLocation.latitude,
+            originLongitude: selectedDelivery!.originLocation.longitude,
+            originAddress: selectedDelivery!.originLocation.name,
+            destinationLatitude: selectedDelivery!.destinationLocation.latitude,
+            destinationLongitude:
+                selectedDelivery!.destinationLocation.longitude,
+            destinationAddress: selectedDelivery!.destinationLocation.name,
+          );
           fetchDeliveries();
           startLocationTracking(
-              trackingId: selectedDelivery!.trackingId, context: Get.context!);
+            trackingId: selectedDelivery!.trackingId,
+            context: Get.context!,
+          );
           Get.offNamed(Routes.DELIVERY_SUCCESS_SCREEN);
         }
       }
@@ -941,26 +987,27 @@ class DeliveriesController extends GetxController {
         parcelImage!.length > 5;
   }
 
-  List<String> parcelCategories = [
-    "non-fragile",
-    "fragile",
-  ];
+  List<String> parcelCategories = ["non-fragile", "fragile"];
   validateSendingInformation() {
     if (sendingInfoFormKey.currentState!.validate() &&
         receiverPhoneController.text.isNotEmpty) {
-      Get.find<SocketService>().listenForAvailableRiders(onRiderOnline: (data) {
-        availableRiders =
-            (data as List).map((r) => AvailableRiderModel.fromJson(r)).toList();
-        update();
-        if ((availableRiders.isEmpty ||
-            !(selectedDelivery!.courierTypePrices!.any((price) =>
-                availableRiders
-                    .map((rider) => rider.courierType.name.toLowerCase())
-                    .contains(price.courierType.toLowerCase()))))) {
-          selectedCourierTypePrice = null;
+      Get.find<SocketService>().listenForAvailableRiders(
+        onRiderOnline: (data) {
+          availableRiders = (data as List)
+              .map((r) => AvailableRiderModel.fromJson(r))
+              .toList();
           update();
-        }
-      });
+          if ((availableRiders.isEmpty ||
+              !(selectedDelivery!.courierTypePrices!.any(
+                (price) => availableRiders
+                    .map((rider) => rider.courierType.name.toLowerCase())
+                    .contains(price.courierType.toLowerCase()),
+              )))) {
+            selectedCourierTypePrice = null;
+            update();
+          }
+        },
+      );
       Get.toNamed(Routes.DELIVERY_ITEM_INPUT_SCREEN);
     }
   }
@@ -989,7 +1036,8 @@ class DeliveriesController extends GetxController {
         return AlertDialog(
           title: customText("Confirm Exit"),
           content: customText(
-              "You have not confirmed this order. Are you sure you want to exit?"),
+            "You have not confirmed this order. Are you sure you want to exit?",
+          ),
           actions: <Widget>[
             TextButton(
               onPressed: () {
@@ -1016,11 +1064,7 @@ class DeliveriesController extends GetxController {
         return AlertDialog(
           title: Row(
             children: [
-              Icon(
-                Icons.info,
-                color: AppColors.primaryColor,
-                size: 25.sp,
-              ),
+              Icon(Icons.info, color: AppColors.primaryColor, size: 25.sp),
             ],
           ),
           content: customText(
@@ -1033,10 +1077,12 @@ class DeliveriesController extends GetxController {
               onPressed: () {
                 Navigator.of(context).pop(); // User confirmed exit
               },
-              child: customText("OK",
-                  color: AppColors.primaryColor,
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w600),
+              child: customText(
+                "OK",
+                color: AppColors.primaryColor,
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ],
         );
@@ -1046,7 +1092,9 @@ class DeliveriesController extends GetxController {
 
   bool statusDialogIsOpened = false;
   void checkProximityToLocations(
-      LatLng currentRiderPosition, BuildContext context) {
+    LatLng currentRiderPosition,
+    BuildContext context,
+  ) {
     // Define sender's location
     LatLng senderLocation = LatLng(
       double.parse(selectedDelivery!.originLocation.latitude),
@@ -1085,10 +1133,11 @@ class DeliveriesController extends GetxController {
       update();
       FlutterRingtonePlayer().playNotification();
       showRiderAndDeliveryStatusDialog(
-          context: context,
-          title: "Rider is here",
-          message: "The rider is here to pick your order",
-          delivery: selectedDelivery!);
+        context: context,
+        title: "Rider is here",
+        message: "The rider is here to pick your order",
+        delivery: selectedDelivery!,
+      );
     }
 
     // Check if the rider has arrived at the receiver's location
@@ -1097,91 +1146,114 @@ class DeliveriesController extends GetxController {
         !statusDialogIsOpened) {
       FlutterRingtonePlayer().playNotification();
       showRiderAndDeliveryStatusDialog(
-          context: context,
-          title: "Rider at receiver's location",
-          message: "The rider has arrived with your delivery",
-          delivery: selectedDelivery!);
+        context: context,
+        title: "Rider at receiver's location",
+        message: "The rider has arrived with your delivery",
+        delivery: selectedDelivery!,
+      );
       // Trigger receiver arrival logic here
     }
   }
 
-  startLocationTracking(
-      {required String trackingId, required BuildContext context}) async {
+  startLocationTracking({
+    required String trackingId,
+    required BuildContext context,
+  }) async {
     if (Get.isRegistered<SocketService>()) {
-      Get.find<SocketService>()
-          .joinTrackingRoom(trackingId: trackingId, msg: "join_room");
+      Get.find<SocketService>().joinTrackingRoom(
+        trackingId: trackingId,
+        msg: "join_room",
+      );
       // Otherwise send location update
       Get.find<SocketService>().listenForParcelLocationUpdate(
-          roomId: 'rider_tracking',
-          onLocationUpdate: (data) async {
-            updateMarkerPosition(
-                currentRiderPosition: LatLng(
-                    double.parse(data['lat'].toString()),
-                    double.parse(data['lon'].toString())),
-                degrees: double.parse(data['degrees'].toString()),
-                context: context);
-            checkProximityToLocations(
-                LatLng(double.parse(data['lat'].toString()),
-                    double.parse(data['lon'].toString())),
-                context);
-            if (data.containsKey('status')) {
-              if (data['status'] != selectedDelivery!.status) {
-                if (data['status'] == "delivered") {
-                  Get.find<SettingsController>().getProfile();
-                  Get.find<NotificationsController>().getNotifications();
-                }
-                await getDelivery();
-                FlutterRingtonePlayer().playNotification();
-                showRiderAndDeliveryStatusToast(
-                    title: "Status change",
-                    message:
-                        "The current status of your delivery is: ${data['status']} ",
-                    delivery: selectedDelivery!);
-                fetchDeliveries();
+        roomId: 'rider_tracking',
+        onLocationUpdate: (data) async {
+          updateMarkerPosition(
+            currentRiderPosition: LatLng(
+              double.parse(data['lat'].toString()),
+              double.parse(data['lon'].toString()),
+            ),
+            degrees: double.parse(data['degrees'].toString()),
+            context: context,
+          );
+          checkProximityToLocations(
+            LatLng(
+              double.parse(data['lat'].toString()),
+              double.parse(data['lon'].toString()),
+            ),
+            context,
+          );
+          if (data.containsKey('status')) {
+            if (data['status'] != selectedDelivery!.status) {
+              if (data['status'] == "delivered") {
+                Get.find<SettingsController>().getProfile();
+                Get.find<NotificationsController>().getNotifications();
               }
+              await getDelivery();
+              FlutterRingtonePlayer().playNotification();
+              showRiderAndDeliveryStatusToast(
+                title: "Status change",
+                message:
+                    "The current status of your delivery is: ${data['status']} ",
+                delivery: selectedDelivery!,
+              );
+              fetchDeliveries();
             }
-          });
+          }
+        },
+      );
     } else {
-      Get.find<SocketService>()
-          .joinTrackingRoom(trackingId: trackingId, msg: "join_room");
+      Get.find<SocketService>().joinTrackingRoom(
+        trackingId: trackingId,
+        msg: "join_room",
+      );
       // Otherwise send location update
       Get.find<SocketService>().listenForParcelLocationUpdate(
-          roomId: 'rider_tracking',
-          onLocationUpdate: (data) async {
-            updateMarkerPosition(
-                currentRiderPosition: LatLng(
-                    double.parse(data['lat'].toString()),
-                    double.parse(data['lon'].toString())),
-                degrees: double.parse(data['degrees'].toString()),
-                context: context);
-            checkProximityToLocations(
-                LatLng(double.parse(data['lat'].toString()),
-                    double.parse(data['lon'].toString())),
-                context);
-            if (data.containsKey('status')) {
-              if (data['status'] != selectedDelivery!.status) {
-                if (data['status'] == "delivered") {
-                }
-                await getDelivery();
-                FlutterRingtonePlayer().playNotification();
-                showRiderAndDeliveryStatusToast(
-                    title: "Status change",
-                    message:
-                        "The current status of your delivery is: ${data['status']} ",
-                    delivery: selectedDelivery!);
-                fetchDeliveries();
-              }
+        roomId: 'rider_tracking',
+        onLocationUpdate: (data) async {
+          updateMarkerPosition(
+            currentRiderPosition: LatLng(
+              double.parse(data['lat'].toString()),
+              double.parse(data['lon'].toString()),
+            ),
+            degrees: double.parse(data['degrees'].toString()),
+            context: context,
+          );
+          checkProximityToLocations(
+            LatLng(
+              double.parse(data['lat'].toString()),
+              double.parse(data['lon'].toString()),
+            ),
+            context,
+          );
+          if (data.containsKey('status')) {
+            if (data['status'] != selectedDelivery!.status) {
+              if (data['status'] == "delivered") {}
+              await getDelivery();
+              FlutterRingtonePlayer().playNotification();
+              showRiderAndDeliveryStatusToast(
+                title: "Status change",
+                message:
+                    "The current status of your delivery is: ${data['status']} ",
+                delivery: selectedDelivery!,
+              );
+              fetchDeliveries();
             }
-          });
+          }
+        },
+      );
     }
   }
 
-  void updateMarkerPosition(
-      {required LatLng currentRiderPosition,
-      required double degrees,
-      required BuildContext context}) async {
-    LatLng newPosition =
-        LatLng(currentRiderPosition.latitude, currentRiderPosition.longitude);
+  void updateMarkerPosition({
+    required LatLng currentRiderPosition,
+    required double degrees,
+    required BuildContext context,
+  }) async {
+    LatLng newPosition = LatLng(
+      currentRiderPosition.latitude,
+      currentRiderPosition.longitude,
+    );
     LatLng closestPoint = getClosestPointOnPolyline(newPosition);
 
     double deviation = Geolocator.distanceBetween(
@@ -1196,24 +1268,32 @@ class DeliveriesController extends GetxController {
 
     // Recalculate the route
     if (['accepted'].contains(selectedDelivery!.status)) {
-      drawPolylineFromRiderToDestination(context,
-          destinationPosition: LatLng(
-              double.parse(selectedDelivery!.originLocation.latitude),
-              double.parse(selectedDelivery!.originLocation.longitude)),
-          currentRiderLocation: newPosition,
-          riderDegrees: degrees);
+      drawPolylineFromRiderToDestination(
+        context,
+        destinationPosition: LatLng(
+          double.parse(selectedDelivery!.originLocation.latitude),
+          double.parse(selectedDelivery!.originLocation.longitude),
+        ),
+        currentRiderLocation: newPosition,
+        riderDegrees: degrees,
+      );
     } else if (['picked'].contains(selectedDelivery!.status)) {
-      drawPolylineFromRiderToDestination(context,
-          destinationPosition: LatLng(
-              double.parse(selectedDelivery!.destinationLocation.latitude),
-              double.parse(selectedDelivery!.destinationLocation.longitude)),
-          currentRiderLocation: newPosition,
-          riderDegrees: degrees);
+      drawPolylineFromRiderToDestination(
+        context,
+        destinationPosition: LatLng(
+          double.parse(selectedDelivery!.destinationLocation.latitude),
+          double.parse(selectedDelivery!.destinationLocation.longitude),
+        ),
+        currentRiderLocation: newPosition,
+        riderDegrees: degrees,
+      );
     } else {
       // Update marker and camera
       var markerId = const MarkerId("Rider");
-      double rotation =
-          calculateLocationDegrees(currentRiderPosition, newPosition);
+      double rotation = calculateLocationDegrees(
+        currentRiderPosition,
+        newPosition,
+      );
       final marker = Marker(
         markerId: markerId,
         position: newPosition,
@@ -1226,8 +1306,9 @@ class DeliveriesController extends GetxController {
       markerSet.add(marker);
 
       if (newGoogleMapController != null) {
-        newGoogleMapController!
-            .animateCamera(CameraUpdate.newLatLng(newPosition));
+        newGoogleMapController!.animateCamera(
+          CameraUpdate.newLatLng(newPosition),
+        );
       }
 
       currentRiderPosition = newPosition;
@@ -1263,73 +1344,75 @@ class DeliveriesController extends GetxController {
           return WillPopScope(
             onWillPop: () async => false,
             child: GetBuilder<DeliveriesController>(
-                builder: (deliveriesController) {
-              return Dialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 12, horizontal: 5),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      customText(
-                        'Rider is here!',
-                        fontSize: 22.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      const SizedBox(height: 10),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 10.sp, vertical: 10.sp),
-                        margin: EdgeInsets.symmetric(
-                            horizontal: 5.sp, vertical: 10.sp),
-                        width: 1.sw,
-                        decoration: BoxDecoration(
+              builder: (deliveriesController) {
+                return Dialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: 5,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        customText(
+                          'Rider is here!',
+                          fontSize: 22.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        const SizedBox(height: 10),
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 10.sp,
+                            vertical: 10.sp,
+                          ),
+                          margin: EdgeInsets.symmetric(
+                            horizontal: 5.sp,
+                            vertical: 10.sp,
+                          ),
+                          width: 1.sw,
+                          decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12.r),
-                            color: AppColors.greenColor.withOpacity(0.92)),
-                        child: Column(
+                            color: AppColors.greenColor.withValues(alpha: 0.92),
+                          ),
+                          child: Column(
+                            children: [
+                              SizedBox(height: 25.sp),
+                              const DottedLine(
+                                dashLength: 3,
+                                dashGapLength: 3,
+                                lineThickness: 2,
+                                dashColor: AppColors.whiteColor,
+                                // lineLength: 150,
+                              ),
+                              SizedBox(height: 10.h),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 20.h),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            SizedBox(
-                              height: 25.sp,
-                            ),
-                            const DottedLine(
-                              dashLength: 3,
-                              dashGapLength: 3,
-                              lineThickness: 2,
-                              dashColor: AppColors.whiteColor,
-// lineLength: 150,
-                            ),
-                            SizedBox(
-                              height: 10.h,
+                            Expanded(
+                              child: CustomButton(
+                                onPressed: () async {
+                                  FlutterRingtonePlayer().stop();
+                                  statusDialogIsOpened = false;
+                                },
+                                title: "Ok",
+                                backgroundColor: AppColors.greenColor,
+                              ),
                             ),
                           ],
                         ),
-                      ),
-                      SizedBox(
-                        height: 20.h,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: CustomButton(
-                              onPressed: () async {
-                                FlutterRingtonePlayer().stop();
-                                statusDialogIsOpened = false;
-                              },
-                              title: "Ok",
-                              backgroundColor: AppColors.greenColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              );
-            }),
+                );
+              },
+            ),
           );
         },
       ),

@@ -5,10 +5,14 @@ class DashboardBindings extends Bindings {
   @override
   void dependencies() {
     // Analytics service dependency - must be registered before controller
-    Get.put<AnalyticsService>(AnalyticsService());
+    Get.lazyPut<AnalyticsService>(
+      () => AnalyticsService(),
+      fenix: true,
+    );
 
-    Get.put(
-      DashboardController(),
+    Get.lazyPut<DashboardController>(
+      () => DashboardController(),
+      fenix: true,
     );
   }
 }

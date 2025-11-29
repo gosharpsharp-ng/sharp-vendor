@@ -63,7 +63,7 @@ class BusinessHoursScreen extends GetView<RestaurantDetailsController> {
                       color: AppColors.whiteColor,
                       borderRadius: BorderRadius.circular(12.r),
                       border: Border.all(
-                        color: AppColors.greyColor.withOpacity(0.2),
+                        color: AppColors.greyColor.withValues(alpha: 0.2),
                       ),
                     ),
                     child: Column(
@@ -163,7 +163,7 @@ class BusinessHoursScreen extends GetView<RestaurantDetailsController> {
                             ),
                             borderRadius: BorderRadius.circular(12.r),
                             color: isSelected
-                                ? AppColors.primaryColor.withOpacity(0.05)
+                                ? AppColors.primaryColor.withValues(alpha: 0.05)
                                 : AppColors.whiteColor,
                           ),
                           child: Row(
@@ -217,10 +217,14 @@ class BusinessHoursScreen extends GetView<RestaurantDetailsController> {
                           ),
                           padding: EdgeInsets.all(16.sp),
                           decoration: BoxDecoration(
-                            color: AppColors.primaryColor.withOpacity(0.05),
+                            color: AppColors.primaryColor.withValues(
+                              alpha: 0.05,
+                            ),
                             borderRadius: BorderRadius.circular(12.r),
                             border: Border.all(
-                              color: AppColors.primaryColor.withOpacity(0.2),
+                              color: AppColors.primaryColor.withValues(
+                                alpha: 0.2,
+                              ),
                             ),
                           ),
                           child: Row(
@@ -311,16 +315,14 @@ class BusinessHoursScreen extends GetView<RestaurantDetailsController> {
 
                 SizedBox(height: 30.h),
 
-            
-
                 // Information Card
                 Container(
                   padding: EdgeInsets.all(16.sp),
                   decoration: BoxDecoration(
-                    color: AppColors.primaryColor.withOpacity(0.05),
+                    color: AppColors.primaryColor.withValues(alpha: 0.05),
                     borderRadius: BorderRadius.circular(12.r),
                     border: Border.all(
-                      color: AppColors.primaryColor.withOpacity(0.2),
+                      color: AppColors.primaryColor.withValues(alpha: 0.2),
                     ),
                   ),
                   child: Row(
@@ -337,7 +339,7 @@ class BusinessHoursScreen extends GetView<RestaurantDetailsController> {
                           color: AppColors.primaryColor,
                           fontSize: 12.sp,
                           fontWeight: FontWeight.w500,
-                          overflow: TextOverflow.visible
+                          overflow: TextOverflow.visible,
                         ),
                       ),
                     ],

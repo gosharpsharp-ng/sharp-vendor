@@ -33,7 +33,7 @@ class CustomImagePickerBottomSheet extends StatelessWidget {
             height: 4.h,
             width: 40.w,
             decoration: BoxDecoration(
-              color: AppColors.greyColor.withOpacity(0.3),
+              color: AppColors.greyColor.withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(2.r),
             ),
           ),
@@ -57,7 +57,7 @@ class CustomImagePickerBottomSheet extends StatelessWidget {
                   child: Container(
                     padding: EdgeInsets.all(8.sp),
                     decoration: BoxDecoration(
-                      color: AppColors.greyColor.withOpacity(0.1),
+                      color: AppColors.greyColor.withValues(alpha: 0.1),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
@@ -80,7 +80,7 @@ class CustomImagePickerBottomSheet extends StatelessWidget {
                 _buildOptionTile(
                   icon: Icons.camera_alt,
                   iconColor: AppColors.primaryColor,
-                  iconBgColor: AppColors.primaryColor.withOpacity(0.1),
+                  iconBgColor: AppColors.primaryColor.withValues(alpha: 0.1),
                   title: "Take Photo",
                   subtitle: "Use camera to capture image",
                   onTap: () async {
@@ -95,7 +95,7 @@ class CustomImagePickerBottomSheet extends StatelessWidget {
                 _buildOptionTile(
                   icon: Icons.photo_library,
                   iconColor: AppColors.primaryColor,
-                  iconBgColor: AppColors.primaryColor.withOpacity(0.1),
+                  iconBgColor: AppColors.primaryColor.withValues(alpha: 0.1),
                   title: "Choose from Gallery",
                   subtitle: "Select from your photo library",
                   onTap: () async {
@@ -110,7 +110,7 @@ class CustomImagePickerBottomSheet extends StatelessWidget {
                 // _buildOptionTile(
                 //   icon: Icons.delete_outline,
                 //   iconColor: AppColors.redColor,
-                //   iconBgColor: AppColors.redColor.withOpacity(0.1),
+                //   iconBgColor: AppColors.redColor.withValues(alpha:0.1),
                 //   title: "Remove Image",
                 //   subtitle: "Delete current image",
                 //   onTap: () async {
@@ -144,7 +144,7 @@ class CustomImagePickerBottomSheet extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12.r),
           border: Border.all(
-            color: AppColors.greyColor.withOpacity(0.2),
+            color: AppColors.greyColor.withValues(alpha: 0.2),
             width: 1,
           ),
         ),
@@ -157,11 +157,7 @@ class CustomImagePickerBottomSheet extends StatelessWidget {
                 color: iconBgColor,
                 borderRadius: BorderRadius.circular(10.r),
               ),
-              child: Icon(
-                icon,
-                color: iconColor,
-                size: 24.sp,
-              ),
+              child: Icon(icon, color: iconColor, size: 24.sp),
             ),
 
             SizedBox(width: 16.w),
@@ -191,7 +187,7 @@ class CustomImagePickerBottomSheet extends StatelessWidget {
             // Arrow icon
             Icon(
               Icons.arrow_forward_ios,
-              color: AppColors.greyColor.withOpacity(0.5),
+              color: AppColors.greyColor.withValues(alpha: 0.5),
               size: 16.sp,
             ),
           ],

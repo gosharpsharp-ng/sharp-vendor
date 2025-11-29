@@ -1,5 +1,6 @@
 import 'package:sharpvendor/core/utils/exports.dart';
-import 'package:sharpvendor/modules/settings/controllers/analytics_controller.dart' show AnalyticsController, DateFilterOption;
+import 'package:sharpvendor/modules/settings/controllers/analytics_controller.dart'
+    show AnalyticsController, DateFilterOption;
 
 class DateFilterDropdown extends StatelessWidget {
   const DateFilterDropdown({super.key});
@@ -14,7 +15,7 @@ class DateFilterDropdown extends StatelessWidget {
             color: AppColors.whiteColor,
             borderRadius: BorderRadius.circular(8.r),
             border: Border.all(
-              color: AppColors.greyColor.withOpacity(0.3),
+              color: AppColors.greyColor.withValues(alpha: 0.3),
             ),
           ),
           child: DropdownButton<DateFilterOption>(
@@ -74,11 +75,7 @@ class DateFilterDropdown extends StatelessWidget {
   Widget _buildFilterItem(String text) {
     return Row(
       children: [
-        Icon(
-          Icons.calendar_today,
-          size: 16.sp,
-          color: AppColors.primaryColor,
-        ),
+        Icon(Icons.calendar_today, size: 16.sp, color: AppColors.primaryColor),
         SizedBox(width: 8.w),
         customText(
           text,
@@ -98,8 +95,8 @@ class DateFilterDropdown extends StatelessWidget {
       context: context,
       firstDate: DateTime(2020),
       lastDate: DateTime.now(),
-      initialDateRange: controller.customStartDate != null &&
-              controller.customEndDate != null
+      initialDateRange:
+          controller.customStartDate != null && controller.customEndDate != null
           ? DateTimeRange(
               start: controller.customStartDate!,
               end: controller.customEndDate!,

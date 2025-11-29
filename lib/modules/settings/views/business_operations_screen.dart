@@ -58,7 +58,8 @@ class BusinessOperationsScreen extends StatelessWidget {
                     OpeningDayWidget(
                       day: "Monday",
                       isSelected: settingsController.selectedDays['monday']!,
-                      onTap: () => settingsController.toggleDaySelection('monday'),
+                      onTap: () =>
+                          settingsController.toggleDaySelection('monday'),
                     ),
                     if (settingsController.selectedDays['monday']!)
                       _buildTimeSelectionRow(settingsController, 'monday'),
@@ -67,7 +68,8 @@ class BusinessOperationsScreen extends StatelessWidget {
                     OpeningDayWidget(
                       day: "Tuesday",
                       isSelected: settingsController.selectedDays['tuesday']!,
-                      onTap: () => settingsController.toggleDaySelection('tuesday'),
+                      onTap: () =>
+                          settingsController.toggleDaySelection('tuesday'),
                     ),
                     if (settingsController.selectedDays['tuesday']!)
                       _buildTimeSelectionRow(settingsController, 'tuesday'),
@@ -76,7 +78,8 @@ class BusinessOperationsScreen extends StatelessWidget {
                     OpeningDayWidget(
                       day: "Wednesday",
                       isSelected: settingsController.selectedDays['wednesday']!,
-                      onTap: () => settingsController.toggleDaySelection('wednesday'),
+                      onTap: () =>
+                          settingsController.toggleDaySelection('wednesday'),
                     ),
                     if (settingsController.selectedDays['wednesday']!)
                       _buildTimeSelectionRow(settingsController, 'wednesday'),
@@ -85,7 +88,8 @@ class BusinessOperationsScreen extends StatelessWidget {
                     OpeningDayWidget(
                       day: "Thursday",
                       isSelected: settingsController.selectedDays['thursday']!,
-                      onTap: () => settingsController.toggleDaySelection('thursday'),
+                      onTap: () =>
+                          settingsController.toggleDaySelection('thursday'),
                     ),
                     if (settingsController.selectedDays['thursday']!)
                       _buildTimeSelectionRow(settingsController, 'thursday'),
@@ -94,7 +98,8 @@ class BusinessOperationsScreen extends StatelessWidget {
                     OpeningDayWidget(
                       day: "Friday",
                       isSelected: settingsController.selectedDays['friday']!,
-                      onTap: () => settingsController.toggleDaySelection('friday'),
+                      onTap: () =>
+                          settingsController.toggleDaySelection('friday'),
                     ),
                     if (settingsController.selectedDays['friday']!)
                       _buildTimeSelectionRow(settingsController, 'friday'),
@@ -103,7 +108,8 @@ class BusinessOperationsScreen extends StatelessWidget {
                     OpeningDayWidget(
                       day: "Saturday",
                       isSelected: settingsController.selectedDays['saturday']!,
-                      onTap: () => settingsController.toggleDaySelection('saturday'),
+                      onTap: () =>
+                          settingsController.toggleDaySelection('saturday'),
                     ),
                     if (settingsController.selectedDays['saturday']!)
                       _buildTimeSelectionRow(settingsController, 'saturday'),
@@ -112,7 +118,8 @@ class BusinessOperationsScreen extends StatelessWidget {
                     OpeningDayWidget(
                       day: "Sunday",
                       isSelected: settingsController.selectedDays['sunday']!,
-                      onTap: () => settingsController.toggleDaySelection('sunday'),
+                      onTap: () =>
+                          settingsController.toggleDaySelection('sunday'),
                     ),
                     if (settingsController.selectedDays['sunday']!)
                       _buildTimeSelectionRow(settingsController, 'sunday'),
@@ -133,19 +140,26 @@ class BusinessOperationsScreen extends StatelessWidget {
       margin: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 15.h),
       padding: EdgeInsets.all(12.sp),
       decoration: BoxDecoration(
-        color: AppColors.primaryColor.withOpacity(0.05),
+        color: AppColors.primaryColor.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(color: AppColors.primaryColor.withOpacity(0.2)),
+        border: Border.all(
+          color: AppColors.primaryColor.withValues(alpha: 0.2),
+        ),
       ),
       child: Row(
         children: [
           Expanded(
             child: ClickableCustomRoundedInputField(
               onPressed: () async {
-                await controller.selectTimeForDay(day: day, isOpeningTime: true);
+                await controller.selectTimeForDay(
+                  day: day,
+                  isOpeningTime: true,
+                );
               },
               title: "Opening Time",
-              label: controller.dayOperatingHours[day]?['openTime'] ?? "Select Time",
+              label:
+                  controller.dayOperatingHours[day]?['openTime'] ??
+                  "Select Time",
               showLabel: true,
               readOnly: true,
               isRequired: true,
@@ -155,7 +169,10 @@ class BusinessOperationsScreen extends StatelessWidget {
               ),
               suffixWidget: IconButton(
                 onPressed: () async {
-                  await controller.selectTimeForDay(day: day, isOpeningTime: true);
+                  await controller.selectTimeForDay(
+                    day: day,
+                    isOpeningTime: true,
+                  );
                 },
                 icon: SvgPicture.asset(
                   SvgAssets.timeIcon,
@@ -168,10 +185,15 @@ class BusinessOperationsScreen extends StatelessWidget {
           Expanded(
             child: ClickableCustomRoundedInputField(
               onPressed: () async {
-                await controller.selectTimeForDay(day: day, isOpeningTime: false);
+                await controller.selectTimeForDay(
+                  day: day,
+                  isOpeningTime: false,
+                );
               },
               title: "Closing Time",
-              label: controller.dayOperatingHours[day]?['closeTime'] ?? "Select Time",
+              label:
+                  controller.dayOperatingHours[day]?['closeTime'] ??
+                  "Select Time",
               showLabel: true,
               isRequired: true,
               hasTitle: true,
@@ -181,7 +203,10 @@ class BusinessOperationsScreen extends StatelessWidget {
               ),
               suffixWidget: IconButton(
                 onPressed: () async {
-                  await controller.selectTimeForDay(day: day, isOpeningTime: false);
+                  await controller.selectTimeForDay(
+                    day: day,
+                    isOpeningTime: false,
+                  );
                 },
                 icon: SvgPicture.asset(
                   SvgAssets.timeIcon,
@@ -221,7 +246,9 @@ class OpeningDayWidget extends StatelessWidget {
             width: isSelected ? 1.5 : 0.5,
           ),
           borderRadius: BorderRadius.circular(8.r),
-          color: isSelected ? AppColors.primaryColor.withOpacity(0.05) : AppColors.transparent,
+          color: isSelected
+              ? AppColors.primaryColor.withValues(alpha: 0.05)
+              : AppColors.transparent,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -234,10 +261,14 @@ class OpeningDayWidget extends StatelessWidget {
             ),
             Container(
               decoration: BoxDecoration(
-                color: isSelected ? AppColors.primaryColor : AppColors.transparent,
+                color: isSelected
+                    ? AppColors.primaryColor
+                    : AppColors.transparent,
                 border: Border.all(
                   width: 1,
-                  color: isSelected ? AppColors.primaryColor : AppColors.greyColor,
+                  color: isSelected
+                      ? AppColors.primaryColor
+                      : AppColors.greyColor,
                 ),
                 borderRadius: BorderRadius.circular(4.r),
               ),
@@ -245,10 +276,14 @@ class OpeningDayWidget extends StatelessWidget {
               width: 20.sp,
               child: Center(
                 child: isSelected
-                    ? Icon(Icons.check, size: 14.sp, color: AppColors.whiteColor)
+                    ? Icon(
+                        Icons.check,
+                        size: 14.sp,
+                        color: AppColors.whiteColor,
+                      )
                     : SizedBox.shrink(),
               ),
-            )
+            ),
           ],
         ),
       ),

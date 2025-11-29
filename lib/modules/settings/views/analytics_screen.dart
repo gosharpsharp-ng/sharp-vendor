@@ -41,7 +41,10 @@ class AnalyticsScreen extends GetView<AnalyticsController> {
                   height: 1.sh,
                   child: SingleChildScrollView(
                     physics: const AlwaysScrollableScrollPhysics(),
-                    padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20.w,
+                      vertical: 20.h,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -50,9 +53,11 @@ class AnalyticsScreen extends GetView<AnalyticsController> {
 
                         SizedBox(height: 20.h),
 
-                        if (analyticsController.isLoading && !analyticsController.hasData)
+                        if (analyticsController.isLoading &&
+                            !analyticsController.hasData)
                           _buildLoadingState()
-                        else if (analyticsController.hasError && !analyticsController.hasData)
+                        else if (analyticsController.hasError &&
+                            !analyticsController.hasData)
                           _buildErrorState(analyticsController)
                         else
                           _buildStatsContent(analyticsController),
@@ -64,7 +69,7 @@ class AnalyticsScreen extends GetView<AnalyticsController> {
               // Loading overlay when filtering with existing data
               if (analyticsController.isLoading && analyticsController.hasData)
                 Container(
-                  color: Colors.black.withOpacity(0.3),
+                  color: Colors.black.withValues(alpha: 0.3),
                   child: Center(
                     child: Container(
                       padding: EdgeInsets.all(20.sp),
@@ -104,11 +109,7 @@ class AnalyticsScreen extends GetView<AnalyticsController> {
     return Column(
       children: [
         SizedBox(height: 100.h),
-        Icon(
-          Icons.error_outline,
-          size: 64.sp,
-          color: AppColors.greyColor,
-        ),
+        Icon(Icons.error_outline, size: 64.sp, color: AppColors.greyColor),
         SizedBox(height: 16.h),
         customText(
           controller.errorMessage,
@@ -236,9 +237,7 @@ class AnalyticsScreen extends GetView<AnalyticsController> {
 
         SizedBox(height: 15.h),
 
-        OrderStatusDonutChart(
-          orderStatus: stats.orderStatusBreakdown,
-        ),
+        OrderStatusDonutChart(orderStatus: stats.orderStatusBreakdown),
 
         SizedBox(height: 30.h),
 
@@ -254,9 +253,7 @@ class AnalyticsScreen extends GetView<AnalyticsController> {
             ),
           ),
           SizedBox(height: 15.h),
-          TopPerformingDaysWidget(
-            topDays: stats.topPerformingDays,
-          ),
+          TopPerformingDaysWidget(topDays: stats.topPerformingDays),
           SizedBox(height: 30.h),
         ],
 
@@ -285,7 +282,7 @@ class AnalyticsScreen extends GetView<AnalyticsController> {
         borderRadius: BorderRadius.circular(12.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -314,14 +311,14 @@ class AnalyticsScreen extends GetView<AnalyticsController> {
                 isPositive
                     ? Icons.arrow_upward
                     : isNegative
-                        ? Icons.arrow_downward
-                        : Icons.remove,
+                    ? Icons.arrow_downward
+                    : Icons.remove,
                 size: 14.sp,
                 color: isPositive
                     ? AppColors.greenColor
                     : isNegative
-                        ? AppColors.redColor
-                        : AppColors.greyColor,
+                    ? AppColors.redColor
+                    : AppColors.greyColor,
               ),
               SizedBox(width: 4.w),
               customText(
@@ -330,8 +327,8 @@ class AnalyticsScreen extends GetView<AnalyticsController> {
                 color: isPositive
                     ? AppColors.greenColor
                     : isNegative
-                        ? AppColors.redColor
-                        : AppColors.greyColor,
+                    ? AppColors.redColor
+                    : AppColors.greyColor,
                 fontWeight: FontWeight.w600,
               ),
             ],
@@ -348,18 +345,12 @@ class AnalyticsScreen extends GetView<AnalyticsController> {
       decoration: BoxDecoration(
         color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(
-          color: AppColors.greyColor.withOpacity(0.2),
-        ),
+        border: Border.all(color: AppColors.greyColor.withValues(alpha: 0.2)),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.bar_chart,
-            size: 48.sp,
-            color: AppColors.greyColor,
-          ),
+          Icon(Icons.bar_chart, size: 48.sp, color: AppColors.greyColor),
           SizedBox(height: 12.h),
           customText(
             "No data available for this period",
@@ -378,9 +369,7 @@ class AnalyticsScreen extends GetView<AnalyticsController> {
       decoration: BoxDecoration(
         color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(
-          color: AppColors.greyColor.withOpacity(0.2),
-        ),
+        border: Border.all(color: AppColors.greyColor.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -97,9 +97,11 @@ class EditMenuScreen extends GetView<FoodMenuController> {
                             borderRadius: BorderRadius.circular(8.r),
                             image: menuController.foodImage != null
                                 ? DecorationImage(
-                              image: _getImageProvider(menuController.foodImage!),
-                              fit: BoxFit.cover,
-                            )
+                                    image: _getImageProvider(
+                                      menuController.foodImage!,
+                                    ),
+                                    fit: BoxFit.cover,
+                                  )
                                 : null,
                           ),
                           padding: EdgeInsets.symmetric(
@@ -108,59 +110,59 @@ class EditMenuScreen extends GetView<FoodMenuController> {
                           ),
                           child: menuController.foodImage != null
                               ? Stack(
-                            children: [
-                              Positioned(
-                                bottom: 0,
-                                right: 2,
-                                child: Container(
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: AppColors.backgroundColor,
-                                  ),
-                                  padding: EdgeInsets.all(8.sp),
-                                  child: SvgPicture.asset(
-                                    SvgAssets.cameraIcon,
-                                    height: 20.sp,
-                                    color: Colors.blue,
-                                    width: 20.sp,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          )
+                                  children: [
+                                    Positioned(
+                                      bottom: 0,
+                                      right: 2,
+                                      child: Container(
+                                        decoration: const BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: AppColors.backgroundColor,
+                                        ),
+                                        padding: EdgeInsets.all(8.sp),
+                                        child: SvgPicture.asset(
+                                          SvgAssets.cameraIcon,
+                                          height: 20.sp,
+                                          color: Colors.blue,
+                                          width: 20.sp,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
                               : Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: AppColors.backgroundColor,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: AppColors.backgroundColor,
+                                      ),
+                                      padding: EdgeInsets.all(8.sp),
+                                      child: SvgPicture.asset(
+                                        SvgAssets.uploadIcon,
+                                        height: 24.sp,
+                                        width: 24.sp,
+                                      ),
+                                    ),
+                                    SizedBox(height: 8.h),
+                                    customText(
+                                      "Browse image to upload",
+                                      color: AppColors.blackColor,
+                                      fontSize: 12.sp,
+                                      textAlign: TextAlign.center,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    customText(
+                                      "(Max. file size: 25 MB)",
+                                      color: AppColors.greyColor,
+                                      fontSize: 10.sp,
+                                      textAlign: TextAlign.center,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ],
                                 ),
-                                padding: EdgeInsets.all(8.sp),
-                                child: SvgPicture.asset(
-                                  SvgAssets.uploadIcon,
-                                  height: 24.sp,
-                                  width: 24.sp,
-                                ),
-                              ),
-                              SizedBox(height: 8.h),
-                              customText(
-                                "Browse image to upload",
-                                color: AppColors.blackColor,
-                                fontSize: 12.sp,
-                                textAlign: TextAlign.center,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              customText(
-                                "(Max. file size: 25 MB)",
-                                color: AppColors.greyColor,
-                                fontSize: 10.sp,
-                                textAlign: TextAlign.center,
-                                fontWeight: FontWeight.normal,
-                              ),
-                            ],
-                          ),
                         ),
                       ),
                     ),
@@ -219,7 +221,8 @@ class EditMenuScreen extends GetView<FoodMenuController> {
                     // Commission Calculator - Shows what customer will see
                     GetBuilder<SettingsController>(
                       builder: (settingsController) {
-                        final restaurant = settingsController.userProfile?.restaurant;
+                        final restaurant =
+                            settingsController.userProfile?.restaurant;
                         final formula = restaurant?.commissionFormula;
 
                         if (formula == null) return SizedBox.shrink();
@@ -230,7 +233,9 @@ class EditMenuScreen extends GetView<FoodMenuController> {
 
                         if (menuPrice <= 0) return SizedBox.shrink();
 
-                        final commission = formula.calculateCommission(menuPrice);
+                        final commission = formula.calculateCommission(
+                          menuPrice,
+                        );
                         final customerPrice = menuPrice + commission;
 
                         return Container(
@@ -267,7 +272,8 @@ class EditMenuScreen extends GetView<FoodMenuController> {
                               ),
                               SizedBox(height: 10.h),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   customText(
                                     "Your price:",
@@ -285,7 +291,8 @@ class EditMenuScreen extends GetView<FoodMenuController> {
                               ),
                               SizedBox(height: 6.h),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   customText(
                                     "Commission:",
@@ -301,9 +308,13 @@ class EditMenuScreen extends GetView<FoodMenuController> {
                                   ),
                                 ],
                               ),
-                              Divider(height: 16.h, color: AppColors.greyColor.withAlpha(100)),
+                              Divider(
+                                height: 16.h,
+                                color: AppColors.greyColor.withAlpha(100),
+                              ),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   customText(
                                     "Final price:",
@@ -362,13 +373,17 @@ class EditMenuScreen extends GetView<FoodMenuController> {
                     SizedBox(height: 8.h),
                     Row(
                       children: menuController.plateSizes.map((size) {
-                        bool isSelected = menuController.selectedPlateSize == size;
+                        bool isSelected =
+                            menuController.selectedPlateSize == size;
                         return Expanded(
                           child: GestureDetector(
-                            onTap: () => menuController.setSelectedPlateSize(size),
+                            onTap: () =>
+                                menuController.setSelectedPlateSize(size),
                             child: Container(
                               margin: EdgeInsets.only(
-                                right: size != menuController.plateSizes.last ? 8.w : 0,
+                                right: size != menuController.plateSizes.last
+                                    ? 8.w
+                                    : 0,
                               ),
                               padding: EdgeInsets.symmetric(vertical: 12.h),
                               decoration: BoxDecoration(
@@ -379,7 +394,9 @@ class EditMenuScreen extends GetView<FoodMenuController> {
                                 border: Border.all(
                                   color: isSelected
                                       ? AppColors.primaryColor
-                                      : AppColors.greyColor.withOpacity(0.3),
+                                      : AppColors.greyColor.withValues(
+                                          alpha: 0.3,
+                                        ),
                                 ),
                               ),
                               child: Center(
@@ -558,7 +575,8 @@ class EditMenuScreen extends GetView<FoodMenuController> {
                               top: Radius.circular(25.0),
                             ),
                           ),
-                          builder: (context) => const AddonSelectionBottomSheet(),
+                          builder: (context) =>
+                              const AddonSelectionBottomSheet(),
                         );
                       },
                       suffixWidget: IconButton(
@@ -571,7 +589,8 @@ class EditMenuScreen extends GetView<FoodMenuController> {
                                 top: Radius.circular(25.0),
                               ),
                             ),
-                            builder: (context) => const AddonSelectionBottomSheet(),
+                            builder: (context) =>
+                                const AddonSelectionBottomSheet(),
                           );
                         },
                         icon: SvgPicture.asset(
@@ -594,10 +613,14 @@ class EditMenuScreen extends GetView<FoodMenuController> {
                               vertical: 6.h,
                             ),
                             decoration: BoxDecoration(
-                              color: AppColors.primaryColor.withOpacity(0.1),
+                              color: AppColors.primaryColor.withValues(
+                                alpha: 0.1,
+                              ),
                               borderRadius: BorderRadius.circular(16.r),
                               border: Border.all(
-                                color: AppColors.primaryColor.withOpacity(0.3),
+                                color: AppColors.primaryColor.withValues(
+                                  alpha: 0.3,
+                                ),
                               ),
                             ),
                             child: Row(
@@ -627,7 +650,52 @@ class EditMenuScreen extends GetView<FoodMenuController> {
                       ),
                     ],
 
-                    SizedBox(height: 20.h),
+                    SizedBox(height: 24.h),
+
+                    // Discounts Section
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        customText(
+                          "Discounts",
+                          color: AppColors.blackColor,
+                          fontSize: 13.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        if (menuController.currentMenuItem != null)
+                          GestureDetector(
+                            onTap: () {
+                              Get.toNamed(
+                                Routes.MENU_DISCOUNTS_LIST_SCREEN,
+                                arguments: menuController.currentMenuItem,
+                              );
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 12.w,
+                                vertical: 6.h,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.primaryColor,
+                                borderRadius: BorderRadius.circular(6.r),
+                              ),
+                              child: customText(
+                                "Manage",
+                                color: AppColors.whiteColor,
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                    SizedBox(height: 8.h),
+                    customText(
+                      "Create and manage discount offers for this menu item",
+                      color: AppColors.greyColor,
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.normal,
+                    ),
 
                     SizedBox(height: 30.h),
                   ],
@@ -648,7 +716,8 @@ class EditMenuScreen extends GetView<FoodMenuController> {
         return base64ToMemoryImage(imagePath);
       }
       // Check if it's a network URL
-      else if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+      else if (imagePath.startsWith('http://') ||
+          imagePath.startsWith('https://')) {
         return NetworkImage(imagePath);
       }
       // Check if it's a file path
@@ -679,8 +748,8 @@ class EditMenuScreen extends GetView<FoodMenuController> {
 
       // Basic check for base64 pattern
       return RegExp(r'^[A-Za-z0-9+/]*={0,2}$').hasMatch(cleanStr) &&
-             cleanStr.length % 4 == 0 &&
-             cleanStr.length > 0;
+          cleanStr.length % 4 == 0 &&
+          cleanStr.length > 0;
     } catch (e) {
       return false;
     }
@@ -734,7 +803,8 @@ class CategoryBottomSheet extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final category = categories[index];
                   return ListTile(
-                    leading: category.iconUrl != null && category.iconUrl!.isNotEmpty
+                    leading:
+                        category.iconUrl != null && category.iconUrl!.isNotEmpty
                         ? ClipRRect(
                             borderRadius: BorderRadius.circular(8.r),
                             child: CachedNetworkImage(
