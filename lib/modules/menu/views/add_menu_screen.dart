@@ -1,4 +1,5 @@
 import 'package:dotted_border/dotted_border.dart';
+import 'package:intl/intl.dart';
 import 'package:sharpvendor/core/models/categories_model.dart';
 import 'package:sharpvendor/modules/menu/controllers/food_menu_controller.dart';
 import 'package:sharpvendor/modules/menu/widgets/addon_selection_bottom_sheet.dart';
@@ -200,7 +201,7 @@ class AddMenuScreen extends GetView<FoodMenuController> {
                     // Price
                     CustomRoundedInputField(
                       title: "Price",
-                      label: "12.99",
+                      label: "₦1,000.00",
                       showLabel: true,
                       isRequired: true,
                       hasTitle: true,
@@ -210,10 +211,28 @@ class AddMenuScreen extends GetView<FoodMenuController> {
                         if (value == null || value.isEmpty) {
                           return 'Please enter price';
                         }
-                        if (double.tryParse(value) == null) {
+                        String cleanedValue = value.replaceAll(RegExp(r'[^\d]'), '');
+                        if (cleanedValue.isEmpty || double.tryParse(cleanedValue) == null) {
                           return 'Please enter a valid price';
                         }
                         return null;
+                      },
+                      onChanged: (value) {
+                        String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
+                        if (value.isEmpty || newValue == '00') {
+                          menuController.priceController.clear();
+                          return;
+                        }
+                        double value1 = int.parse(newValue) / 100;
+                        value = NumberFormat.currency(
+                          locale: 'en_NG',
+                          symbol: '₦',
+                          decimalDigits: 2,
+                        ).format(value1);
+                        menuController.priceController.value = TextEditingValue(
+                          text: value,
+                          selection: TextSelection.collapsed(offset: value.length),
+                        );
                       },
                     ),
 
@@ -226,9 +245,10 @@ class AddMenuScreen extends GetView<FoodMenuController> {
 
                         if (formula == null) return SizedBox.shrink();
 
-                        // Listen to price changes
+                        // Listen to price changes - strip currency formatting
                         final priceText = menuController.priceController.text;
-                        final menuPrice = double.tryParse(priceText) ?? 0.0;
+                        final cleanedPrice = priceText.replaceAll(RegExp(r'[^\d.]'), '');
+                        final menuPrice = double.tryParse(cleanedPrice) ?? 0.0;
 
                         if (menuPrice <= 0) return SizedBox.shrink();
 
@@ -441,7 +461,7 @@ class AddMenuScreen extends GetView<FoodMenuController> {
                       SizedBox(height: 8.h),
                       CustomRoundedInputField(
                         title: "Packaging Price",
-                        label: "2.50",
+                        label: "₦250.00",
                         showLabel: true,
                         isRequired: true,
                         hasTitle: true,
@@ -452,14 +472,33 @@ class AddMenuScreen extends GetView<FoodMenuController> {
                             if (value == null || value.isEmpty) {
                               return 'Please enter packaging price';
                             }
-                            if (double.tryParse(value) == null) {
+                            String cleanedValue = value.replaceAll(RegExp(r'[^\d]'), '');
+                            if (cleanedValue.isEmpty || double.tryParse(cleanedValue) == null) {
                               return 'Please enter a valid price';
                             }
-                            if (double.parse(value) <= 0) {
+                            double numericValue = double.parse(cleanedValue) / 100;
+                            if (numericValue <= 0) {
                               return 'Packaging price must be greater than 0';
                             }
                           }
                           return null;
+                        },
+                        onChanged: (value) {
+                          String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
+                          if (value.isEmpty || newValue == '00') {
+                            menuController.packagingPriceController.clear();
+                            return;
+                          }
+                          double value1 = int.parse(newValue) / 100;
+                          value = NumberFormat.currency(
+                            locale: 'en_NG',
+                            symbol: '₦',
+                            decimalDigits: 2,
+                          ).format(value1);
+                          menuController.packagingPriceController.value = TextEditingValue(
+                            text: value,
+                            selection: TextSelection.collapsed(offset: value.length),
+                          );
                         },
                       ),
                     ],

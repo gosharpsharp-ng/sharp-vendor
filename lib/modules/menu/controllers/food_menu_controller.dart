@@ -388,12 +388,16 @@ class FoodMenuController extends GetxController {
         // Get prep time from controller
         int prepTimeMinutes = _getPrepTime();
 
+        // Strip currency formatting from price
+        String cleanedPrice = priceController.text.replaceAll(RegExp(r'[^\d.]'), '');
+        double priceValue = double.tryParse(cleanedPrice) ?? 0.0;
+
         // Prepare data in the required format
         final Map<String, dynamic> menuData = {
           "name": menuNameController.text.trim(),
           "description": descriptionController.text.trim(),
           "plate_size": selectedPlateSize,
-          "price": double.tryParse(priceController.text) ?? 0.0,
+          "price": priceValue,
           "prep_time_minutes": prepTimeMinutes,
           "category_id": selectedCategory!.id,
           "images": [foodImage], // Array of base64 images
@@ -403,7 +407,8 @@ class FoodMenuController extends GetxController {
 
         // Add packaging_price only if hasPackaging is true
         if (hasPackaging && packagingPriceController.text.isNotEmpty) {
-          menuData["packaging_price"] = double.tryParse(packagingPriceController.text) ?? 0.0;
+          String cleanedPackagingPrice = packagingPriceController.text.replaceAll(RegExp(r'[^\d.]'), '');
+          menuData["packaging_price"] = double.tryParse(cleanedPackagingPrice) ?? 0.0;
         }
 
         // Call the API
@@ -485,7 +490,9 @@ class FoodMenuController extends GetxController {
           menuData["plate_size"] = selectedPlateSize;
         }
 
-        double newPrice = double.tryParse(priceController.text) ?? 0.0;
+        // Strip currency formatting from price
+        String cleanedPriceText = priceController.text.replaceAll(RegExp(r'[^\d.]'), '');
+        double newPrice = double.tryParse(cleanedPriceText) ?? 0.0;
         if (newPrice != _originalMenuItem!.price) {
           menuData["price"] = newPrice;
         }
@@ -519,10 +526,11 @@ class FoodMenuController extends GetxController {
           menuData["addons"] = newAddonIds;
         }
 
-        // Check if packaging price changed
+        // Check if packaging price changed - strip currency formatting
         double? newPackagingPrice;
         if (hasPackaging && packagingPriceController.text.isNotEmpty) {
-          newPackagingPrice = double.tryParse(packagingPriceController.text);
+          String cleanedPackagingPrice = packagingPriceController.text.replaceAll(RegExp(r'[^\d.]'), '');
+          newPackagingPrice = double.tryParse(cleanedPackagingPrice);
         }
 
         double? originalPackagingPrice = _originalMenuItem!.packagingPrice;

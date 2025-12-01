@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:sharpvendor/core/utils/exports.dart';
 
 class PayoutRequestScreen extends StatelessWidget {
@@ -69,21 +70,29 @@ class PayoutRequestScreen extends StatelessWidget {
                         // Amount Input
                         CustomRoundedInputField(
                           title: "Amount",
-                          label: "Enter amount to withdraw",
+                          label: "₦50,000.00",
                           showLabel: true,
                           hasTitle: true,
                           controller: payoutController.amountController,
                           keyboardType: TextInputType.number,
                           validator: payoutController.validateAmount,
-                          suffixWidget: Padding(
-                            padding: EdgeInsets.all(8.sp),
-                            child: customText(
-                              "₦",
-                              fontSize: 18.sp,
-                              color: AppColors.greyColor,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
+                          onChanged: (value) {
+                            String newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
+                            if (value.isEmpty || newValue == '00') {
+                              payoutController.amountController.clear();
+                              return;
+                            }
+                            double value1 = int.parse(newValue) / 100;
+                            value = NumberFormat.currency(
+                              locale: 'en_NG',
+                              symbol: '₦',
+                              decimalDigits: 2,
+                            ).format(value1);
+                            payoutController.amountController.value = TextEditingValue(
+                              text: value,
+                              selection: TextSelection.collapsed(offset: value.length),
+                            );
+                          },
                         ),
 
                         SizedBox(height: 16.h),

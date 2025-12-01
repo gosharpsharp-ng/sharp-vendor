@@ -171,7 +171,9 @@ class PayoutController extends GetxController {
   Future<void> submitPayoutRequest() async {
     if (!payoutRequestFormKey.currentState!.validate()) return;
 
-    final amount = double.tryParse(amountController.text) ?? 0.0;
+    // Strip currency formatting from amount
+    final cleanedAmount = amountController.text.replaceAll(RegExp(r'[^\d.]'), '');
+    final amount = double.tryParse(cleanedAmount) ?? 0.0;
 
     // Validate amount
     if (amount < minimumPayoutAmount) {
