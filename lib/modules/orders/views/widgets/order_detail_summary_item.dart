@@ -266,9 +266,10 @@ class OrderDetailMenuItem extends StatelessWidget {
   final String? imageUrl;
   final int quantity;
   final String price;
+  final String? unitPrice;
   final String? description;
   final String? plateSize;
-  final String? packagingPrice;
+  final String? packagingUnitPrice;
 
   const OrderDetailMenuItem({
     super.key,
@@ -276,9 +277,10 @@ class OrderDetailMenuItem extends StatelessWidget {
     this.imageUrl,
     required this.quantity,
     required this.price,
+    this.unitPrice,
     this.description,
     this.plateSize,
-    this.packagingPrice,
+    this.packagingUnitPrice,
   });
 
   @override
@@ -297,8 +299,8 @@ class OrderDetailMenuItem extends StatelessWidget {
           // Menu item image
           if (imageUrl != null && imageUrl!.isNotEmpty)
             Container(
-              width: 50.w,
-              height: 50.h,
+              width: 65.w,
+              height: 65.h,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8.r),
                 image: DecorationImage(
@@ -349,12 +351,29 @@ class OrderDetailMenuItem extends StatelessWidget {
                 SizedBox(height: 4.h),
                 Row(
                   children: [
-                    customText(
-                      "Qty: $quantity",
-                      color: AppColors.obscureTextColor,
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.normal,
-                    ),
+                    // Show unit price if available
+                    if (unitPrice != null && unitPrice!.isNotEmpty) ...[
+                      customText(
+                        unitPrice!,
+                        color: AppColors.obscureTextColor,
+                        fontSize: 12.sp,
+                        fontFamily: GoogleFonts.montserrat().fontFamily!,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      customText(
+                        " × $quantity",
+                        color: AppColors.obscureTextColor,
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ] else ...[
+                      customText(
+                        "Qty: $quantity",
+                        color: AppColors.obscureTextColor,
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ],
                     if (plateSize != null && plateSize!.isNotEmpty) ...[
                       customText(
                         " • ",
@@ -363,23 +382,7 @@ class OrderDetailMenuItem extends StatelessWidget {
                         fontWeight: FontWeight.normal,
                       ),
                       customText(
-                        "Size: $plateSize",
-                        color: AppColors.obscureTextColor,
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ],
-                    if (packagingPrice != null &&
-                        packagingPrice!.isNotEmpty &&
-                        packagingPrice != '₦0.00') ...[
-                      customText(
-                        " • ",
-                        color: AppColors.obscureTextColor,
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.normal,
-                      ),
-                      customText(
-                        "Packaging: $packagingPrice",
+                        plateSize!,
                         color: AppColors.obscureTextColor,
                         fontSize: 12.sp,
                         fontWeight: FontWeight.normal,
@@ -387,16 +390,45 @@ class OrderDetailMenuItem extends StatelessWidget {
                     ],
                   ],
                 ),
+                // Packaging price on separate line if available
+                if (packagingUnitPrice != null &&
+                    packagingUnitPrice!.isNotEmpty &&
+                    packagingUnitPrice != '₦0.00') ...[
+                  SizedBox(height: 2.h),
+                  Row(
+                    children: [
+                      customText(
+                        "Packaging: ",
+                        color: AppColors.obscureTextColor,
+                        fontSize: 11.sp,
+                        fontWeight: FontWeight.normal,
+                      ),
+                      customText(
+                        packagingUnitPrice!,
+                        color: AppColors.obscureTextColor,
+                        fontSize: 11.sp,
+                        fontFamily: GoogleFonts.montserrat().fontFamily!,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      customText(
+                        " × $quantity",
+                        color: AppColors.obscureTextColor,
+                        fontSize: 11.sp,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ],
+                  ),
+                ],
               ],
             ),
           ),
 
           SizedBox(width: 8.w),
 
-          // Price
+          // Total Price
           customText(
             price,
-            color: AppColors.blackColor,
+            color: AppColors.primaryColor,
             fontSize: 14.sp,
             fontFamily: GoogleFonts.montserrat().fontFamily!,
             fontWeight: FontWeight.w600,

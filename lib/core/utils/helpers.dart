@@ -345,11 +345,30 @@ class SaveIcon extends StatelessWidget {
 }
 
 showToast({String message = "", bool isError = false}) {
-  CustomNotification.show(
-    message: message.trim(),
-    type: isError ? NotificationType.error : NotificationType.success,
-    duration: const Duration(seconds: 3),
-  );
+  // Using bottom sheet for better UX
+  if (isError) {
+    showErrorSheet(
+      title: "Error",
+      message: message.trim(),
+      buttonText: "OK",
+      onButtonPressed: () => Get.back(),
+    );
+  } else {
+    showSuccessSheet(
+      title: "Success",
+      message: message.trim(),
+      buttonText: "Done",
+      onButtonPressed: () => Get.back(),
+      autoDismiss: true,
+    );
+  }
+
+  // Old toast implementation (commented out)
+  // CustomNotification.show(
+  //   message: message.trim(),
+  //   type: isError ? NotificationType.error : NotificationType.success,
+  //   duration: const Duration(seconds: 3),
+  // );
 }
 
 Future<CroppedFile> cropImage(XFile image) async {

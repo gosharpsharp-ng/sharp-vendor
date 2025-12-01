@@ -66,6 +66,7 @@ class RatingBottomSheet extends StatelessWidget {
                 SizedBox(height: 16.h),
                 CustomOutlinedRoundedInputField(
                   maxLines: 3,
+                  keyboardType: TextInputType.multiline,
                   hasTitle: true,
                   title: "Your Review",
                   controller: ordersController.ratingReviewController,

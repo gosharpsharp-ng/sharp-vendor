@@ -398,9 +398,7 @@ class FoodMenuController extends GetxController {
           "category_id": selectedCategory!.id,
           "images": [foodImage], // Array of base64 images
           "addons": selectedAddons.map((addon) => addon.id).toList(), // Array of addon IDs
-          // "is_available": isAvailable==1?true:true,
-          // "available_quantity": availableQuantity,
-          // "show_on_customer_app": showOnCustomerApp,
+          "is_available": isAvailable == 1,
         };
 
         // Add packaging_price only if hasPackaging is true
@@ -537,6 +535,11 @@ class FoodMenuController extends GetxController {
             // If packaging was removed or set to null/0, send null to clear it
             menuData["packaging_price"] = null;
           }
+        }
+
+        // Check if availability changed
+        if (isAvailable != _originalMenuItem!.isAvailable) {
+          menuData["is_available"] = isAvailable == 1;
         }
 
         // Only include images if a new image was selected (base64 format)

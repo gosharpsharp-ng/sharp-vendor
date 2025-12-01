@@ -41,6 +41,7 @@ class DeliveryDisputeEntryBottomSheet extends StatelessWidget {
               ),
               CustomOutlinedRoundedInputField(
                 maxLines: 3,
+                keyboardType: TextInputType.multiline,
                 hasTitle: true,
                 title: "Your message here",
                 controller: ordersController.disputeMessageController,

@@ -309,7 +309,7 @@ class EditBasicInfoScreen extends GetView<RestaurantDetailsController> {
                     controller: restaurantController.descriptionController,
                     label: "Enter restaurant description (optional)",
                     maxLines: 4,
-                    // textInputAction: TextInputAction.newline,
+                    keyboardType: TextInputType.multiline,
                     validator: (value) {
                       if (value != null && value.trim().length > 500) {
                         return "Description must be less than 500 characters";

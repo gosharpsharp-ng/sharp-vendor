@@ -191,6 +191,7 @@ class AddMenuScreen extends GetView<FoodMenuController> {
                       isRequired: false,
                       hasTitle: true,
                       maxLines: 3,
+                      keyboardType: TextInputType.multiline,
                       controller: menuController.descriptionController,
                     ),
 
@@ -462,6 +463,69 @@ class AddMenuScreen extends GetView<FoodMenuController> {
                         },
                       ),
                     ],
+
+                    SizedBox(height: 15.h),
+
+                    // Availability Toggle
+                    Container(
+                      padding: EdgeInsets.all(12.w),
+                      decoration: BoxDecoration(
+                        color: menuController.isAvailable == 1
+                            ? AppColors.greenColor.withValues(alpha: 0.1)
+                            : AppColors.redColor.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(8.r),
+                        border: Border.all(
+                          color: menuController.isAvailable == 1
+                              ? AppColors.greenColor.withValues(alpha: 0.3)
+                              : AppColors.redColor.withValues(alpha: 0.3),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Checkbox(
+                            value: menuController.isAvailable == 1,
+                            onChanged: (value) {
+                              menuController.toggleAvailability(value == true ? 1 : 0);
+                            },
+                            activeColor: AppColors.greenColor,
+                          ),
+                          SizedBox(width: 8.w),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                customText(
+                                  "Available for Order",
+                                  color: AppColors.blackColor,
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                SizedBox(height: 2.h),
+                                customText(
+                                  menuController.isAvailable == 1
+                                      ? "Customers can order this item"
+                                      : "This item is currently unavailable",
+                                  color: menuController.isAvailable == 1
+                                      ? AppColors.greenColor
+                                      : AppColors.redColor,
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Icon(
+                            menuController.isAvailable == 1
+                                ? Icons.check_circle
+                                : Icons.cancel,
+                            color: menuController.isAvailable == 1
+                                ? AppColors.greenColor
+                                : AppColors.redColor,
+                            size: 24.sp,
+                          ),
+                        ],
+                      ),
+                    ),
 
                     SizedBox(height: 15.h),
 
