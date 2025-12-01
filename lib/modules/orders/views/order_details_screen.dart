@@ -72,19 +72,24 @@ class OrderDetailsScreen extends GetView<OrdersController> {
 
                               // Package items
                               ...package.items.map((item) {
+                                // Get per-unit packaging price (already per item from API)
+                                final packagingPerUnit = item.packagingPrice > 0
+                                    ? item.packagingPrice
+                                    : (item.menu.packagingPrice ?? 0.0);
                                 return OrderDetailMenuItem(
                                   name: item.menu.name,
                                   imageUrl: item.menu.files.isNotEmpty
                                       ? item.menu.files.first.url
                                       : null,
                                   quantity: item.quantity,
+                                  unitPrice: item.price > 0
+                                      ? formatToCurrency(item.price)
+                                      : null,
                                   price: formatToCurrency(item.total),
                                   description: item.menu.description,
                                   plateSize: item.menu.plateSize,
-                                  packagingPrice:
-                                      item.menu.packagingPrice != null &&
-                                          item.menu.packagingPrice! > 0
-                                      ? '${item.quantity} × ${formatToCurrency(item.menu.packagingPrice!)}'
+                                  packagingUnitPrice: packagingPerUnit > 0
+                                      ? formatToCurrency(packagingPerUnit)
                                       : null,
                                 );
                               }).toList(),
@@ -115,17 +120,22 @@ class OrderDetailsScreen extends GetView<OrdersController> {
 
                         // Display all items
                         ...order.allItems.map((item) {
+                          // Get per-unit packaging price (already per item from API)
+                          final packagingPerUnit = item.packagingPrice > 0
+                              ? item.packagingPrice
+                              : (item.menu?.packagingPrice ?? 0.0);
                           return OrderDetailMenuItem(
                             name: item.name,
                             imageUrl: item.image,
                             quantity: item.quantity,
+                            unitPrice: item.price > 0
+                                ? formatToCurrency(item.price)
+                                : null,
                             price: formatToCurrency(item.total),
                             description: item.description,
                             plateSize: item.plateSize,
-                            packagingPrice:
-                                item.menu?.packagingPrice != null &&
-                                    item.menu!.packagingPrice! > 0
-                                ? '${item.quantity} × ${formatToCurrency(item.menu!.packagingPrice!)}'
+                            packagingUnitPrice: packagingPerUnit > 0
+                                ? formatToCurrency(packagingPerUnit)
                                 : null,
                           );
                         }).toList(),

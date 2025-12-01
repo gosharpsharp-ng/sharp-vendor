@@ -29,16 +29,14 @@ class OrdersController extends GetxController {
   OrderModel? selectedOrder;
 
   // Order status filter - Updated to match API statuses
-  // Ordered as: pending → paid → confirmed → preparing → ready → in_transit → completed
+  // Ordered as: pending → confirmed → preparing → ready → delivered
   String selectedOrderStatus = 'pending';
   List<String> orderStatuses = [
     'pending',
-    'paid',
     'confirmed',
     'preparing',
     'ready',
-    'in_transit',
-    'completed',
+    'delivered',
   ];
 
   setSelectedOrderStatus(String status) {
@@ -123,10 +121,12 @@ class OrdersController extends GetxController {
 
   // Update order status - UPDATED WITH API INTEGRATION
   // Can accept either orderId or orderNumber
+  // exitAfterUpdate: if true, will go back to orders list after successful update
   updateOrderStatus(
     dynamic orderIdentifier,
     String action, {
     String? reason,
+    bool exitAfterUpdate = true,
   }) async {
     setLoadingState(true);
 
@@ -164,6 +164,11 @@ class OrdersController extends GetxController {
       debugPrint('📦 Update message: ${response.message}');
 
       if (response.status == "success") {
+        // Exit order details screen first if requested
+        if (exitAfterUpdate) {
+          Get.back();
+        }
+
         // Refresh orders to get updated data from server
         await getOrders();
 
@@ -210,6 +215,8 @@ class OrdersController extends GetxController {
         return 'Preparing';
       case 'ready':
         return 'Ready';
+      case 'delivered':
+        return 'Delivered';
       case 'in_transit':
         return 'In Transit';
       case 'completed':
@@ -270,7 +277,7 @@ class OrdersController extends GetxController {
   bool _isValidStatusTransition(String currentStatus, String newStatus) {
     // Define valid transitions based on business requirements
     Map<String, List<String>> validTransitions = {
-      'paid': ['confirmed', 'rejected'],
+      'pending': ['confirmed', 'rejected'],
       'confirmed': ['preparing'],
       'preparing': ['ready'],
       'ready': [
@@ -294,7 +301,7 @@ class OrdersController extends GetxController {
   // From "paid" → reject to "rejected"
   rejectOrder(int orderId) async {
     await updateOrderStatusWithValidation(orderId, "rejected");
-    Get.back(); // Go back if on order details screen
+    // Note: Get.back() is now called automatically in updateOrderStatus
   }
 
   // From "preparing" → mark as "ready"

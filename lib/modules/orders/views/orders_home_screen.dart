@@ -212,6 +212,8 @@ class OrdersHomeScreen extends GetView<OrdersController> {
         return 'Preparing';
       case 'ready':
         return 'Ready';
+      case 'delivered':
+        return 'Delivered';
       case 'in_transit':
         return 'In Transit';
       case 'completed':
@@ -231,6 +233,8 @@ class OrdersHomeScreen extends GetView<OrdersController> {
         return Icons.restaurant;
       case 'ready':
         return Icons.check_circle;
+      case 'delivered':
+        return Icons.done_all;
       case 'in_transit':
         return Icons.motorcycle_sharp;
       case 'completed':
@@ -249,7 +253,9 @@ class OrdersHomeScreen extends GetView<OrdersController> {
       case 'preparing':
         return 'Orders being prepared will show here';
       case 'ready':
-        return 'Completed orders ready for pickup/delivery will appear here';
+        return 'Orders ready for pickup/delivery will appear here';
+      case 'delivered':
+        return 'Successfully delivered orders will be listed here';
       case 'in_transit':
         return 'Orders out for delivery will be tracked here';
       case 'completed':
@@ -532,6 +538,8 @@ class OrderCard extends StatelessWidget {
         return Icons.restaurant;
       case 'ready':
         return Icons.check_circle;
+      case 'delivered':
+        return Icons.done_all;
       case 'in_transit':
         return Icons.local_shipping;
       case 'completed':
@@ -553,6 +561,8 @@ class OrderCard extends StatelessWidget {
         return Colors.blue;
       case 'ready':
         return Colors.green;
+      case 'delivered':
+        return Colors.teal;
       case 'in_transit':
         return AppColors.primaryColor;
       case 'completed':
@@ -574,6 +584,8 @@ class OrderCard extends StatelessWidget {
         return 'Preparing';
       case 'ready':
         return 'Ready';
+      case 'delivered':
+        return 'Delivered';
       case 'in_transit':
         return 'In Transit';
       case 'completed':
