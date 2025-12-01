@@ -1,3 +1,4 @@
+import 'package:sharpvendor/core/services/app_update/app_update_service.dart';
 import 'package:sharpvendor/core/services/push_notification_service.dart';
 import 'package:sharpvendor/core/utils/exports.dart';
 
@@ -16,6 +17,11 @@ void main() async {
   setupServiceLocator();
 
   runApp(GoSharpSharp(navigatorKey: navigatorKey));
+
+  // Check for app updates after app is running
+  Future.delayed(const Duration(seconds: 2), () {
+    AppUpdateService().initialize();
+  });
 }
 
 class GoSharpSharp extends StatelessWidget {
