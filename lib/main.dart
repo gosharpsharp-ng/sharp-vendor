@@ -1,3 +1,4 @@
+import 'package:sharpvendor/core/services/push_notification_service.dart';
 import 'package:sharpvendor/core/utils/exports.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -5,6 +6,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
   await ScreenUtil.ensureScreenSize();
+
+  // Initialize push notifications
+  await PushNotificationService().initialize();
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

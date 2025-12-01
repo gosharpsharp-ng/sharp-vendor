@@ -239,8 +239,6 @@ class RestaurantDetailsController extends GetxController {
 
     final updateData = {
       'restaurant': {
-        'commission_rate':
-            double.tryParse(commissionRateController.text) ?? 0.0,
         'business_registration_number': businessRegNumberController.text,
         'tax_identification_number': taxIdController.text,
       },

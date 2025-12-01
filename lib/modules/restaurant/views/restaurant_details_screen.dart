@@ -452,11 +452,6 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
                           () => Get.toNamed(Routes.RESTAURANT_EDIT_LOCATION),
                         ),
                       _buildInfoRow(
-                        "Commission Rate",
-                        "${restaurant.commissionRate.toStringAsFixed(1)}%",
-                        SvgAssets.analyticsIcon,
-                      ),
-                      _buildInfoRow(
                         "Registration",
                         restaurant.businessRegistrationNumber ?? "Not set",
                         SvgAssets.operationsIcon,

@@ -1,3 +1,4 @@
+import 'package:sharpvendor/core/services/push_notification_service.dart';
 import 'package:sharpvendor/core/services/restaurant/menu/discount_service.dart';
 import 'package:sharpvendor/core/services/restaurant/menu/menu_service.dart';
 import 'package:sharpvendor/core/services/restaurant/orders/orders_service.dart';
@@ -8,6 +9,9 @@ import 'package:sharpvendor/core/utils/exports.dart';
 GetIt serviceLocator = GetIt.instance;
 
 void setupServiceLocator() {
+  serviceLocator.registerLazySingleton<PushNotificationService>(
+    () => PushNotificationService(),
+  );
   serviceLocator.registerLazySingleton<AuthenticationService>(
     () => AuthenticationService(),
   );
