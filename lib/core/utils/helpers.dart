@@ -808,28 +808,21 @@ class PaymentWebViewController {
               debugPrint('Error focusing input: $e');
             }
 
-            // Check payment status after page loads
+            // Check URL directly for faster detection
+            _checkUrlForPaymentStatus(url);
+
+            // Also check page content as backup
             await _checkPaymentStatus();
           },
           onUrlChange: (UrlChange? urlChange) {
+            // Check URL directly for faster detection
             if (urlChange?.url != null) {
-              final url = urlChange!.url!.toLowerCase();
-              debugPrint('Paystack URL changed to: $url');
-
-              // Check if URL contains success callback indicators
-              // Paystack typically redirects to callback_url with trxref or reference parameter
-              if ((url.contains('trxref=') || url.contains('reference=')) &&
-                  !url.contains('paystack.co')) {
-                // This is likely a callback URL redirect after successful payment
-                debugPrint(
-                  'Detected callback URL with transaction reference - checking status',
-                );
-              }
+              _checkUrlForPaymentStatus(urlChange!.url!);
             }
-            // Additional check on URL change
-            _checkPaymentStatus();
           },
           onNavigationRequest: (NavigationRequest request) {
+            // Check the URL being navigated to
+            _checkUrlForPaymentStatus(request.url);
             // Allow navigation
             return NavigationDecision.navigate;
           },
@@ -844,6 +837,60 @@ class PaymentWebViewController {
     });
   }
 
+  void _checkUrlForPaymentStatus(String url) {
+    if (paymentCompleted) return;
+
+    final urlLower = url.toLowerCase();
+
+    // Check for Paystack callback URL patterns
+    // Paystack typically redirects to the callback URL with trxref parameter on success
+    if (urlLower.contains('trxref=') || urlLower.contains('reference=')) {
+      // If there's a transaction reference, the payment was completed
+      // Check for explicit failure/cancellation status in URL
+      if (urlLower.contains('status=failed') ||
+          urlLower.contains('status=failure') ||
+          urlLower.contains('cancelled=true')) {
+        _handleFailure();
+      } else if (urlLower.contains('status=cancelled') ||
+          urlLower.contains('status=canceled')) {
+        _handleFailure();
+      } else {
+        // If we have a transaction reference without failure status, it's a success
+        _handleSuccess();
+      }
+      return;
+    }
+
+    // Check for redirect to app callback URL
+    if (urlLower.contains('gosharpsharp.com') ||
+        urlLower.contains('logistics.gosharpsharp.com')) {
+      _handleSuccess();
+      return;
+    }
+
+    // Check URL path for status indicators
+    if (urlLower.contains('/success') ||
+        urlLower.contains('/payment-success') ||
+        urlLower.contains('/transaction-success')) {
+      _handleSuccess();
+      return;
+    }
+
+    if (urlLower.contains('/failed') ||
+        urlLower.contains('/payment-failed') ||
+        urlLower.contains('/error')) {
+      _handleFailure();
+      return;
+    }
+
+    if (urlLower.contains('/cancelled') ||
+        urlLower.contains('/canceled') ||
+        urlLower.contains('/cancel')) {
+      _handleFailure();
+      return;
+    }
+  }
+
   Future<void> _checkPaymentStatus() async {
     if (paymentCompleted) return;
 
@@ -852,24 +899,35 @@ class PaymentWebViewController {
       final currentUrl = await controller.currentUrl();
       if (currentUrl != null) {
         final urlLower = currentUrl.toLowerCase();
-        debugPrint('Checking payment status - URL: $urlLower');
 
-        // Check if URL contains success callback indicators
-        // Paystack typically redirects to callback_url with trxref or reference parameter
-        if ((urlLower.contains('trxref=') || urlLower.contains('reference=')) &&
-            !urlLower.contains('paystack.co')) {
-          // This is likely a callback URL redirect after successful payment
-          debugPrint(
-            'Detected callback URL with transaction reference - treating as success',
-          );
-          _handleSuccess();
-          return;
+        // Check if redirected to callback URL (this is the most reliable indicator)
+        if (urlLower.contains('callback') ||
+            urlLower.contains('redirect') ||
+            urlLower.contains('gosharpsharp.com') ||
+            urlLower.contains('trxref=') ||
+            urlLower.contains('reference=')) {
+          // Check URL parameters for status
+          if (urlLower.contains('status=success') ||
+              urlLower.contains('status=successful') ||
+              urlLower.contains('trxref=')) {
+            _handleSuccess();
+            return;
+          }
+          if (urlLower.contains('status=failed') ||
+              urlLower.contains('status=failure')) {
+            _handleFailure();
+            return;
+          }
+          if (urlLower.contains('status=cancelled') ||
+              urlLower.contains('status=canceled')) {
+            _handleFailure();
+            return;
+          }
         }
       }
 
       // Method 2: Check page title
       final title = await controller.getTitle();
-      debugPrint('Checking payment status - Title: $title');
 
       if (title != null) {
         final titleLower = title.toLowerCase();
@@ -877,64 +935,88 @@ class PaymentWebViewController {
         // Check for success indicators in title
         if (titleLower.contains('success') ||
             titleLower.contains('successful') ||
-            titleLower.contains('approved') ||
-            titleLower.contains('complete')) {
+            titleLower.contains('complete') ||
+            titleLower.contains('approved')) {
           _handleSuccess();
           return;
         }
 
-        // Check for failure indicators in title
-        if (titleLower.contains('fail') ||
-            titleLower.contains('error') ||
-            titleLower.contains('declined')) {
+        // Check for cancellation indicators in title
+        if (titleLower.contains('cancel') || titleLower.contains('abort')) {
           _handleFailure();
           return;
         }
 
-        // Check for cancellation indicators in title
-        if (titleLower.contains('cancel')) {
+        // Check for declined indicators
+        if (titleLower.contains('declined') || titleLower.contains('decline')) {
+          _handleFailure();
+          return;
+        }
+
+        // Check for failure indicators
+        if (titleLower.contains('fail') || titleLower.contains('error')) {
           _handleFailure();
           return;
         }
       }
 
-      // Method 3: Check page content via JavaScript
+      // Method 3: Check page content via JavaScript (more comprehensive patterns)
       final result = await controller.runJavaScriptReturningResult('''
         (function() {
           const bodyText = document.body.innerText.toLowerCase();
+          const bodyHtml = document.body.innerHTML.toLowerCase();
 
-          // Success patterns
-          if (bodyText.includes('payment successful') ||
-              bodyText.includes('transaction successful') ||
-              bodyText.includes('payment complete') ||
-              bodyText.includes('transaction complete') ||
-              bodyText.includes('was successful') ||
-              bodyText.includes('has been successful') ||
-              bodyText.includes('approved') ||
-              bodyText.includes('payment received') ||
-              bodyText.includes('thank you for your payment') ||
-              bodyText.includes('your payment of')) {
-            return 'success';
-          }
-
-          // Cancellation patterns
+          // Check for cancellation first (more specific)
           if (bodyText.includes('payment cancelled') ||
-              bodyText.includes('payment canceled') ||
               bodyText.includes('transaction cancelled') ||
-              bodyText.includes('transaction canceled') ||
-              bodyText.includes('cancel this payment') ||
+              bodyText.includes('you cancelled') ||
               bodyText.includes('payment was cancelled')) {
             return 'cancelled';
           }
 
-          // Failure patterns
-          if (bodyText.includes('payment failed') ||
-              bodyText.includes('transaction failed') ||
-              bodyText.includes('payment declined') ||
-              bodyText.includes('transaction declined') ||
-              bodyText.includes('could not be processed') ||
+          // Check for declined
+          if (bodyText.includes('declined') ||
+              bodyText.includes('card declined') ||
               bodyText.includes('transaction declined')) {
+            return 'declined';
+          }
+
+          // Check for failure (more specific patterns first)
+          if (bodyText.includes('payment failed') ||
+              bodyText.includes('payment error') ||
+              bodyText.includes('transaction failed') ||
+              bodyText.includes('unable to process') ||
+              bodyText.includes('could not process') ||
+              bodyText.includes('payment unsuccessful')) {
             return 'failed';
+          }
+
+          // Check for success - comprehensive patterns for Paystack
+          // Check specific success phrases first
+          if (bodyText.includes('payment successful') ||
+              bodyText.includes('transaction successful') ||
+              bodyText.includes('payment complete') ||
+              bodyText.includes('transaction complete') ||
+              bodyText.includes('payment completed') ||
+              bodyText.includes('transaction completed') ||
+              bodyText.includes('your payment was successful') ||
+              bodyText.includes('transaction was successful') ||
+              bodyText.includes('payment received') ||
+              bodyText.includes('approved') ||
+              bodyHtml.includes('success-checkmark') ||
+              bodyHtml.includes('success-icon') ||
+              bodyHtml.includes('payment-success')) {
+            return 'success';
+          }
+
+          // Also check for standalone success keywords in the visible text
+          // This catches cases where Paystack just shows "Success" or "Successful"
+          const words = bodyText.split(/\\s+/);
+          for (const word of words) {
+            if (word === 'success' || word === 'successful' ||
+                word === 'complete' || word === 'completed') {
+              return 'success';
+            }
           }
 
           return 'unknown';
@@ -942,11 +1024,10 @@ class PaymentWebViewController {
       ''');
 
       final status = result.toString().replaceAll('"', '');
-      debugPrint('JavaScript content check result: $status');
 
       if (status == 'success') {
         _handleSuccess();
-      } else if (status == 'failed' || status == 'cancelled') {
+      } else if (status == 'failed' || status == 'cancelled' || status == 'declined') {
         _handleFailure();
       }
     } catch (e) {
