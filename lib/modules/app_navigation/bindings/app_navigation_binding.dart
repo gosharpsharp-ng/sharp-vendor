@@ -14,11 +14,9 @@ class AppNavigationBinding extends Bindings {
     );
     Get.put(
       DashboardController(),
-    ); Get.put(
-      FoodMenuController(),
     );
     Get.put(
-      DeliveriesController(),
+      FoodMenuController(),
     );
     Get.put(
       OrdersController(),

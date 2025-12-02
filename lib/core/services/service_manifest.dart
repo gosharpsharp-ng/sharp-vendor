@@ -17,9 +17,6 @@ void setupServiceLocator() {
     () => AuthenticationService(),
   );
   serviceLocator.registerLazySingleton<ProfileService>(() => ProfileService());
-  serviceLocator.registerLazySingleton<DeliveryService>(
-    () => DeliveryService(),
-  );
   serviceLocator.registerLazySingleton<SupportService>(
     () => SupportService(),
   );

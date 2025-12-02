@@ -1,12 +1,11 @@
 import 'dart:developer';
 
-import 'package:sharpvendor/core/services/delivery/delivery_notification.dart';
 import 'package:sharpvendor/modules/orders/controllers/orders_controller.dart';
 
 import '../../utils/exports.dart';
 
-class DeliveryNotificationServiceManager extends GetxService {
-  static DeliveryNotificationServiceManager get instance => Get.find();
+class WebSocketServiceManager extends GetxService {
+  static WebSocketServiceManager get instance => Get.find();
   bool _isServicesInitialized = false;
 
   bool get isServicesInitialized => _isServicesInitialized;
@@ -23,23 +22,19 @@ class DeliveryNotificationServiceManager extends GetxService {
         await Get.delete<SocketService>();
       }
 
-      if (Get.isRegistered<DeliveryNotificationService>()) {
-        await Get.delete<DeliveryNotificationService>();
-      }
-
       // Initialize services
       await Get.putAsync(() => SocketService().init());
       final socketService = Get.find<SocketService>();
 
-      // Get restaurant ID and set it - socket will auto-join when connected
+      // Get vendor ID and set it - socket will auto-join when connected
       if (Get.isRegistered<SettingsController>()) {
         final settingsController = Get.find<SettingsController>();
-        final restaurantId = settingsController.userProfile?.restaurant?.id;
+        final vendorId = settingsController.userProfile?.restaurant?.id;
 
-        if (restaurantId != null) {
-          // Set the restaurant ID so socket will join on connect
-          socketService.setRestaurantId(restaurantId);
-          log('✓ Restaurant ID set: $restaurantId (will join room when socket connects)');
+        if (vendorId != null) {
+          // Set the vendor ID so socket will join on connect
+          socketService.setRestaurantId(vendorId);
+          log('✓ Vendor ID set: $vendorId (will join room when socket connects)');
 
           // Set up listener for new orders
           if (Get.isRegistered<OrdersController>()) {
@@ -47,12 +42,12 @@ class DeliveryNotificationServiceManager extends GetxService {
             socketService.listenForNewOrders((orderData) {
               ordersController.handleNewOrderNotification(orderData);
             });
-            log('✓ Listener setup for restaurant:new-order events');
+            log('✓ Listener setup for vendor:new-order events');
           } else {
             log('⚠️ OrdersController not registered - will listen when it initializes');
           }
         } else {
-          log('⚠️ Restaurant ID not found in user profile');
+          log('⚠️ Vendor ID not found in user profile');
         }
       } else {
         log('⚠️ SettingsController not registered');
@@ -78,3 +73,6 @@ class DeliveryNotificationServiceManager extends GetxService {
     log('Services disposed successfully');
   }
 }
+
+/// Backward compatibility alias
+typedef DeliveryNotificationServiceManager = WebSocketServiceManager;

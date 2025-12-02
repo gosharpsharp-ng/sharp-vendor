@@ -23,18 +23,6 @@ abstract class Routes {
   static const ONBOARDING_BANK_INFORMATION = '/onboarding_bank_information';
   static const APP_NAVIGATION = '/app_navigation';
 
-  static const DELIVERIES_HOME = '/deliveries_home';
-  static const DELIVERY_DETAILS = '/delivery_details';
-  static const PROCESSED_DELIVERY_SUMMARY_SCREEN = '/processed_delivery_details';
-  static const DELIVERY_TRACKING_SCREEN = '/delivery_tracking_screen';
-  static const DELIVERY_INVOICE_DETAILS = '/delivery_invoice_details';
-  static const INITIATE_DELIVERY_SCREEN = '/initiate_delivery_screen';
-  static const DELIVERY_SUCCESS_SCREEN = '/delivery_success_screen';
-  static const DELIVERY_ITEM_INPUT_SCREEN = '/delivery_item_input_screen';
-  static const DELIVERY_PAYMENT_OPTIONS_SCREEN = '/delivery_payment_options_screen';
-  static const RIDE_SELECTION_SCREEN = '/ride_selection_screen';
-  static const DELIVERY_SUMMARY_SCREEN = '/delivery_summary_screen';
-
   static const NOTIFICATIONS_HOME = '/notifications_home';
   static const NOTIFICATIONS_DETAILS = '/notifications_details';
 
@@ -62,7 +50,6 @@ abstract class Routes {
 
   static const RATINGS_AND_REVIEWS_HOME = '/ratings_and_reviews_home';
   static const SELECT_LOCATION_SCREEN = '/select_location_screen';
-
 
 //   Menu
   static const ADD_MENU_SCREEN = '/add_menu_screen';

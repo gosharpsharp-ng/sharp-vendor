@@ -42,6 +42,7 @@ import 'package:sharpvendor/modules/payouts/views/payout_details_screen.dart';
 import 'package:sharpvendor/modules/campaigns/views/campaigns_home_screen.dart';
 import 'package:sharpvendor/modules/campaigns/views/add_campaign_screen.dart';
 import 'package:sharpvendor/modules/campaigns/views/campaign_details_screen.dart';
+import 'package:sharpvendor/core/utils/widgets/select_location.dart';
 part 'app_routes.dart';
 
 class AppPages {
@@ -157,77 +158,6 @@ class AppPages {
     ),
 
     GetPage(
-      name: Routes.DELIVERIES_HOME,
-      page: () => const DeliveriesHomeScreen(),
-      binding: DeliveriesBindings(),
-      transition: Transition.rightToLeftWithFade,
-      transitionDuration: const Duration(milliseconds: 400),
-    ),
-    GetPage(
-      name: Routes.PROCESSED_DELIVERY_SUMMARY_SCREEN,
-      page: () => const ProcessedDeliverySummaryScreen(),
-      binding: DeliveriesBindings(),
-      transition: Transition.rightToLeftWithFade,
-      transitionDuration: const Duration(milliseconds: 400),
-    ),
-    GetPage(
-      name: Routes.DELIVERY_INVOICE_DETAILS,
-      page: () => const DeliveryInvoiceDetailsScreen(),
-      binding: DeliveriesBindings(),
-      transition: Transition.rightToLeftWithFade,
-      transitionDuration: const Duration(milliseconds: 400),
-    ),
-    GetPage(
-      name: Routes.DELIVERY_SUCCESS_SCREEN,
-      page: () => const DeliverySuccessScreen(),
-      binding: DeliveriesBindings(),
-      transition: Transition.fadeIn,
-      transitionDuration: const Duration(milliseconds: 400),
-    ),
-    GetPage(
-      name: Routes.DELIVERY_TRACKING_SCREEN,
-      page: () => const DeliveryTrackingScreen(),
-      binding: DeliveriesBindings(),
-      transition: Transition.zoom,
-      transitionDuration: const Duration(milliseconds: 400),
-    ),
-    GetPage(
-      name: Routes.INITIATE_DELIVERY_SCREEN,
-      page: () => const InitiateDeliveryScreen(),
-      binding: DeliveriesBindings(),
-      transition: Transition.downToUp,
-      transitionDuration: const Duration(milliseconds: 400),
-    ),
-    GetPage(
-      name: Routes.DELIVERY_ITEM_INPUT_SCREEN,
-      page: () => const DeliveryItemInputScreen(),
-      binding: DeliveriesBindings(),
-      transition: Transition.downToUp,
-      transitionDuration: const Duration(milliseconds: 400),
-    ),
-    GetPage(
-      name: Routes.RIDE_SELECTION_SCREEN,
-      page: () => const RideSelectionScreen(),
-      binding: DeliveriesBindings(),
-      transition: Transition.rightToLeftWithFade,
-      transitionDuration: const Duration(milliseconds: 400),
-    ),
-    GetPage(
-      name: Routes.DELIVERY_PAYMENT_OPTIONS_SCREEN,
-      page: () => const DeliveryPaymentOptionsScreen(),
-      binding: DeliveriesBindings(),
-      transition: Transition.rightToLeftWithFade,
-      transitionDuration: const Duration(milliseconds: 400),
-    ),
-    GetPage(
-      name: Routes.DELIVERY_SUMMARY_SCREEN,
-      page: () => const DeliverySummaryScreen(),
-      binding: DeliveriesBindings(),
-      transition: Transition.rightToLeftWithFade,
-      transitionDuration: const Duration(milliseconds: 400),
-    ),
-
-    GetPage(
       name: Routes.SETTINGS_HOME_SCREEN,
       page: () => const SettingsHomeScreen(),
       binding: SettingsBindings(),
@@ -315,6 +245,7 @@ class AppPages {
       transitionDuration: const Duration(milliseconds: 400),
     ),
 
+    // Location Selection
     GetPage(
       name: Routes.SELECT_LOCATION_SCREEN,
       page: () => const SelectLocation(),
