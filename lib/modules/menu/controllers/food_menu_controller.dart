@@ -712,7 +712,7 @@ class FoodMenuController extends GetxController {
         menuItems[index] = MenuItemModel(
           id: menuItems[index].id,
           name: menuItems[index].name,
-          restaurant: menuItems[index].restaurant,
+          vendor: menuItems[index].vendor,
           category: menuItems[index].category,
           price: menuItems[index].price,
           duration: menuItems[index].duration,
@@ -720,7 +720,7 @@ class FoodMenuController extends GetxController {
           isAvailable: 1,
           availableQuantity: menuItems[index].availableQuantity,
           description: menuItems[index].description,
-          plateSize: menuItems[index].plateSize,
+          size: menuItems[index].size,
           showOnCustomerApp: menuItems[index].showOnCustomerApp,
           files: menuItems[index].files,
           packagingPrice: menuItems[index].packagingPrice,

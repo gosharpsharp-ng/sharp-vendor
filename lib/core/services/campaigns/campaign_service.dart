@@ -1,36 +1,40 @@
+import 'package:sharpvendor/core/config/vendor_config.dart';
 import 'package:sharpvendor/core/utils/exports.dart';
 
 class CampaignService extends CoreService {
   Future<CampaignService> init() async => this;
 
-  // Get all campaigns for the restaurant
+  /// Get the API endpoint prefix based on current vendor type
+  String get _endpoint => vendorConfig.apiEndpoint;
+
+  // Get all campaigns for the vendor
   Future<APIResponse> getCampaigns() async {
-    return await fetch("/restaurants/campaigns");
+    return await fetch("/$_endpoint/campaigns");
   }
 
   // Create a new campaign
   Future<APIResponse> createCampaign(dynamic data) async {
-    return await send("/restaurants/campaigns", data);
+    return await send("/$_endpoint/campaigns", data);
   }
 
   // Get campaign by ID
   Future<APIResponse> getCampaignById(int campaignId) async {
-    return await fetch("/restaurants/campaigns/$campaignId");
+    return await fetch("/$_endpoint/campaigns/$campaignId");
   }
 
   // Update campaign status (pause, resume, cancel)
   Future<APIResponse> updateCampaignStatus(int campaignId, String status) async {
-    return await generalPatch("/restaurants/campaigns/$campaignId/status", {"status": status});
+    return await generalPatch("/$_endpoint/campaigns/$campaignId/status", {"status": status});
   }
 
   // Update campaign details
   Future<APIResponse> updateCampaign(int campaignId, dynamic data) async {
-    return await update("/restaurants/campaigns/$campaignId", data);
+    return await update("/$_endpoint/campaigns/$campaignId", data);
   }
 
   // Delete campaign
   Future<APIResponse> deleteCampaign(int campaignId) async {
-    return await remove("/restaurants/campaigns/$campaignId", {});
+    return await remove("/$_endpoint/campaigns/$campaignId", {});
   }
 
   // Estimate campaign cost
@@ -39,7 +43,7 @@ class CampaignService extends CoreService {
     required String endDate,
     required int priority,
   }) async {
-    return await fetchByParams("/restaurants/campaigns/estimate-cost", {
+    return await fetchByParams("/$_endpoint/campaigns/estimate-cost", {
       "start_date": startDate,
       "end_date": endDate,
       "priority": priority,
@@ -51,7 +55,7 @@ class CampaignService extends CoreService {
     required String startDate,
     required String endDate,
   }) async {
-    return await fetchByParams("/restaurants/campaigns/daily-charges", {
+    return await fetchByParams("/$_endpoint/campaigns/daily-charges", {
       "start_date": startDate,
       "end_date": endDate,
     });

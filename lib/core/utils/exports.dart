@@ -1,4 +1,5 @@
 export 'package:flutter/material.dart';
+export 'package:sharpvendor/core/config/vendor_config.dart';
 export 'package:sharpvendor/core/utils/app_colors.dart';
 export 'package:sharpvendor/core/utils/widgets/custom_text.dart';
 export 'package:sharpvendor/core/utils/widgets/custom_notification.dart';
@@ -131,6 +132,12 @@ export 'package:sharpvendor/modules/delivery/views/create_delivery/delivery_succ
 export 'package:sharpvendor/modules/delivery/views/create_delivery/processed_delivery_summary_screen.dart';
 export 'package:sharpvendor/modules/settings/views/change_password/change_password_screen.dart';
 export 'package:sharpvendor/core/models/notification_model.dart';
+export 'package:sharpvendor/core/models/vendor_model.dart';
+export 'package:sharpvendor/core/models/vendor_location_model.dart';
+export 'package:sharpvendor/core/models/vendor_wallet_model.dart';
+export 'package:sharpvendor/core/models/vendor_schedule_model.dart';
+export 'package:sharpvendor/core/models/product_model.dart';
+// Backward compatibility - re-exports
 export 'package:sharpvendor/core/models/restaurant_location_model.dart';
 export 'package:sharpvendor/core/models/restaurant_wallet_model.dart';
 export 'package:sharpvendor/core/models/restaurant_schedule_model.dart';
@@ -154,7 +161,7 @@ export 'package:sharpvendor/modules/restaurant/views/bank_account_edit_screen.da
 
 // Analytics
 export 'package:sharpvendor/core/models/restaurant_analytics_model.dart';
-export 'package:sharpvendor/core/services/restaurant/analytics/analytics_service.dart';
+export 'package:sharpvendor/core/services/vendor/analytics/analytics_service.dart';
 export 'package:sharpvendor/modules/settings/controllers/analytics_controller.dart';
 
 // Campaigns

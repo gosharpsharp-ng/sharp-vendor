@@ -1,17 +1,4 @@
-import 'package:sharpvendor/core/utils/exports.dart';
+// This file is deprecated. Use vendor/transactions/transactions_service.dart instead.
+// Kept for backward compatibility.
 
-class TransactionsService extends CoreService {
-  Future<TransactionsService> init() async => this;
-
-  Future<APIResponse> getAllTransactions(dynamic data) async {
-    return await fetch(
-        "/restaurants/transaction?${data['page']}&page_size=${data['per_page']}");
-  }
-  Future<APIResponse> getTransactionById(dynamic data) async {
-    return await fetch("/restaurants/transactions/${data['id']}");
-  }
-
-
-
-  
-}
+export 'package:sharpvendor/core/services/vendor/transactions/transactions_service.dart';
