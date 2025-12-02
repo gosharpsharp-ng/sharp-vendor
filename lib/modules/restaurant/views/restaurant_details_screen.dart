@@ -16,11 +16,11 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
             appBar: defaultAppBar(
               bgColor: AppColors.backgroundColor,
               onPop: () => Get.back(),
-              title: "Restaurant Details",
+              title: vendorConfig.detailsLabel,
             ),
             body: Center(
               child: customText(
-                "No restaurant data available",
+                "No ${vendorConfig.displayName.toLowerCase()} data available",
                 color: AppColors.blackColor,
                 fontSize: 16.sp,
               ),
@@ -32,7 +32,7 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
           appBar: defaultAppBar(
             bgColor: AppColors.backgroundColor,
             onPop: () => Get.back(),
-            title: "Restaurant Details",
+            title: vendorConfig.detailsLabel,
           ),
           backgroundColor: const Color(0xFFF5F7FA),
           body: Padding(
@@ -204,7 +204,7 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
                                                       shape: BoxShape.circle,
                                                     ),
                                                     child: Icon(
-                                                      Icons.restaurant_menu,
+                                                      vendorConfig.icon,
                                                       color: AppColors
                                                           .primaryColor,
                                                       size: 40.sp,
@@ -219,7 +219,7 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
                                               shape: BoxShape.circle,
                                             ),
                                             child: Icon(
-                                              Icons.restaurant_menu,
+                                              vendorConfig.icon,
                                               color: AppColors.primaryColor,
                                               size: 40.sp,
                                             ),

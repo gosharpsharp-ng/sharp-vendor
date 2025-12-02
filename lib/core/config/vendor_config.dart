@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 /// Vendor type enum representing different types of businesses
 /// that can use this application
 enum VendorType {
@@ -285,6 +287,24 @@ extension VendorTypeExtension on VendorType {
     }
   }
 
+  /// Flutter IconData for this vendor type
+  IconData get icon {
+    switch (this) {
+      case VendorType.restaurant:
+        return Icons.restaurant_menu;
+      case VendorType.pharmacy:
+        return Icons.local_pharmacy;
+      case VendorType.groceryStore:
+        return Icons.local_grocery_store;
+      case VendorType.supermarket:
+        return Icons.store;
+      case VendorType.bakery:
+        return Icons.bakery_dining;
+      case VendorType.other:
+        return Icons.storefront;
+    }
+  }
+
   /// Parse vendor type from string (API response)
   static VendorType fromString(String? value) {
     if (value == null) return VendorType.restaurant;
@@ -335,23 +355,40 @@ class VendorConfigManager {
   /// Current vendor type - defaults to restaurant for backward compatibility
   VendorType currentVendorType = VendorType.restaurant;
 
+  /// Initialize vendor type from user profile or API response
+  void initialize(String? vendorTypeString) {
+    currentVendorType = VendorTypeExtension.fromString(vendorTypeString);
+  }
+
   /// Get the API endpoint prefix for the current vendor
   String get apiEndpoint => currentVendorType.apiEndpoint;
 
-  /// Get display name for current vendor type
+  /// Get display name for current vendor type (e.g., "Restaurant", "Pharmacy")
   String get displayName => currentVendorType.displayName;
 
-  /// Get product label for current vendor type
+  /// Get display name plural (e.g., "Restaurants", "Pharmacies")
+  String get displayNamePlural => currentVendorType.displayNamePlural;
+
+  /// Get product label for current vendor type (e.g., "Menu Item", "Medicine")
   String get productLabel => currentVendorType.productLabel;
 
-  /// Get catalog label for current vendor type
+  /// Get product label plural (e.g., "Menu Items", "Products")
+  String get productLabelPlural => currentVendorType.productLabelPlural;
+
+  /// Get catalog label for current vendor type (e.g., "Menu", "Inventory")
   String get catalogLabel => currentVendorType.catalogLabel;
 
-  /// Get category type label for current vendor
+  /// Get category type label for current vendor (e.g., "Cuisine Type", "Store Type")
   String get categoryTypeLabel => currentVendorType.categoryTypeLabel;
 
   /// Get order statuses for current vendor type
   List<String> get orderStatuses => currentVendorType.orderStatuses;
+
+  /// Get preparation status label (e.g., "Preparing", "Packing")
+  String get preparationStatusLabel => currentVendorType.preparationStatusLabel;
+
+  /// Get preparation time label (e.g., "Prep Time", "Processing Time")
+  String get preparationTimeLabel => currentVendorType.preparationTimeLabel;
 
   /// Check if current vendor type supports add-ons
   bool get supportsAddons => currentVendorType.supportsAddons;
@@ -361,6 +398,41 @@ class VendorConfigManager {
 
   /// Check if current vendor type has portion sizes
   bool get hasPortionSizes => currentVendorType.hasPortionSizes;
+
+  /// Check if current vendor type supports delivery
+  bool get supportsDelivery => currentVendorType.supportsDelivery;
+
+  // ============ UI Label Helpers ============
+
+  /// Get banner label (e.g., "Restaurant Banner", "Store Banner")
+  String get bannerLabel => '$displayName Banner';
+
+  /// Get logo label (e.g., "Restaurant Logo", "Pharmacy Logo")
+  String get logoLabel => '$displayName Logo';
+
+  /// Get name field label (e.g., "Restaurant Name", "Pharmacy Name")
+  String get nameLabel => '$displayName Name';
+
+  /// Get profile label (e.g., "Restaurant Profile", "Store Profile")
+  String get profileLabel => '$displayName Profile';
+
+  /// Get details label (e.g., "Restaurant Details", "Pharmacy Details")
+  String get detailsLabel => '$displayName Details';
+
+  /// Get image label for products (e.g., "Food Image", "Product Image")
+  String get productImageLabel => '$productLabel Image';
+
+  /// Get status updated message
+  String statusUpdatedMessage(String status) => '$displayName $status successfully';
+
+  /// Get location updated message
+  String get locationUpdatedMessage => '$displayName location updated successfully';
+
+  /// Get profile updated message
+  String get profileUpdatedMessage => '$displayName profile updated successfully';
+
+  /// Get icon for current vendor type
+  IconData get icon => currentVendorType.icon;
 }
 
 /// Convenience getter for vendor config manager

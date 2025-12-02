@@ -34,21 +34,21 @@ class EditBasicInfoScreen extends GetView<RestaurantDetailsController> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   customText(
-                    "Restaurant Profile",
+                    vendorConfig.profileLabel,
                     color: AppColors.blackColor,
                     fontSize: 18.sp,
                     fontWeight: FontWeight.w600,
                   ),
                   SizedBox(height: 8.h),
                   customText(
-                    "Update your restaurant's profile images and basic information",
+                    "Update your ${vendorConfig.displayName.toLowerCase()}'s profile images and basic information",
                     color: AppColors.greyColor,
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w400,
                   ),
                   SizedBox(height: 30.h),
 
-                  // Restaurant Images Section
+                  // Vendor Images Section
                   Container(
                     padding: EdgeInsets.all(20.sp),
                     decoration: BoxDecoration(
@@ -62,7 +62,7 @@ class EditBasicInfoScreen extends GetView<RestaurantDetailsController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         customText(
-                          "Restaurant Images",
+                          "${vendorConfig.displayName} Images",
                           color: AppColors.blackColor,
                           fontSize: 16.sp,
                           fontWeight: FontWeight.w600,
@@ -125,14 +125,14 @@ class EditBasicInfoScreen extends GetView<RestaurantDetailsController> {
                                           _buildImagePlaceholder(
                                             "Add Banner Image",
                                             Icons.image_outlined,
-                                            "Tap to upload restaurant banner",
+                                            "Tap to upload ${vendorConfig.displayName.toLowerCase()} banner",
                                           ),
                                     ),
                                   )
                                 : _buildImagePlaceholder(
                                     "Add Banner Image",
                                     Icons.image_outlined,
-                                    "Tap to upload restaurant banner",
+                                    "Tap to upload ${vendorConfig.displayName.toLowerCase()} banner",
                                   ),
                           ),
                         ),
@@ -141,7 +141,7 @@ class EditBasicInfoScreen extends GetView<RestaurantDetailsController> {
 
                         // Logo Image
                         customText(
-                          "Restaurant Logo",
+                          vendorConfig.logoLabel,
                           color: AppColors.blackColor,
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w500,
@@ -199,7 +199,7 @@ class EditBasicInfoScreen extends GetView<RestaurantDetailsController> {
                                                   MainAxisAlignment.center,
                                               children: [
                                                 Icon(
-                                                  Icons.restaurant_menu,
+                                                  vendorConfig.icon,
                                                   color: AppColors.primaryColor,
                                                   size: 32.sp,
                                                 ),
@@ -219,7 +219,7 @@ class EditBasicInfoScreen extends GetView<RestaurantDetailsController> {
                                           MainAxisAlignment.center,
                                       children: [
                                         Icon(
-                                          Icons.restaurant_menu,
+                                          vendorConfig.icon,
                                           color: AppColors.primaryColor,
                                           size: 32.sp,
                                         ),
@@ -282,19 +282,19 @@ class EditBasicInfoScreen extends GetView<RestaurantDetailsController> {
 
                   SizedBox(height: 20.h),
 
-                  // Restaurant Name
+                  // Vendor Name
                   CustomRoundedInputField(
-                    title: "Restaurant Name",
+                    title: vendorConfig.nameLabel,
                     hasTitle: true,
                     isRequired: true,
                     controller: restaurantController.restaurantNameController,
-                    label: "Enter restaurant name",
+                    label: "Enter ${vendorConfig.displayName.toLowerCase()} name",
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return "Restaurant name is required";
+                        return "${vendorConfig.nameLabel} is required";
                       }
                       if (value.trim().length < 2) {
-                        return "Restaurant name must be at least 2 characters";
+                        return "${vendorConfig.nameLabel} must be at least 2 characters";
                       }
                       return null;
                     },
@@ -307,7 +307,7 @@ class EditBasicInfoScreen extends GetView<RestaurantDetailsController> {
                     title: "Description",
                     hasTitle: true,
                     controller: restaurantController.descriptionController,
-                    label: "Enter restaurant description (optional)",
+                    label: "Enter ${vendorConfig.displayName.toLowerCase()} description (optional)",
                     maxLines: 4,
                     keyboardType: TextInputType.multiline,
                     validator: (value) {
@@ -320,16 +320,16 @@ class EditBasicInfoScreen extends GetView<RestaurantDetailsController> {
 
                   SizedBox(height: 5.h),
 
-                  // Cuisine Type
+                  // Business Category (Cuisine Type for restaurants)
                   CustomRoundedInputField(
-                    title: "Cuisine Type",
+                    title: vendorConfig.categoryTypeLabel,
                     hasTitle: true,
                     isRequired: true,
                     controller: restaurantController.cuisineTypeController,
                     label: "e.g., Italian, Chinese, Nigerian",
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return "Cuisine type is required";
+                        return "${vendorConfig.categoryTypeLabel} is required";
                       }
                       return null;
                     },
@@ -339,11 +339,11 @@ class EditBasicInfoScreen extends GetView<RestaurantDetailsController> {
 
                   // Email
                   CustomRoundedInputField(
-                    title: "Restaurant Email",
+                    title: "${vendorConfig.displayName} Email",
                     hasTitle: true,
                     isRequired: true,
                     controller: restaurantController.emailController,
-                    label: "Enter restaurant email",
+                    label: "Enter ${vendorConfig.displayName.toLowerCase()} email",
                     keyboardType: TextInputType.emailAddress,
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
@@ -360,11 +360,11 @@ class EditBasicInfoScreen extends GetView<RestaurantDetailsController> {
 
                   // Phone
                   CustomRoundedInputField(
-                    title: "Restaurant Phone",
+                    title: "${vendorConfig.displayName} Phone",
                     hasTitle: true,
                     isRequired: true,
                     controller: restaurantController.phoneController,
-                    label: "Enter restaurant phone number",
+                    label: "Enter ${vendorConfig.displayName.toLowerCase()} phone number",
                     keyboardType: TextInputType.phone,
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
@@ -399,7 +399,7 @@ class EditBasicInfoScreen extends GetView<RestaurantDetailsController> {
                         SizedBox(width: 12.w),
                         Expanded(
                           child: customText(
-                            "This information will be visible to customers when they view your restaurant.",
+                            "This information will be visible to customers when they view your ${vendorConfig.displayName.toLowerCase()}.",
                             color: AppColors.primaryColor,
                             fontSize: 11.sp,
                             overflow: TextOverflow.visible,

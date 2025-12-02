@@ -20,7 +20,7 @@ class AddMenuScreen extends GetView<FoodMenuController> {
               onPop: () {
                 Get.back();
               },
-              title: "Menu Setup",
+              title: "${vendorConfig.productLabel} Setup",
             ),
             bottomNavigationBar: Container(
               padding: EdgeInsets.symmetric(horizontal: 22.sp, vertical: 20.sp),
@@ -44,9 +44,9 @@ class AddMenuScreen extends GetView<FoodMenuController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Food Image Section
+                    // Product Image Section
                     customText(
-                      "Food image",
+                      vendorConfig.productImageLabel,
                       color: AppColors.blackColor,
                       fontSize: 13.sp,
                       fontWeight: FontWeight.w500,
@@ -70,7 +70,7 @@ class AddMenuScreen extends GetView<FoodMenuController> {
                             ),
                             builder: (BuildContext context) {
                               return CustomImagePickerBottomSheet(
-                                title: "Food Image",
+                                title: vendorConfig.productImageLabel,
                                 takePhotoFunction: () {
                                   menuController.selectFoodImage(
                                     pickFromCamera: true,
@@ -168,9 +168,9 @@ class AddMenuScreen extends GetView<FoodMenuController> {
 
                     SizedBox(height: 20.h),
 
-                    // Menu Name
+                    // Product Name
                     CustomRoundedInputField(
-                      title: "Menu name",
+                      title: "${vendorConfig.productLabel} name",
                       label: "e.g Caesar Salad",
                       showLabel: true,
                       isRequired: true,
@@ -178,7 +178,7 @@ class AddMenuScreen extends GetView<FoodMenuController> {
                       controller: menuController.menuNameController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter menu name';
+                          return 'Please enter ${vendorConfig.productLabel.toLowerCase()} name';
                         }
                         return null;
                       },

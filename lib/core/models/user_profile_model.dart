@@ -1,4 +1,4 @@
-import 'restaurant_model.dart';
+import 'vendor_model.dart';
 
 class UserProfile {
   final int id;
@@ -20,7 +20,7 @@ class UserProfile {
   final String? deletedAt;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final RestaurantModel? restaurant;
+  final VendorModel? vendor;
   final List<dynamic> ratings;
   final dynamic bankAccount;
 
@@ -44,12 +44,15 @@ class UserProfile {
     this.deletedAt,
     required this.createdAt,
     required this.updatedAt,
-    this.restaurant,
+    this.vendor,
     this.ratings = const [],
     this.bankAccount,
   });
 
   factory UserProfile.fromJson(Map<String, dynamic> json) {
+    // Support both 'vendor' and legacy 'restaurant' keys from API
+    final vendorJson = json['vendor'] ?? json['restaurant'];
+
     return UserProfile(
       id: json['id'] ?? 0,
       avatar: json['avatar'],
@@ -70,7 +73,7 @@ class UserProfile {
       deletedAt: json['deleted_at'],
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
-      restaurant: json['restaurant'] != null ? RestaurantModel.fromJson(json['restaurant']) : null,
+      vendor: vendorJson != null ? VendorModel.fromJson(vendorJson) : null,
       ratings: json['ratings'] ?? [],
       bankAccount: json['bank_account'],
     );
@@ -97,11 +100,17 @@ class UserProfile {
       'deleted_at': deletedAt,
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
-      'restaurant': restaurant?.toJson(),
+      'vendor': vendor?.toJson(),
+      'restaurant': vendor?.toJson(), // For backward compatibility with API
       'ratings': ratings,
       'bank_account': bankAccount,
     };
   }
+
+  // ============ Backward Compatibility ============
+
+  /// Backward compatibility getter for restaurant
+  VendorModel? get restaurant => vendor;
 
   // Convenience getter for full name
   String get fullName => '$fname $lname';

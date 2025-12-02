@@ -138,7 +138,7 @@ class RestaurantDetailsController extends GetxController {
         await refreshRestaurantData();
         if (shouldNavigateBack) Get.back();
         showToast(
-          message: successMessage ?? "Restaurant updated successfully",
+          message: successMessage ?? "${vendorConfig.displayName} updated successfully",
           isError: false,
         );
       } else {
@@ -146,7 +146,7 @@ class RestaurantDetailsController extends GetxController {
       }
     } catch (e) {
       showToast(
-        message: "Error updating restaurant: ${e.toString()}",
+        message: "Error updating ${vendorConfig.displayName.toLowerCase()}: ${e.toString()}",
         isError: true,
       );
     } finally {
@@ -229,7 +229,7 @@ class RestaurantDetailsController extends GetxController {
 
     await _updateRestaurantProfile(
       updateData,
-      successMessage: "Restaurant information updated successfully",
+      successMessage: vendorConfig.profileUpdatedMessage,
     );
   }
 
@@ -250,7 +250,7 @@ class RestaurantDetailsController extends GetxController {
     );
   }
 
-  // Update restaurant location
+  // Update vendor location
   Future<void> updateLocation(RestaurantLocation location) async {
     final updateData = {
       'restaurant_location': {
@@ -262,11 +262,11 @@ class RestaurantDetailsController extends GetxController {
 
     await _updateRestaurantProfile(
       updateData,
-      successMessage: "Restaurant location updated successfully",
+      successMessage: vendorConfig.locationUpdatedMessage,
     );
   }
 
-  // Update restaurant location using map selection (like during registration)
+  // Update vendor location using map selection (like during registration)
   Future<void> updateLocationFromMap() async {
     if (restaurantLocation == null) {
       showToast(
@@ -286,7 +286,7 @@ class RestaurantDetailsController extends GetxController {
 
     await _updateRestaurantProfile(
       updateData,
-      successMessage: "Restaurant location updated successfully",
+      successMessage: vendorConfig.locationUpdatedMessage,
     );
   }
 

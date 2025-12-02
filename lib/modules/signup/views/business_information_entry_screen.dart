@@ -6,6 +6,23 @@ import 'package:sharpvendor/core/utils/widgets/base64_image.dart';
 class BusinessInformationEntryScreen extends GetView<SignUpController> {
   const BusinessInformationEntryScreen({super.key});
 
+  /// Get hint text for category type based on vendor type
+  String _getCategoryTypeHint() {
+    switch (vendorConfig.currentVendorType) {
+      case VendorType.restaurant:
+        return "e.g. Italian, Nigerian, Chinese, Fast Food";
+      case VendorType.pharmacy:
+        return "e.g. Retail, Hospital, Community";
+      case VendorType.groceryStore:
+      case VendorType.supermarket:
+        return "e.g. General, Organic, Specialty";
+      case VendorType.bakery:
+        return "e.g. Artisan, Pastry, Cake Shop";
+      case VendorType.other:
+        return "e.g. Your business specialty";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<SignUpController>(
@@ -29,7 +46,7 @@ class BusinessInformationEntryScreen extends GetView<SignUpController> {
                     // Check for required images
                     if (signUpController.restaurantBanner == null) {
                       showToast(
-                        message: "Please upload a restaurant banner",
+                        message: "Please upload a ${vendorConfig.displayName.toLowerCase()} banner",
                         isError: true,
                       );
                       return;
@@ -37,7 +54,7 @@ class BusinessInformationEntryScreen extends GetView<SignUpController> {
 
                     if (signUpController.restaurantLogo == null) {
                       showToast(
-                        message: "Please upload a restaurant logo",
+                        message: "Please upload a ${vendorConfig.displayName.toLowerCase()} logo",
                         isError: true,
                       );
                       return;
@@ -89,11 +106,11 @@ class BusinessInformationEntryScreen extends GetView<SignUpController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Restaurant Banner Section
+                    // Vendor Banner Section
                     Row(
                       children: [
                         customText(
-                          "Restaurant Banner",
+                          vendorConfig.bannerLabel,
                           color: AppColors.blackColor,
                           fontSize: 13.sp,
                           fontWeight: FontWeight.w500,
@@ -220,11 +237,11 @@ class BusinessInformationEntryScreen extends GetView<SignUpController> {
                     ),
                     SizedBox(height: 20.h),
 
-                    // Restaurant Logo Section
+                    // Vendor Logo Section
                     Row(
                       children: [
                         customText(
-                          "Restaurant Logo",
+                          vendorConfig.logoLabel,
                           color: AppColors.blackColor,
                           fontSize: 13.sp,
                           fontWeight: FontWeight.w500,
@@ -352,7 +369,7 @@ class BusinessInformationEntryScreen extends GetView<SignUpController> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               customText(
-                                "Upload your restaurant logo",
+                                "Upload your ${vendorConfig.displayName.toLowerCase()} logo",
                                 color: AppColors.blackColor,
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.w500,
@@ -371,39 +388,39 @@ class BusinessInformationEntryScreen extends GetView<SignUpController> {
                     ),
                     SizedBox(height: 20.h),
 
-                    // Restaurant Name Field
+                    // Vendor Name Field
                     CustomRoundedInputField(
-                      title: "Restaurant Name",
-                      label: "Chachalina",
+                      title: vendorConfig.nameLabel,
+                      label: "Your ${vendorConfig.displayName.toLowerCase()} name",
                       showLabel: true,
                       isRequired: true,
                       hasTitle: true,
                       controller: signUpController.restaurantNameController,
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Restaurant name is required';
+                          return '${vendorConfig.nameLabel} is required';
                         }
                         if (value.trim().length < 2) {
-                          return 'Restaurant name must be at least 2 characters';
+                          return '${vendorConfig.nameLabel} must be at least 2 characters';
                         }
                         return null;
                       },
                     ),
 
-                    // Cuisine Type Field
+                    // Business Category Field (Cuisine Type for restaurants)
                     CustomRoundedInputField(
-                      title: "Cuisine Type",
-                      label: "e.g. Italian, Nigerian, Chinese, Fast Food",
+                      title: vendorConfig.categoryTypeLabel,
+                      label: _getCategoryTypeHint(),
                       showLabel: true,
                       isRequired: true,
                       hasTitle: true,
                       controller: signUpController.cuisineTypeController,
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Cuisine type is required';
+                          return '${vendorConfig.categoryTypeLabel} is required';
                         }
                         if (value.trim().length < 2) {
-                          return 'Cuisine type must be at least 2 characters';
+                          return '${vendorConfig.categoryTypeLabel} must be at least 2 characters';
                         }
                         return null;
                       },
@@ -484,7 +501,7 @@ class BusinessInformationEntryScreen extends GetView<SignUpController> {
                     // Business Email Field
                     CustomRoundedInputField(
                       title: "Business Email",
-                      label: "restaurant@example.com",
+                      label: "${vendorConfig.displayName.toLowerCase()}@example.com",
                       showLabel: true,
                       isRequired: true,
                       useCustomValidator: true,

@@ -138,6 +138,12 @@ class SettingsController extends GetxController {
     setLoadingState(false);
     if (response.status == "success") {
       userProfile = UserProfile.fromJson(response.data);
+
+      // Initialize vendor configuration based on the vendor type from profile
+      if (userProfile?.vendor != null) {
+        vendorConfig.initialize(userProfile!.vendor!.vendorType.toApiString());
+      }
+
       update();
       setProfileFields();
     } else {
@@ -318,8 +324,7 @@ class SettingsController extends GetxController {
     GetStorage getStorage = GetStorage();
     getStorage.remove('token');
     Get.offAllNamed(Routes.SIGN_IN);
-    DeliveryNotificationServiceManager serviceManager =
-        DeliveryNotificationServiceManager();
+    WebSocketServiceManager serviceManager = WebSocketServiceManager();
     serviceManager.disposeServices();
   }
 
@@ -341,8 +346,7 @@ class SettingsController extends GetxController {
         GetStorage getStorage = GetStorage();
         getStorage.remove('token');
         Get.offAllNamed(Routes.SIGN_IN);
-        DeliveryNotificationServiceManager serviceManager =
-            DeliveryNotificationServiceManager();
+        WebSocketServiceManager serviceManager = WebSocketServiceManager();
         serviceManager.disposeServices();
       } else {
         showToast(message: "could not delete your account", isError: true);

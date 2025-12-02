@@ -15,7 +15,7 @@ class MenuHomeScreen extends GetView<FoodMenuController> {
             bgColor: AppColors.backgroundColor,
             implyLeading: false,
             centerTitle: true,
-            title: "Menu",
+            title: vendorConfig.catalogLabel,
           ),
           backgroundColor: AppColors.backgroundColor,
           floatingActionButton: FloatingActionButton(
@@ -48,14 +48,14 @@ class MenuHomeScreen extends GetView<FoodMenuController> {
                           ),
                           SizedBox(height: 20.h),
                           customText(
-                            "No menu items yet",
+                            "No ${vendorConfig.productLabelPlural.toLowerCase()} yet",
                             color: AppColors.blackColor,
                             fontSize: 16.sp,
                             fontWeight: FontWeight.w600,
                           ),
                           SizedBox(height: 8.h),
                           customText(
-                            "Add your first menu item to get started",
+                            "Add your first ${vendorConfig.productLabel.toLowerCase()} to get started",
                             color: AppColors.greyColor,
                             fontSize: 14.sp,
                             fontWeight: FontWeight.normal,
@@ -114,7 +114,7 @@ class MenuHomeScreen extends GetView<FoodMenuController> {
             borderRadius: BorderRadius.circular(12.r),
           ),
           title: customText(
-            "Delete Menu Item",
+            "Delete ${vendorConfig.productLabel}",
             color: AppColors.blackColor,
             fontSize: 16.sp,
             fontWeight: FontWeight.w600,
@@ -384,7 +384,7 @@ class MenuItemCard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.restaurant, size: 40.sp, color: AppColors.greyColor),
+            Icon(vendorConfig.icon, size: 40.sp, color: AppColors.greyColor),
             SizedBox(height: 8.h),
             customText(
               "No Image",
