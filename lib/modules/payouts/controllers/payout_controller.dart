@@ -172,7 +172,10 @@ class PayoutController extends GetxController {
     if (!payoutRequestFormKey.currentState!.validate()) return;
 
     // Strip currency formatting from amount
-    final cleanedAmount = amountController.text.replaceAll(RegExp(r'[^\d.]'), '');
+    final cleanedAmount = amountController.text.replaceAll(
+      RegExp(r'[^\d.]'),
+      '',
+    );
     final amount = double.tryParse(cleanedAmount) ?? 0.0;
 
     // Validate amount
@@ -212,14 +215,14 @@ class PayoutController extends GetxController {
       );
 
       if (response.status == "success") {
-        showToast(
-          message: response.message,
-          isError: false,
-        );
+        showToast(message: response.message, isError: false);
 
         // Update available balance from response if provided
-        if (response.data != null && response.data['available_balance'] != null) {
-          availableBalance = double.tryParse(response.data['available_balance'].toString()) ?? availableBalance;
+        if (response.data != null &&
+            response.data['available_balance'] != null) {
+          availableBalance =
+              double.tryParse(response.data['available_balance'].toString()) ??
+              availableBalance;
         }
 
         // Clear form
@@ -230,8 +233,8 @@ class PayoutController extends GetxController {
         getPayoutHistory();
         refreshBalance();
 
-        // Navigate back
-        Get.back();
+        // // Navigate back
+        // Get.back();
       } else {
         showToast(message: response.message, isError: true);
       }
