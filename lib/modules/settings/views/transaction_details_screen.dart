@@ -30,6 +30,10 @@ class TransactionDetailsScreen extends StatelessWidget {
                               .selectedTransaction?.amount ??
                               "0.0")),
                     ),
+                     TransactionDetailSummaryItem(
+                      title: "Description",
+                      value: settingsController.selectedTransaction?.description??"",
+                    ),
                     TransactionDetailSummaryItem(
                       title: "Transaction Ref",
                       value: settingsController.selectedTransaction?.paymentReference??"",

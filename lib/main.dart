@@ -32,15 +32,27 @@ class GoSharpSharp extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context,
-        designSize: Size(MediaQuery.sizeOf(context).width,
-            MediaQuery.sizeOf(context).height));
+    ScreenUtil.init(
+      context,
+      designSize: const Size(375, 812),
+      splitScreenMode: true,
+      minTextAdapt: true,
+    );
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'GoSharpSharp',
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
       // navigatorKey: navigatorKey,
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            textScaler: TextScaler.linear(0.85),
+            boldText: false,
+          ),
+          child: child!,
+        );
+      },
     );
   }
 }

@@ -70,6 +70,8 @@ class SignInController extends GetxController {
           Get.put(SettingsController());
           Get.put(DeliveriesController());
           Get.toNamed(Routes.APP_NAVIGATION);
+        } else {
+          showToast(message: response.message, isError: true);
         }
       } catch (e) {
         print("Error during sign in: $e");

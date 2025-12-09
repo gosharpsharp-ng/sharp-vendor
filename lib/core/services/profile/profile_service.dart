@@ -66,7 +66,7 @@ class ProfileService extends CoreService {
   // Transactions integration
   Future<APIResponse> getAllTransactions(dynamic data) async {
     return await fetch(
-      "/restaurants/transactions?page=${data['page']}&page_size=${data['per_page']}",
+      "/restaurants/transaction?page=${data['page']}&page_size=${data['per_page']}",
     );
   }
 

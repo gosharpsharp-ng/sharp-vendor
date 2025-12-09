@@ -1663,4 +1663,107 @@ class SkeletonLoaders {
       ),
     );
   }
+
+  /// Transaction item skeleton loader (matches TransactionItem structure)
+  static Widget transactionItem({int count = 5}) {
+    return Skeletonizer(
+      enabled: true,
+      child: Column(
+        children: List.generate(
+          count,
+          (index) => Container(
+            width: 1.sw,
+            padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 5.w),
+            margin: EdgeInsets.symmetric(vertical: 2.h, horizontal: 2.w),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10.r),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Left icon skeleton
+                Container(
+                  width: 40.sp,
+                  height: 40.sp,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
+                ),
+
+                // Transaction content skeleton
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 8.w),
+                    child: Column(
+                      children: [
+                        // Top row: Payment reference and time
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              height: 14.sp,
+                              width: 120.w,
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(4.r),
+                              ),
+                            ),
+                            Container(
+                              height: 12.sp,
+                              width: 60.w,
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(4.r),
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        SizedBox(height: 5.h),
+
+                        // Bottom row: Date and amount
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              height: 12.sp,
+                              width: 90.w,
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(4.r),
+                              ),
+                            ),
+                            Container(
+                              height: 14.sp,
+                              width: 80.w,
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(4.r),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                // Right icon skeleton (inflow/outflow indicator)
+                Container(
+                  width: 24.sp,
+                  height: 24.sp,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
