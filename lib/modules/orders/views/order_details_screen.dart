@@ -351,8 +351,10 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                     'cancelled',
                     'rejected',
                   ].contains(order.status.toLowerCase()))
-                    SectionBox(
+                    Stack(
                       children: [
+                        SectionBox(
+                          children: [
                         // Section Header
                         Container(
                           width: double.infinity,
@@ -615,6 +617,46 @@ class OrderDetailsScreen extends GetView<OrdersController> {
                               ),
                             ),
                           ),
+                          ],
+                        ),
+                        // Loading overlay - same pattern as rider delivery notification
+                        if (ordersController.isLoading)
+                          Positioned.fill(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.85),
+                                borderRadius: BorderRadius.circular(12.r),
+                              ),
+                              child: Center(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SizedBox(
+                                      width: 50.sp,
+                                      height: 50.sp,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 4,
+                                        valueColor: AlwaysStoppedAnimation<Color>(
+                                          order.status.toLowerCase() == 'pending'
+                                              ? AppColors.greenColor
+                                              : AppColors.primaryColor,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 16.h),
+                                    customText(
+                                      _getLoadingMessage(order.status),
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: order.status.toLowerCase() == 'pending'
+                                          ? AppColors.greenColor
+                                          : AppColors.primaryColor,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
                       ],
                     ),
 
@@ -736,6 +778,19 @@ class OrderDetailsScreen extends GetView<OrdersController> {
         return 'Cancelled';
       default:
         return status.toUpperCase();
+    }
+  }
+
+  String _getLoadingMessage(String status) {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return 'Processing order...';
+      case 'confirmed':
+        return 'Updating status...';
+      case 'preparing':
+        return 'Marking as ready...';
+      default:
+        return 'Processing...';
     }
   }
 
