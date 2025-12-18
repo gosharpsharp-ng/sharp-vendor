@@ -69,6 +69,8 @@ class SignInController extends GetxController {
           // Then initialize other controllers
           Get.put(SettingsController());
           Get.toNamed(Routes.APP_NAVIGATION);
+        } else {
+          showToast(message: response.message, isError: true);
         }
       } catch (e) {
         print("Error during sign in: $e");
