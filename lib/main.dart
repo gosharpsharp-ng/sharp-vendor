@@ -1,3 +1,4 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:sharpvendor/core/services/app_update/app_update_service.dart';
 import 'package:sharpvendor/core/services/push_notification_service.dart';
 import 'package:sharpvendor/core/utils/exports.dart';
@@ -5,6 +6,9 @@ import 'package:sharpvendor/core/utils/exports.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+    // Load appropriate env file based on build mode
+  const buildMode = String.fromEnvironment('BUILD_MODE', defaultValue: 'dev');
+  await dotenv.load(fileName: buildMode == 'prod' ? '.env.prod' : '.env.dev');
   await GetStorage.init();
   await ScreenUtil.ensureScreenSize();
 
