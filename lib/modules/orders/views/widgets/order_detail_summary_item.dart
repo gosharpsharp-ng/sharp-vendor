@@ -38,7 +38,7 @@ class OrderDetailSummaryItem extends StatelessWidget {
                   value,
                   color: AppColors.blackColor,
                   fontFamily: title == "Amount" || title == "Total"
-                      ? GoogleFonts.montserrat().fontFamily!
+                      ? "Satoshi"
                       : "Satoshi",
                   fontSize: 14.sp,
                   fontWeight: title == "Amount" || title == "Total"
@@ -64,7 +64,7 @@ class OrderDetailSummaryItem extends StatelessWidget {
                     color: AppColors.blackColor,
                     fontSize: 14.sp,
                     fontFamily: title == "Amount" || title == "Total"
-                        ? GoogleFonts.montserrat().fontFamily!
+                        ? "Satoshi"
                         : "Satoshi",
                     fontWeight: title == "Amount" || title == "Total"
                         ? FontWeight.w600
@@ -252,7 +252,7 @@ class OrderDetailPackageItem extends StatelessWidget {
             price,
             color: AppColors.primaryColor,
             fontSize: 15.sp,
-            fontFamily: GoogleFonts.montserrat().fontFamily!,
+            fontFamily: "Satoshi",
             fontWeight: FontWeight.w600,
           ),
         ],
@@ -357,7 +357,7 @@ class OrderDetailMenuItem extends StatelessWidget {
                         unitPrice!,
                         color: AppColors.obscureTextColor,
                         fontSize: 12.sp,
-                        fontFamily: GoogleFonts.montserrat().fontFamily!,
+                        fontFamily: "Satoshi",
                         fontWeight: FontWeight.w500,
                       ),
                       customText(
@@ -407,7 +407,7 @@ class OrderDetailMenuItem extends StatelessWidget {
                         packagingUnitPrice!,
                         color: AppColors.obscureTextColor,
                         fontSize: 11.sp,
-                        fontFamily: GoogleFonts.montserrat().fontFamily!,
+                        fontFamily: "Satoshi",
                         fontWeight: FontWeight.w500,
                       ),
                       customText(
@@ -430,7 +430,7 @@ class OrderDetailMenuItem extends StatelessWidget {
             price,
             color: AppColors.primaryColor,
             fontSize: 14.sp,
-            fontFamily: GoogleFonts.montserrat().fontFamily!,
+            fontFamily: "Satoshi",
             fontWeight: FontWeight.w600,
           ),
         ],

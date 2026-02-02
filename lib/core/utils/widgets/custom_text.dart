@@ -33,7 +33,8 @@ Widget customText(
             fontWeight: fontWeight,
             decoration: decoration,
           )
-        : GoogleFonts.inter(
+        : TextStyle(
+            fontFamily: "Satoshi",
             fontStyle: FontStyle.normal,
             color: color,
             letterSpacing: letterSpacing,

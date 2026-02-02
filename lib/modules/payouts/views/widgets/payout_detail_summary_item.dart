@@ -37,9 +37,7 @@ class PayoutDetailSummaryItem extends StatelessWidget {
                 customText(
                   value,
                   color: AppColors.blackColor,
-                  fontFamily: title == "Amount"
-                      ? GoogleFonts.montserrat().fontFamily!
-                      : "Satoshi",
+                  fontFamily: title == "Amount" ? "Satoshi" : "Satoshi",
                   fontSize: 14.sp,
                   fontWeight: title == "Amount"
                       ? FontWeight.w600
@@ -63,9 +61,7 @@ class PayoutDetailSummaryItem extends StatelessWidget {
                     value,
                     color: AppColors.blackColor,
                     fontSize: 14.sp,
-                    fontFamily: title == "Amount"
-                        ? GoogleFonts.montserrat().fontFamily!
-                        : "Satoshi",
+                    fontFamily: title == "Amount" ? "Satoshi" : "Satoshi",
                     fontWeight: title == "Amount"
                         ? FontWeight.w600
                         : FontWeight.w500,

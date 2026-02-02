@@ -59,18 +59,25 @@ class DeliveryInstructionsBottomSheet extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildInstructionItem(
-                  "Is given by you in person to the rider at the designated location."),
+                "Is given by you in person to the rider at the designated location.",
+              ),
               _buildInstructionItem(
-                  " Is picked up by the recipient at the designated location."),
+                " Is picked up by the recipient at the designated location.",
+              ),
               _buildInstructionItem(
-                  " Is packed into a box, bag or envelope properly."),
+                " Is packed into a box, bag or envelope properly.",
+              ),
               _buildInstructionItem(
-                  "Fits easily in the box and won't damage it."),
-              _buildInstructionItem("Does not contain prohibited items prohibited under the law"),
+                "Fits easily in the box and won't damage it.",
+              ),
+              _buildInstructionItem(
+                "Does not contain prohibited items prohibited under the law",
+              ),
               _buildInstructionItem("Items should not be above 20kg"),
               _buildInstructionItem(
-                  hasCurrency: true,
-                  "Items should not exceed the permitted goods value of ₦50,000 (Fifty thousand naira)."),
+                hasCurrency: true,
+                "Items should not exceed the permitted goods value of ₦50,000 (Fifty thousand naira).",
+              ),
             ],
           ),
           SizedBox(height: 24.h),
@@ -99,9 +106,7 @@ class DeliveryInstructionsBottomSheet extends StatelessWidget {
                     ),
                     recognizer: TapGestureRecognizer()..onTap = () {},
                   ),
-                  const TextSpan(
-                    text: ".",
-                  ),
+                  const TextSpan(text: "."),
                 ],
               ),
             ),
@@ -133,20 +138,14 @@ class DeliveryInstructionsBottomSheet extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            Icons.check,
-            color: AppColors.primaryColor,
-            size: 20.sp,
-          ),
+          Icon(Icons.check, color: AppColors.primaryColor, size: 20.sp),
           SizedBox(width: 8.w),
           Expanded(
             child: customText(
               text,
               color: AppColors.blackColor,
               fontSize: hasCurrency ? 14.sp : 15.sp,
-              fontFamily: hasCurrency
-                  ? GoogleFonts.montserrat().fontFamily!
-                  : 'Satoshi',
+              fontFamily: hasCurrency ? "Satoshi"! : 'Satoshi',
               fontWeight: hasCurrency ? FontWeight.w600 : FontWeight.w500,
               overflow: TextOverflow.visible,
             ),

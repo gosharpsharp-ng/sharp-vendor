@@ -6,18 +6,15 @@ import 'package:sharpvendor/core/utils/exports.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-    // Load appropriate env file based on build mode
+  // Load appropriate env file based on build mode
   const buildMode = String.fromEnvironment('BUILD_MODE', defaultValue: 'dev');
   await dotenv.load(fileName: buildMode == 'prod' ? '.env.prod' : '.env.dev');
   await GetStorage.init();
-  await ScreenUtil.ensureScreenSize();
 
   // Initialize push notifications
   await PushNotificationService().initialize();
 
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-  ]);
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   setupServiceLocator();
 
   runApp(GoSharpSharp(navigatorKey: navigatorKey));
@@ -30,31 +27,28 @@ void main() async {
 
 class GoSharpSharp extends StatelessWidget {
   final GlobalKey<NavigatorState> navigatorKey;
-  const GoSharpSharp({
-    super.key,
-    required this.navigatorKey,
-  });
+  const GoSharpSharp({super.key, required this.navigatorKey});
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(
-      context,
+    return ScreenUtilInit(
       designSize: const Size(375, 812),
-      splitScreenMode: true,
       minTextAdapt: true,
-    );
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'GoSharpSharp',
-      initialRoute: AppPages.INITIAL,
-      getPages: AppPages.routes,
-      // navigatorKey: navigatorKey,
+      splitScreenMode: true,
       builder: (context, child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-            textScaler: TextScaler.linear(0.85),
-            boldText: false,
-          ),
-          child: child!,
+        return GetMaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'GoSharpSharp',
+          initialRoute: AppPages.INITIAL,
+          getPages: AppPages.routes,
+          // navigatorKey: navigatorKey,
+          builder: (context, child) {
+            return MediaQuery(
+              data: MediaQuery.of(
+                context,
+              ).copyWith(textScaler: TextScaler.linear(0.85), boldText: false),
+              child: child!,
+            );
+          },
         );
       },
     );

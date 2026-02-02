@@ -224,7 +224,8 @@ class AnalyticsScreen extends GetView<AnalyticsController> {
 
         SizedBox(height: 30.h),
 
-        // Order Status Breakdown
+        // Order Status Breakdown - Commented out for now
+        /*
         SizedBox(
           width: 1.sw,
           child: customText(
@@ -240,6 +241,7 @@ class AnalyticsScreen extends GetView<AnalyticsController> {
         OrderStatusDonutChart(orderStatus: stats.orderStatusBreakdown),
 
         SizedBox(height: 30.h),
+        */
 
         // Top Performing Days
         if (stats.topPerformingDays.isNotEmpty) ...[

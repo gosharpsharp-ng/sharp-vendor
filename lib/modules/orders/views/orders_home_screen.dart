@@ -204,6 +204,8 @@ class OrdersHomeScreen extends GetView<OrdersController> {
 
   String _getStatusDisplayName(String status) {
     switch (status.toLowerCase()) {
+      case 'all':
+        return 'All';
       case 'pending':
         return 'Pending';
       case 'confirmed':
@@ -225,6 +227,8 @@ class OrdersHomeScreen extends GetView<OrdersController> {
 
   IconData _getStatusIcon(String status) {
     switch (status.toLowerCase()) {
+      case 'all':
+        return Icons.list;
       case 'pending':
         return Icons.access_time;
       case 'confirmed':
@@ -246,6 +250,8 @@ class OrdersHomeScreen extends GetView<OrdersController> {
 
   String _getEmptyStateMessage(String status) {
     switch (status.toLowerCase()) {
+      case 'all':
+        return 'All orders will appear here when customers place them';
       case 'pending':
         return 'New orders will appear here when customers place them';
       case 'confirmed':

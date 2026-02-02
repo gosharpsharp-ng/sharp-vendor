@@ -40,25 +40,34 @@ class SignInController extends GetxController {
     update();
   }
 
+  String? loginErrorMessage;
+
   TextEditingController passwordController = TextEditingController();
   signIn() async {
+    loginErrorMessage = null;
+    update();
+
     if (signInFormKey.currentState!.validate()) {
       setLoadingState(true);
       try {
         dynamic data = {
-          'login':  loginController.text,
+          'login': loginController.text,
           'password': passwordController.text,
         };
         APIResponse response = await authService.login(data);
 
         if (response.status.toLowerCase() == "success") {
-          print("*****************************************************************************");
+          print(
+            "*****************************************************************************",
+          );
           print(response.data['auth_token']);
-          print("******************************************************************************");
+          print(
+            "******************************************************************************",
+          );
 
           loginController.clear();
           passwordController.clear();
-          filledPhoneNumber=null;
+          filledPhoneNumber = null;
           update();
           final getStorage = GetStorage();
           getStorage.write("token", response.data['auth_token']);
@@ -71,13 +80,13 @@ class SignInController extends GetxController {
           Get.put(DeliveriesController());
           Get.toNamed(Routes.APP_NAVIGATION);
         } else {
-          showToast(message: response.message, isError: true);
+          loginErrorMessage = response.message;
+          update();
         }
       } catch (e) {
         print("Error during sign in: $e");
-        showToast(
-            message: "An unexpected error occurred. Please try again.",
-            isError: true);
+        loginErrorMessage = "An unexpected error occurred. Please try again.";
+        update();
       } finally {
         // Always reset loading state, even if an error occurs
         setLoadingState(false);

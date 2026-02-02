@@ -45,61 +45,157 @@ class AppNavigationScreen extends StatelessWidget {
                   .screens[appNavigationController.currentScreenIndex],
             ),
           ),
-          bottomNavigationBar: BottomAppBar(
-            surfaceTintColor: AppColors.whiteColor,
-            padding: const EdgeInsets.all(0.0),
-            color: AppColors.whiteColor,
-            elevation: 6,
-            shape: const CircularNotchedRectangle(),
-            // notchMargin: 12.sp,
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 8.sp, vertical: 8.sp),
-              decoration: BoxDecoration(
-                color: AppColors.whiteColor,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(
-                    20.r,
-                  ),
-                  topRight: Radius.circular(
-                    20.r,
-                  ),
-                ),
-              ),
-              height: 60.sp,
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Expanded(
-                    child: BottomNavItem(
-                      index: 0,
-                      title: "Home",
-                      activeIcon: SvgAssets.homeIcon,
+          bottomNavigationBar: Builder(
+            builder: (context) {
+              final isTablet = MediaQuery.of(context).size.width > 600;
+              if (isTablet) {
+                return NavigationBar(
+                  backgroundColor: AppColors.whiteColor,
+                  elevation: 6,
+                  surfaceTintColor: AppColors.whiteColor,
+                  labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+                  labelTextStyle: MaterialStateProperty.resolveWith<TextStyle>(
+                    (states) => TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: states.contains(MaterialState.selected)
+                          ? FontWeight.w700
+                          : FontWeight.w400,
                     ),
                   ),
-                  Expanded(
-                    child: BottomNavItem(
-                      index: 1,
-                      title: "Menu",
-                      activeIcon: SvgAssets.menuIcon,
+                  destinations: [
+                    NavigationDestination(
+                      icon: SvgPicture.asset(
+                        SvgAssets.homeIcon,
+                        height: 24.sp,
+                        width: 24.sp,
+                        color: AppColors.blackColor,
+                      ),
+                      selectedIcon: SvgPicture.asset(
+                        SvgAssets.homeIcon,
+                        height: 24.sp,
+                        width: 24.sp,
+                        color: AppColors.primaryColor,
+                      ),
+                      label: "Home",
+                    ),
+                    NavigationDestination(
+                      icon: SvgPicture.asset(
+                        SvgAssets.menuIcon,
+                        height: 24.sp,
+                        width: 24.sp,
+                        color: AppColors.blackColor,
+                      ),
+                      selectedIcon: SvgPicture.asset(
+                        SvgAssets.menuIcon,
+                        height: 24.sp,
+                        width: 24.sp,
+                        color: AppColors.primaryColor,
+                      ),
+                      label: "Menu",
+                    ),
+                    NavigationDestination(
+                      icon: SvgPicture.asset(
+                        SvgAssets.ordersIcon,
+                        height: 24.sp,
+                        width: 24.sp,
+                        color: AppColors.blackColor,
+                      ),
+                      selectedIcon: SvgPicture.asset(
+                        SvgAssets.ordersIcon,
+                        height: 24.sp,
+                        width: 24.sp,
+                        color: AppColors.primaryColor,
+                      ),
+                      label: "Orders",
+                    ),
+                    NavigationDestination(
+                      icon: SvgPicture.asset(
+                        SvgAssets.userIcon,
+                        height: 24.sp,
+                        width: 24.sp,
+                        color: AppColors.blackColor,
+                      ),
+                      selectedIcon: SvgPicture.asset(
+                        SvgAssets.userIcon,
+                        height: 24.sp,
+                        width: 24.sp,
+                        color: AppColors.primaryColor,
+                      ),
+                      label: "Profile",
+                    ),
+                  ],
+                  selectedIndex: appNavigationController.currentScreenIndex,
+                  onDestinationSelected: (index) {
+                    appNavigationController.changeScreenIndex(index);
+                  },
+                );
+              } else {
+                return BottomAppBar(
+                  surfaceTintColor: AppColors.whiteColor,
+                  padding: const EdgeInsets.all(0.0),
+                  color: AppColors.whiteColor,
+                  elevation: 6,
+                  shape: const CircularNotchedRectangle(),
+                  // notchMargin: 12.sp,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8.sp, vertical: 8.sp),
+                    decoration: BoxDecoration(
+                      color: AppColors.whiteColor,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(
+                          20.r,
+                        ),
+                        topRight: Radius.circular(
+                          20.r,
+                        ),
+                      ),
+                    ),
+                    height: 60.sp,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: BottomNavItem(
+                            index: 0,
+                            title: "Home",
+                            activeIcon: SvgAssets.homeIcon,
+                            iconSize: 25,
+                            fontSize: 13,
+                          ),
+                        ),
+                        Expanded(
+                          child: BottomNavItem(
+                            index: 1,
+                            title: "Menu",
+                            activeIcon: SvgAssets.menuIcon,
+                            iconSize: 25,
+                            fontSize: 13,
+                          ),
+                        ),
+                        Expanded(
+                          child: BottomNavItem(
+                            index: 2,
+                            title: "Orders",
+                            activeIcon: SvgAssets.ordersIcon,
+                            iconSize: 25,
+                            fontSize: 13,
+                          ),
+                        ),
+                        Expanded(
+                          child: BottomNavItem(
+                            index: 3,
+                            title: "Profile",
+                            activeIcon: SvgAssets.userIcon,
+                            iconSize: 25,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  Expanded(
-                    child: BottomNavItem(
-                      index: 2,
-                      title: "Orders",
-                      activeIcon: SvgAssets.ordersIcon,
-                    ),
-                  ),
-                  Expanded(
-                    child: BottomNavItem(
-                      index: 3,
-                      title: "Profile",
-                      activeIcon: SvgAssets.userIcon,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+                );
+              }
+            },
           ),
         ),
       ),
@@ -112,11 +208,13 @@ class BottomNavItem extends StatefulWidget {
   final String activeIcon;
   final int index;
   final int iconSize;
+  final double fontSize;
   const BottomNavItem(
       {super.key,
       required this.title,
       required this.activeIcon,
       this.iconSize = 25,
+      this.fontSize = 13,
       required this.index});
 
   @override
@@ -210,7 +308,7 @@ class _BottomNavItemState extends State<BottomNavItem>
                         color: isSelected
                             ? AppColors.primaryColor
                             : AppColors.blackColor,
-                        fontSize: 13.sp,
+                        fontSize: widget.fontSize.sp,
                       ),
                       child: Text(widget.title),
                     ),

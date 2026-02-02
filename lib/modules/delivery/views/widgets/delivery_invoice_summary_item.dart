@@ -39,9 +39,7 @@ class DeliveryInvoiceSummaryItem extends StatelessWidget {
                   value,
                   color: AppColors.blackColor,
                   fontSize: 15.sp,
-                  fontFamily: isCurrency
-                      ? GoogleFonts.montserrat().fontFamily!
-                      : 'Satoshi',
+                  fontFamily: isCurrency ? "Satoshi" : 'Satoshi',
                   fontWeight: FontWeight.w500,
                   overflow: TextOverflow.visible,
                 ),
@@ -61,9 +59,7 @@ class DeliveryInvoiceSummaryItem extends StatelessWidget {
                   value,
                   color: AppColors.blackColor,
                   fontSize: 15.sp,
-                  fontFamily: isCurrency
-                      ? GoogleFonts.montserrat().fontFamily!
-                      : 'Satoshi',
+                  fontFamily: isCurrency ? "Satoshi" : 'Satoshi',
                   fontWeight: FontWeight.w500,
                   overflow: TextOverflow.visible,
                 ),

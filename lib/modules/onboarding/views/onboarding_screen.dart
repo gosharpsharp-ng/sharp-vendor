@@ -20,6 +20,7 @@ class OnboardingScreen extends StatelessWidget {
           body: Container(
             height: 1.sh,
             width: 1.sw,
+            padding: EdgeInsets.symmetric(horizontal: 8.w),
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(PngAssets.lightWatermark),
@@ -50,7 +51,6 @@ class OnboardingScreen extends StatelessWidget {
                               ),
                               child: Container(
                                 width: 1.sw,
-                                height: 1.sh,
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
                                     image: AssetImage(contents[i].image),
@@ -121,8 +121,8 @@ class OnboardingScreen extends StatelessWidget {
                             Get.toNamed(Routes.SIGN_IN);
                           }
                         },
-                        width: 1.sw * 0.90,
-                        height: 55.h,
+                        width: 1.sw * 0.88,
+                        height: 40.h,
                         fontWeight: FontWeight.w600,
                         title:
                             onboardingController.currentPageIndex !=

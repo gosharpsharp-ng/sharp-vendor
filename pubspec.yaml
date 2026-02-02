@@ -5,7 +5,7 @@ description: "Vendor App For Go Sharp Sharp LTD."
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 
-version: 1.0.0+1
+version: 1.0.2+3
 
 environment:
   sdk: ^3.8.1
@@ -98,3 +98,30 @@ flutter_native_splash:
     icon_background_color: "#FFFFFF"
     # TODO: Replace with a padded version of your logo for best results
     image: "assets/icons/app-logo.png"
+
+  fonts:
+    - family: Satoshi
+      fonts:
+        - asset: assets/fonts/Satoshi-Regular.ttf
+        - asset: assets/fonts/Satoshi-Italic.ttf
+          style: italic
+        - asset: assets/fonts/Satoshi-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Satoshi-BoldItalic.ttf
+          weight: 700
+          style: italic
+        - asset: assets/fonts/Satoshi-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Satoshi-MediumItalic.ttf
+          weight: 500
+          style: italic
+        - asset: assets/fonts/Satoshi-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Satoshi-LightItalic.ttf
+          weight: 300
+          style: italic
+        - asset: assets/fonts/Satoshi-Black.ttf
+          weight: 900
+        - asset: assets/fonts/Satoshi-BlackItalic.ttf
+          weight: 900
+          style: italic

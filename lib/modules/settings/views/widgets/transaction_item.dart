@@ -62,7 +62,7 @@ class TransactionItem extends StatelessWidget {
                           formatToCurrency(double.parse(transaction.amount)),
                           color: AppColors.blackColor,
                           fontWeight: FontWeight.w600,
-                          fontFamily: GoogleFonts.montserrat().fontFamily!,
+                          fontFamily: "Satoshi",
                           fontSize: 14.sp,
                           overflow: TextOverflow.visible,
                         ),

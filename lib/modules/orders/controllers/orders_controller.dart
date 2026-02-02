@@ -29,9 +29,10 @@ class OrdersController extends GetxController {
   OrderModel? selectedOrder;
 
   // Order status filter - Updated to match API statuses
-  // Ordered as: pending → confirmed → preparing → ready → delivered
-  String selectedOrderStatus = 'pending';
+  // Ordered as: all → pending → confirmed → preparing → ready → delivered
+  String selectedOrderStatus = 'all';
   List<String> orderStatuses = [
+    'all',
     'pending',
     'confirmed',
     'preparing',
@@ -53,12 +54,16 @@ class OrdersController extends GetxController {
 
   // Filter orders by status
   void filterOrdersByStatus() {
-    filteredOrders = allOrders
-        .where(
-          (order) =>
-              order.status.toLowerCase() == selectedOrderStatus.toLowerCase(),
-        )
-        .toList();
+    if (selectedOrderStatus == 'all') {
+      filteredOrders = allOrders;
+    } else {
+      filteredOrders = allOrders
+          .where(
+            (order) =>
+                order.status.toLowerCase() == selectedOrderStatus.toLowerCase(),
+          )
+          .toList();
+    }
   }
 
   // Get orders from API - UPDATED WITH API INTEGRATION
@@ -404,6 +409,9 @@ class OrdersController extends GetxController {
 
   // Get order count by status
   int getOrderCountByStatus(String status) {
+    if (status == 'all') {
+      return allOrders.length;
+    }
     return allOrders
         .where((order) => order.status.toLowerCase() == status.toLowerCase())
         .length;
