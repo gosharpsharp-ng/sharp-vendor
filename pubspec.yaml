@@ -88,6 +88,7 @@ flutter_native_splash:
   image: "assets/icons/app-logo.png"
   android: true
   ios: true
+  ios_content_mode: scaleAspectFit
   web: false
 
   # Android 12+ uses adaptive splash with circular mask that crops ~33% of edges
@@ -97,7 +98,7 @@ flutter_native_splash:
     color: "#FFFFFF"
     icon_background_color: "#FFFFFF"
     # TODO: Replace with a padded version of your logo for best results
-    image: "assets/icons/app-logo.png"
+    image: "assets/icons/app-logo-android.png"
 
   fonts:
     - family: Satoshi
