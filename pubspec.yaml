@@ -5,7 +5,7 @@ description: "Vendor App For Go Sharp Sharp LTD."
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 
-version: 1.0.2+3
+version: 1.0.3+3
 
 environment:
   sdk: ^3.8.1
@@ -81,25 +81,6 @@ flutter:
     - assets/imgs/
     - assets/json/
 
-
-
-flutter_native_splash:
-  color: "#FFFFFF"
-  image: "assets/icons/app-logo.png"
-  android: true
-  ios: true
-  ios_content_mode: scaleAspectFit
-  web: false
-
-  # Android 12+ uses adaptive splash with circular mask that crops ~33% of edges
-  # IMPORTANT: Create a separate icon with the logo at 66% size, centered with padding
-  # Save it as assets/icons/app-logo-splash.png (1152x1152px recommended)
-  android_12:
-    color: "#FFFFFF"
-    icon_background_color: "#FFFFFF"
-    # TODO: Replace with a padded version of your logo for best results
-    image: "assets/icons/app-logo-android.png"
-
   fonts:
     - family: Satoshi
       fonts:
@@ -126,3 +107,20 @@ flutter_native_splash:
         - asset: assets/fonts/Satoshi-BlackItalic.ttf
           weight: 900
           style: italic
+
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: "assets/icons/app-logo.png"
+  android: true
+  ios: true
+  ios_content_mode: scaleAspectFit
+  web: false
+
+  # Android 12+ uses adaptive splash with circular mask that crops ~33% of edges
+  # IMPORTANT: Create a separate icon with the logo at 66% size, centered with padding
+  # Save it as assets/icons/app-logo-splash.png (1152x1152px recommended)
+  android_12:
+    color: "#FFFFFF"
+    icon_background_color: "#FFFFFF"
+    # TODO: Replace with a padded version of your logo for best results
+    image: "assets/icons/app-logo-android.png"

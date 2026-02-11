@@ -5,24 +5,42 @@ import 'package:sharpvendor/core/utils/exports.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  // Load appropriate env file based on build mode
-  const buildMode = String.fromEnvironment('BUILD_MODE', defaultValue: 'dev');
-  await dotenv.load(fileName: buildMode == 'prod' ? '.env.prod' : '.env.dev');
-  await GetStorage.init();
+  try {
+    WidgetsFlutterBinding.ensureInitialized();
+    // Load appropriate env file based on build mode
+    const buildMode = String.fromEnvironment('BUILD_MODE', defaultValue: 'dev');
+    await dotenv.load(fileName: buildMode == 'prod' ? '.env.prod' : '.env.dev');
+    await GetStorage.init();
 
-  // Initialize push notifications
-  await PushNotificationService().initialize();
+    // Initialize push notifications
+    await PushNotificationService().initialize();
 
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  setupServiceLocator();
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    setupServiceLocator();
 
-  runApp(GoSharpSharp(navigatorKey: navigatorKey));
+    runApp(GoSharpSharp(navigatorKey: navigatorKey));
 
-  // Check for app updates after app is running
-  Future.delayed(const Duration(seconds: 2), () {
-    AppUpdateService().initialize();
-  });
+    // Check for app updates after app is running
+    Future.delayed(const Duration(seconds: 2), () {
+      AppUpdateService().initialize();
+    });
+  } catch (e, stackTrace) {
+    debugPrint('CRITICAL INITIALIZATION ERROR: $e');
+    debugPrint(stackTrace.toString());
+    // Fallback to ensure something is run even if init fails
+    runApp(
+      MaterialApp(
+        home: Scaffold(
+          body: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Text('Initialization Error: $e'),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class GoSharpSharp extends StatelessWidget {
