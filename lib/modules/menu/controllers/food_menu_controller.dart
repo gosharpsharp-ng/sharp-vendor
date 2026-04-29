@@ -21,11 +21,16 @@ class FoodMenuController extends GetxController {
   // Menu items list
   List<MenuItemModel> menuItems = [];
   bool isLoadingMenuItems = false;
+  bool isLoadingMoreMenuItems = false;
+  int _menuCurrentPage = 1;
+  int _menuLastPage = 1;
+  bool get hasMoreMenuItems => _menuCurrentPage <= _menuLastPage;
 
   setMenuItemsLoadingState(bool val) {
     isLoadingMenuItems = val;
     update();
   }
+
 
   // Categories management
   List<CategoryModel> categoryModels = [];
@@ -656,50 +661,71 @@ class FoodMenuController extends GetxController {
     update();
   }
 
-  // Get menu items - UPDATED WITH API INTEGRATION
-  getMenuItems() async {
+  Future<void> getMenuItems() async {
+    _menuCurrentPage = 1;
+    _menuLastPage = 1;
     setMenuItemsLoadingState(true);
 
     try {
-      final response = await menuService.getAllMenu({
-        'fresh': true,
-        'page': 'page=1',
-        'per_page': 50,
-      });
+      final response = await menuService.getAllMenu(1);
 
       if (response.status == "success" && response.data != null) {
         final Map<String, dynamic> responseData = response.data;
         final List<dynamic> menuData = responseData['data'] ?? [];
 
         menuItems = menuData.map((json) => MenuItemModel.fromJson(json)).toList();
-
+        _menuLastPage = responseData['last_page'] ?? 1;
+        _menuCurrentPage = 2;
       } else {
-        if (response.message != null && response.message!.isNotEmpty) {
-          showToast(message: response.message!, isError: true);
+        if (response.message.isNotEmpty) {
+          showToast(message: response.message, isError: true);
         }
       }
     } catch (e) {
-      // Keep existing sample data as fallback
-
-      showToast(
-        message: "Error loading menu items: ${e.toString()}",
-        isError: true,
-      );
+      showToast(message: "Error loading menu items: ${e.toString()}", isError: true);
     } finally {
       setMenuItemsLoadingState(false);
+    }
+  }
+
+  Future<void> loadMoreMenuItems() async {
+    if (isLoadingMoreMenuItems || _menuCurrentPage > _menuLastPage) return;
+
+    isLoadingMoreMenuItems = true;
+    update();
+
+    try {
+      final response = await menuService.getAllMenu(_menuCurrentPage);
+
+      if (response.status == "success" && response.data != null) {
+        final Map<String, dynamic> responseData = response.data;
+        final List<dynamic> menuData = responseData['data'] ?? [];
+
+        menuItems.addAll(menuData.map((json) => MenuItemModel.fromJson(json)));
+        _menuLastPage = responseData['last_page'] ?? _menuLastPage;
+        _menuCurrentPage++;
+      } else {
+        if (response.message.isNotEmpty) {
+          showToast(message: response.message, isError: true);
+        }
+      }
+    } catch (e) {
+      showToast(message: "Error loading more items: ${e.toString()}", isError: true);
+    } finally {
+      isLoadingMoreMenuItems = false;
+      update();
     }
   }
 
   // Current menu item being viewed
   MenuItemModel? currentMenuItem;
 
-  setCurrentMenuItem(MenuItemModel item) {
+  void setCurrentMenuItem(MenuItemModel item) {
     currentMenuItem = item;
     update();
   }
 
-  // Update menu item availability - TODO: Add API integration
-  updateMenuItemAvailability(int itemId, bool isAvailable) async {
+  Future<void> updateMenuItemAvailability(int itemId, bool isAvailable) async {
     setLoadingState(true);
 
     try {
@@ -747,7 +773,7 @@ class FoodMenuController extends GetxController {
     }
   }
 
-  deleteMenuItem(int itemId) async {
+  Future<void> deleteMenuItem(int itemId) async {
     setLoadingState(true);
 
     try {
@@ -768,7 +794,7 @@ class FoodMenuController extends GetxController {
   }
 
   // Edit menu item
-  editMenuItem(MenuItemModel item) {
+  void editMenuItem(MenuItemModel item) {
     // Set the current menu item for updating
     currentMenuItem = item;
 

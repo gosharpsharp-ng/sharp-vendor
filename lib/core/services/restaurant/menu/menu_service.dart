@@ -26,10 +26,8 @@ class MenuService extends CoreService {
     return await fetch("/restaurants/menu-categories/${data['id']}");
   }
 
-  Future<APIResponse> getAllMenu(dynamic data) async {
-    return await fetch(
-      "/restaurants/menus?fresh=${data['fresh']}&${data['page']}&page_size=${data['per_page']}",
-    );
+  Future<APIResponse> getAllMenu(int page) async {
+    return await fetch("/restaurants/menus?page=$page");
   }
 
   Future<APIResponse> getMenuById(dynamic data) async {

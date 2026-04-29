@@ -10,7 +10,44 @@ class MenuHomeScreen extends GetView<FoodMenuController> {
   Widget build(BuildContext context) {
     return GetBuilder<FoodMenuController>(
       builder: (menuController) {
-        return Scaffold(
+        return _MenuHomeBody(menuController: menuController);
+      },
+    );
+  }
+}
+
+class _MenuHomeBody extends StatefulWidget {
+  final FoodMenuController menuController;
+  const _MenuHomeBody({required this.menuController});
+
+  @override
+  State<_MenuHomeBody> createState() => _MenuHomeBodyState();
+}
+
+class _MenuHomeBodyState extends State<_MenuHomeBody> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+          _scrollController.position.maxScrollExtent - 200) {
+        widget.menuController.loadMoreMenuItems();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final menuController = widget.menuController;
+    return Scaffold(
           appBar: defaultAppBar(
             bgColor: AppColors.backgroundColor,
             implyLeading: false,
@@ -76,10 +113,19 @@ class MenuHomeScreen extends GetView<FoodMenuController> {
                       ),
                     )
                   : ListView.separated(
-                      itemCount: menuController.menuItems.length,
+                      controller: _scrollController,
+                      itemCount: menuController.menuItems.length + 1,
                       separatorBuilder: (context, index) =>
                           SizedBox(height: 16.h),
                       itemBuilder: (context, index) {
+                        if (index == menuController.menuItems.length) {
+                          return menuController.isLoadingMoreMenuItems
+                              ? Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 16.h),
+                                  child: Center(child: CircularProgressIndicator(color: AppColors.primaryColor)),
+                                )
+                              : SizedBox(height: 16.h);
+                        }
                         final menuItem = menuController.menuItems[index];
                         return MenuItemCard(
                           menuItem: menuItem,
@@ -101,8 +147,6 @@ class MenuHomeScreen extends GetView<FoodMenuController> {
             ),
           ),
         );
-      },
-    );
   }
 
   void _showDeleteDialog(BuildContext context, MenuItemModel menuItem) {
@@ -140,7 +184,7 @@ class MenuHomeScreen extends GetView<FoodMenuController> {
             TextButton(
               onPressed: () {
                 Get.back();
-                controller.deleteMenuItem(menuItem.id);
+                widget.menuController.deleteMenuItem(menuItem.id);
               },
               child: customText(
                 "Delete",

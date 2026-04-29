@@ -333,28 +333,24 @@ class AppPages {
     GetPage(
       name: Routes.ADD_MENU_SCREEN,
       page: () => const AddMenuScreen(),
-      binding: MenuBindings(),
       transition: Transition.downToUp,
       transitionDuration: const Duration(milliseconds: 400),
     ),
     GetPage(
       name: Routes.MENU_DETAILS_SCREEN,
       page: () => const MenuDetailsScreen(),
-      binding: MenuBindings(),
       transition: Transition.downToUp,
       transitionDuration: const Duration(milliseconds: 400),
     ),
     GetPage(
       name: Routes.EDIT_MENU_SCREEN,
       page: () => const EditMenuScreen(),
-      binding: MenuBindings(),
       transition: Transition.downToUp,
       transitionDuration: const Duration(milliseconds: 400),
     ),
     GetPage(
       name: Routes.CATEGORIES_MANAGEMENT_SCREEN,
       page: () => CategoryManagementScreen(),
-      binding: MenuBindings(),
       transition: Transition.downToUp,
       transitionDuration: const Duration(milliseconds: 400),
     ),
