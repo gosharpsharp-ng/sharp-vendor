@@ -48,8 +48,14 @@ class GoSharpSharp extends StatelessWidget {
   const GoSharpSharp({super.key, required this.navigatorKey});
   @override
   Widget build(BuildContext context) {
+    final view = View.of(context);
+    final screenSize = view.physicalSize / view.devicePixelRatio;
+    final isTablet = screenSize.shortestSide >= 600;
+
     return ScreenUtilInit(
-      designSize: const Size(375, 812),
+      // On tablet, match designSize to actual screen so ScreenUtil scale = 1.0
+      // (no 2.73x distortion). On phone, keep the original phone design size.
+      designSize: isTablet ? screenSize : const Size(375, 812),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
@@ -60,10 +66,9 @@ class GoSharpSharp extends StatelessWidget {
           getPages: AppPages.routes,
           // navigatorKey: navigatorKey,
           builder: (context, child) {
+            final mq = MediaQuery.of(context);
             return MediaQuery(
-              data: MediaQuery.of(
-                context,
-              ).copyWith(textScaler: TextScaler.linear(0.85), boldText: false),
+              data: mq.copyWith(textScaler: TextScaler.linear(0.85), boldText: false),
               child: child!,
             );
           },

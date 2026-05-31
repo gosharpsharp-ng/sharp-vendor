@@ -26,6 +26,9 @@ class FoodMenuController extends GetxController {
   int _menuLastPage = 1;
   bool get hasMoreMenuItems => _menuCurrentPage <= _menuLastPage;
 
+  // Tracks whether the initial load has completed at least once
+  bool _initialLoadDone = false;
+
   setMenuItemsLoadingState(bool val) {
     isLoadingMenuItems = val;
     update();
@@ -662,9 +665,16 @@ class FoodMenuController extends GetxController {
   }
 
   Future<void> getMenuItems() async {
+    // Prevent concurrent full refreshes — set flag synchronously before any await.
+    // Also bail out if a loadMore is in flight so we don't reset _menuCurrentPage mid-scroll.
+    if (isLoadingMenuItems || isLoadingMoreMenuItems) return;
+    isLoadingMenuItems = true;
+    update();
+
     _menuCurrentPage = 1;
     _menuLastPage = 1;
-    setMenuItemsLoadingState(true);
+    // Clear list before fetching to prevent duplication
+    menuItems = [];
 
     try {
       final response = await menuService.getAllMenu(1);
@@ -676,6 +686,7 @@ class FoodMenuController extends GetxController {
         menuItems = menuData.map((json) => MenuItemModel.fromJson(json)).toList();
         _menuLastPage = responseData['last_page'] ?? 1;
         _menuCurrentPage = 2;
+        _initialLoadDone = true;
       } else {
         if (response.message.isNotEmpty) {
           showToast(message: response.message, isError: true);
@@ -684,18 +695,31 @@ class FoodMenuController extends GetxController {
     } catch (e) {
       showToast(message: "Error loading menu items: ${e.toString()}", isError: true);
     } finally {
-      setMenuItemsLoadingState(false);
+      isLoadingMenuItems = false;
+      update();
     }
   }
 
+  /// Refreshes the list only if no load is already in progress.
+  /// Called by the nav controller when the user taps the Menu tab.
+  Future<void> refreshMenuItemsIfNeeded() async {
+    if (isLoadingMenuItems) return;
+    await getMenuItems();
+  }
+
   Future<void> loadMoreMenuItems() async {
-    if (isLoadingMoreMenuItems || _menuCurrentPage > _menuLastPage) return;
+    // Don't load more while a full refresh is already running
+    if (isLoadingMenuItems || isLoadingMoreMenuItems || _menuCurrentPage > _menuLastPage) return;
+
+    // Snapshot the page number before any await so a concurrent getMenuItems()
+    // reset of _menuCurrentPage cannot cause us to re-fetch page 1.
+    final int pageToFetch = _menuCurrentPage;
 
     isLoadingMoreMenuItems = true;
     update();
 
     try {
-      final response = await menuService.getAllMenu(_menuCurrentPage);
+      final response = await menuService.getAllMenu(pageToFetch);
 
       if (response.status == "success" && response.data != null) {
         final Map<String, dynamic> responseData = response.data;
@@ -703,7 +727,8 @@ class FoodMenuController extends GetxController {
 
         menuItems.addAll(menuData.map((json) => MenuItemModel.fromJson(json)));
         _menuLastPage = responseData['last_page'] ?? _menuLastPage;
-        _menuCurrentPage++;
+        // Only advance the cursor if the list hasn't been reset by a concurrent refresh
+        if (_menuCurrentPage == pageToFetch) _menuCurrentPage++;
       } else {
         if (response.message.isNotEmpty) {
           showToast(message: response.message, isError: true);
@@ -777,12 +802,19 @@ class FoodMenuController extends GetxController {
     setLoadingState(true);
 
     try {
-      // TODO: Replace with actual API call
-      await Future.delayed(const Duration(seconds: 1));
+      final APIResponse response = await menuService.deleteMenu(itemId);
 
-      menuItems.removeWhere((item) => item.id == itemId);
-      showToast(message: "Menu item deleted successfully", isError: false);
-      Get.back();
+      if (response.status == "success") {
+        menuItems.removeWhere((item) => item.id == itemId);
+        update();
+        showToast(message: "Menu item deleted successfully", isError: false);
+        Get.back();
+      } else {
+        showToast(
+          message: response.message ?? "Failed to delete menu item",
+          isError: true,
+        );
+      }
     } catch (e) {
       showToast(
         message: "Error deleting menu item: ${e.toString()}",
@@ -870,6 +902,9 @@ class FoodMenuController extends GetxController {
     super.onInit();
     initializeDefaultCategories();
     getCategories();
+    // Load menus on startup. The atomic isLoadingMenuItems flag (set before
+    // any await) ensures that the nav controller's refreshMenuItemsIfNeeded
+    // cannot slip through and cause a duplicate fetch.
     getMenuItems();
 
     // Setup search listener

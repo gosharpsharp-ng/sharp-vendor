@@ -9,6 +9,14 @@ class OnboardingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+    final double buttonWidth = isTablet
+        ?MediaQuery.of(context).size.width * 0.80
+        : MediaQuery.of(context).size.width * 0.88;
+    final double buttonHeight = isTablet ? 100 : 80;
+    final double titleFontSize = isTablet ? 20.sp : 22.sp;
+    final double descFontSize = isTablet ? 13.sp : 14.sp;
+
     return GetBuilder<OnboardingController>(
       builder: (onboardingController) {
         return Scaffold(
@@ -45,17 +53,11 @@ class OnboardingScreen extends StatelessWidget {
                           Expanded(
                             flex: 3,
                             child: Container(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 0.sp,
-                                horizontal: 0.sp,
-                              ),
-                              child: Container(
-                                width: 1.sw,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: AssetImage(contents[i].image),
-                                    fit: BoxFit.cover,
-                                  ),
+                              width: 1.sw,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage(contents[i].image),
+                                  fit: BoxFit.cover,
                                 ),
                               ),
                             ),
@@ -63,28 +65,31 @@ class OnboardingScreen extends StatelessWidget {
                           SizedBox(height: 5.sp),
                           Expanded(
                             flex: 1,
-                            child: Container(
+                            child: Padding(
                               padding: EdgeInsets.symmetric(
-                                horizontal: 14.sp,
-                                vertical: 8.h,
+                                horizontal: isTablet ? 48.0 : 14.sp,
+                                vertical: 4.0,
                               ),
-                              child: Column(
-                                children: [
-                                  customText(
-                                    contents[i].title,
-                                    textAlign: TextAlign.center,
-                                    fontSize: 22.sp,
-                                    fontWeight: FontWeight.w600,
-                                    overflow: TextOverflow.visible,
-                                  ),
-                                  SizedBox(height: 5.sp),
-                                  customText(
-                                    contents[i].desc,
-                                    textAlign: TextAlign.center,
-                                    fontSize: 14.sp,
-                                    overflow: TextOverflow.visible,
-                                  ),
-                                ],
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    customText(
+                                      contents[i].title,
+                                      textAlign: TextAlign.center,
+                                      fontSize: titleFontSize,
+                                      fontWeight: FontWeight.w600,
+                                      overflow: TextOverflow.visible,
+                                    ),
+                                    SizedBox(height: 5.sp),
+                                    customText(
+                                      contents[i].desc,
+                                      textAlign: TextAlign.center,
+                                      fontSize: descFontSize,
+                                      overflow: TextOverflow.visible,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -94,23 +99,22 @@ class OnboardingScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 5.h),
-                Expanded(
-                  flex: 3,
+                Padding(
+                  padding: EdgeInsets.only(bottom: 24.h),
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      SizedBox(
-                        child: AnimatedSmoothIndicator(
-                          activeIndex: onboardingController.currentPageIndex,
-                          count: 3,
-                          effect: ExpandingDotsEffect(
-                            activeDotColor: AppColors.primaryColor,
-                            dotColor: AppColors.obscureTextColor,
-                            dotWidth: 8.sp,
-                            dotHeight: 8.sp,
-                          ),
+                      AnimatedSmoothIndicator(
+                        activeIndex: onboardingController.currentPageIndex,
+                        count: 3,
+                        effect: ExpandingDotsEffect(
+                          activeDotColor: AppColors.primaryColor,
+                          dotColor: AppColors.obscureTextColor,
+                          dotWidth: 8.sp,
+                          dotHeight: 8.sp,
                         ),
                       ),
-                      SizedBox(height: 25.h),
+                      SizedBox(height: 20.h),
                       CustomButton(
                         borderRadius: 16.r,
                         onPressed: () {
@@ -121,8 +125,8 @@ class OnboardingScreen extends StatelessWidget {
                             Get.toNamed(Routes.SIGN_IN);
                           }
                         },
-                        width: 1.sw * 0.88,
-                        height: 40.h,
+                        width: buttonWidth,
+                        height: buttonHeight,
                         fontWeight: FontWeight.w600,
                         title:
                             onboardingController.currentPageIndex !=
@@ -144,7 +148,7 @@ class OnboardingScreen extends StatelessWidget {
                           child: customText(
                             "Skip",
                             textAlign: TextAlign.center,
-                            fontSize: 16.sp,
+                            fontSize: 13.sp,
                             color: AppColors.primaryColor,
                             overflow: TextOverflow.visible,
                           ),

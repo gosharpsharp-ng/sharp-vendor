@@ -10,7 +10,7 @@ class CustomButton extends StatelessWidget {
     this.borderColor = Colors.transparent,
     this.fontWeight = FontWeight.w600,
     this.width = 260,
-    this.height = 55,
+    this.height = 100,
     this.fontSize = 12,
     this.borderRadius = 16, // Default border radius
     this.isBusy = false,
@@ -37,8 +37,8 @@ class CustomButton extends StatelessWidget {
       onTap: () => isBusy ? onPressed() : onPressed(),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 15.sp, vertical: 8.sp),
-        height: height.sp,
-        width: width.sp,
+        height: height,
+        width: width,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(borderRadius.r),
           border: Border.all(color: borderColor, width: 1.sp),
@@ -47,8 +47,8 @@ class CustomButton extends StatelessWidget {
         child: Center(
           child: isBusy
               ? SizedBox(
-                  height: 25.sp,
-                  width: 25.sp,
+                  height: 15.sp,
+                  width: 15.sp,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
                     strokeAlign: BorderSide.strokeAlignCenter,
@@ -107,8 +107,8 @@ class CustomIconButton extends StatelessWidget {
       onTap: () => onPressed(),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 15.sp),
-        height: height.sp,
-        width: width.sp,
+        height: height,
+        width: width,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(borderRadius.r),
           border: Border.all(color: borderColor, width: 1.sp),
@@ -117,8 +117,8 @@ class CustomIconButton extends StatelessWidget {
         child: isBusy
             ? Center(
                 child: SizedBox(
-                  height: 25.sp,
-                  width: 25.sp,
+                  height: 15.sp,
+                  width: 15.sp,
                   child: const CircularProgressIndicator(
                     color: AppColors.whiteColor,
                   ),
@@ -179,8 +179,8 @@ class CustomFlatButton extends StatelessWidget {
       onTap: () => onPressed(),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 15.sp),
-        height: height.sp,
-        width: width.sp,
+        height: height,
+        width: width,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(borderRadius.r),
           border: Border.all(color: borderColor, width: 1.sp),
@@ -189,8 +189,8 @@ class CustomFlatButton extends StatelessWidget {
         child: isBusy
             ? Center(
                 child: SizedBox(
-                  height: 25.sp,
-                  width: 25.sp,
+                  height: 15.sp,
+                  width: 15.sp,
                   child: CircularProgressIndicator(color: fontColor),
                 ),
               )

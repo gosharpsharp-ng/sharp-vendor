@@ -1,5 +1,6 @@
 import 'package:sharpvendor/core/utils/exports.dart';
 import 'package:intl_phone_field/phone_number.dart';
+import 'package:sharpvendor/core/services/push_notification_service.dart';
 
 class SignInController extends GetxController {
   final authService = serviceLocator<AuthenticationService>();
@@ -71,6 +72,9 @@ class SignInController extends GetxController {
           update();
           final getStorage = GetStorage();
           getStorage.write("token", response.data['auth_token']);
+
+          // Register device token for push notifications
+          await PushNotificationService().registerTokenIfAvailable();
 
           // Initialize DeliveryNotificationServiceManager first
           Get.put(DeliveryNotificationServiceManager());

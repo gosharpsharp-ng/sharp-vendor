@@ -1,4 +1,5 @@
 import 'package:sharpvendor/core/utils/exports.dart';
+import 'package:sharpvendor/core/services/push_notification_service.dart';
 
 class SplashController extends GetxController {
   @override
@@ -13,6 +14,9 @@ class SplashController extends GetxController {
     String? token = box.read('token');
 
     if (token != null && token.isNotEmpty) {
+      // Register device token for push notifications
+      await PushNotificationService().registerTokenIfAvailable();
+
       // Load data and navigate after the current frame
       await _loadData();
       WidgetsBinding.instance.addPostFrameCallback((_) {

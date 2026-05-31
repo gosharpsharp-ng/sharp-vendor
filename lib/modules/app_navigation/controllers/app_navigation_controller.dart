@@ -21,10 +21,10 @@ class AppNavigationController extends GetxController {
 
     // Trigger refresh when navigating to Menu or Orders tabs
     if (selectedIndex == 1) {
-      // Menu tab - refresh menu items
+      // Menu tab — use guarded refresh to avoid duplicate concurrent fetches
       try {
         final menuController = Get.find<FoodMenuController>();
-        menuController.getMenuItems();
+        menuController.refreshMenuItemsIfNeeded();
       } catch (e) {
         debugPrint('Menu controller not found: $e');
       }

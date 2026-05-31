@@ -30,6 +30,10 @@ class MenuService extends CoreService {
     return await fetch("/restaurants/menus?page=$page");
   }
 
+  Future<APIResponse> deleteMenu(int id) async {
+    return await remove("/restaurants/menus/$id",{});
+  }
+
   Future<APIResponse> getMenuById(dynamic data) async {
     return await fetch("/restaurants/menus/${data['id']}");
   }
