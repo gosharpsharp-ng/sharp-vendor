@@ -446,6 +446,7 @@ class SignUpController extends GetxController {
     }
     if (photo != null) {
       final croppedPhoto = await cropImage(photo);
+      if (croppedPhoto == null) return;
       restaurantBanner = await convertImageToBase64(croppedPhoto.path);
       update();
     }
@@ -461,6 +462,7 @@ class SignUpController extends GetxController {
     }
     if (photo != null) {
       final croppedPhoto = await cropImage(photo);
+      if (croppedPhoto == null) return;
       restaurantLogo = await convertImageToBase64(croppedPhoto.path);
       update();
     }

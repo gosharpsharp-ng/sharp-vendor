@@ -13,7 +13,7 @@ class OnboardingScreen extends StatelessWidget {
     final double buttonWidth = isTablet
         ?MediaQuery.of(context).size.width * 0.80
         : MediaQuery.of(context).size.width * 0.88;
-    final double buttonHeight = isTablet ? 100 : 80;
+    final double buttonHeight = isTablet ? 75 : 58;
     final double titleFontSize = isTablet ? 20.sp : 22.sp;
     final double descFontSize = isTablet ? 13.sp : 14.sp;
 

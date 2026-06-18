@@ -79,6 +79,7 @@ abstract class Routes {
   // Orders
   static const ORDERS_HOME_SCREEN = '/orders_home_screen';
   static const ORDER_DETAILS_SCREEN = '/order_details_screen';
+  static const ORDER_ACCEPTANCE_RESULT_SCREEN = '/order_acceptance_result_screen';
 
   // Restaurant Management
   static const RESTAURANT_DETAILS_SCREEN = '/restaurant_details_screen';

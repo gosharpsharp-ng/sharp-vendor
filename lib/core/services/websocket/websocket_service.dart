@@ -34,8 +34,7 @@ class SocketService extends GetxService {
   void _setupSocketListeners() {
     // Setup catch-all listener to see ALL events
     socket.onAny((event, data) {
-      log('📨 Socket Event Received: $event');
-      log('📨 Event Data: ${data.toString()}');
+      debugPrint('📨 [Socket] event=$event  data=${data.toString()}');
     });
 
     socket
@@ -79,6 +78,7 @@ class SocketService extends GetxService {
   /// Set restaurant ID (will auto-join when socket connects)
   void setRestaurantId(int restaurantId) {
     _currentRestaurantId = restaurantId;
+    debugPrint('🏠 [Socket] setRestaurantId called → restaurantId=$restaurantId  alreadyConnected=${isConnected.value}');
     // If already connected, join immediately
     if (isConnected.value) {
       joinRestaurantRoom(restaurantId);
@@ -90,10 +90,11 @@ class SocketService extends GetxService {
   void joinRestaurantRoom(int restaurantId) {
     if (isConnected.value) {
       _currentRestaurantId = restaurantId;
-      socket.emit('restaurant:join', {'restaurantId': restaurantId});
-      log('🍽️ Joined restaurant room with restaurantId: $restaurantId');
+      final payload = {'restaurantId': restaurantId};
+      socket.emit('restaurant:join', payload);
+      debugPrint('🍽️ [Socket] emit → event=restaurant:join  payload=$payload  socketId=${socket.id}');
     } else {
-      log('⚠️ Cannot join restaurant room - socket not connected');
+      debugPrint('⚠️ [Socket] joinRestaurantRoom skipped — socket not connected  restaurantId=$restaurantId');
     }
   }
 
@@ -120,11 +121,12 @@ class SocketService extends GetxService {
 
     // Setup new listener
     socket.on('restaurant:new-order', (data) {
-      log(
-        '🔔 ==================== NEW ORDER EVENT RECEIVED ====================',
-      );
-      log('🔔 Raw data type: ${data.runtimeType}');
-      log('🔔 Raw data: ${data.toString()}');
+      debugPrint('');
+      debugPrint('📡 ========= RAW WEBSOCKET EVENT: restaurant:new-order =========');
+      debugPrint('📡 Data type : ${data.runtimeType}');
+      debugPrint('📡 Raw data  : ${data.toString()}');
+      debugPrint('📡 ==============================================================');
+      debugPrint('');
 
       if (data is Map<String, dynamic>) {
         log('✅ Data is Map<String, dynamic>');
@@ -181,13 +183,13 @@ class SocketService extends GetxService {
     socket.on(roomId, onLocationUpdate);
   }
 
-  joinTrackingRoom({required String trackingId, required String msg}) async {
+  Future<void> joinTrackingRoom({required String trackingId, required String msg}) async {
     if (isConnected.value) {
       socket.emit(msg, trackingId);
     }
   }
 
-  joinRidersTrackingRoom() async {
+  Future<void> joinRidersTrackingRoom() async {
     if (isConnected.value) {
       socket.emit("get_riders", "riders");
     }

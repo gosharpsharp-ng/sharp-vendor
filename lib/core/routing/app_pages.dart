@@ -11,6 +11,7 @@ import 'package:sharpvendor/modules/menu/views/discounts/menu_discounts_list_scr
 import 'package:sharpvendor/modules/menu/views/discounts/add_discount_screen.dart';
 import 'package:sharpvendor/modules/menu/views/discounts/edit_discount_screen.dart';
 import 'package:sharpvendor/modules/orders/bindings/orders_bindings.dart';
+import 'package:sharpvendor/modules/orders/views/order_acceptance_result_screen.dart';
 import 'package:sharpvendor/modules/orders/views/order_details_screen.dart';
 import 'package:sharpvendor/modules/orders/views/orders_home_screen.dart';
 import 'package:sharpvendor/modules/settings/views/analytics_screen.dart';
@@ -387,6 +388,13 @@ class AppPages {
       page: () => OrderDetailsScreen(),
       binding: OrdersBindings(),
       transition: Transition.leftToRight,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: Routes.ORDER_ACCEPTANCE_RESULT_SCREEN,
+      page: () => const OrderAcceptanceResultScreen(),
+      binding: OrdersBindings(),
+      transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 400),
     ),
 

@@ -160,7 +160,7 @@ class SignUpScreen extends GetView<SignUpController> {
                           isRequired: true,
                           useCustomValidator: true,
                           obscureText:
-                          signUpController.signUpPasswordVisibility,
+                          !signUpController.signUpPasswordVisibility,
                           hasTitle: true,
                           controller: signUpController.passwordController,
                           suffixWidget: IconButton(
@@ -168,7 +168,7 @@ class SignUpScreen extends GetView<SignUpController> {
                               signUpController.togglePasswordVisibility();
                             },
                             icon: Icon(
-                              signUpController.signUpPasswordVisibility
+                              !signUpController.signUpPasswordVisibility
                                   ? Icons.visibility_outlined
                                   : Icons.visibility_off_outlined,
                               size: 20.sp,
@@ -194,7 +194,7 @@ class SignUpScreen extends GetView<SignUpController> {
                           isRequired: true,
                           useCustomValidator: true,
                           obscureText:
-                          signUpController.signUpConfirmPasswordVisibility,
+                          !signUpController.signUpConfirmPasswordVisibility,
                           hasTitle: true,
                           controller: signUpController.cPasswordController,
                           suffixWidget: IconButton(
@@ -203,7 +203,7 @@ class SignUpScreen extends GetView<SignUpController> {
                                   .toggleConfirmPasswordVisibility();
                             },
                             icon: Icon(
-                              signUpController.signUpConfirmPasswordVisibility
+                              !signUpController.signUpConfirmPasswordVisibility
                                   ? Icons.visibility_outlined
                                   : Icons.visibility_off_outlined,
                               size: 20.sp,

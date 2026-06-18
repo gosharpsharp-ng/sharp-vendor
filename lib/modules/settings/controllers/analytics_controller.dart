@@ -256,14 +256,22 @@ class AnalyticsController extends GetxController {
   }
 
   // Formatted getters for UI
+  static final _currencyFormat = NumberFormat('#,##0.##', 'en_US');
+  static final _intFormat = NumberFormat('#,##0', 'en_US');
+
   String get formattedTotalRevenue {
     if (_stats == null) return '₦0.00';
-    return '₦${_stats!.summary.totalRevenue.toStringAsFixed(2)}';
+    return '₦${_currencyFormat.format(_stats!.summary.totalRevenue)}';
   }
 
   String get formattedAverageOrderValue {
     if (_stats == null) return '₦0.00';
-    return '₦${_stats!.summary.averageOrderValue.toStringAsFixed(2)}';
+    return '₦${_currencyFormat.format(_stats!.summary.averageOrderValue)}';
+  }
+
+  String get formattedTotalOrders {
+    if (_stats == null) return '0';
+    return _intFormat.format(_stats!.summary.totalOrders);
   }
 
   String get formattedCompletionRate {

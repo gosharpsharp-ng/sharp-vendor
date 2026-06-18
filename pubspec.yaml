@@ -5,7 +5,7 @@ description: "Vendor App For Go Sharp Sharp LTD."
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 
-version: 1.0.5+8
+version: 1.0.9+12
 
 environment:
   sdk: ^3.8.1
@@ -52,6 +52,7 @@ dependencies:
   url_launcher: ^6.3.1
   firebase_core: ^3.8.1
   firebase_messaging: ^15.1.6
+  firebase_analytics: ^11.3.3
   flutter_local_notifications: ^18.0.1
   package_info_plus: ^8.0.0
 

@@ -384,12 +384,30 @@ class RestaurantAnalytics {
   });
 
   factory RestaurantAnalytics.fromJson(Map<String, dynamic> json) {
+    // API may return data nested under 'summary' / 'order_status_breakdown'
+    final summary = json['summary'] as Map<String, dynamic>?;
+    final statusBreakdown =
+        json['order_status_breakdown'] as Map<String, dynamic>?;
+
     return RestaurantAnalytics(
-      totalOrders: json['total_orders'] ?? 0,
-      pendingOrders: json['pending_orders'] ?? 0,
+      totalOrders: json['total_orders'] ??
+          summary?['total_orders'] ??
+          statusBreakdown?['total'] ??
+          0,
+      pendingOrders: json['pending_orders'] ??
+          summary?['pending_orders'] ??
+          statusBreakdown?['pending'] ??
+          0,
       weeklyOrders: json['weekly_orders'] ?? 0,
-      newOrders: json['new_orders'] ?? 0,
-      completedOrders: json['completed_orders'] ?? 0,
+      // "new orders" = not yet accepted = pending status
+      newOrders: json['new_orders'] ??
+          statusBreakdown?['pending'] ??
+          summary?['pending_orders'] ??
+          0,
+      completedOrders: json['completed_orders'] ??
+          summary?['completed_orders'] ??
+          statusBreakdown?['completed'] ??
+          0,
       dailyOrders: (json['daily_orders'] as List<dynamic>?)
               ?.map((item) => DailyOrder.fromJson(item))
               .toList() ??

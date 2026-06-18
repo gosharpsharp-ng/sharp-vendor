@@ -318,6 +318,7 @@ class RestaurantDetailsController extends GetxController {
 
       if (pickedFile != null) {
         final croppedPhoto = await cropImage(pickedFile);
+        if (croppedPhoto == null) return;
         bannerImage = File(croppedPhoto.path);
 
         // Immediately convert to base64
@@ -348,6 +349,7 @@ class RestaurantDetailsController extends GetxController {
 
       if (pickedFile != null) {
         final croppedPhoto = await cropImage(pickedFile);
+        if (croppedPhoto == null) return;
         logoImage = File(croppedPhoto.path);
 
         // Immediately convert to base64

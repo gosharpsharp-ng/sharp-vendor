@@ -62,7 +62,7 @@ class FoodMenuController extends GetxController {
     }
     if (photo != null) {
       final croppedPhoto = await cropImage(photo);
-      // File image = compressImageWithLowerQuality(file);
+      if (croppedPhoto == null) return;
       foodImage = await convertImageToBase64(croppedPhoto.path);
       update();
     }

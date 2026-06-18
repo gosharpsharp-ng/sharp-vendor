@@ -37,7 +37,7 @@ class OrdersController extends GetxController {
     'confirmed',
     'preparing',
     'ready',
-    'delivered',
+    'completed',
   ];
 
   setSelectedOrderStatus(String status) {
@@ -221,7 +221,7 @@ class OrdersController extends GetxController {
       case 'ready':
         return 'Ready';
       case 'delivered':
-        return 'Delivered';
+        return 'Completed';
       case 'in_transit':
         return 'In Transit';
       case 'completed':
@@ -499,7 +499,24 @@ class OrdersController extends GetxController {
   // Handle new order notification (public method for external calls)
   void handleNewOrderNotification(Map<String, dynamic> orderData) {
     try {
-      debugPrint('📱 New order notification received!');
+      debugPrint('');
+      debugPrint('🛎️  ============== NEW INCOMING ORDER (WebSocket) ==============');
+      debugPrint('🛎️  Order ID      : ${orderData['orderId'] ?? orderData['order_id'] ?? orderData['id'] ?? 'N/A'}');
+      debugPrint('🛎️  Order Number  : ${orderData['orderNumber'] ?? orderData['order_number'] ?? orderData['ref'] ?? 'N/A'}');
+      debugPrint('🛎️  Status        : ${orderData['status'] ?? 'N/A'}');
+      debugPrint('🛎️  Total         : ${orderData['currency'] ?? ''} ${orderData['total'] ?? 'N/A'}');
+      debugPrint('🛎️  User ID       : ${orderData['userId'] ?? orderData['user_id'] ?? 'N/A'}');
+      debugPrint('🛎️  Created At    : ${orderData['createdAt'] ?? orderData['created_at'] ?? 'N/A'}');
+      final packages = orderData['packages'] as List<dynamic>? ?? [];
+      final items = orderData['items'] as List<dynamic>? ?? [];
+      final lineItems = packages.isNotEmpty ? packages : items;
+      debugPrint('🛎️  Items (${lineItems.length}):');
+      for (final item in lineItems) {
+        debugPrint('       • ${item['name'] ?? 'Unknown'} x${item['quantity'] ?? 1}  @ ${item['price'] ?? ''}');
+      }
+      debugPrint('🛎️  Raw payload   : $orderData');
+      debugPrint('🛎️  =============================================================');
+      debugPrint('');
       debugPrint('🔔 Playing ringtone and vibrating...');
 
       // Vibrate the device with a pattern (vibrate, pause, vibrate)
@@ -758,13 +775,19 @@ class OrdersController extends GetxController {
                                     Vibration.cancel();
 
                                     // Update order status to confirmed
-                                    await updateOrderStatus(
-                                      orderNumber,
-                                      'confirmed',
-                                    );
+                                    final response = await _profileService
+                                        .updateOrderStatus(
+                                          'confirmed',
+                                          orderNumber,
+                                        );
 
-                                    // Fetch the order details and navigate to details screen
-                                    final order = await getOrderById(orderId);
+                                    final success =
+                                        response.status == 'success';
+
+                                    // Fetch order details for the result screen
+                                    if (success) {
+                                      await getOrderById(orderId);
+                                    }
 
                                     setState(() {
                                       isLoadingAccept = false;
@@ -773,24 +796,21 @@ class OrdersController extends GetxController {
                                     // Close dialog
                                     Get.back();
 
-                                    if (order != null) {
-                                      // Navigate to main app with Orders tab selected
-                                      Get.offAllNamed(
-                                        Routes.APP_NAVIGATION,
-                                        arguments: {'initialIndex': 2},
-                                      );
-                                      // Small delay to ensure navigation is loaded
-                                      await Future.delayed(
-                                        const Duration(milliseconds: 300),
-                                      );
-                                      // Then navigate to order details
-                                      Get.toNamed(Routes.ORDER_DETAILS_SCREEN);
-                                    } else {
-                                      Get.offAllNamed(
-                                        Routes.APP_NAVIGATION,
-                                        arguments: {'initialIndex': 2},
-                                      );
-                                    }
+                                    // Navigate to acceptance result screen
+                                    Get.toNamed(
+                                      Routes.ORDER_ACCEPTANCE_RESULT_SCREEN,
+                                      arguments: {
+                                        'isSuccess': success,
+                                        'orderNumber': orderNumber,
+                                        'amount': '$currency $total',
+                                        'message': success
+                                            ? ''
+                                            : response.message,
+                                      },
+                                    );
+
+                                    // Refresh orders list in background
+                                    if (success) getOrders();
                                   },
                             child: Container(
                               padding: EdgeInsets.symmetric(vertical: 14.h),

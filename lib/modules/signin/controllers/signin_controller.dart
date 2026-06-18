@@ -1,6 +1,7 @@
 import 'package:sharpvendor/core/utils/exports.dart';
 import 'package:intl_phone_field/phone_number.dart';
 import 'package:sharpvendor/core/services/push_notification_service.dart';
+import 'package:sharpvendor/core/services/analytics_service.dart' as firebase_analytics;
 
 class SignInController extends GetxController {
   final authService = serviceLocator<AuthenticationService>();
@@ -75,6 +76,13 @@ class SignInController extends GetxController {
 
           // Register device token for push notifications
           await PushNotificationService().registerTokenIfAvailable();
+
+          // Track user login in Firebase Analytics
+          final userProfile = response.data['user'];
+          if (userProfile != null && userProfile['id'] != null) {
+            await firebase_analytics.AnalyticsService().setUserId(userProfile['id'].toString());
+            await firebase_analytics.AnalyticsService().setUserProperty('user_type', 'vendor');
+          }
 
           // Initialize DeliveryNotificationServiceManager first
           Get.put(DeliveryNotificationServiceManager());

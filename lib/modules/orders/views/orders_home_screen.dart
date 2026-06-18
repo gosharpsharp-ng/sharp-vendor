@@ -215,7 +215,7 @@ class OrdersHomeScreen extends GetView<OrdersController> {
       case 'ready':
         return 'Ready';
       case 'delivered':
-        return 'Delivered';
+        return 'Completed';
       case 'in_transit':
         return 'In Transit';
       case 'completed':
@@ -261,7 +261,7 @@ class OrdersHomeScreen extends GetView<OrdersController> {
       case 'ready':
         return 'Orders ready for pickup/delivery will appear here';
       case 'delivered':
-        return 'Successfully delivered orders will be listed here';
+        return 'Successfully completed orders will be listed here';
       case 'in_transit':
         return 'Orders out for delivery will be tracked here';
       case 'completed':
@@ -591,7 +591,7 @@ class OrderCard extends StatelessWidget {
       case 'ready':
         return 'Ready';
       case 'delivered':
-        return 'Delivered';
+        return 'Completed';
       case 'in_transit':
         return 'In Transit';
       case 'completed':

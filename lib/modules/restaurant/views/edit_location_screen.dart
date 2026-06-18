@@ -56,10 +56,10 @@ class EditLocationScreen extends GetView<RestaurantDetailsController> {
                   maxLines: 3,
                   suffixWidget: IconButton(
                     onPressed: () async {
-                      final ItemLocation result = await Get.toNamed(
+                      final result = await Get.toNamed(
                         Routes.SELECT_LOCATION_SCREEN,
                       );
-                      restaurantController.setRestaurantLocation(result);
+                      if (result != null) restaurantController.setRestaurantLocation(result);
                     },
                     icon: SvgPicture.asset(
                       SvgAssets.locationIcon,

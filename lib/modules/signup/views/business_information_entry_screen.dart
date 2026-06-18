@@ -412,15 +412,15 @@ class BusinessInformationEntryScreen extends GetView<SignUpController> {
                     // Business Address Field
                     ClickableCustomRoundedInputField(
                       onPressed: () async {
-                        final ItemLocation result =
+                        final result =
                         await Get.toNamed(Routes.SELECT_LOCATION_SCREEN);
-                        signUpController.setRestaurantLocation(result);
+                        if (result != null) signUpController.setRestaurantLocation(result);
                       },
                       suffixWidget: IconButton(
                         onPressed: () async {
-                          final ItemLocation result =
+                          final result =
                           await Get.toNamed(Routes.SELECT_LOCATION_SCREEN);
-                          signUpController.setRestaurantLocation(result);
+                          if (result != null) signUpController.setRestaurantLocation(result);
                         },
                         icon: SvgPicture.asset(
                           SvgAssets.locationIcon,

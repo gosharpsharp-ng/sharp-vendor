@@ -275,7 +275,7 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
                                     color: AppColors.blackColor,
                                     fontSize: 24.sp,
                                     fontWeight: FontWeight.bold,
-                                    textAlign: TextAlign.center,
+                                    overflow: TextOverflow.visible,
                                   ),
 
                                   SizedBox(height: 8.h),
@@ -310,10 +310,8 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
                                       color: AppColors.greyColor,
                                       fontSize: 14.sp,
                                       fontWeight: FontWeight.w400,
-                                      textAlign: TextAlign.center,
                                       height: 1.5,
-                                      maxLines: 3,
-                                      overflow: TextOverflow.ellipsis,
+                                      overflow: TextOverflow.visible,
                                     ),
 
                                   SizedBox(height: 16.h),
@@ -369,40 +367,39 @@ class RestaurantDetailsScreen extends GetView<RestaurantDetailsController> {
                                       if (restaurant.location != null) ...[
                                         SizedBox(width: 12.w),
                                         // Location Badge
-                                        Container(
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: 12.w,
-                                            vertical: 6.h,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: AppColors.greyColor
-                                                .withValues(alpha: 0.1),
-                                            borderRadius: BorderRadius.circular(
-                                              16.r,
+                                        Flexible(
+                                          child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 12.w,
+                                              vertical: 6.h,
                                             ),
-                                          ),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Icon(
-                                                Icons.location_on,
-                                                color: AppColors.greyColor,
-                                                size: 12.sp,
+                                            decoration: BoxDecoration(
+                                              color: AppColors.greyColor
+                                                  .withValues(alpha: 0.1),
+                                              borderRadius: BorderRadius.circular(
+                                                16.r,
                                               ),
-                                              SizedBox(width: 4.w),
-                                              customText(
-                                                restaurant
-                                                            .location!
-                                                            .name
-                                                            .length >
-                                                        15
-                                                    ? "${restaurant.location!.name.substring(0, 15)}..."
-                                                    : restaurant.location!.name,
-                                                color: AppColors.greyColor,
-                                                fontSize: 12.sp,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ],
+                                            ),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Icon(
+                                                  Icons.location_on,
+                                                  color: AppColors.greyColor,
+                                                  size: 12.sp,
+                                                ),
+                                                SizedBox(width: 4.w),
+                                                Flexible(
+                                                  child: customText(
+                                                    restaurant.location!.name,
+                                                    color: AppColors.greyColor,
+                                                    fontSize: 12.sp,
+                                                    fontWeight: FontWeight.w500,
+                                                    overflow: TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ],

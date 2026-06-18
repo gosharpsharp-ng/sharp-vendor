@@ -218,6 +218,7 @@ class SettingsController extends GetxController {
     }
     if (photo != null) {
       final croppedPhoto = await cropImage(photo);
+      if (croppedPhoto == null) return;
       // Convert image to base64 string
       userProfilePicture = await convertImageToBase64(croppedPhoto.path);
       update();

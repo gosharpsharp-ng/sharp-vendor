@@ -153,7 +153,7 @@ class AnalyticsScreen extends GetView<AnalyticsController> {
             Expanded(
               child: _buildKpiCard(
                 title: "Total Orders",
-                value: "${stats.summary.totalOrders}",
+                value: controller.formattedTotalOrders,
                 change: stats.summary.percentageChanges.ordersChange,
                 backgroundColor: AppColors.whiteColor,
                 controller: controller,

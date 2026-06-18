@@ -371,7 +371,7 @@ showToast({String message = "", bool isError = false}) {
   // );
 }
 
-Future<CroppedFile> cropImage(XFile image) async {
+Future<CroppedFile?> cropImage(XFile image) async {
   final croppedImageFile = await ImageCropper().cropImage(
     sourcePath: image.path,
     uiSettings: [
@@ -394,7 +394,7 @@ Future<CroppedFile> cropImage(XFile image) async {
       ),
     ],
   );
-  return croppedImageFile!;
+  return croppedImageFile;
 }
 
 Future<String?> uploadImageToCloudinary({

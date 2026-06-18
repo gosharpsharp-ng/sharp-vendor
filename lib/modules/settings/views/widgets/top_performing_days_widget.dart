@@ -112,7 +112,7 @@ class TopPerformingDaysWidget extends StatelessWidget {
               ),
               SizedBox(height: 4.h),
               customText(
-                '₦${day.revenue.toStringAsFixed(2)}',
+                '₦${NumberFormat('#,##0.##', 'en_US').format(day.revenue)}',
                 fontSize: 12.sp,
                 color: AppColors.greenColor,
                 fontWeight: FontWeight.w600,

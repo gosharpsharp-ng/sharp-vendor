@@ -66,7 +66,7 @@ class TransactionItemWidget extends StatelessWidget {
           TransactionDetailItem(),
           TransactionDetailItem(title: "Customer",value: "Halley Aminu",),
           TransactionDetailItem(title: "Delivery Type",value: "Pick up",),
-          TransactionDetailItem(title: "Status",value: "Delivered",),
+          TransactionDetailItem(title: "Status",value: "Completed",),
           TransactionDetailItem(title: "Date",value: "17 March, 2025",),
              ],
       ),

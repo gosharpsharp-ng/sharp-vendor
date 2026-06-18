@@ -1023,6 +1023,7 @@ class DeliveriesController extends GetxController {
     }
     if (photo != null) {
       final croppedPhoto = await cropImage(photo);
+      if (croppedPhoto == null) return;
       deliveryItemImages.clear();
       parcelImage = await convertImageToBase64(croppedPhoto.path);
       update();
