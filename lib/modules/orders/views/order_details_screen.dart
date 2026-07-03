@@ -10,10 +10,34 @@ class OrderDetailsScreen extends GetView<OrdersController> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<OrdersController>(
+      initState: (_) {
+        // If selectedOrder is null (e.g. controller was recreated after
+        // Get.offAllNamed) but the caller passed an orderId, fetch it now.
+        final args = Get.arguments as Map<String, dynamic>?;
+        final dynamic orderId = args?['orderId'];
+        if (orderId != null) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            final ctrl = Get.find<OrdersController>();
+            if (ctrl.selectedOrder == null) {
+              ctrl.getOrderById(orderId);
+            }
+          });
+        }
+      },
       builder: (ordersController) {
         final order = ordersController.selectedOrder;
 
         if (order == null) {
+          if (ordersController.isLoading) {
+            return Scaffold(
+              appBar: defaultAppBar(
+                bgColor: AppColors.backgroundColor,
+                onPop: () => Get.back(),
+                title: "Order Details",
+              ),
+              body: const Center(child: CircularProgressIndicator()),
+            );
+          }
           return Scaffold(
             appBar: defaultAppBar(
               bgColor: AppColors.backgroundColor,

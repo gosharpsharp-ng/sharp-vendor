@@ -77,6 +77,7 @@ class DeliveriesHomeScreen extends StatelessWidget {
                   ),
                   child: Expanded(
                     child: SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
                       controller: ordersController.deliveriesScrollController,
                       child: Column(children: [
                         ...List.generate(

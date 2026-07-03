@@ -80,6 +80,7 @@ class CampaignsHomeScreen extends StatelessWidget {
                   else
                     Expanded(
                       child: ListView.separated(
+                        physics: const AlwaysScrollableScrollPhysics(),
                         itemCount: campaignsController.allCampaigns.length,
                         separatorBuilder: (context, index) =>
                             SizedBox(height: 12.h),

@@ -19,9 +19,11 @@ class DashboardController extends GetxController {
   bool get hasAnalyticsData => _analytics != null;
 
   // Wallet balance getter
-  String get walletBalance {
-    return _settingsController.userProfile?.restaurant?.wallet?.formattedBalance ?? '₦0.00';
-  }
+  String get walletBalance =>
+      _settingsController.userProfile?.restaurant?.wallet?.formattedBalance ?? '₦0.00';
+
+  String get userFname => _settingsController.userProfile?.fname ?? '';
+  String? get userAvatarUrl => _settingsController.userProfile?.avatarUrl;
 
   // Chart data for dashboard
   List<ChartData> get dashboardChartData {
@@ -118,7 +120,7 @@ class DashboardController extends GetxController {
   // Refresh dashboard data
   Future<void> refreshDashboard() async {
     await loadDashboardData();
-    _settingsController.getProfile();
+    update();
   }
 
   // Private helper methods

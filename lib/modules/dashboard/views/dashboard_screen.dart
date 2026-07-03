@@ -53,49 +53,36 @@ class DashboardScreen extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      GetBuilder<SettingsController>(
-                        init: SettingsController(),
-                        builder: (settingsController) {
-                          return Container(
-                            margin: EdgeInsets.symmetric(horizontal: 5.sp),
-                            color: AppColors.transparent,
-                            child: Row(
-                              children: [
-                                Visibility(
-                                  visible:
-                                      settingsController
-                                          .userProfile
-                                          ?.avatarUrl !=
-                                      null,
-                                  replacement: CircleAvatar(
-                                    radius: 22.r,
-                                    backgroundColor: AppColors.backgroundColor,
-                                    child: customText(
-                                      // "${settingsController.userProfile?.fname.substring(0, 1) ?? ""}${settingsController.userProfile?.lname.substring(0, 1) ?? ""}",
-                                      "Ab",
-                                      fontSize: 14.sp,
-                                    ),
-                                  ),
-                                  child: CircleAvatar(
-                                    backgroundImage: CachedNetworkImageProvider(
-                                      settingsController
-                                              .userProfile
-                                              ?.avatarUrl ??
-                                          '',
-                                    ),
-                                    radius: 22.r,
-                                  ),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 5.sp),
+                        color: AppColors.transparent,
+                        child: Row(
+                          children: [
+                            Visibility(
+                              visible: dashboardController.userAvatarUrl != null,
+                              replacement: CircleAvatar(
+                                radius: 22.r,
+                                backgroundColor: AppColors.backgroundColor,
+                                child: customText(
+                                  "Ab",
+                                  fontSize: 14.sp,
                                 ),
-                                SizedBox(width: 8.sp),
-                                customText(
-                                  "Hi ${settingsController.userProfile?.fname ?? ''}",
-                                  fontSize: 20.sp,
-                                  fontWeight: FontWeight.w600,
+                              ),
+                              child: CircleAvatar(
+                                backgroundImage: CachedNetworkImageProvider(
+                                  dashboardController.userAvatarUrl ?? '',
                                 ),
-                              ],
+                                radius: 22.r,
+                              ),
                             ),
-                          );
-                        },
+                            SizedBox(width: 8.sp),
+                            customText(
+                              "Hi ${dashboardController.userFname}",
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ],
+                        ),
                       ),
                       GetBuilder<SettingsController>(
                         builder: (settingsController) {
@@ -149,25 +136,15 @@ class DashboardScreen extends StatelessWidget {
               body: RefreshIndicator(
                 backgroundColor: AppColors.primaryColor,
                 color: AppColors.whiteColor,
-                onRefresh: () async {
-                  await dashboardController.refreshDashboard();
-                },
+                onRefresh: () => dashboardController.refreshDashboard(),
                 child: Container(
                   padding: EdgeInsets.symmetric(
                     vertical: 5.sp,
                     horizontal: 10.sp,
                   ),
                   color: AppColors.backgroundColor,
-                  child: RefreshIndicator(
-                    backgroundColor: AppColors.primaryColor,
-                    onRefresh: () async {
-                      // ordersController.fetchDeliveries();
-                      // Get.find<WalletController>().getWalletBalance();
-                      // Get.find<WalletController>().getTransactions();
-                      // Get.find<SettingsController>().getProfile();
-                      // Get.find<NotificationsController>().getNotifications();
-                    },
-                    child: SingleChildScrollView(
+                  child: SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
                       child: Column(
                         children: [
                           // Go Online/Offline Section
@@ -337,8 +314,7 @@ class DashboardScreen extends StatelessWidget {
                 ),
               ),
             ),
-          ),
-        );
+          );
       },
     );
   }

@@ -102,6 +102,7 @@ class PayoutHistoryScreen extends StatelessWidget {
                             !payoutController.fetchingPayouts &&
                             payoutController.payoutRequests.isEmpty,
                         replacement: SingleChildScrollView(
+                          physics: const AlwaysScrollableScrollPhysics(),
                           child: SkeletonLoaders.payoutItem(count: 5),
                         ),
                         child: Column(
@@ -129,6 +130,7 @@ class PayoutHistoryScreen extends StatelessWidget {
                         ),
                       ),
                       child: SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
                         controller:
                             payoutController.payoutHistoryScrollController,
                         child: Column(

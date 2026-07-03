@@ -60,6 +60,7 @@ class MenuDiscountsListScreen extends StatelessWidget {
                   ? SkeletonLoaders.discountCard(count: 4)
                   : controller.discounts.isEmpty
                   ? ListView(
+                      physics: const AlwaysScrollableScrollPhysics(),
                       children: [
                         SizedBox(height: 150.h),
                         Center(
@@ -94,6 +95,7 @@ class MenuDiscountsListScreen extends StatelessWidget {
                       ],
                     )
                   : ListView.separated(
+                      physics: const AlwaysScrollableScrollPhysics(),
                       itemCount: controller.discounts.length,
                       separatorBuilder: (context, index) =>
                           SizedBox(height: 16.h),

@@ -8,6 +8,7 @@ class OrderAcceptanceResultScreen extends StatelessWidget {
     final args = Get.arguments as Map<String, dynamic>?;
     final bool isSuccess = args?['isSuccess'] ?? false;
     final String orderNumber = args?['orderNumber'] ?? '';
+    final dynamic orderId = args?['orderId'];
     final String amount = args?['amount'] ?? '';
     final String message = args?['message'] ?? '';
 
@@ -139,7 +140,10 @@ class OrderAcceptanceResultScreen extends StatelessWidget {
                       arguments: {'initialIndex': 2},
                     );
                     Future.delayed(const Duration(milliseconds: 300), () {
-                      Get.toNamed(Routes.ORDER_DETAILS_SCREEN);
+                      Get.toNamed(
+                        Routes.ORDER_DETAILS_SCREEN,
+                        arguments: {'orderId': orderId},
+                      );
                     });
                   } else {
                     Get.back();

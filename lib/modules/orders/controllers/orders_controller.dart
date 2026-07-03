@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:vibration/vibration.dart';
 import 'package:sharpvendor/core/models/order_model.dart';
@@ -6,6 +7,33 @@ import '../../../core/utils/exports.dart';
 class OrdersController extends GetxController {
   // Profile Service Instance (now handles orders integration)
   final ProfileService _profileService = serviceLocator<ProfileService>();
+
+  // iOS ignores flutter_ringtone_player's looping flag — we loop manually.
+  Timer? _ringtoneTimer;
+
+  void _startRinging() {
+    _playRingtoneCycle();
+    // Repeat every 4 seconds (adjust if the chosen sound is shorter/longer)
+    _ringtoneTimer = Timer.periodic(const Duration(seconds: 4), (_) {
+      _playRingtoneCycle();
+    });
+  }
+
+  void _playRingtoneCycle() {
+    FlutterRingtonePlayer().play(
+      android: AndroidSounds.ringtone,
+      ios: IosSounds.electronic,
+      looping: false, // handled by our timer on iOS; Android loops natively
+      volume: 1.0,
+      asAlarm: false,
+    );
+  }
+
+  void _stopRinging() {
+    _ringtoneTimer?.cancel();
+    _ringtoneTimer = null;
+    FlutterRingtonePlayer().stop();
+  }
 
   // Loading states
   bool isLoading = false;
@@ -282,7 +310,7 @@ class OrdersController extends GetxController {
   bool _isValidStatusTransition(String currentStatus, String newStatus) {
     // Define valid transitions based on business requirements
     Map<String, List<String>> validTransitions = {
-      'pending': ['confirmed', 'rejected'],
+      'pending': ['confirmed', 'cancelled'],
       'confirmed': ['preparing'],
       'preparing': ['ready'],
       'ready': [
@@ -303,9 +331,8 @@ class OrdersController extends GetxController {
     await updateOrderStatusWithValidation(orderId, "confirmed");
   }
 
-  // From "paid" → reject to "rejected"
   rejectOrder(int orderId) async {
-    await updateOrderStatusWithValidation(orderId, "rejected");
+    await updateOrderStatusWithValidation(orderId, "cancelled");
     // Note: Get.back() is now called automatically in updateOrderStatus
   }
 
@@ -496,12 +523,27 @@ class OrdersController extends GetxController {
     }
   }
 
+  // Track order IDs we've already shown a notification for this session.
+  // Prevents the same order re-triggering the dialog every time the WebSocket
+  // re-emits (which happens on reconnect or if the server replays the event).
+  final Set<dynamic> _notifiedOrderIds = {};
+
   // Handle new order notification (public method for external calls)
   void handleNewOrderNotification(Map<String, dynamic> orderData) {
     try {
+      final orderId =
+          orderData['orderId'] ?? orderData['order_id'] ?? orderData['id'] ?? 0;
+
+      // Deduplicate: skip if we already handled this order ID
+      if (orderId != 0 && _notifiedOrderIds.contains(orderId)) {
+        debugPrint('⚠️ [OrderNotif] Already notified for order $orderId — skipping duplicate WebSocket event');
+        return;
+      }
+      if (orderId != 0) _notifiedOrderIds.add(orderId);
+
       debugPrint('');
       debugPrint('🛎️  ============== NEW INCOMING ORDER (WebSocket) ==============');
-      debugPrint('🛎️  Order ID      : ${orderData['orderId'] ?? orderData['order_id'] ?? orderData['id'] ?? 'N/A'}');
+      debugPrint('🛎️  Order ID      : $orderId');
       debugPrint('🛎️  Order Number  : ${orderData['orderNumber'] ?? orderData['order_number'] ?? orderData['ref'] ?? 'N/A'}');
       debugPrint('🛎️  Status        : ${orderData['status'] ?? 'N/A'}');
       debugPrint('🛎️  Total         : ${orderData['currency'] ?? ''} ${orderData['total'] ?? 'N/A'}');
@@ -519,21 +561,11 @@ class OrdersController extends GetxController {
       debugPrint('');
       debugPrint('🔔 Playing ringtone and vibrating...');
 
-      // Vibrate the device with a pattern (vibrate, pause, vibrate)
       Vibration.vibrate(
         pattern: [0, 1000, 500, 1000, 500, 1000],
-        repeat: 0, // Repeat from index 0 (continuous vibration pattern)
+        repeat: 0,
       );
-
-      // Play ringtone (continuous ringing like a phone call)
-      FlutterRingtonePlayer().play(
-        android: AndroidSounds.ringtone,
-        ios: IosSounds.electronic,
-        looping: true, // Keep ringing until stopped
-        volume: 1.0,
-        asAlarm: false,
-      );
-
+      _startRinging();
       debugPrint('✅ Ringtone and vibration started');
 
       // Show new order dialog
@@ -547,8 +579,19 @@ class OrdersController extends GetxController {
     }
   }
 
+  // Guard: track whether the new-order dialog is already on screen.
+  // Without this, a second WebSocket event (e.g. reconnect replay) would push
+  // a second dialog on top, and the first Get.back() would close the second
+  // dialog — leaving the original dialog permanently stuck.
+  bool _isOrderDialogShowing = false;
+
   // Show new order notification dialog
   void _showNewOrderDialog(Map<String, dynamic> orderData) {
+    if (_isOrderDialogShowing) {
+      debugPrint('⚠️ [OrderDialog] Dialog already showing — ignoring duplicate event');
+      return;
+    }
+
     // Try multiple possible field names for order ID (camelCase, snake_case, or just 'id')
     final orderId =
         orderData['orderId'] ?? orderData['order_id'] ?? orderData['id'] ?? 0;
@@ -592,14 +635,17 @@ class OrdersController extends GetxController {
       }
     }
 
+    // State lives outside the builder so setState rebuilds don't reset it to false.
+    bool isLoadingViewDetails = false;
+    bool isLoadingAccept = false;
+
+    _isOrderDialogShowing = true;
+
     Get.dialog(
       WillPopScope(
         onWillPop: () async => false,
         child: StatefulBuilder(
           builder: (context, setState) {
-            bool isLoadingViewDetails = false;
-            bool isLoadingAccept = false;
-
             return Dialog(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.r),
@@ -658,8 +704,10 @@ class OrdersController extends GetxController {
                                 isLoadingViewDetails = true;
                               });
 
-                              // Stop ringtone and vibration
-                              FlutterRingtonePlayer().stop();
+                              // Capture navigator before async gap
+                              final nav = Navigator.of(context);
+
+                              _stopRinging();
                               Vibration.cancel();
 
                               // Fetch the full order details
@@ -684,7 +732,8 @@ class OrdersController extends GetxController {
                                 );
 
                                 // Close dialog and navigate
-                                Get.back();
+                                _isOrderDialogShowing = false;
+                                nav.pop();
                                 Get.toNamed(Routes.ORDER_DETAILS_SCREEN);
                               } else {
                                 debugPrint('❌ Failed to fetch order details');
@@ -734,10 +783,10 @@ class OrdersController extends GetxController {
                             onTap: (isLoadingViewDetails || isLoadingAccept)
                                 ? null
                                 : () {
-                                    // Stop ringtone and vibration
-                                    FlutterRingtonePlayer().stop();
+                                    _stopRinging();
                                     Vibration.cancel();
-                                    Get.back();
+                                    _isOrderDialogShowing = false;
+                                    Navigator.of(context).pop();
 
                                     // Show reason dialog
                                     _showCancellationReasonDialog(orderNumber);
@@ -770,8 +819,10 @@ class OrdersController extends GetxController {
                                       isLoadingAccept = true;
                                     });
 
-                                    // Stop ringtone and vibration
-                                    FlutterRingtonePlayer().stop();
+                                    // Capture navigator before async gap
+                                    final nav = Navigator.of(context);
+
+                                    _stopRinging();
                                     Vibration.cancel();
 
                                     // Update order status to confirmed
@@ -794,7 +845,8 @@ class OrdersController extends GetxController {
                                     });
 
                                     // Close dialog
-                                    Get.back();
+                                    _isOrderDialogShowing = false;
+                                    nav.pop();
 
                                     // Navigate to acceptance result screen
                                     Get.toNamed(
@@ -802,6 +854,7 @@ class OrdersController extends GetxController {
                                       arguments: {
                                         'isSuccess': success,
                                         'orderNumber': orderNumber,
+                                        'orderId': orderId,
                                         'amount': '$currency $total',
                                         'message': success
                                             ? ''
@@ -851,7 +904,10 @@ class OrdersController extends GetxController {
         ),
       ),
       barrierDismissible: false,
-    );
+    ).then((_) {
+      // Fallback reset in case the dialog closes through any other path
+      _isOrderDialogShowing = false;
+    });
   }
 
   // Show cancellation reason dialog
@@ -1085,7 +1141,8 @@ class OrdersController extends GetxController {
 
   @override
   void onClose() {
-    // Stop listening for new orders when controller is disposed
+    _stopRinging();
+    Vibration.cancel();
     if (Get.isRegistered<SocketService>()) {
       Get.find<SocketService>().stopListeningForNewOrders();
     }

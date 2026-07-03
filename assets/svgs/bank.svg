@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+  <!-- Roof / pediment -->
+  <path d="M2 9h20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Roofline triangle -->
+  <path d="M12 3L2 9h20L12 3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+  <!-- Columns -->
+  <line x1="5"  y1="9" x2="5"  y2="18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="9"  y1="9" x2="9"  y2="18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="15" y1="9" x2="15" y2="18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="19" y1="9" x2="19" y2="18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Base -->
+  <path d="M1 18h22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M1 21h22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+</svg>

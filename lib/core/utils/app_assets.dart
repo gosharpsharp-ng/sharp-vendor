@@ -16,6 +16,7 @@ class PngAssets {
 }
 
 class SvgAssets {
+  static const String bankIcon = 'assets/svgs/bank.svg';
   static const String settingsIcon = 'assets/svgs/settings.svg';
   static const String homeIcon = 'assets/svgs/home.svg';
   static const String saveIcon = 'assets/svgs/save.svg';

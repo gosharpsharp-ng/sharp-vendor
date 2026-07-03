@@ -115,28 +115,23 @@ class BankSelectionBottomSheet extends StatelessWidget {
                           ),
                           child: Row(
                             children: [
-                              Container(
-                                width: 40.sp,
-                                height: 40.sp,
-                                decoration: BoxDecoration(
-                                  color: AppColors.primaryColor.withValues(
-                                    alpha: 0.1,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8.r),
-                                ),
-                                child: Icon(
-                                  Icons.account_balance,
-                                  color: AppColors.primaryColor,
-                                  size: 20.sp,
+                              SvgPicture.asset(
+                                SvgAssets.bankIcon,
+                                width: 20.sp,
+                                height: 20.sp,
+                                colorFilter: const ColorFilter.mode(
+                                  Color(0xFF9E9E9E),
+                                  BlendMode.srcIn,
                                 ),
                               ),
                               SizedBox(width: 12.w),
                               Expanded(
                                 child: customText(
                                   bank.name,
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w600,
+                                  fontSize: 15.sp,
+                                  fontWeight: FontWeight.w400,
                                   color: AppColors.blackColor,
+                                  overflow: TextOverflow.visible,
                                 ),
                               ),
                               Icon(

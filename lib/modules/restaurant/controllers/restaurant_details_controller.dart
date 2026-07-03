@@ -1,4 +1,5 @@
 import 'package:sharpvendor/core/utils/exports.dart';
+import 'dart:developer';
 import 'dart:io';
 
 import '../../../core/models/restaurant_model.dart';
@@ -161,7 +162,9 @@ class RestaurantDetailsController extends GetxController {
   }) async {
     setUpdatingState(true);
     try {
+      log('[BankLink] REQUEST: $updateData');
       final response = await _profileService.updateBankAccount(updateData);
+      log('[BankLink] RESPONSE status=${response.status} message=${response.message} data=${response.data}');
 
       if (response.status == "success") {
         await refreshRestaurantData();
@@ -177,6 +180,7 @@ class RestaurantDetailsController extends GetxController {
         showToast(message: response.message, isError: true);
       }
     } catch (e) {
+      log('[BankLink] ERROR: $e');
       showToast(
         message: "Error updating bank account: ${e.toString()}",
         isError: true,
@@ -582,6 +586,7 @@ class RestaurantDetailsController extends GetxController {
     setLoadingState(true);
     try {
       final response = await _walletsService.getBankList();
+      log('[GetBanks] status=${response.status} message=${response.message} data=${response.data}');
       if (response.status == "success") {
         banks = (response.data['banks'] as List)
             .map((bank) => BankModel.fromJson(bank))
@@ -635,12 +640,14 @@ class RestaurantDetailsController extends GetxController {
     setVerifyingAccountState(true);
 
     try {
+      final bankCode = selectedBank!.code;
       final data = {
         'account_number': accountNumberController.text,
-        'bank_code': selectedBank!.code,
+        'bank_code': bankCode,
       };
-      customDebugPrint(data.toString());
+      log('[BankVerify] REQUEST: $data');
       final response = await _walletsService.verifyPayoutBank(data);
+      log('[BankVerify] RESPONSE status=${response.status} message=${response.message} data=${response.data}');
 
       if (response.status == "success") {
         accountNameController.text =
@@ -653,6 +660,7 @@ class RestaurantDetailsController extends GetxController {
       }
     } catch (e) {
       accountNameController.clear();
+      log('[BankVerify] ERROR: $e');
       showToast(
         message: "Error verifying account: ${e.toString()}",
         isError: true,
@@ -682,9 +690,10 @@ class RestaurantDetailsController extends GetxController {
     setUpdatingState(true);
 
     try {
+      final bankCode = selectedBank!.code;
       final updateData = {
         'bank_name': selectedBank!.name,
-        'bank_code': selectedBank!.code,
+        'bank_code': bankCode,
         'bank_account_number': accountNumberController.text,
         'bank_account_name': accountNameController.text,
       };

@@ -69,6 +69,7 @@ class TransactionsScreen extends StatelessWidget {
                   child: SkeletonLoaders.transactionItem(count: 8),
                 ),
                 child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
                   controller: settingsController.transactionsScrollController,
                   child: Column(
                     children: [

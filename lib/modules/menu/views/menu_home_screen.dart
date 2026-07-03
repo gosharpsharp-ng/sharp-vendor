@@ -72,7 +72,7 @@ class _MenuHomeBodyState extends State<_MenuHomeBody> {
                 await menuController.getMenuItems();
               },
               child: menuController.isLoadingMenuItems
-                  ? ListView(children: [SkeletonLoaders.menuItemCard(count: 4)])
+                  ? ListView(physics: const AlwaysScrollableScrollPhysics(), children: [SkeletonLoaders.menuItemCard(count: 4)])
                   : menuController.menuItems.isEmpty
                   ? Center(
                       child: Column(
