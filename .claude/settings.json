@@ -2,7 +2,12 @@
   "permissions": {
     "allow": [
       "Bash(git checkout *)",
-      "Bash(pod deintegrate *)"
+      "Bash(pod deintegrate *)",
+      "Bash(flutter analyze *)",
+      "Bash(git -C /Users/mac/Documents/apps/sharp-vendor diff --stat)",
+      "Bash(tmutil listlocalsnapshots *)",
+      "Bash(git -C /Users/mac/Documents/apps/gosharpsharp-mobile log --oneline -30)",
+      "Bash(git -C /Users/mac/Documents/apps/gosharpsharp-mobile log --oneline --all -i --grep=\"verif\")"
     ]
   }
 }

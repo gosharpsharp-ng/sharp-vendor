@@ -45,6 +45,14 @@ class SignUpController extends GetxController {
     });
   }
 
+  // Public method to start OTP timer (for use from other controllers)
+  void startOtpTimer() {
+    _startOtpResendTimer();
+  }
+
+  // Flag to track if user came from login screen for email verification
+  bool isFromLoginFlow = false;
+
   final authService = serviceLocator<AuthenticationService>();
   final signUpFormKey = GlobalKey<FormState>();
   final businessInfoFormKey = GlobalKey<FormState>();
@@ -255,15 +263,21 @@ class SignUpController extends GetxController {
       setLoadingState(true);
       dynamic data = {'otp': otpController.text, 'identifier': emailController.text};
       APIResponse response = await authService.verifyEmailOtp(data);
-      showToast(
-        message: response.message,
-        isError: response.status != "success",
-      );
       setLoadingState(false);
       if (response.status == "success") {
-        // Delete the controller before navigating away
-        Get.delete<SignUpController>(force: true);
-        Get.offAllNamed(Routes.SIGN_IN);
+        if (isFromLoginFlow) {
+          // LOGIN FLOW: skip the toast (it would interfere with Get.back);
+          // SignInController shows the success dialog instead.
+          Get.back(result: true);
+        } else {
+          // SIGNUP FLOW: show toast and go back to login
+          showToast(message: response.message, isError: false);
+          // Delete the controller before navigating away
+          Get.delete<SignUpController>(force: true);
+          Get.offAllNamed(Routes.SIGN_IN);
+        }
+      } else {
+        showToast(message: response.message, isError: true);
       }
     }
   }

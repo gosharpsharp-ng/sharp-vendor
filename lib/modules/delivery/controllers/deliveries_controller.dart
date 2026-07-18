@@ -8,7 +8,7 @@ import 'package:sharpvendor/core/models/payment_method_model.dart';
 import 'package:sharpvendor/core/utils/exports.dart';
 import 'package:intl_phone_field/phone_number.dart';
 
-class DeliveriesController extends GetxController {
+class DeliveriesController extends GetxController with WidgetsBindingObserver {
   final deliveryService = serviceLocator<DeliveryService>();
   final sendingInfoFormKey = GlobalKey<FormState>();
   final itemDetailsFormKey = GlobalKey<FormState>();
@@ -25,6 +25,35 @@ class DeliveriesController extends GetxController {
   bool isOnline = false;
   final DeliveryNotificationServiceManager serviceManager =
       DeliveryNotificationServiceManager.instance;
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _ensureSocketConnectionIfOnline();
+    }
+  }
+
+  /// The OS suspends networking while the app is backgrounded, so the socket
+  /// may be dead on resume even though [isOnline] is still true.
+  Future<void> _ensureSocketConnectionIfOnline() async {
+    if (!isOnline) return;
+
+    if (Get.isRegistered<SocketService>()) {
+      final socketService = Get.find<SocketService>();
+      if (!socketService.socket.connected) {
+        debugPrint('🔄 [Lifecycle] Resumed while online but socket disconnected — reconnecting');
+        socketService.socket.connect();
+      }
+    } else {
+      debugPrint('🔄 [Lifecycle] Resumed while online but services missing — reinitializing');
+      try {
+        await serviceManager.disposeServices();
+        await serviceManager.initializeServices();
+      } catch (e) {
+        debugPrint('❌ [Lifecycle] Failed to reinitialize services on resume: $e');
+      }
+    }
+  }
 
   Future<void> toggleOnlineStatus() async {
     isOnline = !isOnline;
@@ -1424,10 +1453,17 @@ class DeliveriesController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    WidgetsBinding.instance.addObserver(this);
     // deliveriesScrollController.addListener(_deliveriesScrollListener);
     // searchDeliveriesScrollController
     //     .addListener(_searchDeliveriesScrollListener);
     // fetchDeliveries();
     // getBikeIcon();
+  }
+
+  @override
+  void onClose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.onClose();
   }
 }

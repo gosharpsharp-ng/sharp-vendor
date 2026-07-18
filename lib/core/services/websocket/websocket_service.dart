@@ -24,8 +24,10 @@ class SocketService extends GetxService {
           .setTransports(['websocket'])
           .enableAutoConnect()
           .enableReconnection()
-          .setReconnectionAttempts(5)
+          // No attempt cap: the OS suspends networking in the background, and a
+          // capped retry gives up permanently before the app is resumed.
           .setReconnectionDelay(3000)
+          .setReconnectionDelayMax(15000)
           .build(),
     );
     socket.connect();
